@@ -45,6 +45,7 @@
 		5C6676C72BC210F9002DD52E /* RetroviewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RetroviewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C6676CB2BC210F9002DD52E /* RetroviewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewUITests.swift; sourceTree = "<group>"; };
 		5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		5C6676DA2BC215C7002DD52E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +76,7 @@
 		5C6676A32BC210F7002DD52E = {
 			isa = PBXGroup;
 			children = (
+				5C6676DA2BC215C7002DD52E /* .gitignore */,
 				5C6676AE2BC210F7002DD52E /* Retroview */,
 				5C6676C02BC210F8002DD52E /* RetroviewTests */,
 				5C6676CA2BC210F9002DD52E /* RetroviewUITests */,
@@ -442,10 +444,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.Retroview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Debug;
 		};
@@ -480,10 +483,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.Retroview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Release;
 		};
