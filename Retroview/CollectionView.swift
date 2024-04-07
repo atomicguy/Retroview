@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CollectionView: View {
+    @State private var createNewCard = false
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -19,11 +20,15 @@ struct CollectionView: View {
         .navigationTitle("Stereoviews")
         .toolbar {
             Button {
-                
+                createNewCard = true
             }label: {
                 Image(systemName: "plus.circle.fill")
                     .imageScale(.large)
             }
+        }
+        .sheet(isPresented: $createNewCard) {
+            NewCardView()
+                .presentationDetents([.medium])
         }
     }
 }

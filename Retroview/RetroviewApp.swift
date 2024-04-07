@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct RetroviewApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CollectionView()
         }
+        .modelContainer(for: Stereoview.self)
+    }
+    
+    init() {
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
     }
 }
