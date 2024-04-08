@@ -15,18 +15,21 @@ class Stereoview {
     var authors: [String]
     var subjects: [String]
     var dates: [String]
+    var rating: Int?
     
     init(
         uuid: String,
         titles: [String],
         authors: [String],
         subjects: [String],
-        dates: [String]
+        dates: [String],
+        rating: Int? = nil
     ) {
         self.uuid = uuid
         self.titles = titles
         self.authors = authors
         self.subjects = subjects
         self.dates = dates
+        self.rating = rating
     }
 }

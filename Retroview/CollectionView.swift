@@ -6,33 +6,55 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CollectionView: View {
+    @Environment(\.modelContext) private var context
+    @Query(sort: \Stereoview.uuid) private var stereoviews: [Stereoview]
     @State private var createNewCard = false
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-        .navigationTitle("Stereoviews")
-        .toolbar {
-            Button {
-                createNewCard = true
-            }label: {
-                Image(systemName: "plus.circle.fill")
-                    .imageScale(.large)
+        NavigationStack{
+            List {
+                ForEach(stereoviews) { stereoview in
+                    NavigationLink {
+                        EditCardView(card: stereoview)
+                    } label: {
+                        HStack(spacing: 10) {
+                            VStack(alignment: .leading) {
+                                Text(stereoview.titles[0]).font(.title2)
+                                Text(stereoview.uuid).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+                .onDelete {indexSet in
+                    indexSet.forEach { index in
+                        let stereoview = stereoviews[index]
+                        context.delete(stereoview)
+                    }
+                }
             }
-        }
-        .sheet(isPresented: $createNewCard) {
-            NewCardView()
-                .presentationDetents([.medium])
+            .listStyle(.plain)
+            .navigationTitle("Stereoviews")
+            .toolbar {
+                Button {
+                    createNewCard = true
+                }label: {
+                    Image(systemName: "plus.circle.fill")
+                        .imageScale(.large)
+                }
+            }
+            .sheet(isPresented: $createNewCard) {
+                NewCardView()
+                    .presentationDetents([.medium])
+            }
         }
     }
 }
 
 #Preview {
     CollectionView()
+        .modelContainer(for: Stereoview.self, inMemory: true)
 }
+
+
