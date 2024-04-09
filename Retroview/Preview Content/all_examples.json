@@ -1,0 +1,966 @@
+[
+    {
+        "uuid": "c7980740-c53b-012f-c86d-58d385a7bc34",
+        "titles": [
+            "Bird's-eye view, Columbian Exposition.",
+            "Stereoscopic views of the World's Columbian Exposition. 7972."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_030F",
+            "back": "G90F186_030B"
+        },
+        "left": {
+            "x0": 0.05299678444862366,
+            "y0": 0.07310159504413605,
+            "x1": 0.8640091419219971,
+            "y1": 0.4875648021697998,
+            "score": 0.9998635053634644,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.05890658497810364,
+            "y0": 0.489278107881546,
+            "x1": 0.861069917678833,
+            "y1": 0.9071069955825806,
+            "score": 0.9980714917182922,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8288.",
+            "Ostrich farm, Midway Plaisance, Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_122F",
+            "back": "G90F186_122B"
+        },
+        "left": {
+            "x0": 0.04484763741493225,
+            "y0": 0.0854133665561676,
+            "x1": 0.8568880558013916,
+            "y1": 0.4988066256046295,
+            "score": 0.9999356269836426,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.041730403900146484,
+            "y0": 0.4985104203224182,
+            "x1": 0.8540880084037781,
+            "y1": 0.9136133790016174,
+            "score": 0.9982233643531799,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "ecea5fb0-c53b-012f-7f72-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8244.",
+            "The great Ferris Wheel, Midway Plaisance, Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_114F",
+            "back": "G90F186_114B"
+        },
+        "left": {
+            "x0": 0.035678714513778687,
+            "y0": 0.07914303243160248,
+            "x1": 0.8625965118408203,
+            "y1": 0.49553388357162476,
+            "score": 0.9999808073043823,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.03491479158401489,
+            "y0": 0.49593448638916016,
+            "x1": 0.8596377372741699,
+            "y1": 0.9109271764755249,
+            "score": 0.9998418092727661,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "e5082480-c53b-012f-b6f2-58d385a7bc34",
+        "titles": [
+            "Idols of the British Columbian Indians, Columbian Exposition.",
+            "Stereoscopic views of the World's Columbian Exposition. 8199."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_096F",
+            "back": "G90F186_096B"
+        },
+        "left": {
+            "x0": 0.040410369634628296,
+            "y0": 0.07915288209915161,
+            "x1": 0.852149486541748,
+            "y1": 0.5011094808578491,
+            "score": 0.9999624490737915,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.03860563039779663,
+            "y0": 0.5031371116638184,
+            "x1": 0.8638659119606018,
+            "y1": 0.9170447587966919,
+            "score": 0.9989408850669861,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "e9b0f580-c53b-012f-54ac-58d385a7bc34",
+        "titles": [
+            "The convent where Columbus died, Columbian Exposition. 8228.",
+            "This train made the quickest time on record, a mile in 32 seconds. Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_107F",
+            "back": "G90F186_107B"
+        },
+        "left": {
+            "x0": 0.04361709952354431,
+            "y0": 0.08783958852291107,
+            "x1": 0.8640400171279907,
+            "y1": 0.4983378052711487,
+            "score": 0.999909520149231,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.04546630382537842,
+            "y0": 0.5028594136238098,
+            "x1": 0.8694990277290344,
+            "y1": 0.9073877930641174,
+            "score": 0.9996541738510132,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "d6661a90-c53b-012f-fcd1-58d385a7bc34",
+        "titles": [
+            "The crowning glory of the Basin, Columbian Exposition.",
+            "Stereoscopic views of the World's Columbian Exposition. 8104."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_063F",
+            "back": "G90F186_063B"
+        },
+        "left": {
+            "x0": 0.05166548490524292,
+            "y0": 0.07530859112739563,
+            "x1": 0.8449552655220032,
+            "y1": 0.4943850338459015,
+            "score": 0.9993993043899536,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.05763062834739685,
+            "y0": 0.5003597140312195,
+            "x1": 0.845665693283081,
+            "y1": 0.9075776934623718,
+            "score": 0.9988370537757874,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "f3489f60-c53b-012f-42ca-58d385a7bc34",
+        "titles": [
+            "Little-me-too at the World's Fair.",
+            "Stereoscopic views of the World's Columbian Exposition. 8404."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_128F",
+            "back": "G90F186_128B"
+        },
+        "left": {
+            "x0": 0.05269774794578552,
+            "y0": 0.08212341368198395,
+            "x1": 0.846436619758606,
+            "y1": 0.4963873028755188,
+            "score": 0.9999606609344482,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.058870553970336914,
+            "y0": 0.49953702092170715,
+            "x1": 0.8493868708610535,
+            "y1": 0.9116054773330688,
+            "score": 0.9997797608375549,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "f3b88d20-c53b-012f-d63d-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8439.",
+            "Administration building and fountains from Agricultural building, Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_129F",
+            "back": "G90F186_129B"
+        },
+        "left": {
+            "x0": 0.044107645750045776,
+            "y0": 0.08031684160232544,
+            "x1": 0.8637950420379639,
+            "y1": 0.49469172954559326,
+            "score": 0.9999821186065674,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.046040356159210205,
+            "y0": 0.4987448453903198,
+            "x1": 0.8689234256744385,
+            "y1": 0.9109866619110107,
+            "score": 0.9997171759605408,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "c6afbd00-c53b-012f-a2aa-58d385a7bc34",
+        "titles": [
+            "North Canal from Electric building, Columbian Exposition.",
+            "Stereoscopic views of the World's Columbian Exposition. 7968."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_028F",
+            "back": "G90F186_028B"
+        },
+        "left": {
+            "x0": 0.057654768228530884,
+            "y0": 0.09406989812850952,
+            "x1": 0.8609311580657959,
+            "y1": 0.49804210662841797,
+            "score": 0.9999467134475708,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.05177140235900879,
+            "y0": 0.500615656375885,
+            "x1": 0.8651679754257202,
+            "y1": 0.9162902235984802,
+            "score": 0.9982514977455139,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "bd64d6a0-c53b-012f-cd44-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 7879.",
+            "Dedication of the Japanese building. World's Fair."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_007F",
+            "back": "G90F186_007B"
+        },
+        "left": {
+            "x0": 0.029102951288223267,
+            "y0": 0.07870563864707947,
+            "x1": 0.8618733882904053,
+            "y1": 0.49584993720054626,
+            "score": 0.9999337196350098,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.032322973012924194,
+            "y0": 0.49616414308547974,
+            "x1": 0.8590619564056396,
+            "y1": 0.9121242165565491,
+            "score": 0.9996442794799805,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "f886fee0-c53b-012f-de2a-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8567.",
+            "The great light house lens mounted for work, Electric building, World's Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_140F",
+            "back": "G90F186_140B"
+        },
+        "left": {
+            "x0": 0.03353559970855713,
+            "y0": 0.08207376301288605,
+            "x1": 0.8589106798171997,
+            "y1": 0.4951629042625427,
+            "score": 0.999935507774353,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.03493055701255798,
+            "y0": 0.49972599744796753,
+            "x1": 0.8583910465240479,
+            "y1": 0.9113591313362122,
+            "score": 0.999541163444519,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "e86e10c0-c53b-012f-a674-58d385a7bc34",
+        "titles": [
+            "The convent where Columbus died, Columbian Exposition. 8218.",
+            "Liberal Arts building, German department. Bust of the Emperor and Empress, Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_104F",
+            "back": "G90F186_104B"
+        },
+        "left": {
+            "x0": 0.04184332489967346,
+            "y0": 0.08596421778202057,
+            "x1": 0.8596415519714355,
+            "y1": 0.49864351749420166,
+            "score": 0.9996297359466553,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.04033613204956055,
+            "y0": 0.5028352737426758,
+            "x1": 0.8643025755882263,
+            "y1": 0.9182134866714478,
+            "score": 0.999210000038147,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "ebfd0ef0-c53b-012f-183e-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8241.",
+            "Sweetly the chimes are ringing, Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_112F",
+            "back": "G90F186_112B"
+        },
+        "left": {
+            "x0": 0.04265552759170532,
+            "y0": 0.08010174334049225,
+            "x1": 0.8585749268531799,
+            "y1": 0.5014432668685913,
+            "score": 0.9999608993530273,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.04248678684234619,
+            "y0": 0.5037965774536133,
+            "x1": 0.8667953014373779,
+            "y1": 0.9231126308441162,
+            "score": 0.9997809529304504,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "e42f4fc0-c53b-012f-1a69-58d385a7bc34",
+        "titles": [
+            "The mammoth fern, Horticultural Hall, Columbian Exposition.",
+            "Stereoscopic views of the World's Columbian Exposition. 8195."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_094F",
+            "back": "G90F186_094B"
+        },
+        "left": {
+            "x0": 0.045494258403778076,
+            "y0": 0.08331601321697235,
+            "x1": 0.8676659464836121,
+            "y1": 0.49917685985565186,
+            "score": 0.9999709129333496,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.047940224409103394,
+            "y0": 0.5012176036834717,
+            "x1": 0.8649641275405884,
+            "y1": 0.9171267747879028,
+            "score": 0.9989644289016724,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "b18685d0-c53b-012f-66ec-58d385a7bc34",
+        "titles": [
+            "Columbian Exposition: Chicago, 1893. 375.",
+            "The India building, World's Fair, Chicago, Ill."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Unknown"
+        ],
+        "dates": [
+            "Unknown"
+        ],
+        "image_ids": {
+            "front": "G90F185_001F",
+            "back": "G90F185_001B"
+        },
+        "left": {
+            "x0": 0.11825990676879883,
+            "y0": 0.10454367101192474,
+            "x1": 0.8816646337509155,
+            "y1": 0.5048679709434509,
+            "score": 0.9997960925102234,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.10993242263793945,
+            "y0": 0.5045708417892456,
+            "x1": 0.881416916847229,
+            "y1": 0.8996714353561401,
+            "score": 0.9998849630355835,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "cbc8a590-c53b-012f-eaa2-58d385a7bc34",
+        "titles": [
+            "The Great Austrian exhibit, Liberal Arts building, Columbian Exposition.",
+            "Stereoscopic views of the World's Columbian Exposition. 8002."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_039F",
+            "back": "G90F186_039B"
+        },
+        "left": {
+            "x0": 0.04436853528022766,
+            "y0": 0.08382876217365265,
+            "x1": 0.8533697128295898,
+            "y1": 0.5008342266082764,
+            "score": 0.9999676942825317,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.044845134019851685,
+            "y0": 0.49881768226623535,
+            "x1": 0.8530439138412476,
+            "y1": 0.9144576787948608,
+            "score": 0.9997130036354065,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "b51e0710-c560-012f-7c8d-58d385a7bc34",
+        "titles": [],
+        "subjects": [
+            "Saratoga Springs (N.Y.)",
+            "Springhouses",
+            "New York (State)"
+        ],
+        "authors": [
+            "Barnum, Deloss"
+        ],
+        "dates": [
+            "1865"
+        ],
+        "image_ids": {
+            "front": "G91F146_038F",
+            "back": "G91F146_038B"
+        },
+        "left": {
+            "x0": 0.05767980217933655,
+            "y0": 0.10353405773639679,
+            "x1": 0.9134386777877808,
+            "y1": 0.5030148029327393,
+            "score": 0.9999243021011353,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.06015068292617798,
+            "y0": 0.5020149350166321,
+            "x1": 0.9143779873847961,
+            "y1": 0.9000819325447083,
+            "score": 0.9997720122337341,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "e93db840-c53b-012f-0990-58d385a7bc34",
+        "titles": [
+            "John Bull train and great Krupp Guns, Columbian Exposition.",
+            "The convent where Columbus died, Columbian Exposition. 8226."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_106F",
+            "back": "G90F186_106B"
+        },
+        "left": {
+            "x0": 0.04286709427833557,
+            "y0": 0.08081269264221191,
+            "x1": 0.8568214178085327,
+            "y1": 0.4972684383392334,
+            "score": 0.9999831914901733,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.04730415344238281,
+            "y0": 0.4978329539299011,
+            "x1": 0.860072135925293,
+            "y1": 0.9116566777229309,
+            "score": 0.999667763710022,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "f790ae50-c53b-012f-19b5-58d385a7bc34",
+        "titles": [
+            "The great Krupp Guns, Krupp building, World's Fair, Chicago.",
+            "Stereoscopic views of the World's Columbian Exposition. 8555."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_138F",
+            "back": "G90F186_138B"
+        },
+        "left": {
+            "x0": 0.025134503841400146,
+            "y0": 0.07752430438995361,
+            "x1": 0.8787411451339722,
+            "y1": 0.49803411960601807,
+            "score": 0.9999141693115234,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.027982503175735474,
+            "y0": 0.5022934675216675,
+            "x1": 0.8817572593688965,
+            "y1": 0.9201127290725708,
+            "score": 0.9989179372787476,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "f0893e90-c560-012f-42ed-58d385a7bc34",
+        "titles": [],
+        "subjects": [
+            "New York (State)"
+        ],
+        "authors": [
+            "Baker & Record (Firm)"
+        ],
+        "dates": [
+            "Unknown"
+        ],
+        "image_ids": {
+            "front": "G91F145_104F",
+            "back": "G91F145_104B"
+        },
+        "left": {
+            "x0": 0.08163776993751526,
+            "y0": 0.09307479858398438,
+            "x1": 0.9088194370269775,
+            "y1": 0.5034359693527222,
+            "score": 0.9997283816337585,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.08039698004722595,
+            "y0": 0.5025206804275513,
+            "x1": 0.9022762775421143,
+            "y1": 0.9074628353118896,
+            "score": 0.9997039437294006,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "feed3630-c53b-012f-e4d0-58d385a7bc34",
+        "titles": [
+            "India's princess, Agricultural building, World's Fair, Chicago.",
+            "Stereoscopic views of the World's Columbian Exposition. 8712."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_154F",
+            "back": "G90F186_154B"
+        },
+        "left": {
+            "x0": 0.040576159954071045,
+            "y0": 0.07881186902523041,
+            "x1": 0.8625147938728333,
+            "y1": 0.4983169436454773,
+            "score": 0.9999163150787354,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.03905150294303894,
+            "y0": 0.49790412187576294,
+            "x1": 0.8651998043060303,
+            "y1": 0.9166397452354431,
+            "score": 0.9989275336265564,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "fe7194c0-c53b-012f-6324-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8703.",
+            "The great thunder and lightning makers, Machinery building, World's Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_153F",
+            "back": "G90F186_153B"
+        },
+        "left": {
+            "x0": 0.031614094972610474,
+            "y0": 0.07270823419094086,
+            "x1": 0.8586411476135254,
+            "y1": 0.4932399392127991,
+            "score": 0.9997283816337585,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.034266918897628784,
+            "y0": 0.4958512783050537,
+            "x1": 0.8559961318969727,
+            "y1": 0.9129642248153687,
+            "score": 0.9988735318183899,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "dc02d430-c53b-012f-9c76-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8144.",
+            "California redwood, Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_076F",
+            "back": "G90F186_076B"
+        },
+        "left": {
+            "x0": 0.05687505006790161,
+            "y0": 0.07838776707649231,
+            "x1": 0.8585129976272583,
+            "y1": 0.49523237347602844,
+            "score": 0.9999290704727173,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.050556182861328125,
+            "y0": 0.4983770251274109,
+            "x1": 0.8607694506645203,
+            "y1": 0.92047518491745,
+            "score": 0.9959977865219116,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "defc4b40-c53b-012f-4dc9-58d385a7bc34",
+        "titles": [
+            "Stereoscopic views of the World's Columbian Exposition. 8172.",
+            "Golden Arch, Transportation building, Columbian Exposition."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_083F",
+            "back": "G90F186_083B"
+        },
+        "left": {
+            "x0": 0.05773124098777771,
+            "y0": 0.087916299700737,
+            "x1": 0.8549906015396118,
+            "y1": 0.4994123578071594,
+            "score": 0.9999105930328369,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.060601383447647095,
+            "y0": 0.5022591352462769,
+            "x1": 0.8554646968841553,
+            "y1": 0.9143925905227661,
+            "score": 0.9996011853218079,
+            "side": "right"
+        }
+    },
+    {
+        "uuid": "c2b84960-c53b-012f-4224-58d385a7bc34",
+        "titles": [
+            "The surging sea of humanity at the opening of the Columbian Exposition.",
+            "Stereoscopic views of the World's Columbian Exposition. 7929."
+        ],
+        "subjects": [
+            "Chicago (Ill.)",
+            "Illinois",
+            "World's Columbian Exposition (1893 : Chicago, Ill.)",
+            "Exhibitions"
+        ],
+        "authors": [
+            "Kilburn, B. W. (Benjamin West) (1827-1909)"
+        ],
+        "dates": [
+            "1893"
+        ],
+        "image_ids": {
+            "front": "G90F186_019F",
+            "back": "G90F186_019B"
+        },
+        "left": {
+            "x0": 0.04304733872413635,
+            "y0": 0.08268089592456818,
+            "x1": 0.869910717010498,
+            "y1": 0.49766290187835693,
+            "score": 0.9999532699584961,
+            "side": "left"
+        },
+        "right": {
+            "x0": 0.04562777280807495,
+            "y0": 0.5006446838378906,
+            "x1": 0.8664619326591492,
+            "y1": 0.9171948432922363,
+            "score": 0.9990525841712952,
+            "side": "right"
+        }
+    }
+]

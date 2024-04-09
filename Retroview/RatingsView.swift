@@ -17,8 +17,8 @@ import SwiftUI
 public struct RatingsView: View {
     var maxRating: Int
     @Binding var currentRating: Int?
-    var width:Int
-    var color: UIColor
+    var width: Int
+    var color: Color
     var sfSymbol: String
     
     /// Only two required parameters are maxRating and the binding to currentRating.  All other parameters have default values
@@ -29,7 +29,7 @@ public struct RatingsView: View {
     ///   - color: The color of the image ( (Default - systemYellow)
     ///   - sfSymbol: A String representing an SFImage that has a fill variabnt (Default -  "star")
     ///
-    public init(maxRating: Int, currentRating: Binding<Int?>, width: Int = 20, color: UIColor = .systemYellow, sfSymbol: String = "star") {
+    public init(maxRating: Int, currentRating: Binding<Int?>, width: Int = 20, color: Color = Color.yellow, sfSymbol: String = "star") {
         self.maxRating = maxRating
         self._currentRating = currentRating
         self.width = width
@@ -100,9 +100,7 @@ extension View {
             RatingsView(
                 maxRating: 5,
                 currentRating: $currentRating,
-                width: 30,
-                color: .red,
-                sfSymbol: "heart"
+                width: 30
             )
         }
     }

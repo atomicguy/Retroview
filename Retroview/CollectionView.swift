@@ -53,8 +53,10 @@ struct CollectionView: View {
 }
 
 #Preview {
-    CollectionView()
-        .modelContainer(for: Stereoview.self, inMemory: true)
+    let preview = Preview(Stereoview.self)
+    preview.addEexamples(Stereoview.sampleCards)
+    return CollectionView()
+        .modelContainer(preview.container)
 }
 
 

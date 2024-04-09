@@ -73,7 +73,7 @@ struct EditCardView: View {
         .padding()
         .textFieldStyle(.roundedBorder)
         .navigationTitle(uuid)
-        .navigationBarTitleDisplayMode(.inline)
+//        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button("Update") {
                 card.uuid = uuid
@@ -106,8 +106,10 @@ struct EditCardView: View {
     }
 }
 
-//#Preview {
-//    NavigationStack{
-//        EditCardView()
-//    }
-//}
+#Preview {
+    let preview = Preview(Stereoview.self)
+    return NavigationStack{
+        EditCardView(card: Stereoview.sampleCards[1])
+            .modelContainer(preview.container)
+    }
+}
