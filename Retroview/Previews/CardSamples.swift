@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension Stereoview {
-    static var sampleCards: [Stereoview] {
+extension Card {
+    static var sampleCards: [Card] {
         [
-            Stereoview(
+            Card(
                 uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
                 titles: [
                     "Bird's-eye view, Columbian Exposition.",
@@ -29,7 +29,7 @@ extension Stereoview {
                     "1893"
                 ]
             ),
-            Stereoview(
+            Card(
                 uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
                 titles: [
                     "Stereoscopic views of the World's Columbian Exposition. 8288.",
@@ -48,7 +48,7 @@ extension Stereoview {
                     "1893"
                 ]
             ),
-            Stereoview(
+            Card(
                 uuid: "ecea5fb0-c53b-012f-7f72-58d385a7bc34",
                 titles: [
                     "Stereoscopic views of the World's Columbian Exposition. 8244.",
@@ -67,7 +67,7 @@ extension Stereoview {
                     "1893"
                 ]
             ),
-            Stereoview(
+            Card(
                 uuid: "e5082480-c53b-012f-b6f2-58d385a7bc34",
                 titles: [
                     "Idols of the British Columbian Indians, Columbian Exposition.",
@@ -86,7 +86,7 @@ extension Stereoview {
                     "1893"
                 ]
             ),
-            Stereoview(
+            Card(
                 uuid: "e9b0f580-c53b-012f-54ac-58d385a7bc34",
                 titles: [
                     "The convent where Columbus died, Columbian Exposition. 8228.",
@@ -105,7 +105,7 @@ extension Stereoview {
                     "1893"
                 ]
             ),
-            Stereoview(
+            Card(
                 uuid: "d6661a90-c53b-012f-fcd1-58d385a7bc34",
                 titles: [
                     "The crowning glory of the Basin, Columbian Exposition.",

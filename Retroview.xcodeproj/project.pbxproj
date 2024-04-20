@@ -13,7 +13,7 @@
 		5C6676C22BC210F8002DD52E /* RetroviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676C12BC210F8002DD52E /* RetroviewTests.swift */; };
 		5C6676CC2BC210F9002DD52E /* RetroviewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CB2BC210F9002DD52E /* RetroviewUITests.swift */; };
 		5C6676CE2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */; };
-		5C6676DC2BC21881002DD52E /* Stereoview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* Stereoview.swift */; };
+		5C6676DC2BC21881002DD52E /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* Card.swift */; };
 		5C6676DE2BC21C85002DD52E /* NewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DD2BC21C85002DD52E /* NewCardView.swift */; };
 		5C6676E02BC220D8002DD52E /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DF2BC220D8002DD52E /* CollectionView.swift */; };
 		5C6676E42BC388E2002DD52E /* RatingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676E32BC388E2002DD52E /* RatingsView.swift */; };
@@ -21,6 +21,10 @@
 		5C6676E82BC4EED1002DD52E /* CardSamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676E72BC4EED1002DD52E /* CardSamples.swift */; };
 		5C6676EA2BC4EF30002DD52E /* all_examples.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676E92BC4EF2F002DD52E /* all_examples.json */; };
 		5C6676EC2BC4F16B002DD52E /* PreviewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676EB2BC4F16B002DD52E /* PreviewContainer.swift */; };
+		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
+		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
+		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
+		5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C82BD47ABA005811DA /* Date.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +56,7 @@
 		5C6676CB2BC210F9002DD52E /* RetroviewUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewUITests.swift; sourceTree = "<group>"; };
 		5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5C6676DA2BC215C7002DD52E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		5C6676DB2BC21881002DD52E /* Stereoview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stereoview.swift; sourceTree = "<group>"; };
+		5C6676DB2BC21881002DD52E /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		5C6676DD2BC21C85002DD52E /* NewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCardView.swift; sourceTree = "<group>"; };
 		5C6676DF2BC220D8002DD52E /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		5C6676E32BC388E2002DD52E /* RatingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsView.swift; sourceTree = "<group>"; };
@@ -60,6 +64,10 @@
 		5C6676E72BC4EED1002DD52E /* CardSamples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSamples.swift; sourceTree = "<group>"; };
 		5C6676E92BC4EF2F002DD52E /* all_examples.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_examples.json; sourceTree = "<group>"; };
 		5C6676EB2BC4F16B002DD52E /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
+		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
+		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
+		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
+		5CC5A5C82BD47ABA005811DA /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,14 +119,12 @@
 		5C6676AE2BC210F7002DD52E /* Retroview */ = {
 			isa = PBXGroup;
 			children = (
-				5C6676DB2BC21881002DD52E /* Stereoview.swift */,
+				5CB421B32BCCB9E20065C130 /* Views */,
 				5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */,
-				5C6676DF2BC220D8002DD52E /* CollectionView.swift */,
-				5C6676E52BC38969002DD52E /* EditCardView.swift */,
-				5C6676DD2BC21C85002DD52E /* NewCardView.swift */,
-				5C6676E32BC388E2002DD52E /* RatingsView.swift */,
+				5CB421B42BCCB9EA0065C130 /* Models */,
 				5C6676B32BC210F8002DD52E /* Assets.xcassets */,
 				5C6676B52BC210F8002DD52E /* Retroview.entitlements */,
+				5CB421B22BCCB9D70065C130 /* Previews */,
 				5C6676B62BC210F8002DD52E /* Preview Content */,
 			);
 			path = Retroview;
@@ -129,8 +135,6 @@
 			children = (
 				5C6676E92BC4EF2F002DD52E /* all_examples.json */,
 				5C6676B72BC210F8002DD52E /* Preview Assets.xcassets */,
-				5C6676E72BC4EED1002DD52E /* CardSamples.swift */,
-				5C6676EB2BC4F16B002DD52E /* PreviewContainer.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -150,6 +154,38 @@
 				5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */,
 			);
 			path = RetroviewUITests;
+			sourceTree = "<group>";
+		};
+		5CB421B22BCCB9D70065C130 /* Previews */ = {
+			isa = PBXGroup;
+			children = (
+				5C6676E72BC4EED1002DD52E /* CardSamples.swift */,
+				5C6676EB2BC4F16B002DD52E /* PreviewContainer.swift */,
+			);
+			path = Previews;
+			sourceTree = "<group>";
+		};
+		5CB421B32BCCB9E20065C130 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5C6676DF2BC220D8002DD52E /* CollectionView.swift */,
+				5C6676E52BC38969002DD52E /* EditCardView.swift */,
+				5C6676DD2BC21C85002DD52E /* NewCardView.swift */,
+				5C6676E32BC388E2002DD52E /* RatingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		5CB421B42BCCB9EA0065C130 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5C6676DB2BC21881002DD52E /* Card.swift */,
+				5CC5A5C22BD471D0005811DA /* Title.swift */,
+				5CC5A5C42BD47622005811DA /* Author.swift */,
+				5CC5A5C62BD478CE005811DA /* Subject.swift */,
+				5CC5A5C82BD47ABA005811DA /* Date.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,9 +320,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C6676E62BC38969002DD52E /* EditCardView.swift in Sources */,
-				5C6676DC2BC21881002DD52E /* Stereoview.swift in Sources */,
+				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
+				5C6676DC2BC21881002DD52E /* Card.swift in Sources */,
 				5C6676E42BC388E2002DD52E /* RatingsView.swift in Sources */,
+				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
+				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
+				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5C6676E02BC220D8002DD52E /* CollectionView.swift in Sources */,
 				5C6676DE2BC21C85002DD52E /* NewCardView.swift in Sources */,
 				5C6676EC2BC4F16B002DD52E /* PreviewContainer.swift in Sources */,

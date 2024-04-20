@@ -24,7 +24,7 @@ struct NewCardView: View {
                 TextField("Subject", text: $subjects[0])
                 TextField("Date", text: $dates[0])
                 Button("Create") {
-                    let newCard = Stereoview(uuid: uuid, titles: titles, authors: authors, subjects: subjects, dates: dates)
+                    let newCard = Card(uuid: uuid, titles: titles, authors: authors, subjects: subjects, dates: dates)
                     context.insert(newCard)
                     dismiss()
                 }

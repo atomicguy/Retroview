@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EditCardView: View {
     @Environment(\.dismiss) private var dismiss
-    let card: Stereoview
+    let card: Card
     @State private var uuid = ""
     @State private var titles = [String]()
     @State private var authors = [String]()
@@ -107,9 +107,9 @@ struct EditCardView: View {
 }
 
 #Preview {
-    let preview = Preview(Stereoview.self)
+    let preview = Preview(Card.self)
     return NavigationStack{
-        EditCardView(card: Stereoview.sampleCards[1])
+        EditCardView(card: Card.sampleCards[1])
             .modelContainer(preview.container)
     }
 }

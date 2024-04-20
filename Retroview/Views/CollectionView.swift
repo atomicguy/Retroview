@@ -10,7 +10,7 @@ import SwiftData
 
 struct CollectionView: View {
     @Environment(\.modelContext) private var context
-    @Query(sort: \Stereoview.uuid) private var stereoviews: [Stereoview]
+    @Query(sort: \Card.uuid) private var stereoviews: [Card]
     @State private var createNewCard = false
     var body: some View {
         NavigationStack{
@@ -53,8 +53,8 @@ struct CollectionView: View {
 }
 
 #Preview {
-    let preview = Preview(Stereoview.self)
-    preview.addEexamples(Stereoview.sampleCards)
+    let preview = Preview(Card.self)
+    preview.addEexamples(Card.sampleCards)
     return CollectionView()
         .modelContainer(preview.container)
 }

@@ -20,7 +20,7 @@ struct RetroviewApp: App {
     }
     
     init() {
-        let schema = Schema([Stereoview.self])
+        let schema = Schema([Card.self])
         let config = ModelConfiguration("MyStereoviews", schema: schema)
         do {
             container = try ModelContainer(for: schema, configurations: config)
