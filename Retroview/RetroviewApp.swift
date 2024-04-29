@@ -13,26 +13,20 @@ struct RetroviewApp: App {
     let container: ModelContainer
     var body: some Scene {
         WindowGroup {
-            CollectionView()
+            CardCollectionScreen()
         }
-//        .modelContainer(for: Stereoview.self)
         .modelContainer(container)
     }
     
     init() {
-        let schema = Schema([Card.self])
+        let schema = Schema([CardSchemaV1.StereoCard.self])
         let config = ModelConfiguration("MyStereoviews", schema: schema)
         do {
             container = try ModelContainer(for: schema, configurations: config)
         } catch {
             fatalError("Could not configure the container")
         }
-//        let config = ModelConfiguration(url: URL.documentsDirectory.appending(path: "MyCards.store"))
-//        do {
-//            container = try ModelContainer(for: Stereoview.self, configurations: config)
-//        } catch {
-//            fatalError("Could not configure the container")
-//        }
+
         print(URL.applicationSupportDirectory.path(percentEncoded: false))
 //        print(URL.documentsDirectory.path())
     }
