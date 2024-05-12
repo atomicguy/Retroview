@@ -27,6 +27,6 @@ struct CardCollectionScreen: View {
 #Preview {
     NavigationStack{
         CardCollectionScreen()
-            .modelContainer(for: [CardSchemaV1.StereoCard.self])
+            .modelContainer(SampleData.shared.modelContainer)
     }
 }

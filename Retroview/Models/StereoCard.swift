@@ -9,7 +9,42 @@ import Foundation
 import SwiftData
 
 enum CardSchemaV1: VersionedSchema {
-    static var versionIdentifier: Schema.Version = .init(2,0,0)
+    static var versionIdentifier: Schema.Version = .init(0,1,0)
+    
+    static var models: [any PersistentModel.Type] {
+        [StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self, DateSchemaV1.Date.self]
+    }
+    
+    @Model
+    class StereoCard {
+        @Attribute(.unique)
+        var uuid: String
+        @Relationship(inverse: \TitleSchemaV1.Title.cards)
+        var titles = [TitleSchemaV1.Title]()
+
+        init(
+            uuid: String,
+            titles: [TitleSchemaV1.Title]
+        ) {
+            self.uuid = uuid
+            self.titles = titles
+        }
+        
+        static let sampleData = [
+            StereoCard(
+                uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
+                titles: []
+                ),
+            StereoCard(
+                uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
+                titles: []
+            )
+        ]
+    }
+}
+
+enum CardSchemaV2: VersionedSchema {
+    static var versionIdentifier: Schema.Version = .init(0,2,0)
     
     static var models: [any PersistentModel.Type] {
         [StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self, DateSchemaV1.Date.self]
@@ -58,6 +93,62 @@ enum CardSchemaV1: VersionedSchema {
             self.imageIdBack = imageIdBack
             self.left = left
             self.right = right
+        }
+        
+        static func example() -> StereoCard {
+            let card = StereoCard(
+                uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
+                titles: [
+                    TitleSchemaV1.Title(
+                        text: "Bird's-eye view, Columbian Exposition."
+                    ),
+                    TitleSchemaV1.Title(text: "Stereoscopic views of the World's Columbian Exposition. 7972.")
+                ],
+                authors: [
+                    AuthorSchemaV1.Author(
+                        name: "Kilburn, B. W. (Benjamin West) (1827-1909)"
+                    )
+                ],
+                subjects: [
+                    SubjectSchemaV1.Subject(
+                        name: "Chicago (Ill.)"
+                    ),
+                    SubjectSchemaV1.Subject(
+                        name: "Illinois"
+                    ),
+                    SubjectSchemaV1.Subject(
+                        name: "World's Columbian Exposition (1893 : Chicago, Ill.)"
+                    ),
+                    SubjectSchemaV1.Subject(
+                        name: "Exhibitions"
+                    )
+                ],
+                dates: [
+                    DateSchemaV1.Date(
+                        text: "1893"
+                    )
+                ],
+                imageIdFront: "IMG123f",
+                imageIdBack: "IMG123b",
+                left: CropSchemaV1.Crop(
+                    x0: 0.0,
+                    y0: 0.0,
+                    x1: 0.0,
+                    y1: 0.0,
+                    score: 0.9,
+                    side: "left"
+                ),
+                right: CropSchemaV1.Crop(
+                    x0: 0.0,
+                    y0: 0.0,
+                    x1: 0.0,
+                    y1: 0.0,
+                    score: 0.9,
+                    side: "right"
+                )
+            )
+            
+            return card
         }
     }
 }

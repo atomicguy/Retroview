@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CardListView: View {
     
     let cards: [CardSchemaV1.StereoCard]
+//    let titles: [TitleSchemaV1.Title]
     
     @Environment(\.modelContext) private var context
     
@@ -20,7 +22,13 @@ struct CardListView: View {
                     HStack {
                         Text(card.uuid)
                         Spacer()
-                        Text(card.titles.description)
+                        VStack(alignment: .leading) {
+                            if card.titles.count > 0 {
+                                ForEach(0 ..< card.titles.count, id: \.self) { index in
+                                    Text(card.titles[index].text)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -29,6 +37,8 @@ struct CardListView: View {
 }
 
 #Preview {
-    CardListView(cards: [])
-        .modelContainer(for: [CardSchemaV1.StereoCard.self])
+    NavigationStack {
+        CardListView(cards: SampleData.shared.cards)
+    }
+    .modelContainer(SampleData.shared.modelContainer)
 }
