@@ -20,7 +20,7 @@ struct CardListView: View {
             ForEach(cards) { card in
                 NavigationLink(value: card) {
                     HStack {
-                        Text(card.uuid)
+                        Text(card.uuid.uuidString)
                         Spacer()
                         VStack(alignment: .leading) {
                             if card.titles.count > 0 {

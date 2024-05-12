@@ -18,12 +18,14 @@ enum CardSchemaV1: VersionedSchema {
     @Model
     class StereoCard {
         @Attribute(.unique)
-        var uuid: String
+        var uuid: UUID
         @Relationship(inverse: \TitleSchemaV1.Title.cards)
         var titles = [TitleSchemaV1.Title]()
+        @Relationship(inverse: \TitleSchemaV1.Title.cards)
+        var titlePick: TitleSchemaV1.Title?
 
         init(
-            uuid: String,
+            uuid: UUID,
             titles: [TitleSchemaV1.Title]
         ) {
             self.uuid = uuid
@@ -32,11 +34,11 @@ enum CardSchemaV1: VersionedSchema {
         
         static let sampleData = [
             StereoCard(
-                uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
+                uuid: UUID(uuidString: "c7980740-c53b-012f-c86d-58d385a7bc34")!,
                 titles: []
                 ),
             StereoCard(
-                uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
+                uuid: UUID(uuidString: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34")!,
                 titles: []
             )
         ]

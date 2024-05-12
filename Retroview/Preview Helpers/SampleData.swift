@@ -41,15 +41,19 @@ class SampleData {
             context.insert(title)
         }
         
+        
+        // Add titles
         CardSchemaV1.StereoCard.sampleData[0].titles = [
             TitleSchemaV1.Title.sampleData[0],
             TitleSchemaV1.Title.sampleData[1]
         ]
+        CardSchemaV1.StereoCard.sampleData[0].titlePick = TitleSchemaV1.Title.sampleData[1]
         
         CardSchemaV1.StereoCard.sampleData[1].titles = [
             TitleSchemaV1.Title.sampleData[2],
             TitleSchemaV1.Title.sampleData[3]
         ]
+        CardSchemaV1.StereoCard.sampleData[1].titlePick = TitleSchemaV1.Title.sampleData[3]
         
         do {
             try context.save()
