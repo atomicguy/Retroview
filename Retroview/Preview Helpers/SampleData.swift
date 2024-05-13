@@ -47,7 +47,7 @@ class SampleData {
             TitleSchemaV1.Title.sampleData[0],
             TitleSchemaV1.Title.sampleData[1]
         ]
-        CardSchemaV1.StereoCard.sampleData[0].titlePick = TitleSchemaV1.Title.sampleData[1]
+        CardSchemaV1.StereoCard.sampleData[0].titlePick = TitleSchemaV1.Title.sampleData[0]
         
         CardSchemaV1.StereoCard.sampleData[1].titles = [
             TitleSchemaV1.Title.sampleData[2],
@@ -55,11 +55,20 @@ class SampleData {
         ]
         CardSchemaV1.StereoCard.sampleData[1].titlePick = TitleSchemaV1.Title.sampleData[3]
         
+        // Add authors
+        CardSchemaV1.StereoCard.sampleData[0].authors = [AuthorSchemaV1.Author.sampleData[0]]
+        CardSchemaV1.StereoCard.sampleData[1].authors = [AuthorSchemaV1.Author.sampleData[0]]
+        
+        
         do {
             try context.save()
         } catch {
             print("Sample data context failed to save")
         }
+    }
+    
+    var card: CardSchemaV1.StereoCard {
+        CardSchemaV1.StereoCard.sampleData[0]
     }
     
     var cards: [CardSchemaV1.StereoCard] {

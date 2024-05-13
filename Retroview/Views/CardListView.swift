@@ -19,17 +19,7 @@ struct CardListView: View {
         List {
             ForEach(cards) { card in
                 NavigationLink(value: card) {
-                    HStack {
-                        Text(card.uuid.uuidString)
-                        Spacer()
-                        VStack(alignment: .leading) {
-                            if card.titles.count > 0 {
-                                ForEach(0 ..< card.titles.count, id: \.self) { index in
-                                    Text(card.titles[index].text)
-                                }
-                            }
-                        }
-                    }
+                    CardView(card: card)
                 }
             }
         }
