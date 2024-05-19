@@ -23,21 +23,52 @@ struct CardView: View {
         }
     }
     
+    var sortedSubjects: [SubjectSchemaV1.Subject] {
+        card.subjects.sorted { first, second in
+            first.name < second.name
+        }
+    }
+    
+    var sortedDates: [DateSchemaV1.Date] {
+        card.dates.sorted { first, second in first.text < second.text}
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text(displayTitle.text)
-                .font(.system(.headline, design: .serif))
+                .font(.system(.title, design: .serif))
             Text(card.uuid.uuidString)
                 .font(.caption)
             if !card.authors.isEmpty {
-                LabeledContent{
+                HStack(alignment: .top){
+                    Text("Authors:")
                     VStack(alignment: .leading){
                         ForEach(sortedAuthors) { author in
                             Text(author.name)
                         }
                     }
-                } label: {
-                    Text("Authors:")
+                }
+            }
+            if !card.subjects.isEmpty {
+                HStack(alignment: .top) {
+                    Text("Subjects:")
+                    VStack(alignment: .leading){
+                        ForEach(sortedSubjects) {
+                            subject in
+                            Text(subject.name)
+                        }
+                    }
+                }
+            }
+            if !card.dates.isEmpty {
+                HStack(alignment: .top) {
+                    Text("Dates:")
+                    VStack(alignment: .leading){
+                        ForEach(sortedDates) {
+                            date in
+                            Text(date.text)
+                        }
+                    }
                 }
             }
         }

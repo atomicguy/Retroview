@@ -19,7 +19,7 @@ class SampleData {
     }
     
     private init() {
-        let schema = Schema([CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self])
+        let schema = Schema([CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self, DateSchemaV1.Date.self])
         
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         
@@ -38,12 +38,18 @@ class SampleData {
     func insertSampleData() {
         for card in CardSchemaV1.StereoCard.sampleData {
             context.insert(card)
-            print("card inserted:", card.uuid)
         }
         
         for title in TitleSchemaV1.Title.sampleData {
             context.insert(title)
-            print("title inserted:", title.text)
+        }
+        
+        for subject in SubjectSchemaV1.Subject.sampleData {
+            context.insert(subject)
+        }
+        
+        for date in DateSchemaV1.Date.sampleData {
+            context.insert(date)
         }
         
         
@@ -63,6 +69,21 @@ class SampleData {
         // Add authors
         CardSchemaV1.StereoCard.sampleData[0].authors = [AuthorSchemaV1.Author.sampleData[0]]
         CardSchemaV1.StereoCard.sampleData[1].authors = [AuthorSchemaV1.Author.sampleData[0]]
+        
+        // Add subjects
+        CardSchemaV1.StereoCard.sampleData[0].subjects = [SubjectSchemaV1.Subject.sampleData[0],
+                                                          SubjectSchemaV1.Subject.sampleData[1],
+                                                          SubjectSchemaV1.Subject.sampleData[2],
+                                                          SubjectSchemaV1.Subject.sampleData[3]]
+        
+        CardSchemaV1.StereoCard.sampleData[1].subjects = [SubjectSchemaV1.Subject.sampleData[0],
+                                                          SubjectSchemaV1.Subject.sampleData[1],
+                                                          SubjectSchemaV1.Subject.sampleData[2],
+                                                          SubjectSchemaV1.Subject.sampleData[3]]
+        
+        // Add dates
+        CardSchemaV1.StereoCard.sampleData[0].dates = [DateSchemaV1.Date.sampleData[0]]
+        CardSchemaV1.StereoCard.sampleData[1].dates = [DateSchemaV1.Date.sampleData[0]]
         
         
         do {

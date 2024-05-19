@@ -18,11 +18,20 @@ enum SubjectSchemaV1: VersionedSchema {
     @Model
     class Subject {
         var name: String
-        
         var cards: [CardSchemaV1.StereoCard]?
         
         init(name: String) {
             self.name = name
         }
+        
+        static let sampleData = [
+            Subject(name: "Chicago (Ill.)"),
+            Subject(name: "Illinois"),
+            Subject(name: "World's Columbian Exposition (1893 : Chicago, Ill.)"),
+            Subject(name: "Exhibitions"),
+            Subject(name: "Saratoga Springs (N.Y.)"),
+            Subject(name: "Springhouses"),
+            Subject(name: "New York (State)"),
+        ]
     }
 }

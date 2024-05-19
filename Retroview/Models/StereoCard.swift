@@ -12,19 +12,18 @@ enum CardSchemaV1: VersionedSchema {
     static var versionIdentifier: Schema.Version = .init(0,1,0)
     
     static var models: [any PersistentModel.Type] {
-        [CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self]
+        [CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self, DateSchemaV1.Date.self]
     }
     
     @Model
     class StereoCard {
         @Attribute(.unique)
         var uuid: UUID
-//        @Relationship(inverse: \TitleSchemaV1.Title.cards)
         var titles = [TitleSchemaV1.Title]()
-//        @Relationship(inverse: \TitleSchemaV1.Title.cards)
         var titlePick: TitleSchemaV1.Title?
-//        @Relationship(inverse: \AuthorSchemaV1.Author.cards)
         var authors = [AuthorSchemaV1.Author]()
+        var subjects = [SubjectSchemaV1.Subject]()
+        var dates = [DateSchemaV1.Date]()
 
         init(
             uuid: String
