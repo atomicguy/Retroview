@@ -19,26 +19,31 @@ class SampleData {
     }
     
     private init() {
-        let schema = Schema([CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self])
+        let schema = Schema([CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self])
         
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            print("ModelContainer created successfully")
             insertSampleData()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
+        
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
         
     }
     
     func insertSampleData() {
         for card in CardSchemaV1.StereoCard.sampleData {
             context.insert(card)
+            print("card inserted:", card.uuid)
         }
         
         for title in TitleSchemaV1.Title.sampleData {
             context.insert(title)
+            print("title inserted:", title.text)
         }
         
         
@@ -74,8 +79,4 @@ class SampleData {
     var cards: [CardSchemaV1.StereoCard] {
         CardSchemaV1.StereoCard.sampleData
     }
-//    
-//    var titles: [TitleSchemaV1.Title] {
-//        TitleSchemaV1.Title.sampleData
-//    }
 }

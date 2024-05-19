@@ -12,9 +12,9 @@ struct CardView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     
     @Environment(\.modelContext) private var context
-   
+    
     var displayTitle: TitleSchemaV1.Title {
-        card.titlePick ?? card.titles[0]
+        card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
     }
     
     var sortedAuthors: [AuthorSchemaV1.Author] {
@@ -24,16 +24,20 @@ struct CardView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(displayTitle.text)
                 .font(.system(.headline, design: .serif))
             Text(card.uuid.uuidString)
                 .font(.caption)
             if !card.authors.isEmpty {
-                Section("Authors:") {
-                    ForEach(sortedAuthors) { author in
-                        Text(author.name)
+                LabeledContent{
+                    VStack(alignment: .leading){
+                        ForEach(sortedAuthors) { author in
+                            Text(author.name)
+                        }
                     }
+                } label: {
+                    Text("Authors:")
                 }
             }
         }

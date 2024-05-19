@@ -19,11 +19,11 @@ enum CardSchemaV1: VersionedSchema {
     class StereoCard {
         @Attribute(.unique)
         var uuid: UUID
-        @Relationship(inverse: \TitleSchemaV1.Title.cards)
+//        @Relationship(inverse: \TitleSchemaV1.Title.cards)
         var titles = [TitleSchemaV1.Title]()
-        @Relationship(inverse: \TitleSchemaV1.Title.cards)
+//        @Relationship(inverse: \TitleSchemaV1.Title.cards)
         var titlePick: TitleSchemaV1.Title?
-        @Relationship(inverse: \AuthorSchemaV1.Author.cards)
+//        @Relationship(inverse: \AuthorSchemaV1.Author.cards)
         var authors = [AuthorSchemaV1.Author]()
 
         init(

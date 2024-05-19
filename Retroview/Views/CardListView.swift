@@ -9,9 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct CardListView: View {
-    
     let cards: [CardSchemaV1.StereoCard]
-//    let titles: [TitleSchemaV1.Title]
     
     @Environment(\.modelContext) private var context
     

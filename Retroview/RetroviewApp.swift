@@ -10,7 +10,6 @@ import SwiftData
 
 @main
 struct RetroviewApp: App {
-//    let container: /*ModelContainer*/
     
     
     var sharedModelContainer: ModelContainer = {
