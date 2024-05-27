@@ -16,7 +16,10 @@
 		5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* StereoCard.swift */; };
 		5C6676EA2BC4EF30002DD52E /* all_examples.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676E92BC4EF2F002DD52E /* all_examples.json */; };
 		5C7014F42BF1AC01001D6CC3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7014F32BF1AC01001D6CC3 /* CardView.swift */; };
+		5C875A7A2C051A8B00C0EA63 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C875A792C051A8B00C0EA63 /* ImageLoader.swift */; };
+		5C875A7C2C051AF500C0EA63 /* URLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C875A7B2C051AF500C0EA63 /* URLImageView.swift */; };
 		5C97172B2BF00B2A00C13D7B /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C97172A2BF00B2A00C13D7B /* SampleData.swift */; };
+		5CC502DA2BFAF15E005BCB65 /* DataImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC502D92BFAF15E005BCB65 /* DataImageView.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
@@ -59,7 +62,10 @@
 		5C6676DB2BC21881002DD52E /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
 		5C6676E92BC4EF2F002DD52E /* all_examples.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_examples.json; sourceTree = "<group>"; };
 		5C7014F32BF1AC01001D6CC3 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		5C875A792C051A8B00C0EA63 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		5C875A7B2C051AF500C0EA63 /* URLImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageView.swift; sourceTree = "<group>"; };
 		5C97172A2BF00B2A00C13D7B /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		5CC502D92BFAF15E005BCB65 /* DataImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataImageView.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -119,11 +125,13 @@
 		5C6676AE2BC210F7002DD52E /* Retroview */ = {
 			isa = PBXGroup;
 			children = (
+				5CD6000F2C0534A9008732E8 /* Import */,
 				5CC89F052BE835AF001ECF22 /* Preview Helpers */,
 				5CD0759B2BDF29AB002B463C /* Screens */,
 				5CB421B32BCCB9E20065C130 /* Views */,
 				5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */,
 				5CD075922BD609AF002B463C /* Import.swift */,
+				5C875A792C051A8B00C0EA63 /* ImageLoader.swift */,
 				5CB421B42BCCB9EA0065C130 /* Models */,
 				5C6676B32BC210F8002DD52E /* Assets.xcassets */,
 				5C6676B52BC210F8002DD52E /* Retroview.entitlements */,
@@ -163,6 +171,8 @@
 			children = (
 				5CD0759C2BDF29C6002B463C /* CardListView.swift */,
 				5C7014F32BF1AC01001D6CC3 /* CardView.swift */,
+				5CC502D92BFAF15E005BCB65 /* DataImageView.swift */,
+				5C875A7B2C051AF500C0EA63 /* URLImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -194,6 +204,13 @@
 				5CD075992BDF2961002B463C /* CardCollectionScreen.swift */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		5CD6000F2C0534A9008732E8 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Import;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,7 +277,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					5C6676AB2BC210F7002DD52E = {
 						CreatedOnToolsVersion = 15.3;
@@ -327,12 +344,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C875A7A2C051A8B00C0EA63 /* ImageLoader.swift in Sources */,
 				5CD075932BD609AF002B463C /* Import.swift in Sources */,
+				5CC502DA2BFAF15E005BCB65 /* DataImageView.swift in Sources */,
 				5C97172B2BF00B2A00C13D7B /* SampleData.swift in Sources */,
 				5CD0759A2BDF2961002B463C /* CardCollectionScreen.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
+				5C875A7C2C051AF500C0EA63 /* URLImageView.swift in Sources */,
 				5C7014F42BF1AC01001D6CC3 /* CardView.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
@@ -409,6 +429,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -470,6 +491,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -497,6 +519,7 @@
 				CODE_SIGN_ENTITLEMENTS = Retroview/Retroview.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Retroview/Preview Content\"";
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -537,6 +560,7 @@
 				CODE_SIGN_ENTITLEMENTS = Retroview/Retroview.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Retroview/Preview Content\"";
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -576,6 +600,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
@@ -599,6 +624,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
@@ -621,6 +647,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
@@ -643,6 +670,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;

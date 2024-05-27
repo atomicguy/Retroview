@@ -32,9 +32,23 @@ struct CardView: View {
     var sortedDates: [DateSchemaV1.Date] {
         card.dates.sorted { first, second in first.text < second.text}
     }
+
     
     var body: some View {
         VStack(alignment: .leading) {
+
+            AsyncImage(url: card.imageUrl(forSide: "front")) { phase in
+                if let image = phase.image{
+                    image.resizable()
+                } else if phase.error != nil {
+                    Color.red
+                } else {
+                    Color.blue
+                }
+            }
+            .frame(width: 400, height: 205)
+//            URLImageView(url: card.imageUrl(forSide: "front"), side: "front", card: card)
+//                            .frame(width: 400, height: 205)
             Text(displayTitle.text)
                 .font(.system(.title, design: .serif))
             Text(card.uuid.uuidString)

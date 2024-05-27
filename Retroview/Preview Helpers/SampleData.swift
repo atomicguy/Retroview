@@ -25,7 +25,6 @@ class SampleData {
         
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            print("ModelContainer created successfully")
             insertSampleData()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
@@ -38,6 +37,7 @@ class SampleData {
     func insertSampleData() {
         for card in CardSchemaV1.StereoCard.sampleData {
             context.insert(card)
+//            print(card.imageFrontId ?? "unknown")
         }
         
         for title in TitleSchemaV1.Title.sampleData {
