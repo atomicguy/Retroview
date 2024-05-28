@@ -43,7 +43,7 @@ struct CardView: View {
                 } else if phase.error != nil {
                     Color.red
                 } else {
-                    Color.blue
+                    Color.secondary
                 }
             }
             .frame(width: 400, height: 205)

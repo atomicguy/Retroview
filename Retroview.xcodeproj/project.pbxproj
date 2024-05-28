@@ -28,6 +28,9 @@
 		5CD075962BD60B3E002B463C /* Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD075952BD60B3E002B463C /* Crop.swift */; };
 		5CD0759A2BDF2961002B463C /* CardCollectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD075992BDF2961002B463C /* CardCollectionScreen.swift */; };
 		5CD0759D2BDF29C6002B463C /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD0759C2BDF29C6002B463C /* CardListView.swift */; };
+		5CD600112C053557008732E8 /* StereoCardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD600102C053557008732E8 /* StereoCardData.swift */; };
+		5CD6002C2C054EC8008732E8 /* loadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6001A2C054C18008732E8 /* loadData.swift */; };
+		5CD600302C055761008732E8 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6002F2C055761008732E8 /* CardDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +49,18 @@
 			remoteInfo = Retroview;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5CD600162C054C18008732E8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +89,10 @@
 		5CD075952BD60B3E002B463C /* Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crop.swift; sourceTree = "<group>"; };
 		5CD075992BDF2961002B463C /* CardCollectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionScreen.swift; sourceTree = "<group>"; };
 		5CD0759C2BDF29C6002B463C /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
+		5CD600102C053557008732E8 /* StereoCardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardData.swift; sourceTree = "<group>"; };
+		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CD6001A2C054C18008732E8 /* loadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loadData.swift; sourceTree = "<group>"; };
+		5CD6002F2C055761008732E8 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +111,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5C6676C42BC210F9002DD52E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD600152C054C18008732E8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -118,6 +144,7 @@
 				5C6676AC2BC210F7002DD52E /* Retroview.app */,
 				5C6676BD2BC210F8002DD52E /* RetroviewTests.xctest */,
 				5C6676C72BC210F9002DD52E /* RetroviewUITests.xctest */,
+				5CD600182C054C18008732E8 /* CardLoader */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -173,6 +200,7 @@
 				5C7014F32BF1AC01001D6CC3 /* CardView.swift */,
 				5CC502D92BFAF15E005BCB65 /* DataImageView.swift */,
 				5C875A7B2C051AF500C0EA63 /* URLImageView.swift */,
+				5CD6002F2C055761008732E8 /* CardDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -209,6 +237,8 @@
 		5CD6000F2C0534A9008732E8 /* Import */ = {
 			isa = PBXGroup;
 			children = (
+				5CD6001A2C054C18008732E8 /* loadData.swift */,
+				5CD600102C053557008732E8 /* StereoCardData.swift */,
 			);
 			path = Import;
 			sourceTree = "<group>";
@@ -269,6 +299,23 @@
 			productReference = 5C6676C72BC210F9002DD52E /* RetroviewUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		5CD600172C054C18008732E8 /* CardLoader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5CD6001C2C054C18008732E8 /* Build configuration list for PBXNativeTarget "CardLoader" */;
+			buildPhases = (
+				5CD600142C054C18008732E8 /* Sources */,
+				5CD600152C054C18008732E8 /* Frameworks */,
+				5CD600162C054C18008732E8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CardLoader;
+			productName = CardLoader;
+			productReference = 5CD600182C054C18008732E8 /* CardLoader */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -276,7 +323,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1530;
+				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					5C6676AB2BC210F7002DD52E = {
@@ -289,6 +336,9 @@
 					5C6676C62BC210F9002DD52E = {
 						CreatedOnToolsVersion = 15.3;
 						TestTargetID = 5C6676AB2BC210F7002DD52E;
+					};
+					5CD600172C054C18008732E8 = {
+						CreatedOnToolsVersion = 15.4;
 					};
 				};
 			};
@@ -308,6 +358,7 @@
 				5C6676AB2BC210F7002DD52E /* Retroview */,
 				5C6676BC2BC210F8002DD52E /* RetroviewTests */,
 				5C6676C62BC210F9002DD52E /* RetroviewUITests */,
+				5CD600172C054C18008732E8 /* CardLoader */,
 			);
 		};
 /* End PBXProject section */
@@ -344,11 +395,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CD600302C055761008732E8 /* CardDetailView.swift in Sources */,
 				5C875A7A2C051A8B00C0EA63 /* ImageLoader.swift in Sources */,
 				5CD075932BD609AF002B463C /* Import.swift in Sources */,
+				5CD6002C2C054EC8008732E8 /* loadData.swift in Sources */,
 				5CC502DA2BFAF15E005BCB65 /* DataImageView.swift in Sources */,
 				5C97172B2BF00B2A00C13D7B /* SampleData.swift in Sources */,
 				5CD0759A2BDF2961002B463C /* CardCollectionScreen.swift in Sources */,
+				5CD600112C053557008732E8 /* StereoCardData.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
@@ -376,6 +430,13 @@
 			files = (
 				5C6676CE2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift in Sources */,
 				5C6676CC2BC210F9002DD52E /* RetroviewUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD600142C054C18008732E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,6 +748,32 @@
 			};
 			name = Release;
 		};
+		5CD6001D2C054C18008732E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MYU957XGF6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		5CD6001E2C054C18008732E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MYU957XGF6;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -722,6 +809,15 @@
 			buildConfigurations = (
 				5C6676D82BC210F9002DD52E /* Debug */,
 				5C6676D92BC210F9002DD52E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5CD6001C2C054C18008732E8 /* Build configuration list for PBXNativeTarget "CardLoader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CD6001D2C054C18008732E8 /* Debug */,
+				5CD6001E2C054C18008732E8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

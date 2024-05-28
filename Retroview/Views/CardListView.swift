@@ -18,8 +18,11 @@ struct CardListView: View {
             ForEach(cards) { card in
                 NavigationLink(value: card) {
                     CardView(card: card)
-                }
+                } 
             }
+        }
+        .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
+            CardDetailView(card: card)
         }
     }
 }

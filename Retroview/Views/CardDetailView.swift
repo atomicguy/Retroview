@@ -1,8 +1,8 @@
 //
-//  CardDetailView.swift
+//  CardDetails.swift
 //  Retroview
 //
-//  Created by Adam Schuster on 5/12/24.
+//  Created by Adam Schuster on 5/27/24.
 //
 
 import SwiftUI
@@ -10,20 +10,37 @@ import SwiftData
 
 struct CardDetailView: View {
     @Bindable var card: CardSchemaV1.StereoCard
+    
     @Environment(\.modelContext) private var context
     
-    var body: some View {
-        HStack {
-            Text(card.titlePick?.text ?? card.titles[0].text)
-        }
-        .background(.background, in: RoundedRectangle(cornerRadius: 12))
-        .foregroundStyle(.primary)
+    var displayTitle: TitleSchemaV1.Title {
+        card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
     }
+        
+        var body: some View {
+            VStack(alignment: .leading) {
+
+                AsyncImage(url: card.imageUrl(forSide: "front")) { phase in
+                    if let image = phase.image{
+                        image.resizable()
+                    } else if phase.error != nil {
+                        Color.red
+                    } else {
+                        Color.secondary
+                    }
+                }
+                .frame(width: 760, height: 390)
+                Text(displayTitle.text)
+                    .font(.system(.title, design: .serif))
+                Text(card.uuid.uuidString)
+                    .font(.caption)
+               
+            }
+            .padding()
+        }
 }
 
 #Preview {
-    NavigationStack {
-        CardDetailView(card: SampleData.shared.card1)
-    }
-    .modelContainer(SampleData.shared.modelContainer)
+    CardDetailView(card: SampleData.shared.card)
+        .modelContainer(SampleData.shared.modelContainer)
 }
