@@ -19,6 +19,7 @@ enum TitleSchemaV1: VersionedSchema {
     class Title {
         var text: String
         var cards = [CardSchemaV1.StereoCard]()
+        var picks = [CardSchemaV1.StereoCard]()
         
         init(
             text: String

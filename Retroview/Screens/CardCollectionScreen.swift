@@ -18,7 +18,9 @@ struct CardCollectionScreen: View {
         VStack(alignment: .leading) {
             Text("Stereoview Cards")
                 .font(.largeTitle)
-            CardListView(cards: cards)
+            NavigationStack {
+                CardListView(cards: cards)
+            }
         }
         .padding()
     }

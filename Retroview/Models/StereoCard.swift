@@ -28,24 +28,38 @@ enum CardSchemaV1: VersionedSchema {
         var imageBack: Data?
         var imageBackId: String?
         
+        @Relationship(inverse: \TitleSchemaV1.Title.cards)
         var titles = [TitleSchemaV1.Title]()
+        @Relationship(inverse: \TitleSchemaV1.Title.picks)
         var titlePick: TitleSchemaV1.Title?
+        @Relationship(inverse: \AuthorSchemaV1.Author.cards)
         var authors = [AuthorSchemaV1.Author]()
+        @Relationship(inverse: \SubjectSchemaV1.Subject.cards)
         var subjects = [SubjectSchemaV1.Subject]()
+        @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
 
         init(
-            uuid: String,
-            imageFront: Data? = nil,
-            imageFrontId: String? = "",
-            imageBack: Data? = nil,
-            imageBackId: String? = ""
-            
-        ) {
-            self.uuid = UUID(uuidString: uuid) ?? UUID()
-            self.imageFrontId = imageFrontId
-            self.imageBackId = imageBackId
-        }
+                uuid: String,
+                imageFront: Data? = nil,
+                imageFrontId: String? = "",
+                imageBack: Data? = nil,
+                imageBackId: String? = "",
+                titles: [TitleSchemaV1.Title] = [],
+                authors: [AuthorSchemaV1.Author] = [],
+                subjects: [SubjectSchemaV1.Subject] = [],
+                dates: [DateSchemaV1.Date] = []
+            ) {
+                self.uuid = UUID(uuidString: uuid) ?? UUID()
+                self.imageFront = imageFront
+                self.imageFrontId = imageFrontId
+                self.imageBack = imageBack
+                self.imageBackId = imageBackId
+                self.titles = titles
+                self.authors = authors
+                self.subjects = subjects
+                self.dates = dates
+            }
         
         func imageUrl(forSide side: String ) -> URL? {
             let baseUrl = "https://iiif-prod.nypl.org/index.php?id="
@@ -55,7 +69,6 @@ enum CardSchemaV1: VersionedSchema {
                 imageName = imageBackId
             }
             let imageUrl = baseUrl + (imageName ?? "unknown") + size
-//            print(imageUrl)
             return URL(string: imageUrl)
         }
         

@@ -15,7 +15,10 @@ struct RetroviewApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CardSchemaV1.StereoCard.self,
-            TitleSchemaV1.Title.self
+            TitleSchemaV1.Title.self,
+            AuthorSchemaV1.Author.self,
+            SubjectSchemaV1.Subject.self,
+            DateSchemaV1.Date.self
         ])
         let config = ModelConfiguration("MyStereoviews", schema: schema, isStoredInMemoryOnly: false)
         do {
@@ -23,7 +26,7 @@ struct RetroviewApp: App {
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-
+        
         print(URL.applicationSupportDirectory.path(percentEncoded: false))
     }()
     

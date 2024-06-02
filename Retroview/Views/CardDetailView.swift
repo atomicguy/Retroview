@@ -22,7 +22,9 @@ struct CardDetailView: View {
 
                 AsyncImage(url: card.imageUrl(forSide: "front")) { phase in
                     if let image = phase.image{
-                        image.resizable()
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
                     } else if phase.error != nil {
                         Color.red
                     } else {

@@ -39,7 +39,9 @@ struct CardView: View {
 
             AsyncImage(url: card.imageUrl(forSide: "front")) { phase in
                 if let image = phase.image{
-                    image.resizable()
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 } else if phase.error != nil {
                     Color.red
                 } else {
@@ -47,8 +49,6 @@ struct CardView: View {
                 }
             }
             .frame(width: 400, height: 205)
-//            URLImageView(url: card.imageUrl(forSide: "front"), side: "front", card: card)
-//                            .frame(width: 400, height: 205)
             Text(displayTitle.text)
                 .font(.system(.title, design: .serif))
             Text(card.uuid.uuidString)
