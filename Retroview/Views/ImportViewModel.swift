@@ -33,7 +33,10 @@ class ImportViewModel: ObservableObject {
                    let dates = jsonDict["dates"] as? [String],
                    let imageIds = jsonDict["image_ids"] as? [String: String],
                    let frontImageId = imageIds["front"],
-                   let backImageId = imageIds["back"] {
+                   let backImageId = imageIds["back"],
+                   let leftCropDict = jsonDict["left"] as? [String: Any],
+                   let rightCropDict = jsonDict["right"] as? [String: Any]
+                {
                     
                     var titleObjects = [TitleSchemaV1.Title]()
                     for title in titles {
@@ -59,6 +62,25 @@ class ImportViewModel: ObservableObject {
                         dateObjects.append(dateObject)
                     }
                     
+                    let leftCrop = CropSchemaV1.Crop(
+                        x0: leftCropDict["x0"] as? Float ?? 0,
+                        y0: leftCropDict["y0"] as? Float ?? 0,
+                        x1: leftCropDict["x1"] as? Float ?? 0,
+                        y1: leftCropDict["y1"] as? Float ?? 0,
+                        score: leftCropDict["score"] as? Float ?? 0,
+                        side: leftCropDict["side"] as? String ?? "left"
+         
+                    )
+                    
+                    let rightCrop = CropSchemaV1.Crop(
+                        x0: rightCropDict["x0"] as? Float ?? 0,
+                        y0: rightCropDict["y0"] as? Float ?? 0,
+                        x1: rightCropDict["x1"] as? Float ?? 0,
+                        y1: rightCropDict["y1"] as? Float ?? 0,
+                        score: rightCropDict["score"] as? Float ?? 0,
+                        side: rightCropDict["side"] as? String ?? "right"
+                    )
+                                        
                     let stereoCard = CardSchemaV1.StereoCard(
                         uuid: uuidString,
                         imageFrontId: frontImageId,
@@ -66,8 +88,20 @@ class ImportViewModel: ObservableObject {
                         titles: titleObjects,
                         authors: authorObjects,
                         subjects: subjectObjects,
-                        dates: dateObjects
+                        dates: dateObjects,
+                        leftCrop: leftCrop,
+                        rightCrop: rightCrop
                     )
+                    
+                    let frontImage: () = stereoCard.downloadImage(forSide: "front") { result in
+                        switch result {
+                        case .success():
+                            print("Front image downloaded")
+                        case .failure(let error):
+                            print("Failed to download image: \(error)")
+                        }
+                    }
+                    
                     
                     stereoCards.append(stereoCard)
                 }

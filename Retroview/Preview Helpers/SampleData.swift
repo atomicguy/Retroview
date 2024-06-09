@@ -37,7 +37,6 @@ class SampleData {
     func insertSampleData() {
         for card in CardSchemaV1.StereoCard.sampleData {
             context.insert(card)
-//            print(card.imageFrontId ?? "unknown")
         }
         
         for title in TitleSchemaV1.Title.sampleData {

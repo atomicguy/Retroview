@@ -23,6 +23,7 @@ enum CropSchemaV1: VersionedSchema {
         var y1: Float
         var score: Float
         var side: String
+        var card: CardSchemaV1.StereoCard? = nil
         
         init(
             x0: Float,

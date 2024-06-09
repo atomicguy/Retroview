@@ -38,6 +38,10 @@ enum CardSchemaV1: VersionedSchema {
         var subjects = [SubjectSchemaV1.Subject]()
         @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
+        @Relationship(inverse: \CropSchemaV1.Crop.card)
+        var leftCrop: CropSchemaV1.Crop?
+        @Relationship(inverse: \CropSchemaV1.Crop.card)
+        var rightCrop: CropSchemaV1.Crop?
 
         init(
                 uuid: String,
@@ -48,7 +52,9 @@ enum CardSchemaV1: VersionedSchema {
                 titles: [TitleSchemaV1.Title] = [],
                 authors: [AuthorSchemaV1.Author] = [],
                 subjects: [SubjectSchemaV1.Subject] = [],
-                dates: [DateSchemaV1.Date] = []
+                dates: [DateSchemaV1.Date] = [],
+                leftCrop: CropSchemaV1.Crop? = nil,
+                rightCrop: CropSchemaV1.Crop? = nil
             ) {
                 self.uuid = UUID(uuidString: uuid) ?? UUID()
                 self.imageFront = imageFront
@@ -59,17 +65,49 @@ enum CardSchemaV1: VersionedSchema {
                 self.authors = authors
                 self.subjects = subjects
                 self.dates = dates
+                self.leftCrop = leftCrop
+                self.rightCrop = rightCrop
             }
         
         func imageUrl(forSide side: String ) -> URL? {
             let baseUrl = "https://iiif-prod.nypl.org/index.php?id="
-            let size = "&t=w"
+            let sizeSuffix = "&t=w"
             var imageName = imageFrontId
             if (side == "back") {
                 imageName = imageBackId
             }
-            let imageUrl = baseUrl + (imageName ?? "unknown") + size
+            let imageUrl = baseUrl + (imageName ?? "unknown") + sizeSuffix
             return URL(string: imageUrl)
+        }
+        
+        // Function to download image and store it as external storage
+        func downloadImage(forSide side: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            guard let url = imageUrl(forSide: side) else {
+                completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+                return
+            }
+            
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let data = data else {
+                    completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                    return
+                }
+                
+                if side == "front" {
+                    self.imageFront = data
+                } else if side == "back" {
+                    self.imageBack = data
+                }
+                
+                completion(.success(()))
+            }
+            
+            task.resume()
         }
         
         static let sampleData: [StereoCard] = {
