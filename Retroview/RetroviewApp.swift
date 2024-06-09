@@ -10,30 +10,30 @@ import SwiftData
 
 @main
 struct RetroviewApp: App {
-    let container: ModelContainer
+    
+    
+    var sharedModelContainer: ModelContainer = {
+        let schema = Schema([
+            CardSchemaV1.StereoCard.self,
+            TitleSchemaV1.Title.self,
+            AuthorSchemaV1.Author.self,
+            SubjectSchemaV1.Subject.self,
+            DateSchemaV1.Date.self
+        ])
+        let config = ModelConfiguration("MyStereoviews", schema: schema, isStoredInMemoryOnly: false)
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+        
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
+    }()
+    
     var body: some Scene {
         WindowGroup {
-            CollectionView()
+            CardCollectionScreen()
         }
-//        .modelContainer(for: Stereoview.self)
-        .modelContainer(container)
-    }
-    
-    init() {
-        let schema = Schema([Stereoview.self])
-        let config = ModelConfiguration("MyStereoviews", schema: schema)
-        do {
-            container = try ModelContainer(for: schema, configurations: config)
-        } catch {
-            fatalError("Could not configure the container")
-        }
-//        let config = ModelConfiguration(url: URL.documentsDirectory.appending(path: "MyCards.store"))
-//        do {
-//            container = try ModelContainer(for: Stereoview.self, configurations: config)
-//        } catch {
-//            fatalError("Could not configure the container")
-//        }
-        print(URL.applicationSupportDirectory.path(percentEncoded: false))
-//        print(URL.documentsDirectory.path())
+        .modelContainer(sharedModelContainer)
     }
 }
