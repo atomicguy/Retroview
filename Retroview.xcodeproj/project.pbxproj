@@ -16,8 +16,12 @@
 		5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* StereoCard.swift */; };
 		5C6676EA2BC4EF30002DD52E /* all_examples.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676E92BC4EF2F002DD52E /* all_examples.json */; };
 		5C7014F42BF1AC01001D6CC3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7014F32BF1AC01001D6CC3 /* CardView.swift */; };
-		5C875A7A2C051A8B00C0EA63 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C875A792C051A8B00C0EA63 /* ImageLoader.swift */; };
+		5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8C88CE2C1FF11300874E19 /* BackCardView.swift */; };
 		5C97172B2BF00B2A00C13D7B /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C97172A2BF00B2A00C13D7B /* SampleData.swift */; };
+		5C9BCA522C166A2D00668900 /* StereoCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */; };
+		5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA532C166AD600668900 /* FrontCardView.swift */; };
+		5C9BCA562C166D5500668900 /* FrontBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA552C166D5500668900 /* FrontBackView.swift */; };
+		5C9BCA582C166EBD00668900 /* CardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA572C166EBD00668900 /* CardGridView.swift */; };
 		5C9DDB022C0BEDAC00D83DE3 /* ImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9DDB012C0BEDAC00D83DE3 /* ImportViewModel.swift */; };
 		5C9DDB042C0C0C5500D83DE3 /* MyStereoviews.store in Resources */ = {isa = PBXBuildFile; fileRef = 5C9DDB032C0C0C5500D83DE3 /* MyStereoviews.store */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
@@ -27,8 +31,8 @@
 		5CD075962BD60B3E002B463C /* Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD075952BD60B3E002B463C /* Crop.swift */; };
 		5CD0759A2BDF2961002B463C /* CardCollectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD075992BDF2961002B463C /* CardCollectionScreen.swift */; };
 		5CD0759D2BDF29C6002B463C /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD0759C2BDF29C6002B463C /* CardListView.swift */; };
-		5CD600112C053557008732E8 /* StereoCardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD600102C053557008732E8 /* StereoCardData.swift */; };
 		5CD600302C055761008732E8 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6002F2C055761008732E8 /* CardDetailView.swift */; };
+		5CE6031D2C213968007D3DBA /* CardCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6031C2C213968007D3DBA /* CardCropView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,8 +79,12 @@
 		5C6676DB2BC21881002DD52E /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
 		5C6676E92BC4EF2F002DD52E /* all_examples.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_examples.json; sourceTree = "<group>"; };
 		5C7014F32BF1AC01001D6CC3 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
-		5C875A792C051A8B00C0EA63 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		5C8C88CE2C1FF11300874E19 /* BackCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackCardView.swift; sourceTree = "<group>"; };
 		5C97172A2BF00B2A00C13D7B /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardViewModel.swift; sourceTree = "<group>"; };
+		5C9BCA532C166AD600668900 /* FrontCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontCardView.swift; sourceTree = "<group>"; };
+		5C9BCA552C166D5500668900 /* FrontBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontBackView.swift; sourceTree = "<group>"; };
+		5C9BCA572C166EBD00668900 /* CardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGridView.swift; sourceTree = "<group>"; };
 		5C9DDB012C0BEDAC00D83DE3 /* ImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportViewModel.swift; sourceTree = "<group>"; };
 		5C9DDB032C0C0C5500D83DE3 /* MyStereoviews.store */ = {isa = PBXFileReference; lastKnownFileType = file; path = MyStereoviews.store; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
@@ -86,9 +94,9 @@
 		5CD075952BD60B3E002B463C /* Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crop.swift; sourceTree = "<group>"; };
 		5CD075992BDF2961002B463C /* CardCollectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionScreen.swift; sourceTree = "<group>"; };
 		5CD0759C2BDF29C6002B463C /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
-		5CD600102C053557008732E8 /* StereoCardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardData.swift; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD6002F2C055761008732E8 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
+		5CE6031C2C213968007D3DBA /* CardCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCropView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,12 +157,10 @@
 		5C6676AE2BC210F7002DD52E /* Retroview */ = {
 			isa = PBXGroup;
 			children = (
-				5CD6000F2C0534A9008732E8 /* Import */,
 				5CC89F052BE835AF001ECF22 /* Preview Helpers */,
 				5CD0759B2BDF29AB002B463C /* Screens */,
 				5CB421B32BCCB9E20065C130 /* Views */,
 				5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */,
-				5C875A792C051A8B00C0EA63 /* ImageLoader.swift */,
 				5CB421B42BCCB9EA0065C130 /* Models */,
 				5C6676B32BC210F8002DD52E /* Assets.xcassets */,
 				5C6676B52BC210F8002DD52E /* Retroview.entitlements */,
@@ -196,6 +202,11 @@
 				5C7014F32BF1AC01001D6CC3 /* CardView.swift */,
 				5CD6002F2C055761008732E8 /* CardDetailView.swift */,
 				5C9DDB012C0BEDAC00D83DE3 /* ImportViewModel.swift */,
+				5C9BCA532C166AD600668900 /* FrontCardView.swift */,
+				5C8C88CE2C1FF11300874E19 /* BackCardView.swift */,
+				5C9BCA552C166D5500668900 /* FrontBackView.swift */,
+				5C9BCA572C166EBD00668900 /* CardGridView.swift */,
+				5CE6031C2C213968007D3DBA /* CardCropView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -209,6 +220,7 @@
 				5CC5A5C62BD478CE005811DA /* Subject.swift */,
 				5CC5A5C82BD47ABA005811DA /* Date.swift */,
 				5CD075952BD60B3E002B463C /* Crop.swift */,
+				5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -227,14 +239,6 @@
 				5CD075992BDF2961002B463C /* CardCollectionScreen.swift */,
 			);
 			path = Screens;
-			sourceTree = "<group>";
-		};
-		5CD6000F2C0534A9008732E8 /* Import */ = {
-			isa = PBXGroup;
-			children = (
-				5CD600102C053557008732E8 /* StereoCardData.swift */,
-			);
-			path = Import;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,7 +322,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					5C6676AB2BC210F7002DD52E = {
 						CreatedOnToolsVersion = 15.3;
@@ -392,14 +396,18 @@
 			files = (
 				5C9DDB022C0BEDAC00D83DE3 /* ImportViewModel.swift in Sources */,
 				5CD600302C055761008732E8 /* CardDetailView.swift in Sources */,
-				5C875A7A2C051A8B00C0EA63 /* ImageLoader.swift in Sources */,
+				5C9BCA522C166A2D00668900 /* StereoCardViewModel.swift in Sources */,
 				5C97172B2BF00B2A00C13D7B /* SampleData.swift in Sources */,
 				5CD0759A2BDF2961002B463C /* CardCollectionScreen.swift in Sources */,
-				5CD600112C053557008732E8 /* StereoCardData.swift in Sources */,
+				5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */,
+				5C9BCA562C166D5500668900 /* FrontBackView.swift in Sources */,
+				5CE6031D2C213968007D3DBA /* CardCropView.swift in Sources */,
+				5C9BCA582C166EBD00668900 /* CardGridView.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C7014F42BF1AC01001D6CC3 /* CardView.swift in Sources */,
+				5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
@@ -651,7 +659,6 @@
 		5C6676D52BC210F9002DD52E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -675,7 +682,6 @@
 		5C6676D62BC210F9002DD52E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -699,7 +705,6 @@
 		5C6676D82BC210F9002DD52E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -722,7 +727,6 @@
 		5C6676D92BC210F9002DD52E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;

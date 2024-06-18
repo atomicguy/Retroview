@@ -35,52 +35,44 @@ struct CardView: View {
 
     
     var body: some View {
-        VStack(alignment: .leading) {
-
-            AsyncImage(url: card.imageUrl(forSide: "front")) { phase in
-                if let image = phase.image{
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } else if phase.error != nil {
-                    Color.red
-                } else {
-                    Color.secondary
-                }
-            }
-            .frame(width: 400, height: 205)
-            Text(displayTitle.text)
-                .font(.system(.title, design: .serif))
-            Text(card.uuid.uuidString)
-                .font(.caption)
-            if !card.authors.isEmpty {
-                HStack(alignment: .top){
-                    Text("Authors:")
-                    VStack(alignment: .leading){
-                        ForEach(sortedAuthors) { author in
-                            Text(author.name)
+        HStack() {
+            let viewModel = StereoCardViewModel(stereoCard: card)
+            FrontCardView(viewModel: viewModel)
+            VStack(alignment: .leading) {
+                
+                Text(displayTitle.text)
+                    .font(.system(.title, design: .serif))
+                Text(card.uuid.uuidString)
+                    .font(.caption)
+                if !card.authors.isEmpty {
+                    HStack(alignment: .top){
+                        Text("Authors:")
+                        VStack(alignment: .leading){
+                            ForEach(sortedAuthors) { author in
+                                Text(author.name)
+                            }
                         }
                     }
                 }
-            }
-            if !card.subjects.isEmpty {
-                HStack(alignment: .top) {
-                    Text("Subjects:")
-                    VStack(alignment: .leading){
-                        ForEach(sortedSubjects) {
-                            subject in
-                            Text(subject.name)
+                if !card.subjects.isEmpty {
+                    HStack(alignment: .top) {
+                        Text("Subjects:")
+                        VStack(alignment: .leading){
+                            ForEach(sortedSubjects) {
+                                subject in
+                                Text(subject.name)
+                            }
                         }
                     }
                 }
-            }
-            if !card.dates.isEmpty {
-                HStack(alignment: .top) {
-                    Text("Dates:")
-                    VStack(alignment: .leading){
-                        ForEach(sortedDates) {
-                            date in
-                            Text(date.text)
+                if !card.dates.isEmpty {
+                    HStack(alignment: .top) {
+                        Text("Dates:")
+                        VStack(alignment: .leading){
+                            ForEach(sortedDates) {
+                                date in
+                                Text(date.text)
+                            }
                         }
                     }
                 }

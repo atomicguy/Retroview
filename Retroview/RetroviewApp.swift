@@ -10,8 +10,6 @@ import SwiftData
 
 @main
 struct RetroviewApp: App {
-    
-    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CardSchemaV1.StereoCard.self,

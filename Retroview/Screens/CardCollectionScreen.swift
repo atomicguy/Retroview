@@ -11,6 +11,9 @@ import SwiftData
 struct CardCollectionScreen: View {
     
     @Environment(\.modelContext) private var context
+    @ObservedObject var viewModel = ImportViewModel()
+    @State private var isImporting = false
+
     
     @Query private var cards: [CardSchemaV1.StereoCard]
     
@@ -19,7 +22,20 @@ struct CardCollectionScreen: View {
             Text("Stereoview Cards")
                 .font(.largeTitle)
             NavigationStack {
-                CardListView(cards: cards)
+                Button(action: {isImporting = true}, label: {
+                    Label("Import", systemImage: "square.and.arrow.down")
+                })
+                .fileImporter(isPresented: $isImporting, allowedContentTypes: [.json], allowsMultipleSelection: true) { result in
+                    switch result {
+                    case .success(let urls):
+                        for url in urls {
+                            viewModel.importData(fromFile: url, context: context)
+                        }
+                    case .failure(let error):
+                        print("Error importing file: \(error.localizedDescription)")
+                    }
+                }
+                CardGridView(cards: cards)
             }
         }
         .padding()

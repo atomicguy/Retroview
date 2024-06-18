@@ -93,7 +93,7 @@ class ImportViewModel: ObservableObject {
                         rightCrop: rightCrop
                     )
                     
-                    let frontImage: () = stereoCard.downloadImage(forSide: "front") { result in
+                    let _: () = stereoCard.downloadImage(forSide: "front") { result in
                         switch result {
                         case .success():
                             print("Front image downloaded")
@@ -102,6 +102,14 @@ class ImportViewModel: ObservableObject {
                         }
                     }
                     
+                    let _: () = stereoCard.downloadImage(forSide: "back") { result in
+                        switch result {
+                        case .success():
+                            print("Back image downloaded")
+                        case .failure(let error):
+                            print("Failed to download image: \(error)")
+                        }
+                    }
                     
                     stereoCards.append(stereoCard)
                 }
