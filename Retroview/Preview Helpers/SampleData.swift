@@ -84,6 +84,12 @@ class SampleData {
         CardSchemaV1.StereoCard.sampleData[0].dates = [DateSchemaV1.Date.sampleData[0]]
         CardSchemaV1.StereoCard.sampleData[1].dates = [DateSchemaV1.Date.sampleData[0]]
         
+        // Add crops
+        CardSchemaV1.StereoCard.sampleData[0].leftCrop = CropSchemaV1.Crop.sampleData[0]
+        CardSchemaV1.StereoCard.sampleData[0].rightCrop = CropSchemaV1.Crop.sampleData[1]
+        CardSchemaV1.StereoCard.sampleData[1].leftCrop = CropSchemaV1.Crop.sampleData[2]
+        CardSchemaV1.StereoCard.sampleData[1].rightCrop = CropSchemaV1.Crop.sampleData[3]
+        
         
         do {
             try context.save()

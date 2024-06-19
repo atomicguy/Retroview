@@ -11,17 +11,19 @@ struct BackCardView: View {
     @ObservedObject var viewModel: StereoCardViewModel
 
     var body: some View {
-        VStack {
-            if let backCGImage = viewModel.backCGImage {
-                Image(decorative: backCGImage, scale: 1.0, orientation: .up)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 400, maxHeight: 300)
-            } else {
-                ProgressView("Loading Front Image...")
-                    .onAppear {
-                        viewModel.loadImage(forSide: "back")
-                    }
+        GeometryReader { geometry in
+            VStack {
+                if let backCGImage = viewModel.backCGImage {
+                    Image(decorative: backCGImage, scale: 1.0, orientation: .up)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                } else {
+                    ProgressView("Loading Front Image...")
+                        .onAppear {
+                            viewModel.loadImage(forSide: "back")
+                        }
+                }
             }
         }
         .padding()

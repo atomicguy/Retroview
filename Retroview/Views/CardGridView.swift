@@ -25,15 +25,14 @@ struct CardGridView: View {
                 ForEach(cards) { card in
                     NavigationLink(destination: CardDetailView(card: card)) {
                         CardView(card: card)
-                            .contentShape(.hoverEffect, .rect(cornerRadius: 20))
+                            .contentShape(.rect(cornerRadius: 20))
                             .aspectRatio(2, contentMode: .fit)
-                            .hoverEffect()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(.regularMaterial)
                     .aspectRatio(2, contentMode: .fit)
                     .clipShape(.rect(cornerRadius: 20))
-                    .padding()
+                    .padding(5)
                 }
                 .buttonStyle(.plain)
             }

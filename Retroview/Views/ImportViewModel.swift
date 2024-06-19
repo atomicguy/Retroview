@@ -1,15 +1,7 @@
-//
-//  ImportViewModel.swift
-//  Retroview
-//
-//  Created by Adam Schuster on 6/1/24.
-//
-
 import SwiftUI
 import SwiftData
 
 class ImportViewModel: ObservableObject {
-//    @Environment(\.modelContext) private var context
     
     func parseJSON(fromFile fileURL: URL) -> Data? {
         do {
@@ -35,8 +27,7 @@ class ImportViewModel: ObservableObject {
                    let frontImageId = imageIds["front"],
                    let backImageId = imageIds["back"],
                    let leftCropDict = jsonDict["left"] as? [String: Any],
-                   let rightCropDict = jsonDict["right"] as? [String: Any]
-                {
+                   let rightCropDict = jsonDict["right"] as? [String: Any] {
                     
                     var titleObjects = [TitleSchemaV1.Title]()
                     for title in titles {
@@ -69,7 +60,6 @@ class ImportViewModel: ObservableObject {
                         y1: leftCropDict["y1"] as? Float ?? 0,
                         score: leftCropDict["score"] as? Float ?? 0,
                         side: leftCropDict["side"] as? String ?? "left"
-         
                     )
                     
                     let rightCrop = CropSchemaV1.Crop(
@@ -80,7 +70,7 @@ class ImportViewModel: ObservableObject {
                         score: rightCropDict["score"] as? Float ?? 0,
                         side: rightCropDict["side"] as? String ?? "right"
                     )
-                                        
+                    
                     let stereoCard = CardSchemaV1.StereoCard(
                         uuid: uuidString,
                         imageFrontId: frontImageId,
@@ -121,42 +111,19 @@ class ImportViewModel: ObservableObject {
     }
     
     @MainActor
-    func saveModelObjects(_ objects: [CardSchemaV1.StereoCard], context: ModelContext) {
-            objects.forEach { object in
-                context.insert(object)
-            }
-            do {
-                try context.save()
-                print("Model objects saved successfully.")
-            } catch {
-                print("Could not save context: \(error)")
-            }
+    private func saveModelObjects(_ objects: [CardSchemaV1.StereoCard], context: ModelContext) {
+        objects.forEach { object in
+            context.insert(object)
         }
+        do {
+            try context.save()
+            print("Model objects saved successfully.")
+        } catch {
+            print("Could not save context: \(error)")
+        }
+    }
     
-    //    func importData(fromFile fileURL: URL) {
-    //        Task {
-    //            var didStartAccessing = false
-    //            if fileURL.startAccessingSecurityScopedResource() {
-    //                didStartAccessing = true
-    //                print("Started accessing security scoped resource")
-    //            } else {
-    //                print("Failed to start accessing security scoped resource")
-    //            }
-    //            defer {
-    //                if didStartAccessing {
-    //                    fileURL.stopAccessingSecurityScopedResource()
-    //                    print("Stopped accessing security scoped resource")
-    //                }
-    //            }
-    //
-    //            if let jsonData = parseJSON(fromFile: fileURL) {
-    //                let modelObjects = createModelObjects(fromJSONData: jsonData)
-    //                await saveModelObjects(modelObjects)
-    //            } else {
-    //                print("Failed to parse JSON data")
-    //            }
-    //        }
-    //    }
+    @MainActor
     func importData(fromFile fileURL: URL, context: ModelContext) {
         Task {
             var didStartAccessing = false
@@ -173,15 +140,34 @@ class ImportViewModel: ObservableObject {
                 }
             }
             
+            // Move file reading and JSON parsing to a background thread.
+            let jsonData: Data
             do {
-                let jsonData = try Data(contentsOf: fileURL)
-                print("Read JSON data successfully: \(jsonData)")
-                let modelObjects = createModelObjects(fromJSONData: jsonData)
-                await saveModelObjects(modelObjects, context: context)
+                jsonData = try await withCheckedThrowingContinuation { continuation in
+                    DispatchQueue.global(qos: .background).async {
+                        do {
+                            let data = try Data(contentsOf: fileURL)
+                            continuation.resume(returning: data)
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    }
+                }
             } catch {
                 print("Error reading JSON file: \(error.localizedDescription)")
+                return
             }
+            
+            // Creating model objects can stay on the background thread.
+            let modelObjects = await withCheckedContinuation { continuation in
+                DispatchQueue.global(qos: .background).async {
+                    let objects = self.createModelObjects(fromJSONData: jsonData)
+                    continuation.resume(returning: objects)
+                }
+            }
+            
+            // Save the model objects on the main thread.
+            saveModelObjects(modelObjects, context: context)
         }
     }
-    
 }
