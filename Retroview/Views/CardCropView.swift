@@ -8,55 +8,84 @@
 import SwiftUI
 
 struct CardCropView: View {
-    
     @Bindable var card: CardSchemaV1.StereoCard
     @Environment(\.modelContext) private var context
+    @StateObject private var viewModel: StereoCardViewModel
+    @State private var imageSize: CGSize = .zero
+    
+    init(card: CardSchemaV1.StereoCard) {
+        self.card = card
+        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
+    }
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack() {
-                let viewModel = StereoCardViewModel(stereoCard: card)
-                
-                // The sample values seem to have x and y flipped
-                let left = card.leftCrop
-                let leftWidth = CGFloat((left?.y1 ?? 0) - (left?.y0 ?? 0)) * geometry.size.width
-                let leftHeight = CGFloat((left?.x1 ?? 0) - (left?.x0 ?? 0)) * geometry.size.height
-                let leftX = CGFloat(left?.y0 ?? 0) * geometry.size.width + leftWidth / 2
-                let leftY = CGFloat(left?.x0 ?? 0) * geometry.size.height + leftHeight / 2
-                
-                let right = card.rightCrop
-                let rightWidth = CGFloat((right?.y1 ?? 0) - (right?.y0 ?? 0)) * geometry.size.width
-                let rightHeight = CGFloat((right?.x1 ?? 0) - (right?.x0 ?? 0)) * geometry.size.height
-                let rightX = CGFloat(right?.y0 ?? 0) * geometry.size.width + rightWidth / 2
-                let rightY = CGFloat(right?.x0 ?? 0) * geometry.size.height + rightHeight / 2
-                
-                FrontCardView(viewModel: viewModel)
-                
-                Rectangle()
-                    .fill(Color.clear)
-                    .strokeBorder(Color.red, lineWidth: 5)
-                    .frame(
-                        width: leftWidth,
-                        height: leftHeight
-                    )
-                    .position(
-                        x: leftX,
-                        y: leftY
-                    )
-                
-                Rectangle()
-                    .fill(Color.clear)
-                    .strokeBorder(Color.blue, lineWidth: 5)
-                    .frame(
-                        width: rightWidth,
-                        height: rightHeight
-                    )
-                    .position(
-                        x: rightX,
-                        y: rightY
-                    )
+            ZStack {
+                if let frontCGImage = viewModel.frontCGImage {
+                    Image(decorative: frontCGImage, scale: 1.0, orientation: .up)
+                        .resizable()
+                        .scaledToFit()
+                        .background(
+                            GeometryReader { imageGeometry in
+                                Color.clear
+                                    .onAppear {
+                                        self.imageSize = imageGeometry.size
+                                    }
+                                    .onChange(of: imageGeometry.size) { oldValue, newValue in
+                                        self.imageSize = newValue
+                                    }
+                            }
+                        )
+                        .overlay {
+                            if imageSize.width > 0 && imageSize.height > 0 {
+                                BoundingBoxView(crop: card.leftCrop, color: .red, imageSize: imageSize)
+                                BoundingBoxView(crop: card.rightCrop, color: .blue, imageSize: imageSize)
+                            }
+                        }
+                } else {
+                    ProgressView("Loading Front Image...")
+                }
             }
         }
+        .adaptiveFrame()
+        .onAppear {
+            viewModel.loadImage(forSide: "front")
+        }
+    }
+}
+
+struct BoundingBoxView: View {
+    let crop: CropSchemaV1.Crop?
+    let color: Color
+    let imageSize: CGSize
+    
+    var body: some View {
+        GeometryReader { geometry in
+            if let crop = crop {
+                // The sample values seem to have x and y flipped
+                let width = CGFloat(crop.y1 - crop.y0) * imageSize.width
+                let height = CGFloat(crop.x1 - crop.x0) * imageSize.height
+                let x = CGFloat(crop.y0) * imageSize.width
+                let y = CGFloat(crop.x0) * imageSize.height
+                
+                Rectangle()
+                    .fill(Color.clear)
+                    .strokeBorder(color, lineWidth: 5)
+                    .frame(width: width, height: height)
+                    .position(x: x + width / 2, y: y + height / 2)
+            }
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func adaptiveFrame() -> some View {
+        #if os(visionOS)
+        self.frame(width: 800, height: 600)
+        #else
+        self.frame(minWidth: 400, minHeight: 300)
+        #endif
     }
 }
 

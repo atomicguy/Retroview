@@ -19,7 +19,7 @@ struct BackCardView: View {
                         .scaledToFit()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                 } else {
-                    ProgressView("Loading Front Image...")
+                    ProgressView("Loading Back Image...")
                         .onAppear {
                             viewModel.loadImage(forSide: "back")
                         }
