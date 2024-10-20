@@ -79,8 +79,7 @@ class ImportViewModel: ObservableObject {
                         authors: authorObjects,
                         subjects: subjectObjects,
                         dates: dateObjects,
-                        leftCrop: leftCrop,
-                        rightCrop: rightCrop
+                        crops: [leftCrop, rightCrop]
                     )
                     
                     let _: () = stereoCard.downloadImage(forSide: "front") { result in

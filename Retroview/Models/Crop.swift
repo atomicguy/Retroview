@@ -9,12 +9,17 @@ import Foundation
 import SwiftData
 
 enum CropSchemaV1: VersionedSchema {
-    static var versionIdentifier: Schema.Version = .init(1,0,0)
-    
+    static var versionIdentifier: Schema.Version = .init(1, 0, 0)
+
     static var models: [any PersistentModel.Type] {
         [Crop.self]
     }
-    
+
+    enum Side: String {
+        case left = "left"
+        case right = "right"
+    }
+
     @Model
     class Crop {
         var x0: Float
@@ -23,8 +28,10 @@ enum CropSchemaV1: VersionedSchema {
         var y1: Float
         var score: Float
         var side: String
-        var card: CardSchemaV1.StereoCard? = nil
-        
+
+        @Relationship(deleteRule: .cascade)
+        var card: CardSchemaV1.StereoCard?
+
         init(
             x0: Float,
             y0: Float,
@@ -40,7 +47,7 @@ enum CropSchemaV1: VersionedSchema {
             self.score = score
             self.side = side
         }
-        
+
         static let sampleData = [
             Crop(
                 x0: 0.05299678444862366,
@@ -48,7 +55,7 @@ enum CropSchemaV1: VersionedSchema {
                 x1: 0.8640091419219971,
                 y1: 0.4875648021697998,
                 score: 0.9998635053634644,
-                side: "left"
+                side: Side.left.rawValue
             ),
             Crop(
                 x0: 0.05890658497810364,
@@ -56,7 +63,7 @@ enum CropSchemaV1: VersionedSchema {
                 x1: 0.861069917678833,
                 y1: 0.9071069955825806,
                 score: 0.9980714917182922,
-                side: "right"
+                side: Side.right.rawValue
             ),
             Crop(
                 x0: 0.04484763741493225,
@@ -64,7 +71,7 @@ enum CropSchemaV1: VersionedSchema {
                 x1: 0.8568880558013916,
                 y1: 0.4988066256046295,
                 score: 0.9999356269836426,
-                side: "left"
+                side: Side.left.rawValue
             ),
             Crop(
                 x0: 0.041730403900146484,
@@ -72,8 +79,8 @@ enum CropSchemaV1: VersionedSchema {
                 x1: 0.8540880084037781,
                 y1: 0.9136133790016174,
                 score: 0.9982233643531799,
-                side: "right"
-            )
+                side: Side.right.rawValue
+            ),
         ]
     }
 }
