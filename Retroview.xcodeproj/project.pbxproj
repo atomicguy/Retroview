@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,7 @@
 		5C7014F42BF1AC01001D6CC3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7014F32BF1AC01001D6CC3 /* CardView.swift */; };
 		5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8C88CE2C1FF11300874E19 /* BackCardView.swift */; };
 		5C97172B2BF00B2A00C13D7B /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C97172A2BF00B2A00C13D7B /* SampleData.swift */; };
+		5C9ADA612CC4A37A00A599B5 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 5C9ADA602CC4A37A00A599B5 /* RealityKitContent */; };
 		5C9BCA522C166A2D00668900 /* StereoCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */; };
 		5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA532C166AD600668900 /* FrontCardView.swift */; };
 		5C9BCA562C166D5500668900 /* FrontBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA552C166D5500668900 /* FrontBackView.swift */; };
@@ -81,6 +82,7 @@
 		5C7014F32BF1AC01001D6CC3 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		5C8C88CE2C1FF11300874E19 /* BackCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackCardView.swift; sourceTree = "<group>"; };
 		5C97172A2BF00B2A00C13D7B /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		5C9ADA492CC4A2A000A599B5 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardViewModel.swift; sourceTree = "<group>"; };
 		5C9BCA532C166AD600668900 /* FrontCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontCardView.swift; sourceTree = "<group>"; };
 		5C9BCA552C166D5500668900 /* FrontBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontBackView.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C9ADA612CC4A37A00A599B5 /* RealityKitContent in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +168,7 @@
 				5C6676B32BC210F8002DD52E /* Assets.xcassets */,
 				5C6676B52BC210F8002DD52E /* Retroview.entitlements */,
 				5C6676B62BC210F8002DD52E /* Preview Content */,
+				5C9ADA4A2CC4A2A000A599B5 /* Packages */,
 			);
 			path = Retroview;
 			sourceTree = "<group>";
@@ -193,6 +197,14 @@
 				5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */,
 			);
 			path = RetroviewUITests;
+			sourceTree = "<group>";
+		};
+		5C9ADA4A2CC4A2A000A599B5 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				5C9ADA492CC4A2A000A599B5 /* RealityKitContent */,
+			);
+			path = Packages;
 			sourceTree = "<group>";
 		};
 		5CB421B32BCCB9E20065C130 /* Views */ = {
@@ -349,6 +361,9 @@
 				Base,
 			);
 			mainGroup = 5C6676A32BC210F7002DD52E;
+			packageReferences = (
+				5C9ADA5F2CC4A37A00A599B5 /* XCLocalSwiftPackageReference "Retroview/Packages/RealityKitContent" */,
+			);
 			productRefGroup = 5C6676AD2BC210F7002DD52E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -605,12 +620,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.Retroview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 1.1;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -647,12 +662,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.Retroview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 1.1;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -821,6 +836,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		5C9ADA5F2CC4A37A00A599B5 /* XCLocalSwiftPackageReference "Retroview/Packages/RealityKitContent" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Retroview/Packages/RealityKitContent;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5C9ADA602CC4A37A00A599B5 /* RealityKitContent */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RealityKitContent;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5C6676A42BC210F7002DD52E /* Project object */;
 }
