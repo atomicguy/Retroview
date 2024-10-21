@@ -85,7 +85,7 @@ struct CardDetailView: View {
                     }
                     .font(.system(.body, design: .serif))
                 }
-                CardCropView(card: card)
+                StereoView(card: card)
             }
             .padding()
         }
