@@ -84,3 +84,9 @@ enum CropSchemaV1: VersionedSchema {
         ]
     }
 }
+
+extension CropSchemaV1.Crop {
+    var description: String {
+        "(\(x0),\(y0))->(\(x1),\(y1))"
+    }
+}

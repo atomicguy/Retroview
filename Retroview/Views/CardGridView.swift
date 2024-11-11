@@ -5,22 +5,24 @@
 //  Created by Adam Schuster on 6/9/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct CardGridView: View {
     let cards: [CardSchemaV1.StereoCard]
-    
+
     @ObservedObject var viewModel = ImportViewModel()
     @Environment(\.modelContext) private var context
-    
 
     @State private var isImporting = false
-    
+
     var body: some View {
-        let columns = [GridItem(.fixed(650), spacing: 10), GridItem(.fixed(650), spacing: 10)]
-        
-        ScrollView{
+        let columns = [
+            GridItem(.fixed(650), spacing: 10),
+            GridItem(.fixed(650), spacing: 10),
+        ]
+
+        ScrollView {
             LazyVGrid(columns: columns) {
                 ForEach(cards) { card in
                     NavigationLink(destination: CardDetailView(card: card)) {

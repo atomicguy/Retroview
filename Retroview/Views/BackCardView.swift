@@ -17,11 +17,15 @@ struct BackCardView: View {
                     Image(decorative: backCGImage, scale: 1.0, orientation: .up)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height)
                 } else {
                     ProgressView("Loading Front Image...")
                         .onAppear {
-                            viewModel.loadImage(forSide: "back")
+                            Task {
+                                try? await viewModel.loadImage(forSide: "back")
+                            }
                         }
                 }
             }
@@ -37,4 +41,3 @@ struct BackCardView_Previews: PreviewProvider {
         FrontCardView(viewModel: viewModel)
     }
 }
-

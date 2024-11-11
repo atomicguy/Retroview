@@ -1,8 +1,8 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 class ImportViewModel: ObservableObject {
-    
+
     func parseJSON(fromFile fileURL: URL) -> Data? {
         do {
             let data = try Data(contentsOf: fileURL)
@@ -12,47 +12,52 @@ class ImportViewModel: ObservableObject {
         }
         return nil
     }
-    
-    func createModelObjects(fromJSONData jsonData: Data) -> [CardSchemaV1.StereoCard] {
+
+    func createModelObjects(fromJSONData jsonData: Data) -> [CardSchemaV1
+        .StereoCard]
+    {
         var stereoCards = [CardSchemaV1.StereoCard]()
         do {
-            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+            let jsonObject = try JSONSerialization.jsonObject(
+                with: jsonData, options: [])
             if let jsonDict = jsonObject as? [String: Any] {
                 if let uuidString = jsonDict["uuid"] as? String,
-                   let titles = jsonDict["titles"] as? [String],
-                   let subjects = jsonDict["subjects"] as? [String],
-                   let authors = jsonDict["authors"] as? [String],
-                   let dates = jsonDict["dates"] as? [String],
-                   let imageIds = jsonDict["image_ids"] as? [String: String],
-                   let frontImageId = imageIds["front"],
-                   let backImageId = imageIds["back"],
-                   let leftCropDict = jsonDict["left"] as? [String: Any],
-                   let rightCropDict = jsonDict["right"] as? [String: Any] {
-                    
+                    let titles = jsonDict["titles"] as? [String],
+                    let subjects = jsonDict["subjects"] as? [String],
+                    let authors = jsonDict["authors"] as? [String],
+                    let dates = jsonDict["dates"] as? [String],
+                    let imageIds = jsonDict["image_ids"] as? [String: String],
+                    let frontImageId = imageIds["front"],
+                    let backImageId = imageIds["back"],
+                    let leftCropDict = jsonDict["left"] as? [String: Any],
+                    let rightCropDict = jsonDict["right"] as? [String: Any]
+                {
+
                     var titleObjects = [TitleSchemaV1.Title]()
                     for title in titles {
                         let titleObject = TitleSchemaV1.Title(text: title)
                         titleObjects.append(titleObject)
                     }
-                    
+
                     var subjectObjects = [SubjectSchemaV1.Subject]()
                     for subject in subjects {
-                        let subjectObject = SubjectSchemaV1.Subject(name: subject)
+                        let subjectObject = SubjectSchemaV1.Subject(
+                            name: subject)
                         subjectObjects.append(subjectObject)
                     }
-                    
+
                     var authorObjects = [AuthorSchemaV1.Author]()
                     for author in authors {
                         let authorObject = AuthorSchemaV1.Author(name: author)
                         authorObjects.append(authorObject)
                     }
-                    
+
                     var dateObjects = [DateSchemaV1.Date]()
                     for date in dates {
                         let dateObject = DateSchemaV1.Date(text: date)
                         dateObjects.append(dateObject)
                     }
-                    
+
                     let leftCrop = CropSchemaV1.Crop(
                         x0: leftCropDict["x0"] as? Float ?? 0,
                         y0: leftCropDict["y0"] as? Float ?? 0,
@@ -61,7 +66,7 @@ class ImportViewModel: ObservableObject {
                         score: leftCropDict["score"] as? Float ?? 0,
                         side: leftCropDict["side"] as? String ?? "left"
                     )
-                    
+
                     let rightCrop = CropSchemaV1.Crop(
                         x0: rightCropDict["x0"] as? Float ?? 0,
                         y0: rightCropDict["y0"] as? Float ?? 0,
@@ -70,7 +75,7 @@ class ImportViewModel: ObservableObject {
                         score: rightCropDict["score"] as? Float ?? 0,
                         side: rightCropDict["side"] as? String ?? "right"
                     )
-                    
+
                     let stereoCard = CardSchemaV1.StereoCard(
                         uuid: uuidString,
                         imageFrontId: frontImageId,
@@ -81,8 +86,9 @@ class ImportViewModel: ObservableObject {
                         dates: dateObjects,
                         crops: [leftCrop, rightCrop]
                     )
-                    
-                    let _: () = stereoCard.downloadImage(forSide: "front") { result in
+
+                    let _: () = stereoCard.downloadImage(forSide: "front") {
+                        result in
                         switch result {
                         case .success():
                             print("Front image downloaded")
@@ -90,8 +96,9 @@ class ImportViewModel: ObservableObject {
                             print("Failed to download image: \(error)")
                         }
                     }
-                    
-                    let _: () = stereoCard.downloadImage(forSide: "back") { result in
+
+                    let _: () = stereoCard.downloadImage(forSide: "back") {
+                        result in
                         switch result {
                         case .success():
                             print("Back image downloaded")
@@ -99,7 +106,7 @@ class ImportViewModel: ObservableObject {
                             print("Failed to download image: \(error)")
                         }
                     }
-                    
+
                     stereoCards.append(stereoCard)
                 }
             }
@@ -108,9 +115,11 @@ class ImportViewModel: ObservableObject {
         }
         return stereoCards
     }
-    
+
     @MainActor
-    private func saveModelObjects(_ objects: [CardSchemaV1.StereoCard], context: ModelContext) {
+    private func saveModelObjects(
+        _ objects: [CardSchemaV1.StereoCard], context: ModelContext
+    ) {
         objects.forEach { object in
             context.insert(object)
         }
@@ -121,7 +130,7 @@ class ImportViewModel: ObservableObject {
             print("Could not save context: \(error)")
         }
     }
-    
+
     @MainActor
     func importData(fromFile fileURL: URL, context: ModelContext) {
         Task {
@@ -138,11 +147,12 @@ class ImportViewModel: ObservableObject {
                     print("Stopped accessing security scoped resource")
                 }
             }
-            
+
             // Move file reading and JSON parsing to a background thread.
             let jsonData: Data
             do {
-                jsonData = try await withCheckedThrowingContinuation { continuation in
+                jsonData = try await withCheckedThrowingContinuation {
+                    continuation in
                     DispatchQueue.global(qos: .background).async {
                         do {
                             let data = try Data(contentsOf: fileURL)
@@ -156,15 +166,16 @@ class ImportViewModel: ObservableObject {
                 print("Error reading JSON file: \(error.localizedDescription)")
                 return
             }
-            
+
             // Creating model objects can stay on the background thread.
             let modelObjects = await withCheckedContinuation { continuation in
                 DispatchQueue.global(qos: .background).async {
-                    let objects = self.createModelObjects(fromJSONData: jsonData)
+                    let objects = self.createModelObjects(
+                        fromJSONData: jsonData)
                     continuation.resume(returning: objects)
                 }
             }
-            
+
             // Save the model objects on the main thread.
             saveModelObjects(modelObjects, context: context)
         }

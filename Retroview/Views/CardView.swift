@@ -5,49 +5,49 @@
 //  Created by Adam Schuster on 5/12/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct CardView: View {
     @Bindable var card: CardSchemaV1.StereoCard
-    
+
     @Environment(\.modelContext) private var context
-    
+
     var displayTitle: TitleSchemaV1.Title {
-        card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
+        card.titlePick ?? card.titles.first
+            ?? TitleSchemaV1.Title(text: "Unknown")
     }
-    
+
     var sortedAuthors: [AuthorSchemaV1.Author] {
         card.authors.sorted { first, second in
             first.name < second.name
         }
     }
-    
+
     var sortedSubjects: [SubjectSchemaV1.Subject] {
         card.subjects.sorted { first, second in
             first.name < second.name
         }
     }
-    
+
     var sortedDates: [DateSchemaV1.Date] {
-        card.dates.sorted { first, second in first.text < second.text}
+        card.dates.sorted { first, second in first.text < second.text }
     }
 
-    
     var body: some View {
-        HStack() {
+        HStack {
             let viewModel = StereoCardViewModel(stereoCard: card)
             FrontCardView(viewModel: viewModel)
             VStack(alignment: .leading) {
-                
+
                 Text(displayTitle.text)
                     .font(.system(.title, design: .serif))
                 Text(card.uuid.uuidString)
                     .font(.caption)
                 if !card.authors.isEmpty {
-                    HStack(alignment: .top){
+                    HStack(alignment: .top) {
                         Text("Authors:")
-                        VStack(alignment: .leading){
+                        VStack(alignment: .leading) {
                             ForEach(sortedAuthors) { author in
                                 Text(author.name)
                             }
@@ -57,7 +57,7 @@ struct CardView: View {
                 if !card.subjects.isEmpty {
                     HStack(alignment: .top) {
                         Text("Subjects:")
-                        VStack(alignment: .leading){
+                        VStack(alignment: .leading) {
                             ForEach(sortedSubjects) {
                                 subject in
                                 Text(subject.name)
@@ -68,7 +68,7 @@ struct CardView: View {
                 if !card.dates.isEmpty {
                     HStack(alignment: .top) {
                         Text("Dates:")
-                        VStack(alignment: .leading){
+                        VStack(alignment: .leading) {
                             ForEach(sortedDates) {
                                 date in
                                 Text(date.text)

@@ -5,8 +5,8 @@
 //  Created by Adam Schuster on 4/6/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct RetroviewApp: App {
@@ -16,18 +16,19 @@ struct RetroviewApp: App {
             TitleSchemaV1.Title.self,
             AuthorSchemaV1.Author.self,
             SubjectSchemaV1.Subject.self,
-            DateSchemaV1.Date.self
+            DateSchemaV1.Date.self,
         ])
-        let config = ModelConfiguration("MyStereoviews", schema: schema, isStoredInMemoryOnly: false)
+        let config = ModelConfiguration(
+            "MyStereoviews", schema: schema, isStoredInMemoryOnly: false)
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-        
+
         print(URL.applicationSupportDirectory.path(percentEncoded: false))
     }()
-    
+
     var body: some Scene {
         WindowGroup {
             CardCollectionScreen()

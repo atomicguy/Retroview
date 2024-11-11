@@ -20,10 +20,12 @@ struct FrontBackView: View {
             } else {
                 ProgressView("Loading Front Image...")
                     .onAppear {
-                        viewModel.loadImage(forSide: "front")
+                        Task {
+                            try? await viewModel.loadImage(forSide: "front")
+                        }
                     }
             }
-            
+
             if let backCGImage = viewModel.backCGImage {
                 Image(decorative: backCGImage, scale: 1.0, orientation: .up)
                     .resizable()
@@ -32,7 +34,9 @@ struct FrontBackView: View {
             } else {
                 ProgressView("Loading Back Image...")
                     .onAppear {
-                        viewModel.loadImage(forSide: "back")
+                        Task {
+                            try? await viewModel.loadImage(forSide: "back")
+                        }
                     }
             }
         }

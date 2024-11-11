@@ -5,9 +5,9 @@
 //  Created by Adam Schuster on 6/9/24.
 //
 
+import CoreGraphics  // For CGImage
 import Foundation
 import SwiftUI
-import CoreGraphics // For CGImage
 
 class StereoCardViewModel: ObservableObject {
     @Published var stereoCard: CardSchemaV1.StereoCard
@@ -16,23 +16,35 @@ class StereoCardViewModel: ObservableObject {
 
     init(stereoCard: CardSchemaV1.StereoCard) {
         self.stereoCard = stereoCard
+        print("ViewModel initialized for card: \(stereoCard.uuid)")
     }
 
-    func loadImage(forSide side: String) {
+    func loadImage(forSide side: String) async throws {
+        print("Loading image for side: \(side)")
         if side == "front", let data = stereoCard.imageFront {
+            print("Found front image data")
             frontCGImage = CGImageFromData(data)
+            print("Front CGImage created: \(frontCGImage != nil)")
         } else if side == "back", let data = stereoCard.imageBack {
+            print("Found back image data")
             backCGImage = CGImageFromData(data)
+            print("Back CGImage created: \(backCGImage != nil)")
         } else {
-            // Attempt to download the image if not already loaded
+            print("No image data found, attempting download")
+            try await downloadImage(forSide: side)
+            print("Download successful, reloading image")
+            try await loadImage(forSide: side)  // Added 'try' here
+        }
+    }
+
+    private func downloadImage(forSide side: String) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
             stereoCard.downloadImage(forSide: side) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success():
-                        self.loadImage(forSide: side)
-                    case .failure(let error):
-                        print("Failed to download image for side \(side): \(error)")
-                    }
+                switch result {
+                case .success():
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
                 }
             }
         }
@@ -40,12 +52,14 @@ class StereoCardViewModel: ObservableObject {
 
     private func CGImageFromData(_ data: Data) -> CGImage? {
         #if os(macOS)
-        if let nsImage = NSImage(data: data), let imageData = nsImage.tiffRepresentation {
-            return NSBitmapImageRep(data: imageData)?.cgImage
-        }
-        return nil
+            if let nsImage = NSImage(data: data),
+                let imageData = nsImage.tiffRepresentation
+            {
+                return NSBitmapImageRep(data: imageData)?.cgImage
+            }
+            return nil
         #else
-        return UIImage(data: data)?.cgImage
+            return UIImage(data: data)?.cgImage
         #endif
     }
 }
