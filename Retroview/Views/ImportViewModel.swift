@@ -2,7 +2,6 @@ import SwiftData
 import SwiftUI
 
 class ImportViewModel: ObservableObject {
-
     func parseJSON(fromFile fileURL: URL) -> Data? {
         do {
             let data = try Data(contentsOf: fileURL)
@@ -19,20 +18,20 @@ class ImportViewModel: ObservableObject {
         var stereoCards = [CardSchemaV1.StereoCard]()
         do {
             let jsonObject = try JSONSerialization.jsonObject(
-                with: jsonData, options: [])
+                with: jsonData, options: []
+            )
             if let jsonDict = jsonObject as? [String: Any] {
                 if let uuidString = jsonDict["uuid"] as? String,
-                    let titles = jsonDict["titles"] as? [String],
-                    let subjects = jsonDict["subjects"] as? [String],
-                    let authors = jsonDict["authors"] as? [String],
-                    let dates = jsonDict["dates"] as? [String],
-                    let imageIds = jsonDict["image_ids"] as? [String: String],
-                    let frontImageId = imageIds["front"],
-                    let backImageId = imageIds["back"],
-                    let leftCropDict = jsonDict["left"] as? [String: Any],
-                    let rightCropDict = jsonDict["right"] as? [String: Any]
+                   let titles = jsonDict["titles"] as? [String],
+                   let subjects = jsonDict["subjects"] as? [String],
+                   let authors = jsonDict["authors"] as? [String],
+                   let dates = jsonDict["dates"] as? [String],
+                   let imageIds = jsonDict["image_ids"] as? [String: String],
+                   let frontImageId = imageIds["front"],
+                   let backImageId = imageIds["back"],
+                   let leftCropDict = jsonDict["left"] as? [String: Any],
+                   let rightCropDict = jsonDict["right"] as? [String: Any]
                 {
-
                     var titleObjects = [TitleSchemaV1.Title]()
                     for title in titles {
                         let titleObject = TitleSchemaV1.Title(text: title)
@@ -120,7 +119,7 @@ class ImportViewModel: ObservableObject {
     private func saveModelObjects(
         _ objects: [CardSchemaV1.StereoCard], context: ModelContext
     ) {
-        objects.forEach { object in
+        for object in objects {
             context.insert(object)
         }
         do {

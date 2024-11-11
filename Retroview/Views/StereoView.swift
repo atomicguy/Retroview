@@ -14,7 +14,7 @@ struct StereoView: View {
     @StateObject private var viewModel: StereoCardViewModel
     @StateObject private var materialLoader = StereoMaterialLoader()
     @State private var content: RealityViewContent?
-    @State private var showDebug = true  // Set to false for production
+    @State private var showDebug = true // Set to false for production
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
@@ -87,6 +87,7 @@ struct StereoView: View {
 }
 
 // MARK: - Debug Overlay
+
 private struct DebugOverlay: View {
     let hasImage: Bool
     let imageSize: String

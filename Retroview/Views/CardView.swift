@@ -39,7 +39,6 @@ struct CardView: View {
             let viewModel = StereoCardViewModel(stereoCard: card)
             FrontCardView(viewModel: viewModel)
             VStack(alignment: .leading) {
-
                 Text(displayTitle.text)
                     .font(.system(.title, design: .serif))
                 Text(card.uuid.uuidString)

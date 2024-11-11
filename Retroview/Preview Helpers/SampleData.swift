@@ -31,7 +31,6 @@ class SampleData {
         }
         
         print(URL.applicationSupportDirectory.path(percentEncoded: false))
-        
     }
     
     func insertSampleData() {
@@ -50,7 +49,6 @@ class SampleData {
         for date in DateSchemaV1.Date.sampleData {
             context.insert(date)
         }
-        
         
         // Add titles
         CardSchemaV1.StereoCard.sampleData[0].titles = [
@@ -89,7 +87,6 @@ class SampleData {
         CardSchemaV1.StereoCard.sampleData[0].rightCrop = CropSchemaV1.Crop.sampleData[1]
         CardSchemaV1.StereoCard.sampleData[1].leftCrop = CropSchemaV1.Crop.sampleData[2]
         CardSchemaV1.StereoCard.sampleData[1].rightCrop = CropSchemaV1.Crop.sampleData[3]
-        
         
         do {
             try context.save()

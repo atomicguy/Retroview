@@ -16,8 +16,8 @@ enum CropSchemaV1: VersionedSchema {
     }
 
     enum Side: String {
-        case left = "left"
-        case right = "right"
+        case left
+        case right
     }
 
     @Model

@@ -13,53 +13,33 @@ class StereoCardViewModel: ObservableObject {
     @Published var stereoCard: CardSchemaV1.StereoCard
     @Published var frontCGImage: CGImage?
     @Published var backCGImage: CGImage?
-
-    init(stereoCard: CardSchemaV1.StereoCard) {
+    
+    private let imageLoader: ImageLoading
+    
+    init(stereoCard: CardSchemaV1.StereoCard, imageLoader: ImageLoading = DefaultImageLoader()) {
         self.stereoCard = stereoCard
-        print("ViewModel initialized for card: \(stereoCard.uuid)")
+        self.imageLoader = imageLoader
     }
-
+    
     func loadImage(forSide side: String) async throws {
-        print("Loading image for side: \(side)")
-        if side == "front", let data = stereoCard.imageFront {
-            print("Found front image data")
-            frontCGImage = CGImageFromData(data)
-            print("Front CGImage created: \(frontCGImage != nil)")
-        } else if side == "back", let data = stereoCard.imageBack {
-            print("Found back image data")
-            backCGImage = CGImageFromData(data)
-            print("Back CGImage created: \(backCGImage != nil)")
-        } else {
-            print("No image data found, attempting download")
-            try await downloadImage(forSide: side)
-            print("Download successful, reloading image")
-            try await loadImage(forSide: side)  // Added 'try' here
-        }
-    }
-
-    private func downloadImage(forSide side: String) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            stereoCard.downloadImage(forSide: side) { result in
-                switch result {
-                case .success():
-                    continuation.resume()
-                case .failure(let error):
-                    continuation.resume(throwing: error)
+        let imageData = side == "front" ? stereoCard.imageFront : stereoCard.imageBack
+        
+        if let data = imageData {
+            let cgImage = await imageLoader.createCGImage(from: data)
+            await MainActor.run {
+                if side == "front" {
+                    frontCGImage = cgImage
+                } else {
+                    backCGImage = cgImage
                 }
             }
+        } else {
+            try await downloadAndLoadImage(forSide: side)
         }
     }
-
-    private func CGImageFromData(_ data: Data) -> CGImage? {
-        #if os(macOS)
-            if let nsImage = NSImage(data: data),
-                let imageData = nsImage.tiffRepresentation
-            {
-                return NSBitmapImageRep(data: imageData)?.cgImage
-            }
-            return nil
-        #else
-            return UIImage(data: data)?.cgImage
-        #endif
+    
+    private func downloadAndLoadImage(forSide side: String) async throws {
+        try await stereoCard.downloadImage(forSide: side)
+        try await loadImage(forSide: side)
     }
 }

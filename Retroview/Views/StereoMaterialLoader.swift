@@ -5,21 +5,21 @@
 //  Created by Adam Schuster on 11/10/24.
 //
 
-import SwiftUI
-import RealityKit
 import Foundation
+import RealityKit
 import StereoViewer
+import SwiftUI
 
 class StereoMaterialLoader: ObservableObject {
     @Published var material: ShaderGraphMaterial?
     @Published var status: LoadingStatus = .loading
-    
+
     enum LoadingStatus {
         case loading
         case success
         case error(String)
     }
-    
+
     func loadMaterial() async {
         do {
             self.material = try await ShaderGraphMaterial(
@@ -41,10 +41,10 @@ class StereoMaterialLoader: ObservableObject {
 
 struct StereoMaterialView: View {
     @StateObject private var loader = StereoMaterialLoader()
-    
+
     var body: some View {
         Group {
-            switch loader.status {
+            switch self.loader.status {
             case .loading:
                 ProgressView("Loading material...")
             case .success:
@@ -61,7 +61,7 @@ struct StereoMaterialView: View {
             }
         }
         .task {
-            await loader.loadMaterial()
+            await self.loader.loadMaterial()
         }
     }
 }

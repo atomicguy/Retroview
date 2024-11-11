@@ -124,13 +124,12 @@ enum CardSchemaV1: VersionedSchema {
                     .failure(
                         NSError(
                             domain: "", code: 0,
-                            userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]
-                        )))
+                            userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
                 return
             }
 
             let task = URLSession.shared.dataTask(with: url) {
-                data, response, error in
+                data, _, error in
                 if let error = error {
                     completion(.failure(error))
                     return
@@ -143,7 +142,7 @@ enum CardSchemaV1: VersionedSchema {
                                 domain: "", code: 0,
                                 userInfo: [
                                     NSLocalizedDescriptionKey:
-                                        "No data received"
+                                        "No data received",
                                 ])))
                     return
                 }
@@ -160,21 +159,16 @@ enum CardSchemaV1: VersionedSchema {
             task.resume()
         }
 
-        static let sampleData: [StereoCard] = {
-
-            return [
-                StereoCard(
-                    uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
-                    imageFrontId: "G90F186_030F",
-                    imageBackId: "G90F186_030B"
-                ),
-                StereoCard(
-                    uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
-                    imageFrontId: "G90F186_122F",
-                    imageBackId: "G90F186_122B"
-                ),
-            ]
-        }()
+        static let sampleData: [StereoCard] = [
+            StereoCard(
+                uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
+                imageFrontId: "G90F186_030F",
+                imageBackId: "G90F186_030B"),
+            StereoCard(
+                uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
+                imageFrontId: "G90F186_122F",
+                imageBackId: "G90F186_122B"),
+        ]
 
         private static func loadImageData(named imageName: String) -> Data? {
             guard
@@ -184,6 +178,26 @@ enum CardSchemaV1: VersionedSchema {
                 return nil
             }
             return try? Data(contentsOf: url)
+        }
+    }
+}
+
+// Add this extension to StereoCard.swift
+
+extension CardSchemaV1.StereoCard {
+    /// Downloads an image for the specified side and stores it in the model
+    /// - Parameter side: The side of the card ("front" or "back")
+    /// - Throws: Error if download fails or URL is invalid
+    func downloadImage(forSide side: String) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.downloadImage(forSide: side) { result in
+                switch result {
+                case .success():
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 }
