@@ -10,21 +10,41 @@ import SwiftUI
 
 struct CardListView: View {
     let cards: [CardSchemaV1.StereoCard]
+    @State private var isImporting = false
 
     @ObservedObject var viewModel = ImportViewModel()
     @Environment(\.modelContext) private var context
-
-    @State private var isImporting = false
-
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+    
+    @EnvironmentObject private var windowStateManager: WindowStateManager
+    
     var body: some View {
-        Button(
-            action: { isImporting = true },
-            label: {
+        List(cards) { card in
+            CardView(card: card)
+                .contentShape(Rectangle())
+                .background(windowStateManager.selectedCardId == card.uuid ? Color.accentColor.opacity(0.1) : Color.clear)
+                .onTapGesture {
+                    let identifier = StereoCardIdentifier(from: card)
+                    windowStateManager.selectCard(card)
+                    
+                    if windowStateManager.isDetailWindowOpen {
+                        dismissWindow(id: "stereo-detail")
+                        openWindow(id: "stereo-detail", value: identifier)
+                    } else {
+                        openWindow(id: "stereo-detail", value: identifier)
+                        windowStateManager.isDetailWindowOpen = true
+                    }
+                }
+        }
+        .toolbar {
+            Button(action: { isImporting = true }) {
                 Label("Import", systemImage: "square.and.arrow.down")
             }
-        )
+        }
         .fileImporter(
-            isPresented: $isImporting, allowedContentTypes: [.json],
+            isPresented: $isImporting,
+            allowedContentTypes: [.json],
             allowsMultipleSelection: true
         ) { result in
             switch result {
@@ -36,22 +56,10 @@ struct CardListView: View {
                 print("Error importing file: \(error.localizedDescription)")
             }
         }
-        List {
-            ForEach(cards) { card in
-                NavigationLink(destination: CardDetailView(card: card)) {
-                    CardView(card: card)
-                }
-            }
-        }
-        //        .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
-        //            CardDetailView(card: card)
-        //        }
     }
 }
 
 #Preview {
-    NavigationStack {
-        CardListView(cards: SampleData.shared.cards)
-    }
-    .modelContainer(SampleData.shared.modelContainer)
+    CardListView(cards: SampleData.shared.cards)
+        .modelContainer(SampleData.shared.modelContainer)
 }

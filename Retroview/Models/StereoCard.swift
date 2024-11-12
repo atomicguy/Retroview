@@ -79,6 +79,24 @@ enum CardSchemaV1: VersionedSchema {
             }
         }
 
+        enum CodingKeys: String, CodingKey {
+            case uuid, imageFrontId, imageBackId
+        }
+
+        required init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.uuid = try container.decode(UUID.self, forKey: .uuid)
+            self.imageFrontId = try container.decodeIfPresent(String.self, forKey: .imageFrontId)
+            self.imageBackId = try container.decodeIfPresent(String.self, forKey: .imageBackId)
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(uuid, forKey: .uuid)
+            try container.encodeIfPresent(imageFrontId, forKey: .imageFrontId)
+            try container.encodeIfPresent(imageBackId, forKey: .imageBackId)
+        }
+
         init(
             uuid: String,
             imageFront: Data? = nil,
