@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @MainActor
-class SampleData {
+final class SampleData {
     static let shared = SampleData()
     
     let modelContainer: ModelContainer
@@ -19,7 +19,13 @@ class SampleData {
     }
     
     private init() {
-        let schema = Schema([CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self, DateSchemaV1.Date.self])
+        let schema = Schema([
+            CardSchemaV1.StereoCard.self,
+            TitleSchemaV1.Title.self,
+            AuthorSchemaV1.Author.self,
+            SubjectSchemaV1.Subject.self,
+            DateSchemaV1.Date.self
+        ])
         
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         
@@ -29,11 +35,10 @@ class SampleData {
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-        
-        print(URL.applicationSupportDirectory.path(percentEncoded: false))
     }
     
-    func insertSampleData() {
+    private func insertSampleData() {
+        // Insert sample data
         for card in CardSchemaV1.StereoCard.sampleData {
             context.insert(card)
         }
@@ -50,6 +55,17 @@ class SampleData {
             context.insert(date)
         }
         
+        // Setup relationships
+        setupSampleRelationships()
+        
+        do {
+            try context.save()
+        } catch {
+            print("Sample data context failed to save: \(error)")
+        }
+    }
+    
+    private func setupSampleRelationships() {
         // Add titles
         CardSchemaV1.StereoCard.sampleData[0].titles = [
             TitleSchemaV1.Title.sampleData[0],
@@ -87,12 +103,6 @@ class SampleData {
         CardSchemaV1.StereoCard.sampleData[0].rightCrop = CropSchemaV1.Crop.sampleData[1]
         CardSchemaV1.StereoCard.sampleData[1].leftCrop = CropSchemaV1.Crop.sampleData[2]
         CardSchemaV1.StereoCard.sampleData[1].rightCrop = CropSchemaV1.Crop.sampleData[3]
-        
-        do {
-            try context.save()
-        } catch {
-            print("Sample data context failed to save")
-        }
     }
     
     var card: CardSchemaV1.StereoCard {

@@ -36,4 +36,5 @@ struct MainTabView: View {
 #Preview {
     MainTabView()
         .modelContainer(SampleData.shared.modelContainer)
+        .environmentObject(WindowStateManager.shared)
 }

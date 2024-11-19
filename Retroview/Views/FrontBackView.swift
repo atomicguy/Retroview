@@ -8,46 +8,23 @@
 import SwiftUI
 
 struct FrontBackView: View {
-    @ObservedObject var viewModel: StereoCardViewModel
-
     var body: some View {
-        VStack {
-            if let frontCGImage = viewModel.frontCGImage {
-                Image(decorative: frontCGImage, scale: 1.0, orientation: .up)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 400, maxHeight: 300)
-            } else {
-                ProgressView("Loading Front Image...")
-                    .onAppear {
-                        Task {
-                            try? await viewModel.loadImage(forSide: "front")
-                        }
-                    }
-            }
+        let viewModel = StereoCardViewModel(stereoCard: SampleData.shared.card)
 
-            if let backCGImage = viewModel.backCGImage {
-                Image(decorative: backCGImage, scale: 1.0, orientation: .up)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 400, maxHeight: 300)
-            } else {
-                ProgressView("Loading Back Image...")
-                    .onAppear {
-                        Task {
-                            try? await viewModel.loadImage(forSide: "back")
-                        }
-                    }
-            }
+        VStack(spacing: 20) {
+            FrontCardView(viewModel: viewModel)
+                .frame(width: 400, height: 200)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            BackCardView(viewModel: viewModel)
+                .frame(width: 400, height: 200)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
         }
         .padding()
     }
 }
 
-struct FrontBackView_Previews: PreviewProvider {
-    static var previews: some View {
-        let sampleCard = CardSchemaV1.StereoCard.sampleData[0]
-        let viewModel = StereoCardViewModel(stereoCard: sampleCard)
-        FrontBackView(viewModel: viewModel)
-    }
+#Preview("Front & Back") {
+    FrontBackView()
+        .modelContainer(SampleData.shared.modelContainer)
 }

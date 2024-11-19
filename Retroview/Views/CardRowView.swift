@@ -1,15 +1,14 @@
 //
-//  CardView.swift
+//  CardRowView.swift
 //  Retroview
 //
-//  Created by Adam Schuster on 5/12/24.
+//  Created by Adam Schuster on 11/18/24.
 //
 
-import SwiftData
 import SwiftUI
 
-struct CardView: View {
-    @Bindable var card: CardSchemaV1.StereoCard
+struct CardRow: View {
+    let card: CardSchemaV1.StereoCard
     @StateObject private var viewModel: StereoCardViewModel
 
     init(card: CardSchemaV1.StereoCard) {
@@ -54,9 +53,4 @@ struct CardView: View {
         .padding()
         .background(Color(.systemBackground))
     }
-}
-
-#Preview {
-    CardView(card: SampleData.shared.card)
-        .modelContainer(SampleData.shared.modelContainer)
 }

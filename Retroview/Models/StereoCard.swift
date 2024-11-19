@@ -86,8 +86,10 @@ enum CardSchemaV1: VersionedSchema {
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.uuid = try container.decode(UUID.self, forKey: .uuid)
-            self.imageFrontId = try container.decodeIfPresent(String.self, forKey: .imageFrontId)
-            self.imageBackId = try container.decodeIfPresent(String.self, forKey: .imageBackId)
+            self.imageFrontId = try container.decodeIfPresent(
+                String.self, forKey: .imageFrontId)
+            self.imageBackId = try container.decodeIfPresent(
+                String.self, forKey: .imageBackId)
         }
 
         func encode(to encoder: Encoder) throws {
@@ -138,32 +140,42 @@ enum CardSchemaV1: VersionedSchema {
             completion: @escaping (Result<Void, Error>) -> Void
         ) {
             guard let url = imageUrl(forSide: side) else {
-                completion(
-                    .failure(
-                        NSError(
-                            domain: "", code: 0,
-                            userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+                let error = NSError(
+                    domain: "", code: 0,
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+                print("Invalid URL for side: \(side)")
+                completion(.failure(error))
                 return
             }
 
+            print("Starting download for \(side) image from URL: \(url)")
+
             let task = URLSession.shared.dataTask(with: url) {
-                data, _, error in
+                data, response, error in
                 if let error = error {
+                    print("Download error for \(side): \(error)")
                     completion(.failure(error))
                     return
                 }
 
+                if let httpResponse = response as? HTTPURLResponse {
+                    print(
+                        "HTTP Status code for \(side): \(httpResponse.statusCode)"
+                    )
+                }
+
                 guard let data = data else {
-                    completion(
-                        .failure(
-                            NSError(
-                                domain: "", code: 0,
-                                userInfo: [
-                                    NSLocalizedDescriptionKey:
-                                        "No data received",
-                                ])))
+                    let error = NSError(
+                        domain: "", code: 0,
+                        userInfo: [
+                            NSLocalizedDescriptionKey: "No data received",
+                        ])
+                    print("No data received for \(side)")
+                    completion(.failure(error))
                     return
                 }
+
+                print("Received \(data.count) bytes for \(side)")
 
                 if side == "front" {
                     self.imageFront = data
@@ -171,10 +183,25 @@ enum CardSchemaV1: VersionedSchema {
                     self.imageBack = data
                 }
 
+                print("Successfully stored \(side) image data")
                 completion(.success(()))
             }
 
             task.resume()
+        }
+
+        // Add the async version right after it in the class
+        nonisolated func downloadImage(forSide side: String) async throws {
+            return try await withCheckedThrowingContinuation { continuation in
+                downloadImage(forSide: side) { result in
+                    switch result {
+                    case .success():
+                        continuation.resume()
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
         }
 
         static let sampleData: [StereoCard] = [
@@ -196,26 +223,6 @@ enum CardSchemaV1: VersionedSchema {
                 return nil
             }
             return try? Data(contentsOf: url)
-        }
-    }
-}
-
-// Add this extension to StereoCard.swift
-
-extension CardSchemaV1.StereoCard {
-    /// Downloads an image for the specified side and stores it in the model
-    /// - Parameter side: The side of the card ("front" or "back")
-    /// - Throws: Error if download fails or URL is invalid
-    func downloadImage(forSide side: String) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            self.downloadImage(forSide: side) { result in
-                switch result {
-                case .success():
-                    continuation.resume()
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
         }
     }
 }

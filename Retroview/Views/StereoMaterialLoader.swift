@@ -10,6 +10,22 @@ import RealityKit
 import StereoViewer
 import SwiftUI
 
+// MARK: - Custom Error Type
+
+enum MaterialLoadingError: LocalizedError {
+    case failedToLoadMaterial(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .failedToLoadMaterial(let message):
+            return "Failed to load material: \(message)"
+        }
+    }
+}
+
+// MARK: - StereoMaterialLoader
+
+@MainActor
 class StereoMaterialLoader: ObservableObject {
     @Published var material: ShaderGraphMaterial?
     @Published var status: LoadingStatus = .loading
@@ -17,51 +33,53 @@ class StereoMaterialLoader: ObservableObject {
     enum LoadingStatus {
         case loading
         case success
-        case error(String)
+        case error(MaterialLoadingError)
     }
 
     func loadMaterial() async {
         do {
-            self.material = try await ShaderGraphMaterial(
+            // Load the material asynchronously
+            let loadedMaterial = try await ShaderGraphMaterial(
                 named: "/Root/StereoMaterial",
                 from: "StereoViewerScene",
                 in: stereoViewerBundle
             )
-            await MainActor.run {
-                self.status = .success
-            }
+            material = loadedMaterial
+            status = .success
         } catch {
-            print("Material loading error: \(error)")
-            await MainActor.run {
-                self.status = .error(error.localizedDescription)
-            }
+            status = .error(.failedToLoadMaterial(error.localizedDescription))
         }
     }
 }
+
+// MARK: - StereoMaterialView
 
 struct StereoMaterialView: View {
     @StateObject private var loader = StereoMaterialLoader()
 
     var body: some View {
         Group {
-            switch self.loader.status {
+            switch loader.status {
             case .loading:
                 ProgressView("Loading material...")
             case .success:
                 Text("Material loaded successfully!")
                     .foregroundColor(.green)
-            case .error(let message):
+            case .error(let error):
                 VStack {
                     Text("Error loading material:")
                         .foregroundColor(.red)
-                    Text(message)
+                    Text(error.localizedDescription)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
         }
         .task {
-            await self.loader.loadMaterial()
+            await loader.loadMaterial()
+        }
+        .onDisappear {
+            // Cancel tasks if necessary (future enhancement)
         }
     }
 }

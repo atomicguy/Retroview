@@ -14,12 +14,12 @@ struct StereoView: View {
     @StateObject private var viewModel: StereoCardViewModel
     @StateObject private var materialLoader = StereoMaterialLoader()
     @State private var content: RealityViewContent?
-    @State private var showDebug = true // Set to false for production
+    @State private var showDebug = true
+    @State private var errorMessage: String?
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
-        _viewModel = StateObject(
-            wrappedValue: StereoCardViewModel(stereoCard: card))
+        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
     }
 
     var body: some View {
@@ -33,15 +33,20 @@ struct StereoView: View {
                         hasCrops: card.leftCrop != nil && card.rightCrop != nil,
                         leftCrop: card.leftCrop?.description ?? "none",
                         rightCrop: card.rightCrop?.description ?? "none",
-                        hasMaterial: materialLoader.material != nil
+                        hasMaterial: materialLoader.material != nil,
+                        error: errorMessage
                     )
                 }
             }
         }
         .task {
-            await materialLoader.loadMaterial()
-            coordinator.stereoMaterial = materialLoader.material
-            try? await viewModel.loadImage(forSide: "front")
+            do {
+                await materialLoader.loadMaterial()
+                coordinator.stereoMaterial = materialLoader.material
+                try await viewModel.loadImage(forSide: "front")
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 
@@ -53,7 +58,7 @@ struct StereoView: View {
     private func mainView(geometry: GeometryProxy) -> some View {
         RealityView { content in
             self.content = content
-        } update: { [viewModel, coordinator, card] content in
+        } update: { content in
             // Capture value types in closure to avoid reference cycle
             let contentCopy = content
             Task { @MainActor in
@@ -73,17 +78,6 @@ struct StereoView: View {
         }
         .frame(width: geometry.size.width, height: geometry.size.height)
     }
-
-    private func updateRealityView(content: RealityViewContent) async throws {
-        guard let image = viewModel.frontCGImage else { return }
-
-        try await coordinator.updateContent(
-            content: content,
-            sourceImage: image,
-            leftCrop: card.leftCrop,
-            rightCrop: card.rightCrop
-        )
-    }
 }
 
 // MARK: - Debug Overlay
@@ -95,6 +89,7 @@ private struct DebugOverlay: View {
     let leftCrop: String
     let rightCrop: String
     let hasMaterial: Bool
+    let error: String?
 
     var body: some View {
         VStack {
@@ -105,6 +100,16 @@ private struct DebugOverlay: View {
                 .background(Color.black.opacity(0.7))
                 .cornerRadius(8)
                 .padding()
+
+            if let error = error {
+                Text("Error: \(error)")
+                    .font(.caption)
+                    .foregroundColor(.red)
+                    .padding()
+                    .background(Color.black.opacity(0.7))
+                    .cornerRadius(8)
+            }
+
             Spacer()
         }
     }
@@ -121,7 +126,17 @@ private struct DebugOverlay: View {
     }
 }
 
-#Preview {
-    StereoView(card: SampleData.shared.card)
-        .modelContainer(SampleData.shared.modelContainer)
+// MARK: - Preview Support
+
+struct StereoViewPreview: View {
+    var body: some View {
+        StereoView(card: SampleData.shared.card)
+            .modelContainer(SampleData.shared.modelContainer)
+            .environmentObject(WindowStateManager.shared)
+    }
 }
+
+#Preview {
+    StereoViewPreview()
+}
+
