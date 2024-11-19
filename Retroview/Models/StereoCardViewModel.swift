@@ -72,9 +72,8 @@ class StereoCardViewModel: ObservableObject {
 }
 
 extension StereoCardViewModel {
-    static func previewViewModel() async -> StereoCardViewModel {
-        let card = await PreviewHelper.shared.previewCard
-        return StereoCardViewModel(stereoCard: card)
+    static func previewViewModel() -> StereoCardViewModel {
+        StereoCardViewModel(stereoCard: PreviewHelper.shared.previewCard)
     }
 }
 
@@ -92,7 +91,7 @@ struct PreviewCard<Content: View>: View {
         } else {
             ProgressView()
                 .task {
-                    viewModel = await StereoCardViewModel.previewViewModel()
+                    viewModel = StereoCardViewModel.previewViewModel()
                 }
         }
     }

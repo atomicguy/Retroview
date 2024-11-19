@@ -10,54 +10,66 @@ import SwiftUI
 
 struct CardListView: View {
     let cards: [CardSchemaV1.StereoCard]
+    @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var isImporting = false
     @ObservedObject var viewModel = ImportViewModel()
     @Environment(\.modelContext) private var context
-    @Environment(\.openWindow) private var openWindow
-    @Environment(\.dismissWindow) private var dismissWindow
-    @EnvironmentObject private var windowStateManager: WindowStateManager
-
+    
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 16) {
-                ForEach(cards) { card in
-                    CardRow(card: card)
-                        .contentShape(Rectangle())
-                        .background(
-                            windowStateManager.selectedCardId == card.uuid
-                                ? Color.accentColor.opacity(0.1)
-                                : Color.clear
-                        )
-                        .onTapGesture {
-                            handleCardTap(card)
-                        }
+        NavigationSplitView(columnVisibility: .constant(.all)) {
+            ScrollView {
+                LazyVStack(spacing: 16) {
+                    ForEach(cards) { card in
+                        UnifiedCardView(card: card, style: .list)
+                            .contentShape(Rectangle())
+                            .background(
+                                selectedCard?.uuid == card.uuid
+                                    ? Color.accentColor.opacity(0.1)
+                                    : Color.clear
+                            )
+                            .onTapGesture {
+                                handleCardTap(card)
+                            }
+                    }
+                }
+                .padding()
+            }
+            .navigationSplitViewColumnWidth(min: 500, ideal: 600)
+            .toolbar {
+                Button(action: { isImporting = true }) {
+                    Label("Import", systemImage: "square.and.arrow.down")
                 }
             }
-            .padding()
-        }
-        .toolbar {
-            Button(action: { isImporting = true }) {
-                Label("Import", systemImage: "square.and.arrow.down")
+            .fileImporter(
+                isPresented: $isImporting,
+                allowedContentTypes: [.json],
+                allowsMultipleSelection: true
+            ) { result in
+                handleImport(result)
+            }
+        } detail: {
+            if let selectedCard {
+                // Using an id modifier to force view recreation when selection changes
+                StereoView(card: selectedCard)
+                    .id(selectedCard.uuid)
+                    .navigationSplitViewColumnWidth(min: 250, ideal: 300)
+            } else {
+                Text("Select a card to view in stereo")
+                    .foregroundStyle(.secondary)
+                    .navigationSplitViewColumnWidth(min: 250, ideal: 300)
             }
         }
-        .fileImporter(isPresented: $isImporting, allowedContentTypes: [.json], allowsMultipleSelection: true) { result in
-            handleImport(result)
-        }
     }
-
+    
     private func handleCardTap(_ card: CardSchemaV1.StereoCard) {
-        let identifier = StereoCardIdentifier(from: card)
-        windowStateManager.selectCard(card)
-
-        if windowStateManager.isDetailWindowOpen {
-            dismissWindow(id: "stereo-detail")
-            openWindow(id: "stereo-detail", value: identifier)
+        // If selecting the same card, deselect it
+        if selectedCard?.uuid == card.uuid {
+            selectedCard = nil
         } else {
-            openWindow(id: "stereo-detail", value: identifier)
-            windowStateManager.isDetailWindowOpen = true
+            selectedCard = card
         }
     }
-
+    
     private func handleImport(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
