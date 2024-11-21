@@ -11,21 +11,28 @@ struct StereoCardImageView: View {
     @ObservedObject var viewModel: StereoCardViewModel
     let side: String
     let contentMode: ContentMode
-    
-    init(viewModel: StereoCardViewModel, side: String, contentMode: ContentMode = .fit) {
+
+    init(
+        viewModel: StereoCardViewModel, side: String,
+        contentMode: ContentMode = .fit
+    ) {
         self.viewModel = viewModel
         self.side = side
         self.contentMode = contentMode
     }
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if let image = side == "front" ? viewModel.frontCGImage : viewModel.backCGImage {
+                if let image = side == "front"
+                    ? viewModel.frontCGImage : viewModel.backCGImage
+                {
                     Image(decorative: image, scale: 1.0)
                         .resizable()
                         .aspectRatio(contentMode: contentMode)
-                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height)
                 } else {
                     Rectangle()
                         .fill(Color.gray.opacity(0.2))

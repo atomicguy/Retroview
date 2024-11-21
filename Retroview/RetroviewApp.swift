@@ -12,6 +12,9 @@ import SwiftUI
 struct RetroviewApp: App {
     @StateObject private var windowStateManager = WindowStateManager.shared
 
+    // Shared image loader
+    private let imageLoader = ImageLoader()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CardSchemaV1.StereoCard.self,
@@ -19,10 +22,15 @@ struct RetroviewApp: App {
             AuthorSchemaV1.Author.self,
             SubjectSchemaV1.Subject.self,
             DateSchemaV1.Date.self,
+            CardGroupSchemaV1.Group.self,
         ])
+
         let config = ModelConfiguration(
-            "MyStereoviews", schema: schema, isStoredInMemoryOnly: false
+            "MyStereoviews",
+            schema: schema,
+            isStoredInMemoryOnly: false
         )
+
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
@@ -34,6 +42,7 @@ struct RetroviewApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(windowStateManager)
+                .environment(\.imageLoader, imageLoader)
         }
         #if os(macOS)
         .defaultSize(width: 1200, height: 800)
@@ -66,6 +75,18 @@ struct RetroviewApp: App {
         }
         #endif
         .modelContainer(sharedModelContainer)
+    }
+}
+
+// Environment key for ImageLoader
+private struct ImageLoaderKey: EnvironmentKey {
+    static let defaultValue = ImageLoader()
+}
+
+extension EnvironmentValues {
+    var imageLoader: ImageLoader {
+        get { self[ImageLoaderKey.self] }
+        set { self[ImageLoaderKey.self] = newValue }
     }
 }
 
