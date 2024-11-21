@@ -5,7 +5,13 @@
 //  Created by Adam Schuster on 11/18/24.
 //
 
+import SwiftData
 import SwiftUI
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 struct CardRow: View {
     let card: CardSchemaV1.StereoCard
@@ -18,6 +24,14 @@ struct CardRow: View {
 
     var displayTitle: TitleSchemaV1.Title {
         card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
+    }
+    
+    var platformBackground: Color {
+        #if os(macOS)
+        Color(NSColor.windowBackgroundColor)
+        #else
+        Color(UIColor.systemBackground)
+        #endif
     }
 
     var body: some View {
@@ -51,6 +65,12 @@ struct CardRow: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color(.systemBackground))
+        .background(platformBackground)
     }
+}
+
+#Preview("Card Row") {
+    CardRow(card: PreviewHelper.shared.previewCard)
+        .modelContainer(PreviewHelper.shared.modelContainer)
+        .frame(width: 600)
 }

@@ -21,7 +21,8 @@ struct RetroviewApp: App {
             DateSchemaV1.Date.self,
         ])
         let config = ModelConfiguration(
-            "MyStereoviews", schema: schema, isStoredInMemoryOnly: false)
+            "MyStereoviews", schema: schema, isStoredInMemoryOnly: false
+        )
         do {
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
@@ -31,45 +32,45 @@ struct RetroviewApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            RootView()
                 .environmentObject(windowStateManager)
         }
-        .modelContainer(sharedModelContainer)
-
-        WindowGroup(id: "stereo-detail", for: StereoCardIdentifier.self) { $cardIdentifier in
-            if let identifier = cardIdentifier,
-               let card = try? sharedModelContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>(
-                   predicate: #Predicate<CardSchemaV1.StereoCard> { card in
-                       card.uuid == identifier.uuid
-                   }
-               )).first
-            {
-                NavigationStack {
-                    StereoView(card: card)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button(action: {
-                                    windowStateManager.clearSelection()
-                                    $cardIdentifier.wrappedValue = nil
-                                }) {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            if let title = card.titlePick?.text {
-                                ToolbarItem(placement: .principal) {
-                                    Text(title)
-                                        .font(.headline)
-                                }
-                            }
-                        }
-                        .environmentObject(windowStateManager)
+        #if os(macOS)
+        .defaultSize(width: 1200, height: 800)
+        .commands {
+            CommandGroup(after: .newItem) {
+                Button("Import Cards...") {
+                    NotificationCenter.default.post(
+                        name: .importRequested,
+                        object: nil
+                    )
                 }
+                .keyboardShortcut("i", modifiers: .command)
+
+                Button("Import Group...") {
+                    NotificationCenter.default.post(
+                        name: .importGroupRequested,
+                        object: nil
+                    )
+                }
+                .keyboardShortcut("i", modifiers: [.command, .option])
+
+                Button("Export Selected Group...") {
+                    NotificationCenter.default.post(
+                        name: .exportGroupRequested,
+                        object: nil
+                    )
+                }
+                .keyboardShortcut("e", modifiers: [.command, .option])
             }
         }
-        .windowResizability(.contentSize)
-        .defaultSize(width: 1200, height: 800)
+        #endif
         .modelContainer(sharedModelContainer)
-        .windowStyle(.plain)
     }
+}
+
+extension Notification.Name {
+    static let importRequested = Notification.Name("importRequested")
+    static let importGroupRequested = Notification.Name("importGroupRequested")
+    static let exportGroupRequested = Notification.Name("exportGroupRequested")
 }

@@ -5,6 +5,11 @@
 //  Created by Adam Schuster on 11/18/24.
 //
 
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 import SwiftData
 import SwiftUI
 
@@ -26,6 +31,14 @@ struct UnifiedCardView: View {
     
     var displayTitle: TitleSchemaV1.Title {
         card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
+    }
+    
+    var platformBackground: Color {
+        #if os(macOS)
+        Color(NSColor.windowBackgroundColor)
+        #else
+        Color(UIColor.systemBackground)
+        #endif
     }
     
     var body: some View {
@@ -55,7 +68,7 @@ struct UnifiedCardView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color(.systemBackground))
+        .background(platformBackground)
     }
     
     private var cardDetails: some View {

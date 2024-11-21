@@ -5,8 +5,12 @@
 //  Created by Adam Schuster on 11/9/24.
 //
 
-import RealityKit
+import Foundation
 import SwiftUI
+
+#if os(visionOS)
+import RealityKit
+import StereoViewer
 
 class StereoViewCoordinator: ObservableObject {
     var stereoMaterial: ShaderGraphMaterial?
@@ -18,6 +22,7 @@ class StereoViewCoordinator: ObservableObject {
         leftCrop: CropSchemaV1.Crop?,
         rightCrop: CropSchemaV1.Crop?
     ) async throws {
+        // Existing visionOS implementation
         guard let leftCrop = leftCrop,
               let rightCrop = rightCrop,
               var material = stereoMaterial
@@ -139,6 +144,13 @@ class StereoViewCoordinator: ObservableObject {
         return image.cropped(to: scaledRect)
     }
 }
+
+#else
+// Empty coordinator for macOS
+class StereoViewCoordinator: ObservableObject {
+    // No functionality needed for macOS
+}
+#endif
 
 enum StereoError: Error {
     case missingRequiredData

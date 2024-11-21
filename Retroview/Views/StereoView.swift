@@ -4,9 +4,12 @@
 //
 //  Created by Adam Schuster on 10/20/24.
 
+import SwiftData
+import SwiftUI
+
+#if os(visionOS)
 import RealityKit
 import StereoViewer
-import SwiftUI
 
 struct StereoView: View {
     let card: CardSchemaV1.StereoCard
@@ -59,7 +62,6 @@ struct StereoView: View {
         RealityView { content in
             self.content = content
         } update: { content in
-            // Capture value types in closure to avoid reference cycle
             let contentCopy = content
             Task { @MainActor in
                 if let image = viewModel.frontCGImage {
@@ -79,6 +81,40 @@ struct StereoView: View {
         .frame(width: geometry.size.width, height: geometry.size.height)
     }
 }
+
+#else
+// macOS version - simplified view without stereo functionality
+struct StereoView: View {
+    let card: CardSchemaV1.StereoCard
+    @StateObject private var viewModel: StereoCardViewModel
+
+    init(card: CardSchemaV1.StereoCard) {
+        self.card = card
+        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
+    }
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Stereo View")
+                .font(.title)
+
+            if let frontImage = viewModel.frontCGImage {
+                Image(decorative: frontImage, scale: 1.0)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxHeight: 400)
+            }
+
+            Text("Stereo viewing is only available on Vision Pro")
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .task {
+            try? await viewModel.loadImage(forSide: "front")
+        }
+    }
+}
+#endif
 
 // MARK: - Debug Overlay
 
@@ -139,4 +175,3 @@ struct StereoViewPreview: View {
 #Preview {
     StereoViewPreview()
 }
-

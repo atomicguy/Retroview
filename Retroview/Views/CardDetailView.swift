@@ -18,22 +18,8 @@ struct CardDetailView: View {
         _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
     }
 
-    @Environment(\.modelContext) private var context
-
     var displayTitle: TitleSchemaV1.Title {
         card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
-    }
-
-    var sortedAuthors: [AuthorSchemaV1.Author] {
-        card.authors.sorted { first, second in first.name < second.name }
-    }
-
-    var sortedSubjects: [SubjectSchemaV1.Subject] {
-        card.subjects.sorted { first, second in first.name < second.name }
-    }
-
-    var sortedDates: [DateSchemaV1.Date] {
-        card.dates.sorted { first, second in first.text < second.text }
     }
 
     var body: some View {
@@ -51,18 +37,33 @@ struct CardDetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
 
-                StereoPreviewButton(
-                    viewModel: viewModel,
-                    showingStereoView: $showingStereoView,
-                    card: card
-                )
+                #if os(macOS)
+                Button(action: { showingStereoView = true }) {
+                    StereoPreviewButton(viewModel: viewModel)
+                }
+                .sheet(isPresented: $showingStereoView) {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button("Close") {
+                                showingStereoView = false
+                            }
+                            .padding()
+                        }
+                        StereoView(card: card)
+                    }
+                    .frame(minWidth: 800, minHeight: 600)
+                }
+                #else
+                Button(action: { showingStereoView = true }) {
+                    StereoPreviewButton(viewModel: viewModel)
+                }
+                .fullScreenCover(isPresented: $showingStereoView) {
+                    FullScreenStereoView(card: card)
+                }
+                #endif
 
-                MetadataView(
-                    uuid: card.uuid,
-                    authors: sortedAuthors,
-                    subjects: sortedSubjects,
-                    dates: sortedDates
-                )
+                MetadataView(card: card)
             }
             .padding()
         }
@@ -70,81 +71,81 @@ struct CardDetailView: View {
 }
 
 // Break out the stereo preview button for better organization
-private struct StereoPreviewButton: View {
+struct StereoPreviewButton: View {
     @ObservedObject var viewModel: StereoCardViewModel
-    @Binding var showingStereoView: Bool
-    let card: CardSchemaV1.StereoCard
-    
+
     var body: some View {
-        Button(action: { showingStereoView = true }) {
-            ZStack {
-                if let frontImage = viewModel.frontCGImage {
-                    Image(decorative: frontImage, scale: 1.0)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 200)
-                        .overlay(Rectangle().fill(Color.black.opacity(0.3)))
-                } else {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 200)
-                }
-
-                VStack {
-                    Image(systemName: "view.3d")
-                        .font(.largeTitle)
-                        .foregroundColor(.white)
-
-                    Text("View in Stereo")
-                        .foregroundColor(.white)
-                        .font(.headline)
-                }
-                .padding()
-                .background(Color.black.opacity(0.5))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+        ZStack {
+            if let frontImage = viewModel.frontCGImage {
+                Image(decorative: frontImage, scale: 1.0)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 200)
+                    .overlay(Rectangle().fill(Color.black.opacity(0.3)))
+            } else {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 200)
             }
-        }
-        .buttonStyle(PlainButtonStyle())
-        .fullScreenCover(isPresented: $showingStereoView) {
-            FullScreenStereoView(card: card)
+
+            VStack {
+                Image(systemName: "view.3d")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+
+                Text("View in Stereo")
+                    .foregroundColor(.white)
+                    .font(.headline)
+            }
+            .padding()
+            .background(Color.black.opacity(0.5))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
 }
 
 // Break out the metadata view for better organization
-private struct MetadataView: View {
-    let uuid: UUID
-    let authors: [AuthorSchemaV1.Author]
-    let subjects: [SubjectSchemaV1.Subject]
-    let dates: [DateSchemaV1.Date]
-    
+struct MetadataView: View {
+    let card: CardSchemaV1.StereoCard
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(uuid.uuidString)
+            Text(card.uuid.uuidString)
                 .font(.system(.caption, design: .serif))
-            
-            if !authors.isEmpty {
-                MetadataSection(title: "Authors:", items: authors.map(\.name))
+
+            if !card.authors.isEmpty {
+                metadataSection("Authors:", items: card.authors.map(\.name))
             }
-            
-            if !subjects.isEmpty {
-                MetadataSection(title: "Subjects:", items: subjects.map(\.name))
+
+            if !card.subjects.isEmpty {
+                metadataSection("Subjects:", items: card.subjects.map(\.name))
             }
-            
-            if !dates.isEmpty {
-                MetadataSection(title: "Dates:", items: dates.map(\.text))
+
+            if !card.dates.isEmpty {
+                metadataSection("Dates:", items: card.dates.map(\.text))
             }
         }
         .font(.system(.body, design: .serif))
+    }
+
+    private func metadataSection(_ title: String, items: [String]) -> some View {
+        HStack(alignment: .top) {
+            Text(title)
+            VStack(alignment: .leading) {
+                ForEach(items, id: \.self) { item in
+                    Text(item)
+                }
+            }
+        }
     }
 }
 
 private struct MetadataSection: View {
     let title: String
     let items: [String]
-    
+
     var body: some View {
         HStack(alignment: .top) {
             Text(title)
@@ -157,10 +158,7 @@ private struct MetadataSection: View {
     }
 }
 
-// Update the preview
 #Preview {
-    NavigationStack {
-        CardDetailView(card: SampleData.shared.card)
-            .modelContainer(SampleData.shared.modelContainer)
-    }
+    CardDetailView(card: PreviewHelper.shared.previewCard)
+        .modelContainer(PreviewHelper.shared.modelContainer)
 }

@@ -7,6 +7,11 @@
 
 import SwiftData
 import SwiftUI
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 struct CardView: View {
     @Bindable var card: CardSchemaV1.StereoCard
@@ -19,6 +24,14 @@ struct CardView: View {
 
     var displayTitle: TitleSchemaV1.Title {
         card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
+    }
+    
+    var platformBackground: Color {
+        #if os(macOS)
+        Color(NSColor.windowBackgroundColor)
+        #else
+        Color(UIColor.systemBackground)
+        #endif
     }
 
     var body: some View {
@@ -52,11 +65,12 @@ struct CardView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color(.systemBackground))
+        .background(platformBackground)
     }
 }
 
-#Preview {
-    CardView(card: SampleData.shared.card)
-        .modelContainer(SampleData.shared.modelContainer)
+#Preview("Card View") {
+    CardView(card: PreviewHelper.shared.previewCard)
+        .modelContainer(PreviewHelper.shared.modelContainer)
+        .frame(width: 600)
 }
