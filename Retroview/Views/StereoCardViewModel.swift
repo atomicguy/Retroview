@@ -110,7 +110,7 @@ struct PreviewCard<Content: View>: View {
             if let frontImage = viewModel.frontCGImage {
                 Image(decorative: frontImage, scale: 1.0)
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
                     .frame(height: 200)
             }
 
@@ -124,7 +124,7 @@ struct PreviewCard<Content: View>: View {
             if let backImage = viewModel.backCGImage {
                 Image(decorative: backImage, scale: 1.0)
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
                     .frame(height: 200)
             }
         }

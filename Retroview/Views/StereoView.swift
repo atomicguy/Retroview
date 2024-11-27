@@ -13,32 +13,36 @@ import StereoViewer
 
 struct StereoView: View {
     let card: CardSchemaV1.StereoCard
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var coordinator = StereoViewCoordinator()
     @StateObject private var viewModel: StereoCardViewModel
     @StateObject private var materialLoader = StereoMaterialLoader()
     @State private var content: RealityViewContent?
-    @State private var showDebug = true
-    @State private var errorMessage: String?
-
+    @State private var isReady = false
+    
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
         _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
     }
-
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                mainView(geometry: geometry)
-                if showDebug {
-                    DebugOverlay(
-                        hasImage: viewModel.frontCGImage != nil,
-                        imageSize: imageSize,
-                        hasCrops: card.leftCrop != nil && card.rightCrop != nil,
-                        leftCrop: card.leftCrop?.description ?? "none",
-                        rightCrop: card.rightCrop?.description ?? "none",
-                        hasMaterial: materialLoader.material != nil,
-                        error: errorMessage
-                    )
+                if isReady {
+                    mainView(geometry: geometry)
+                        .transition(.opacity)
+                } else {
+                    loadingView
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut, value: isReady)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Done") {
+                    dismiss()
                 }
             }
         }
@@ -47,17 +51,13 @@ struct StereoView: View {
                 await materialLoader.loadMaterial()
                 coordinator.stereoMaterial = materialLoader.material
                 try await viewModel.loadImage(forSide: "front")
+                withAnimation { isReady = true }
             } catch {
-                errorMessage = error.localizedDescription
+                print("Error loading stereo view: \(error)")
             }
         }
     }
-
-    private var imageSize: String {
-        guard let image = viewModel.frontCGImage else { return "none" }
-        return "\(image.width)x\(image.height)"
-    }
-
+    
     private func mainView(geometry: GeometryProxy) -> some View {
         RealityView { content in
             self.content = content
@@ -78,7 +78,17 @@ struct StereoView: View {
                 }
             }
         }
-        .frame(width: geometry.size.width, height: geometry.size.height)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .controlSize(.large)
+            Text("Loading stereo view...")
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -87,28 +97,32 @@ struct StereoView: View {
 struct StereoView: View {
     let card: CardSchemaV1.StereoCard
     @StateObject private var viewModel: StereoCardViewModel
-
+    
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
         _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
     }
-
+    
     var body: some View {
         VStack(spacing: 16) {
             Text("Stereo View")
                 .font(.title)
-
+            
             if let frontImage = viewModel.frontCGImage {
                 Image(decorative: frontImage, scale: 1.0)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxHeight: 400)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .padding()
             }
-
+            
             Text("Stereo viewing is only available on Vision Pro")
                 .foregroundStyle(.secondary)
         }
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.ultraThinMaterial)
         .task {
             try? await viewModel.loadImage(forSide: "front")
         }
@@ -116,62 +130,10 @@ struct StereoView: View {
 }
 #endif
 
-// MARK: - Debug Overlay
-
-private struct DebugOverlay: View {
-    let hasImage: Bool
-    let imageSize: String
-    let hasCrops: Bool
-    let leftCrop: String
-    let rightCrop: String
-    let hasMaterial: Bool
-    let error: String?
-
-    var body: some View {
-        VStack {
-            Text(debugDescription)
-                .font(.system(.caption, design: .monospaced))
-                .foregroundColor(.green)
-                .padding()
-                .background(Color.black.opacity(0.7))
-                .cornerRadius(8)
-                .padding()
-
-            if let error = error {
-                Text("Error: \(error)")
-                    .font(.caption)
-                    .foregroundColor(.red)
-                    .padding()
-                    .background(Color.black.opacity(0.7))
-                    .cornerRadius(8)
-            }
-
-            Spacer()
-        }
-    }
-
-    private var debugDescription: String {
-        """
-        Image Loaded: \(hasImage)
-        Image Size: \(imageSize)
-        Has Crops: \(hasCrops)
-        Left Crop: \(leftCrop)
-        Right Crop: \(rightCrop)
-        Material Loaded: \(hasMaterial)
-        """
-    }
-}
-
 // MARK: - Preview Support
 
-struct StereoViewPreview: View {
-    var body: some View {
-        StereoView(card: SampleData.shared.card)
-            .modelContainer(SampleData.shared.modelContainer)
-            .environmentObject(WindowStateManager.shared)
-    }
-}
-
 #Preview {
-    StereoViewPreview()
+    StereoView(card: PreviewHelper.shared.previewCard)
+        .modelContainer(PreviewHelper.shared.modelContainer)
+        .environmentObject(WindowStateManager.shared)
 }

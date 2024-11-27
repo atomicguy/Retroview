@@ -15,11 +15,13 @@ struct CardDetailView: View {
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
-        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
+        _viewModel = StateObject(
+            wrappedValue: StereoCardViewModel(stereoCard: card))
     }
 
     var displayTitle: TitleSchemaV1.Title {
-        card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
+        card.titlePick ?? card.titles.first
+            ?? TitleSchemaV1.Title(text: "Unknown")
     }
 
     var body: some View {
@@ -37,30 +39,34 @@ struct CardDetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
 
-                #if os(macOS)
-                Button(action: { showingStereoView = true }) {
-                    StereoPreviewButton(viewModel: viewModel)
-                }
-                .sheet(isPresented: $showingStereoView) {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Button("Close") {
-                                showingStereoView = false
-                            }
-                            .padding()
-                        }
-                        StereoView(card: card)
+                #if os(visionOS)
+                    Button(action: { showingStereoView = true }) {
+                        StereoPreviewButton(viewModel: viewModel)
                     }
-                    .frame(minWidth: 800, minHeight: 600)
-                }
+                    .fullScreenCover(isPresented: $showingStereoView) {  // Changed from .sheet to .fullScreenCover
+                        NavigationStack {
+                            StereoView(card: card)
+                                .navigationTitle(displayTitle.text)
+                                .navigationBarTitleDisplayMode(.inline)
+                                .toolbar {
+                                    ToolbarItem(placement: .cancellationAction)
+                                    {
+                                        Button("Close") {
+                                            showingStereoView = false
+                                        }
+                                    }
+                                }
+                        }
+                        .presentationBackground(.clear)
+                    }
                 #else
-                Button(action: { showingStereoView = true }) {
-                    StereoPreviewButton(viewModel: viewModel)
-                }
-                .fullScreenCover(isPresented: $showingStereoView) {
-                    FullScreenStereoView(card: card)
-                }
+                    Button(action: { showingStereoView = true }) {
+                        StereoPreviewButton(viewModel: viewModel)
+                    }
+                    .sheet(isPresented: $showingStereoView) {
+                        StereoView(card: card)
+                            .frame(minWidth: 800, minHeight: 600)
+                    }
                 #endif
 
                 MetadataView(card: card)
@@ -130,7 +136,8 @@ struct MetadataView: View {
         .font(.system(.body, design: .serif))
     }
 
-    private func metadataSection(_ title: String, items: [String]) -> some View {
+    private func metadataSection(_ title: String, items: [String]) -> some View
+    {
         HStack(alignment: .top) {
             Text(title)
             VStack(alignment: .leading) {

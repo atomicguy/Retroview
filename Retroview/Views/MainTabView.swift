@@ -22,13 +22,10 @@ struct MainTabView: View {
                 Label("Collection", systemImage: "square.grid.2x2")
             }
             
-            NavigationStack {
-                CardListView(cards: cards)
-                    .navigationTitle("List")
-            }
-            .tabItem {
-                Label("List", systemImage: "list.bullet")
-            }
+            VisionBrowserView()
+                .tabItem {
+                    Label("Browser", systemImage: "rectangle.split.3x1")
+                }
         }
     }
 }

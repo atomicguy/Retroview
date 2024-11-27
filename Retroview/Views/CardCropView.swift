@@ -45,6 +45,7 @@ struct CardCropView: View {
                         / 2
 
                 FrontCardView(viewModel: viewModel)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 Rectangle()
                     .fill(Color.clear)
@@ -70,7 +71,9 @@ struct CardCropView: View {
                         y: rightY
                     )
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
