@@ -90,7 +90,7 @@ enum CardSchemaV1: VersionedSchema {
             }
             set {
                 cardColor = newValue.toHex() ?? "#F5E6D3"
-                colorOpacity = 0.15 // Default opacity when setting new color
+                colorOpacity = 0.15  // Default opacity when setting new color
             }
         }
 
@@ -195,7 +195,7 @@ enum CardSchemaV1: VersionedSchema {
                     let error = NSError(
                         domain: "", code: 0,
                         userInfo: [
-                            NSLocalizedDescriptionKey: "No data received",
+                            NSLocalizedDescriptionKey: "No data received"
                         ])
                     print("No data received for \(side)")
                     completion(.failure(error))
@@ -259,5 +259,13 @@ enum CardSchemaV1: VersionedSchema {
             }
             return try? Data(contentsOf: url)
         }
+    }
+}
+
+extension CardSchemaV1.StereoCard: Transferable {
+    static var transferRepresentation: some TransferRepresentation {
+        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: { card in
+            card.uuid.uuidString
+        })
     }
 }

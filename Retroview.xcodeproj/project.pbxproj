@@ -23,6 +23,11 @@
 		5C1454442CF816F700D5C232 /* ImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454432CF816EF00D5C232 /* ImportService.swift */; };
 		5C1454462CF8173100D5C232 /* BatchImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454452CF8172900D5C232 /* BatchImportService.swift */; };
 		5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454472CF8174700D5C232 /* ImportView.swift */; };
+		5C14544A2CF83FF900D5C232 /* PlatformToolbarModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */; };
+		5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14544E2CF849D700D5C232 /* Collection.swift */; };
+		5C1454512CF84B5100D5C232 /* ReorderableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */; };
+		5C1454532CF84C7E00D5C232 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454522CF84C7900D5C232 /* CollectionView.swift */; };
+		5C1454572CF84E8D00D5C232 /* AddToCollectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */; };
 		5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */; };
 		5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */; };
 		5C6676B42BC210F8002DD52E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B32BC210F8002DD52E /* Assets.xcassets */; };
@@ -94,6 +99,11 @@
 		5C1454432CF816EF00D5C232 /* ImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportService.swift; sourceTree = "<group>"; };
 		5C1454452CF8172900D5C232 /* BatchImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportService.swift; sourceTree = "<group>"; };
 		5C1454472CF8174700D5C232 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
+		5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformToolbarModifiers.swift; sourceTree = "<group>"; };
+		5C14544E2CF849D700D5C232 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderableGridView.swift; sourceTree = "<group>"; };
+		5C1454522CF84C7900D5C232 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCollectionMenu.swift; sourceTree = "<group>"; };
 		5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -242,6 +252,8 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C1454522CF84C7900D5C232 /* CollectionView.swift */,
+				5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */,
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C1454302CF6F74600D5C232 /* LibraryView.swift */,
 				5C14542C2CF6F17B00D5C232 /* SquareCropGridView.swift */,
@@ -260,6 +272,7 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5C14544E2CF849D700D5C232 /* Collection.swift */,
 				5C1454412CF816D100D5C232 /* JSONStructures.swift */,
 				5C6676DB2BC21881002DD52E /* StereoCard.swift */,
 				5CC5A5C22BD471D0005811DA /* Title.swift */,
@@ -282,6 +295,8 @@
 		5CD0759B2BDF29AB002B463C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */,
+				5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */,
 				5C1454392CF7F5FA00D5C232 /* NavigationState.swift */,
 				5C14542E2CF6F5EC00D5C232 /* GalleryScreen.swift */,
 			);
@@ -467,8 +482,13 @@
 				5C14543A2CF7F5FE00D5C232 /* NavigationState.swift in Sources */,
 				5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */,
 				5C1454382CF7ED1600D5C232 /* SquareAspectRatioModifier.swift in Sources */,
+				5C1454512CF84B5100D5C232 /* ReorderableGridView.swift in Sources */,
+				5C1454572CF84E8D00D5C232 /* AddToCollectionMenu.swift in Sources */,
+				5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
+				5C1454532CF84C7E00D5C232 /* CollectionView.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
+				5C14544A2CF83FF900D5C232 /* PlatformToolbarModifiers.swift in Sources */,
 				5C1454312CF6F74B00D5C232 /* LibraryView.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,

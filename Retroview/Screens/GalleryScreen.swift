@@ -8,47 +8,96 @@
 import SwiftData
 import SwiftUI
 
+private struct NavigationSidebar: View {
+    @Environment(\.modelContext) private var modelContext
+    @Binding var selectedDestination: NavigationDestination
+    @Query(sort: \CollectionSchemaV1.Collection.name) private var collections:
+        [CollectionSchemaV1.Collection]
+
+    var body: some View {
+        List(selection: $selectedDestination) {
+            NavigationLink(value: NavigationDestination.library) {
+                Label(
+                    NavigationDestination.library.label,
+                    systemImage: NavigationDestination.library.systemImage
+                )
+            }
+
+            Section("Collections") {
+                ForEach(collections) { collection in
+                    NavigationLink(
+                        value: NavigationDestination.collection(collection.id)
+                    ) {
+                        Label(collection.name, systemImage: "folder")
+                    }
+                }
+            }
+        }
+        .navigationTitle("Retroview")
+        .frame(idealWidth: 100)
+    }
+}
+
 struct GalleryScreen: View {
     @Environment(\.modelContext) private var modelContext
     @State private var selectedDestination: NavigationDestination = .library
     @State private var showingImport = false
 
     var body: some View {
-        NavigationSplitView {
-            // Sidebar
-            List(selection: $selectedDestination) {
-                NavigationLink(value: NavigationDestination.library) {
-                    Label(
-                        NavigationDestination.library.label,
-                        systemImage: NavigationDestination.library.systemImage
-                    )
-                }
-            }
-            .navigationTitle("Retroview")
-            .frame(idealWidth: 100) // Width of "Library" + icon + padding
-        } detail: {
-            // Main content area
-            switch selectedDestination {
-            case .library:
-                LibraryView()
-                    .toolbar {
-                        ToolbarItem {
-                            Button {
-                                showingImport = true
-                            } label: {
-                                Label(
-                                    "Import Cards",
-                                    systemImage: "square.and.arrow.down"
-                                )
-                            }
-                        }
+        #if os(visionOS)
+            NavigationSplitView {
+                NavigationSidebar(selectedDestination: $selectedDestination)
+            } detail: {
+                navigationDestinationView
+                    .platformToolbar {
+                        showingImport = true
                     }
             }
+            .navigationSplitViewStyle(.automatic)
+            .sheet(isPresented: $showingImport) {
+                ImportView(modelContext: modelContext)
+            }
+        #else
+            NavigationSplitView {
+                NavigationSidebar(selectedDestination: $selectedDestination)
+            } detail: {
+                navigationDestinationView
+                    .platformToolbar {
+                        showingImport = true
+                    }
+            }
+            .navigationSplitViewStyle(.automatic)
+            .sheet(isPresented: $showingImport) {
+                ImportView(modelContext: modelContext)
+            }
+        #endif
+    }
+    
+    @ViewBuilder
+    private var navigationDestinationView: some View {
+        switch selectedDestination {
+        case .library:
+            LibraryView()
+        case .collection(let id):
+            if let collection = fetchCollection(id: id) {
+                CollectionView(collection: collection)
+            } else {
+                ContentUnavailableView(
+                    "Collection Not Found",
+                    systemImage: "folder.badge.questionmark",
+                    description: Text("The selected collection could not be found")
+                )
+            }
         }
-        .navigationSplitViewStyle(.automatic)
-        .sheet(isPresented: $showingImport) {
-            ImportView(modelContext: modelContext)
-        }
+    }
+    
+    private func fetchCollection(id: UUID) -> CollectionSchemaV1.Collection? {
+        let descriptor = FetchDescriptor<CollectionSchemaV1.Collection>(
+            predicate: #Predicate<CollectionSchemaV1.Collection> { collection in
+                collection.id == id
+            }
+        )
+        return try? modelContext.fetch(descriptor).first
     }
 }
 

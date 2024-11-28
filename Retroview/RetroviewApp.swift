@@ -11,9 +11,6 @@ import SwiftUI
 @main
 struct RetroviewApp: App {
     var sharedModelContainer: ModelContainer = {
-        // Delete existing store files before creating new container
-        deleteExistingStoreFiles()
-
         let schema = Schema([
             CardSchemaV1.StereoCard.self,
             TitleSchemaV1.Title.self,
@@ -21,6 +18,7 @@ struct RetroviewApp: App {
             SubjectSchemaV1.Subject.self,
             DateSchemaV1.Date.self,
             CropSchemaV1.Crop.self,
+            CollectionSchemaV1.Collection.self,
         ])
 
         let modelConfiguration = ModelConfiguration(
@@ -50,9 +48,9 @@ struct RetroviewApp: App {
     }
 }
 
+// Move store management to a separate utility
 extension RetroviewApp {
-    static func deleteExistingStoreFiles() {
-        // Get the container URL for the app
+    static func clearAllData() {
         guard
             let containerURL = FileManager.default.urls(
                 for: .applicationSupportDirectory,
@@ -71,10 +69,10 @@ extension RetroviewApp {
 
         for url in urls {
             try? FileManager.default.removeItem(at: url)
-            print("Attempted to delete: \(url.path)")
+            print("Deleted: \(url.path)")
         }
 
-        // Also try to remove any files in the Containers directory
+        // Clear app group container if used
         if let containerPath = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: "net.atompowered.Retroview"
         ) {
@@ -84,7 +82,7 @@ extension RetroviewApp {
                     .appendingPathComponent("Application Support")
                     .appendingPathComponent("MyStereoviews.store")
             try? FileManager.default.removeItem(at: storeURL)
-            print("Attempted to delete container store: \(storeURL.path)")
+            print("Deleted container store: \(storeURL.path)")
         }
     }
 }

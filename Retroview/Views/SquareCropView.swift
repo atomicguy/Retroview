@@ -12,6 +12,7 @@ import SwiftUI
 struct SquareCropView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     @StateObject private var viewModel: StereoCardViewModel
+    @State private var showingNewCollectionSheet = false
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
@@ -24,10 +25,10 @@ struct SquareCropView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .center, spacing: 8) {
             GeometryReader { geometry in
                 if let image = viewModel.frontCGImage,
-                   let leftCrop = card.leftCrop
+                    let leftCrop = card.leftCrop
                 {
                     let cropWidth = CGFloat(leftCrop.y1 - leftCrop.y0)
                     let cropHeight = CGFloat(leftCrop.x1 - leftCrop.x0)
@@ -51,6 +52,7 @@ struct SquareCropView: View {
                             y: -CGFloat(leftCrop.x0) * CGFloat(image.height)
                                 * scale
                         )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)  // Center in GeometryReader
                         .clipped()
                 } else {
                     ProgressView()
@@ -64,8 +66,10 @@ struct SquareCropView: View {
                 .font(.system(.subheadline, design: .serif))
                 .lineLimit(2)
                 .foregroundStyle(.primary)
+                .multilineTextAlignment(.center)  // Center align text
+                .frame(maxWidth: .infinity)  // Make text use full width
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity)  // Ensure VStack takes full width
         .padding()
         .background(
             LinearGradient(
@@ -86,22 +90,82 @@ struct SquareCropView: View {
             y: 4
         )
         .task(priority: .high) {
-            // Load both images concurrently
             await withTaskGroup(of: Void.self) { group in
-                // Load front image for display
                 group.addTask {
                     try? await viewModel.loadImage(forSide: "front")
                 }
 
-                // Load back image for color analysis
                 group.addTask {
                     try? await viewModel.loadImage(forSide: "back")
                 }
 
-                // Wait for all tasks to complete
                 await group.waitForAll()
             }
         }
+        .draggable(card)
+        .contextMenu {
+            CollectionMenu(
+                showNewCollectionSheet: $showingNewCollectionSheet, card: card)
+
+            ShareLink(
+                item: displayTitle,
+                subject: Text("Stereoview Card"),
+                message: Text(card.titles.first?.text ?? ""),
+                preview: SharePreview(
+                    displayTitle,
+                    image: viewModel.frontCGImage.map {
+                        Image(decorative: $0, scale: 1.0)
+                    } ?? Image(systemName: "photo")
+                )
+            )
+        }
+        .sheet(isPresented: $showingNewCollectionSheet) {
+            NewCollectionSheet(card: card)
+        }
+    }
+}
+
+struct CollectionMenu: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \CollectionSchemaV1.Collection.name) private var collections: [CollectionSchemaV1.Collection]
+    @Binding var showNewCollectionSheet: Bool
+    
+    let card: CardSchemaV1.StereoCard
+    
+    var body: some View {
+        if collections.isEmpty {
+            Text("No Collections")
+                .foregroundStyle(.secondary)
+        } else {
+            ForEach(collections) { collection in
+                Button {
+                    toggleCard(in: collection)
+                } label: {
+                    if collection.hasCard(card) {
+                        Label(collection.name, systemImage: "checkmark.circle.fill")
+                    } else {
+                        Label(collection.name, systemImage: "circle")
+                    }
+                }
+            }
+            
+            Divider()
+        }
+        
+        Button {
+            showNewCollectionSheet = true
+        } label: {
+            Label("New Collection...", systemImage: "folder.badge.plus")
+        }
+    }
+    
+    private func toggleCard(in collection: CollectionSchemaV1.Collection) {
+        if collection.hasCard(card) {
+            collection.removeCard(card)
+        } else {
+            collection.addCard(card)
+        }
+        try? modelContext.save()
     }
 }
 

@@ -20,10 +20,8 @@ struct LibraryView: View {
     var body: some View {
         HStack(spacing: 0) {
             // Main grid area (expanding/contracting)
-            ScrollView {
-                AdaptiveGridView(cards: cards, selectedCard: $selectedCard)
-                    .padding()
-            }
+            AdaptiveGridView(cards: cards, selectedCard: $selectedCard)
+                .frame(maxWidth: .infinity)
 
             // Divider for visual separation
             Divider()
@@ -58,20 +56,11 @@ private struct AdaptiveGridView: View {
     private let minItemWidth: CGFloat = 250
 
     var body: some View {
-        GeometryReader { geometry in
-            let availableWidth = geometry.size.width - (spacing * 2)
-            let columns = max(1, Int(availableWidth / (minItemWidth + spacing)))
-            let actualItemWidth =
-                (availableWidth - (spacing * CGFloat(columns - 1)))
-                    / CGFloat(columns)
-
+        ScrollView {
             LazyVGrid(
-                columns: Array(
-                    repeating: GridItem(
-                        .fixed(actualItemWidth), spacing: spacing
-                    ),
-                    count: columns
-                ),
+                columns: [
+                    GridItem(.adaptive(minimum: minItemWidth), spacing: spacing)
+                ],
                 spacing: spacing
             ) {
                 ForEach(cards) { card in
@@ -88,6 +77,7 @@ private struct AdaptiveGridView: View {
                         }
                 }
             }
+            .padding()
         }
     }
 }

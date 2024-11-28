@@ -7,23 +7,25 @@
 
 import Foundation
 
-enum NavigationDestination: String, Identifiable {
+enum NavigationDestination: Hashable {
     case library
-    // Future destinations can be added here
-
-    var id: String { rawValue }
-
+    case collection(UUID)
+    
     var label: String {
         switch self {
         case .library:
             return "Library"
+        case .collection:
+            return "Collection"
         }
     }
-
+    
     var systemImage: String {
         switch self {
         case .library:
             return "photo.on.rectangle.angled"
+        case .collection:
+            return "folder"
         }
     }
 }

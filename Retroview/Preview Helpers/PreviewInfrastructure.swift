@@ -24,6 +24,7 @@ final class PreviewContainer {
             SubjectSchemaV1.Subject.self,
             DateSchemaV1.Date.self,
             CropSchemaV1.Crop.self,
+            CollectionSchemaV1.Collection.self,
         ])
 
         let modelConfiguration = ModelConfiguration(
@@ -38,9 +39,7 @@ final class PreviewContainer {
             )
             setupSampleData()
         } catch {
-            fatalError(
-                "Could not create preview ModelContainer: \(error.localizedDescription)"
-            )
+            fatalError("Could not create preview ModelContainer: \(error)")
         }
     }
 
@@ -54,6 +53,9 @@ final class PreviewContainer {
 
         // Setup relationships
         setupRelationships(in: context)
+
+        // Add sample collections
+        CollectionSchemaV1.Collection.sampleData.forEach { context.insert($0) }
 
         do {
             try context.save()
