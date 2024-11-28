@@ -9,7 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct GalleryScreen: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var selectedDestination: NavigationDestination = .library
+    @State private var showingImport = false
 
     var body: some View {
         NavigationSplitView {
@@ -18,7 +20,8 @@ struct GalleryScreen: View {
                 NavigationLink(value: NavigationDestination.library) {
                     Label(
                         NavigationDestination.library.label,
-                        systemImage: NavigationDestination.library.systemImage)
+                        systemImage: NavigationDestination.library.systemImage
+                    )
                 }
             }
             .navigationTitle("Retroview")
@@ -28,13 +31,26 @@ struct GalleryScreen: View {
             switch selectedDestination {
             case .library:
                 LibraryView()
+                    .toolbar {
+                        ToolbarItem {
+                            Button {
+                                showingImport = true
+                            } label: {
+                                Label(
+                                    "Import Cards",
+                                    systemImage: "square.and.arrow.down"
+                                )
+                            }
+                        }
+                    }
             }
         }
         .navigationSplitViewStyle(.automatic)
+        .sheet(isPresented: $showingImport) {
+            ImportView(modelContext: modelContext)
+        }
     }
 }
-
-// MARK: - Preview Provider
 
 #Preview("Gallery") {
     GalleryScreen()
