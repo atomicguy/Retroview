@@ -24,8 +24,8 @@ import SwiftUI
             rightCrop: CropSchemaV1.Crop?
         ) async throws {
             guard let leftCrop = leftCrop,
-                let rightCrop = rightCrop,
-                var material = stereoMaterial
+                  let rightCrop = rightCrop,
+                  var material = stereoMaterial
             else {
                 throw StereoError.missingRequiredData
             }
@@ -33,15 +33,13 @@ import SwiftUI
             let (leftTexture, rightTexture) = try await createTexturesFromCrops(
                 sourceImage: sourceImage,
                 leftCrop: leftCrop,
-                rightCrop: rightCrop
-            )
+                rightCrop: rightCrop)
 
             try await updateMaterialAndPlane(
                 content: content,
                 material: &material,
                 leftTexture: leftTexture,
-                rightTexture: rightTexture
-            )
+                rightTexture: rightTexture)
         }
 
         private func createTexturesFromCrops(
@@ -81,8 +79,7 @@ import SwiftUI
                     bytesPerRow: 0,
                     space: sourceImage.colorSpace
                         ?? CGColorSpaceCreateDeviceRGB(),
-                    bitmapInfo: sourceImage.bitmapInfo.rawValue
-                )
+                    bitmapInfo: sourceImage.bitmapInfo.rawValue)
             else {
                 throw StereoError.imageProcessingFailed
             }
@@ -126,8 +123,7 @@ import SwiftUI
 
             let dimensions = calculatePlaneDimensions(
                 textureWidth: Float(leftTexture.width),
-                textureHeight: Float(leftTexture.height)
-            )
+                textureHeight: Float(leftTexture.height))
 
             if let existingPlane = content.entities.first as? ModelEntity {
                 updateExistingPlane(existingPlane, with: material)
@@ -135,8 +131,7 @@ import SwiftUI
                 let plane = createPlane(
                     width: dimensions.width,
                     height: dimensions.height,
-                    material: material
-                )
+                    material: material)
                 content.add(plane)
             }
         }

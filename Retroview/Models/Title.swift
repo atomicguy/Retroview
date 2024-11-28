@@ -28,6 +28,14 @@ enum TitleSchemaV1: VersionedSchema {
         }
 
         static let sampleData = [
+            Title(
+                text:
+                "Playful as kittens - sea lions, Central Park, N.Y., U.S.A."
+            ),
+            Title(
+                text:
+                "Up the Colorado River from Pyrite Point to Zoroaster Tower."
+            ),
             Title(text: "Bird's-eye view, Columbian Exposition."),
             Title(
                 text:

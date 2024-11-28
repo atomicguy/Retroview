@@ -10,67 +10,81 @@ import SwiftUI
 
 @main
 struct RetroviewApp: App {
-    @StateObject private var windowStateManager = WindowStateManager.shared
-
     var sharedModelContainer: ModelContainer = {
+        // Delete existing store files before creating new container
+        deleteExistingStoreFiles()
+
         let schema = Schema([
             CardSchemaV1.StereoCard.self,
             TitleSchemaV1.Title.self,
             AuthorSchemaV1.Author.self,
             SubjectSchemaV1.Subject.self,
             DateSchemaV1.Date.self,
+            CropSchemaV1.Crop.self,
         ])
-        let config = ModelConfiguration(
-            "MyStereoviews", schema: schema, isStoredInMemoryOnly: false
+
+        let modelConfiguration = ModelConfiguration(
+            "MyStereoviews",
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            allowsSave: true
         )
+
         do {
-            return try ModelContainer(for: schema, configurations: [config])
+            return try ModelContainer(
+                for: schema,
+                configurations: [modelConfiguration]
+            )
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            fatalError(
+                "Could not create ModelContainer: \(error.localizedDescription)"
+            )
         }
     }()
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environmentObject(windowStateManager)
+            GalleryScreen()
         }
-        #if os(macOS)
-        .defaultSize(width: 1200, height: 800)
-        .commands {
-            CommandGroup(after: .newItem) {
-                Button("Import Cards...") {
-                    NotificationCenter.default.post(
-                        name: .importRequested,
-                        object: nil
-                    )
-                }
-                .keyboardShortcut("i", modifiers: .command)
-
-                Button("Import Group...") {
-                    NotificationCenter.default.post(
-                        name: .importGroupRequested,
-                        object: nil
-                    )
-                }
-                .keyboardShortcut("i", modifiers: [.command, .option])
-
-                Button("Export Selected Group...") {
-                    NotificationCenter.default.post(
-                        name: .exportGroupRequested,
-                        object: nil
-                    )
-                }
-                .keyboardShortcut("e", modifiers: [.command, .option])
-            }
-        }
-        #endif
         .modelContainer(sharedModelContainer)
     }
 }
 
-extension Notification.Name {
-    static let importRequested = Notification.Name("importRequested")
-    static let importGroupRequested = Notification.Name("importGroupRequested")
-    static let exportGroupRequested = Notification.Name("exportGroupRequested")
+extension RetroviewApp {
+    static func deleteExistingStoreFiles() {
+        // Get the container URL for the app
+        guard
+            let containerURL = FileManager.default.urls(
+                for: .applicationSupportDirectory,
+                in: .userDomainMask
+            ).first
+        else { return }
+
+        let storeURL = containerURL.appendingPathComponent(
+            "MyStereoviews.store")
+        let shmURL = containerURL.appendingPathComponent(
+            "MyStereoviews.store-shm")
+        let walURL = containerURL.appendingPathComponent(
+            "MyStereoviews.store-wal")
+
+        let urls = [storeURL, shmURL, walURL]
+
+        for url in urls {
+            try? FileManager.default.removeItem(at: url)
+            print("Attempted to delete: \(url.path)")
+        }
+
+        // Also try to remove any files in the Containers directory
+        if let containerPath = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "net.atompowered.Retroview"
+        ) {
+            let storeURL =
+                containerPath
+                    .appendingPathComponent("Library")
+                    .appendingPathComponent("Application Support")
+                    .appendingPathComponent("MyStereoviews.store")
+            try? FileManager.default.removeItem(at: storeURL)
+            print("Attempted to delete container store: \(storeURL.path)")
+        }
+    }
 }

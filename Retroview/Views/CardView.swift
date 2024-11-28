@@ -7,10 +7,11 @@
 
 import SwiftData
 import SwiftUI
+
 #if os(macOS)
-import AppKit
+    import AppKit
 #else
-import UIKit
+    import UIKit
 #endif
 
 struct CardView: View {
@@ -19,18 +20,20 @@ struct CardView: View {
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
-        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
+        _viewModel = StateObject(
+            wrappedValue: StereoCardViewModel(stereoCard: card))
     }
 
     var displayTitle: TitleSchemaV1.Title {
-        card.titlePick ?? card.titles.first ?? TitleSchemaV1.Title(text: "Unknown")
+        card.titlePick ?? card.titles.first
+            ?? TitleSchemaV1.Title(text: "Unknown")
     }
-    
+
     var platformBackground: Color {
         #if os(macOS)
-        Color(NSColor.windowBackgroundColor)
+            Color(NSColor.windowBackgroundColor)
         #else
-        Color(UIColor.systemBackground)
+            Color(UIColor.systemBackground)
         #endif
     }
 
@@ -70,7 +73,8 @@ struct CardView: View {
 }
 
 #Preview("Card View") {
-    CardView(card: PreviewHelper.shared.previewCard)
-        .modelContainer(PreviewHelper.shared.modelContainer)
-        .frame(width: 600)
+    CardPreviewContainer { card in
+        CardView(card: card)
+            .frame(width: 600)
+    }
 }

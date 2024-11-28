@@ -86,4 +86,5 @@ struct StereoMaterialView: View {
 
 #Preview {
     StereoMaterialView()
+        .withPreviewContainer()
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 enum CardSchemaV1: VersionedSchema {
     static var versionIdentifier: Schema.Version = .init(0, 1, 0)
@@ -32,6 +33,8 @@ enum CardSchemaV1: VersionedSchema {
         @Attribute(.externalStorage)
         var imageBack: Data?
         var imageBackId: String?
+        var cardColor: String = "#F5E6D3"
+        var colorOpacity: Double
 
         @Relationship(inverse: \TitleSchemaV1.Title.cards)
         var titles = [TitleSchemaV1.Title]()
@@ -79,8 +82,20 @@ enum CardSchemaV1: VersionedSchema {
             }
         }
 
+        // Helper for converting stored hex to Color
+        var color: Color {
+            get {
+                (Color(hex: cardColor) ?? Color(hex: "#F5E6D3")!)
+                    .opacity(colorOpacity)
+            }
+            set {
+                cardColor = newValue.toHex() ?? "#F5E6D3"
+                colorOpacity = 0.15 // Default opacity when setting new color
+            }
+        }
+
         enum CodingKeys: String, CodingKey {
-            case uuid, imageFrontId, imageBackId
+            case uuid, imageFrontId, imageBackId, cardColor, colorOpacity
         }
 
         required init(from decoder: Decoder) throws {
@@ -90,6 +105,12 @@ enum CardSchemaV1: VersionedSchema {
                 String.self, forKey: .imageFrontId)
             self.imageBackId = try container.decodeIfPresent(
                 String.self, forKey: .imageBackId)
+            self.cardColor =
+                try container.decodeIfPresent(
+                    String.self, forKey: .cardColor) ?? "#F5E6D3"
+            self.colorOpacity =
+                try container.decodeIfPresent(
+                    Double.self, forKey: .colorOpacity) ?? 0.15
         }
 
         func encode(to encoder: Encoder) throws {
@@ -97,6 +118,8 @@ enum CardSchemaV1: VersionedSchema {
             try container.encode(uuid, forKey: .uuid)
             try container.encodeIfPresent(imageFrontId, forKey: .imageFrontId)
             try container.encodeIfPresent(imageBackId, forKey: .imageBackId)
+            try container.encode(cardColor, forKey: .cardColor)
+            try container.encode(colorOpacity, forKey: .colorOpacity)
         }
 
         init(
@@ -105,6 +128,8 @@ enum CardSchemaV1: VersionedSchema {
             imageFrontId: String? = "",
             imageBack: Data? = nil,
             imageBackId: String? = "",
+            cardColor: String = "#F5E6D3",
+            colorOpacity: Double = 0.15,
             titles: [TitleSchemaV1.Title] = [],
             authors: [AuthorSchemaV1.Author] = [],
             subjects: [SubjectSchemaV1.Subject] = [],
@@ -116,6 +141,8 @@ enum CardSchemaV1: VersionedSchema {
             self.imageFrontId = imageFrontId
             self.imageBack = imageBack
             self.imageBackId = imageBackId
+            self.cardColor = cardColor
+            self.colorOpacity = colorOpacity
             self.titles = titles
             self.authors = authors
             self.subjects = subjects
@@ -205,6 +232,14 @@ enum CardSchemaV1: VersionedSchema {
         }
 
         static let sampleData: [StereoCard] = [
+            StereoCard(
+                uuid: "a0056e40-c55a-012f-e57a-58d385a7bc34",
+                imageFrontId: "G91F230_029F",
+                imageBackId: "G91F230_029B"),
+            StereoCard(
+                uuid: "8f936cf0-c52e-012f-c9aa-58d385a7bc34",
+                imageFrontId: "G88F105_023F",
+                imageBackId: "G88F105_023B"),
             StereoCard(
                 uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
                 imageFrontId: "G90F186_030F",

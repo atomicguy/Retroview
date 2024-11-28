@@ -33,6 +33,17 @@ enum SubjectSchemaV1: VersionedSchema {
             Subject(name: "Saratoga Springs (N.Y.)"),
             Subject(name: "Springhouses"),
             Subject(name: "New York (State)"),
+            Subject(name: "Zoos"),
+            Subject(name: "Manhattan (New York, N.Y.)"),
+            Subject(name: "Central Park (New York, N.Y.)"),
+            Subject(name: "Animals"),
+            Subject(name: "Parks"),
+            Subject(name: "New York (N.Y.)"),
+            Subject(name: "New York (State)"),
+            Subject(name: "Sightseers"),
+            Subject(name: "Colorado River (Colo.-Mexico)"),
+            Subject(name: "Grand Canyon (Ariz.)"),
+            Subject(name: "Arizona"),
         ]
     }
 }

@@ -10,13 +10,13 @@ import SwiftUI
 
 // MARK: - Typography Style Extension
 
-extension Font {
-    fileprivate static let cardTitle = Font.system(.title, design: .serif)
-    fileprivate static let cardHeadline = Font.system(.headline, design: .serif)
-    fileprivate static let cardSubheadline = Font.system(
+private extension Font {
+    static let cardTitle = Font.system(.title, design: .serif)
+    static let cardHeadline = Font.system(.headline, design: .serif)
+    static let cardSubheadline = Font.system(
         .title2, design: .serif)
-    fileprivate static let cardBody = Font.system(.body, design: .serif)
-    fileprivate static let cardCaption = Font.system(.caption, design: .serif)
+    static let cardBody = Font.system(.body, design: .serif)
+    static let cardCaption = Font.system(.caption, design: .serif)
 }
 
 // MARK: - Decorative Elements
@@ -54,6 +54,7 @@ private struct SectionHeader: View {
 struct CardContentView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     @StateObject private var viewModel: StereoCardViewModel
+    @State private var backgroundColor: Color = .clear
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
@@ -66,47 +67,62 @@ struct CardContentView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Title above card
-                Text(selectedTitle)
-                    .font(.cardTitle)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, 8)
+        ZStack {
+            // Background color that fills the entire area
+            card.color
+                .ignoresSafeArea()
 
-                // Front Card Image
-                CardImageContainer(viewModel: viewModel)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Title above card
+                    Text(selectedTitle)
+                        .font(.cardTitle)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 8)
 
-                OrnamentalDivider()
+                    // Front Card Image
+                    CardImageContainer(viewModel: viewModel)
 
-                // Titles Picker
-                TitlePickerView(card: card)
+                    OrnamentalDivider()
 
-                // Metadata Lists
-                VStack(alignment: .leading, spacing: 16) {
-                    MetadataListView(
-                        title: "Authors", items: card.authors.map(\.name))
-                    MetadataListView(
-                        title: "Dates", items: card.dates.map(\.text))
-                    MetadataListView(
-                        title: "Subjects", items: card.subjects.map(\.name))
+                    // Titles Picker
+                    TitlePickerView(card: card)
+
+                    // Metadata Lists
+                    VStack(alignment: .leading, spacing: 16) {
+                        MetadataListView(
+                            title: "Authors", items: card.authors.map(\.name))
+                        MetadataListView(
+                            title: "Dates", items: card.dates.map(\.text))
+                        MetadataListView(
+                            title: "Subjects", items: card.subjects.map(\.name))
+                    }
+
+                    OrnamentalDivider()
+
+                    // Reverse label and back view
+                    Text("Reverse")
+                        .font(.cardSubheadline.smallCaps())
+                        .fontWeight(.regular)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 8)
+
+                    // Back Card Image
+                    CardImageContainer(viewModel: viewModel, isBack: true)
                 }
-
-                OrnamentalDivider()
-
-                // Reverse label and back view
-                Text("Reverse")
-                    .font(.cardSubheadline.smallCaps())
-                    .fontWeight(.regular)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 8)
-
-                // Back Card Image
-                CardImageContainer(viewModel: viewModel, isBack: true)
+                .padding()
             }
-            .padding()
+        }
+        .task {
+            // Load back image first for color extraction
+            try? await viewModel.loadImage(forSide: "back")
+            if let backImage = viewModel.backCGImage {
+                backgroundColor =
+                    CardColorAnalyzer.extractCardstockColor(from: backImage)
+                        ?? .clear
+            }
         }
     }
 }
@@ -123,15 +139,13 @@ private struct CardImageContainer: View {
                 BackCardView(viewModel: viewModel)
                     .frame(
                         width: geometry.size.width,
-                        height: geometry.size.width / 2
-                    )
+                        height: geometry.size.width / 2)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             } else {
                 FrontCardView(viewModel: viewModel)
                     .frame(
                         width: geometry.size.width,
-                        height: geometry.size.width / 2
-                    )
+                        height: geometry.size.width / 2)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
@@ -189,13 +203,15 @@ private struct MetadataListView: View {
 // MARK: - Preview Provider
 
 #Preview("Card Content") {
-    CardContentView(card: PreviewHelper.shared.previewCard)
-        .modelContainer(PreviewHelper.shared.modelContainer)
-        .frame(width: 600)
+    CardPreviewContainer { card in
+        CardContentView(card: card)
+            .frame(width: 600)
+    }
 }
 
 #Preview("Card Content - Narrow") {
-    CardContentView(card: PreviewHelper.shared.previewCard)
-        .modelContainer(PreviewHelper.shared.modelContainer)
-        .frame(width: 300)
+    CardPreviewContainer { card in
+        CardContentView(card: card)
+            .frame(width: 300)
+    }
 }
