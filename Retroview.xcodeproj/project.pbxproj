@@ -30,6 +30,13 @@
 		5C1454572CF84E8D00D5C232 /* AddToCollectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */; };
 		5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */; };
 		5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */; };
+		5C43BC472CF98BF70053FAFD /* CollectionMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC462CF98BF20053FAFD /* CollectionMenuView.swift */; };
+		5C43BC492CF98D910053FAFD /* ModelContextPreviewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */; };
+		5C43BC4B2CF993010053FAFD /* ImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC4A2CF992FB0053FAFD /* ImportServiceTests.swift */; };
+		5C43BC4D2CF99D380053FAFD /* SubjectListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC4C2CF99D330053FAFD /* SubjectListView.swift */; };
+		5C43BC4F2CF99D910053FAFD /* SubjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC4E2CF99D8D0053FAFD /* SubjectsView.swift */; };
+		5C43BC512CF9A1620053FAFD /* SubjectGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC502CF9A15C0053FAFD /* SubjectGridView.swift */; };
+		5C43BC532CF9A9530053FAFD /* NavigationSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC522CF9A9530053FAFD /* NavigationSidebar.swift */; };
 		5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C665F552CF9591A00838F37 /* FavoriteButton.swift */; };
 		5C665F582CF95EA500838F37 /* CardHoverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */; };
 		5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */; };
@@ -110,6 +117,13 @@
 		5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDefaults.swift; sourceTree = "<group>"; };
 		5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5C43BC462CF98BF20053FAFD /* CollectionMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionMenuView.swift; sourceTree = "<group>"; };
+		5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContextPreviewExtension.swift; sourceTree = "<group>"; };
+		5C43BC4A2CF992FB0053FAFD /* ImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportServiceTests.swift; sourceTree = "<group>"; };
+		5C43BC4C2CF99D330053FAFD /* SubjectListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectListView.swift; sourceTree = "<group>"; };
+		5C43BC4E2CF99D8D0053FAFD /* SubjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectsView.swift; sourceTree = "<group>"; };
+		5C43BC502CF9A15C0053FAFD /* SubjectGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectGridView.swift; sourceTree = "<group>"; };
+		5C43BC522CF9A9530053FAFD /* NavigationSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSidebar.swift; sourceTree = "<group>"; };
 		5C665F552CF9591A00838F37 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHoverOverlay.swift; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,6 +191,7 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */,
 				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 				5C1454432CF816EF00D5C232 /* ImportService.swift */,
 				5C14543B2CF7FF8800D5C232 /* ColorUtility.swift */,
@@ -241,6 +256,7 @@
 		5C6676C02BC210F8002DD52E /* RetroviewTests */ = {
 			isa = PBXGroup;
 			children = (
+				5C43BC4A2CF992FB0053FAFD /* ImportServiceTests.swift */,
 				5C6676C12BC210F8002DD52E /* RetroviewTests.swift */,
 			);
 			path = RetroviewTests;
@@ -258,6 +274,10 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C43BC502CF9A15C0053FAFD /* SubjectGridView.swift */,
+				5C43BC4E2CF99D8D0053FAFD /* SubjectsView.swift */,
+				5C43BC4C2CF99D330053FAFD /* SubjectListView.swift */,
+				5C43BC462CF98BF20053FAFD /* CollectionMenuView.swift */,
 				5C1454522CF84C7900D5C232 /* CollectionView.swift */,
 				5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */,
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
@@ -308,6 +328,7 @@
 				5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */,
 				5C1454392CF7F5FA00D5C232 /* NavigationState.swift */,
 				5C14542E2CF6F5EC00D5C232 /* GalleryScreen.swift */,
+				5C43BC522CF9A9530053FAFD /* NavigationSidebar.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -468,13 +489,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C43BC4D2CF99D380053FAFD /* SubjectListView.swift in Sources */,
 				5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */,
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
+				5C43BC472CF98BF70053FAFD /* CollectionMenuView.swift in Sources */,
+				5C43BC532CF9A9530053FAFD /* NavigationSidebar.swift in Sources */,
 				5C9BCA522C166A2D00668900 /* StereoCardViewModel.swift in Sources */,
 				5C14543C2CF7FF8B00D5C232 /* ColorUtility.swift in Sources */,
 				5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */,
 				5C1454222CF5834400D5C232 /* CardContentView.swift in Sources */,
+				5C43BC512CF9A1620053FAFD /* SubjectGridView.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
+				5C43BC4F2CF99D910053FAFD /* SubjectsView.swift in Sources */,
 				5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */,
 				5C1454362CF7E07A00D5C232 /* PreviewInfrastructure.swift in Sources */,
 				5C14542D2CF6F18100D5C232 /* SquareCropGridView.swift in Sources */,
@@ -501,6 +527,7 @@
 				5C14544A2CF83FF900D5C232 /* PlatformToolbarModifiers.swift in Sources */,
 				5C1454312CF6F74B00D5C232 /* LibraryView.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
+				5C43BC492CF98D910053FAFD /* ModelContextPreviewExtension.swift in Sources */,
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
@@ -513,6 +540,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C43BC4B2CF993010053FAFD /* ImportServiceTests.swift in Sources */,
 				5C6676C22BC210F8002DD52E /* RetroviewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -760,8 +788,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.RetroviewTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -783,8 +811,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.RetroviewTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -806,7 +834,7 @@
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.RetroviewUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -828,7 +856,7 @@
 				DEVELOPMENT_TEAM = MYU957XGF6;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.atompowered.RetroviewUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

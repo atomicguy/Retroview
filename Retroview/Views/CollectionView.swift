@@ -44,7 +44,8 @@ struct CollectionView: View {
                         }
                         return firstIndex < secondIndex
                     }),
-                selectedCard: $selectedCard)
+                selectedCard: $selectedCard,
+                collection: collection)
             { newOrder in
                 collection.updateCards(newOrder)
                 try? modelContext.save()

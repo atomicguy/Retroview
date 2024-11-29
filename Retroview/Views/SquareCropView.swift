@@ -13,11 +13,12 @@ struct SquareCropView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     @StateObject private var viewModel: StereoCardViewModel
     @State private var showingNewCollectionSheet = false
+    let currentCollection: CollectionSchemaV1.Collection?
 
-    init(card: CardSchemaV1.StereoCard) {
+    init(card: CardSchemaV1.StereoCard, currentCollection: CollectionSchemaV1.Collection? = nil) {
         self.card = card
-        _viewModel = StateObject(
-            wrappedValue: StereoCardViewModel(stereoCard: card))
+        self.currentCollection = currentCollection
+        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
     }
 
     var displayTitle: String {
@@ -33,10 +34,8 @@ struct SquareCropView: View {
                     let cropWidth = CGFloat(leftCrop.y1 - leftCrop.y0)
                     let cropHeight = CGFloat(leftCrop.x1 - leftCrop.x0)
                     let scale = min(
-                        geometry.size.width
-                            / (cropWidth * CGFloat(image.width)),
-                        geometry.size.height
-                            / (cropHeight * CGFloat(image.height))
+                        geometry.size.width / (cropWidth * CGFloat(image.width)),
+                        geometry.size.height / (cropHeight * CGFloat(image.height))
                     )
 
                     Image(decorative: image, scale: 1.0)
@@ -47,12 +46,10 @@ struct SquareCropView: View {
                             height: CGFloat(image.height) * scale
                         )
                         .offset(
-                            x: -CGFloat(leftCrop.y0) * CGFloat(image.width)
-                                * scale,
-                            y: -CGFloat(leftCrop.x0) * CGFloat(image.height)
-                                * scale
+                            x: -CGFloat(leftCrop.y0) * CGFloat(image.width) * scale,
+                            y: -CGFloat(leftCrop.x0) * CGFloat(image.height) * scale
                         )
-                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Center in GeometryReader
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .clipped()
                 } else {
                     ProgressView()
@@ -66,8 +63,8 @@ struct SquareCropView: View {
                 .font(.system(.subheadline, design: .serif))
                 .lineLimit(2)
                 .foregroundStyle(.primary)
-                .multilineTextAlignment(.center) // Center align text
-                .frame(maxWidth: .infinity) // Make text use full width
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity)
         .padding()
@@ -94,7 +91,8 @@ struct SquareCropView: View {
                 CardHoverOverlay(
                     card: card,
                     viewModel: viewModel,
-                    showingNewCollectionSheet: $showingNewCollectionSheet
+                    showingNewCollectionSheet: $showingNewCollectionSheet,
+                    currentCollection: currentCollection
                 )
             }
         }
@@ -113,20 +111,10 @@ struct SquareCropView: View {
         }
         .draggable(card)
         .contextMenu {
-            CollectionMenu(
-                showNewCollectionSheet: $showingNewCollectionSheet, card: card
-            )
-
-            ShareLink(
-                item: displayTitle,
-                subject: Text("Stereoview Card"),
-                message: Text(card.titles.first?.text ?? ""),
-                preview: SharePreview(
-                    displayTitle,
-                    image: viewModel.frontCGImage.map {
-                        Image(decorative: $0, scale: 1.0)
-                    } ?? Image(systemName: "photo")
-                )
+            CollectionMenuContent(
+                showNewCollectionSheet: $showingNewCollectionSheet,
+                card: card,
+                currentCollection: currentCollection
             )
         }
         .sheet(isPresented: $showingNewCollectionSheet) {
@@ -135,58 +123,21 @@ struct SquareCropView: View {
     }
 }
 
-struct CollectionMenu: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \CollectionSchemaV1.Collection.name) private var collections:
-        [CollectionSchemaV1.Collection]
-    @Binding var showNewCollectionSheet: Bool
-
-    let card: CardSchemaV1.StereoCard
-
-    var body: some View {
-        if collections.isEmpty {
-            Text("No Collections")
-                .foregroundStyle(.secondary)
-        } else {
-            ForEach(collections) { collection in
-                Button {
-                    toggleCard(in: collection)
-                } label: {
-                    if collection.hasCard(card) {
-                        Label(
-                            collection.name,
-                            systemImage: "checkmark.circle.fill"
-                        )
-                    } else {
-                        Label(collection.name, systemImage: "circle")
-                    }
-                }
-            }
-
-            Divider()
-        }
-
-        Button {
-            showNewCollectionSheet = true
-        } label: {
-            Label("New Collection...", systemImage: "folder.badge.plus")
-        }
-    }
-
-    private func toggleCard(in collection: CollectionSchemaV1.Collection) {
-        if collection.hasCard(card) {
-            collection.removeCard(card)
-        } else {
-            collection.addCard(card)
-        }
-        try? modelContext.save()
-    }
-}
-
 #Preview("Square Crop View") {
     CardPreviewContainer { card in
         SquareCropView(card: card)
             .frame(width: 300)
             .padding()
+    }
+}
+
+#Preview("Square Crop View in Collection") {
+    CardPreviewContainer { card in
+        SquareCropView(
+            card: card,
+            currentCollection: CollectionSchemaV1.Collection.preview
+        )
+        .frame(width: 300)
+        .padding()
     }
 }

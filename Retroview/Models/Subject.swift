@@ -18,7 +18,7 @@ enum SubjectSchemaV1: VersionedSchema {
     @Model
     class Subject {
         var name: String
-        var cards: [CardSchemaV1.StereoCard]?
+        var cards: [CardSchemaV1.StereoCard] = []
 
         init(name: String) {
             self.name = name

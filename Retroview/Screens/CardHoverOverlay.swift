@@ -11,6 +11,7 @@ struct CardHoverOverlay: View {
     let card: CardSchemaV1.StereoCard
     @ObservedObject var viewModel: StereoCardViewModel
     @Binding var showingNewCollectionSheet: Bool
+    let currentCollection: CollectionSchemaV1.Collection?
     @State private var showingMenu = false
 
     var displayTitle: String {
@@ -24,9 +25,10 @@ struct CardHoverOverlay: View {
             Spacer()
 
             Menu {
-                CollectionMenu(
+                CollectionMenuContent(
                     showNewCollectionSheet: $showingNewCollectionSheet,
-                    card: card
+                    card: card,
+                    currentCollection: currentCollection
                 )
 
                 ShareLink(
@@ -61,7 +63,21 @@ struct CardHoverOverlay: View {
         CardHoverOverlay(
             card: card,
             viewModel: StereoCardViewModel(stereoCard: card),
-            showingNewCollectionSheet: .constant(false)
+            showingNewCollectionSheet: .constant(false),
+            currentCollection: nil
+        )
+        .frame(width: 300, height: 300)
+        .background(Color.black.opacity(0.3))
+    }
+}
+
+#Preview("In Collection") {
+    CardPreviewContainer { card in
+        CardHoverOverlay(
+            card: card,
+            viewModel: StereoCardViewModel(stereoCard: card),
+            showingNewCollectionSheet: .constant(false),
+            currentCollection: CollectionSchemaV1.Collection.preview
         )
         .frame(width: 300, height: 300)
         .background(Color.black.opacity(0.3))

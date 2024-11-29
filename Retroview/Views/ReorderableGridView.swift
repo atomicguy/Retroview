@@ -13,11 +13,12 @@ import SwiftUI
 private struct ReorderableGridItem: View {
     let card: CardSchemaV1.StereoCard
     let selectedCard: CardSchemaV1.StereoCard?
+    let currentCollection: CollectionSchemaV1.Collection
     let onSelect: (CardSchemaV1.StereoCard) -> Void
     @State private var isDragging = false
 
     var body: some View {
-        SquareCropView(card: card)
+        SquareCropView(card: card, currentCollection: currentCollection)
             .contentShape(Rectangle())
             .onTapGesture {
                 onSelect(card)
@@ -44,6 +45,7 @@ private struct ReorderableGridItem: View {
 private struct ReorderableGridContent: View {
     let cards: [CardSchemaV1.StereoCard]
     let selectedCard: CardSchemaV1.StereoCard?
+    let collection: CollectionSchemaV1.Collection
     let onSelect: (CardSchemaV1.StereoCard) -> Void
     let onReorder: ([CardSchemaV1.StereoCard]) -> Void
 
@@ -59,6 +61,7 @@ private struct ReorderableGridContent: View {
                 ReorderableGridItem(
                     card: card,
                     selectedCard: selectedCard,
+                    currentCollection: collection,
                     onSelect: onSelect
                 )
             }
@@ -83,6 +86,7 @@ struct ReorderableCardGridView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard?
+    let collection: CollectionSchemaV1.Collection
     let onReorder: ([CardSchemaV1.StereoCard]) -> Void
 
     var body: some View {
@@ -91,6 +95,7 @@ struct ReorderableCardGridView: View {
                 ReorderableGridContent(
                     cards: cards,
                     selectedCard: selectedCard,
+                    collection: collection,
                     onSelect: { selectedCard = $0 },
                     onReorder: onReorder
                 )
@@ -116,6 +121,7 @@ struct ReorderableCardGridView: View {
         let content = ReorderableGridContent(
             cards: cards,
             selectedCard: selectedCard,
+            collection: collection,
             onSelect: { selectedCard = $0 },
             onReorder: onReorder
         )
@@ -144,6 +150,7 @@ struct ReorderableCardGridView: View {
         ReorderableCardGridView(
             cards: .constant(cards),
             selectedCard: .constant(nil),
+            collection: CollectionSchemaV1.Collection.preview,
             onReorder: { _ in }
         )
         .frame(width: 1200, height: 800)
@@ -155,6 +162,7 @@ struct ReorderableCardGridView: View {
         ReorderableCardGridView(
             cards: .constant(cards),
             selectedCard: .constant(cards.first),
+            collection: CollectionSchemaV1.Collection.preview,
             onReorder: { _ in }
         )
         .frame(width: 1200, height: 800)
