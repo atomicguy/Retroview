@@ -43,6 +43,10 @@ struct RetroviewApp: App {
     var body: some Scene {
         WindowGroup {
             GalleryScreen()
+                .onAppear {
+                    CollectionDefaults.setupDefaultCollections(
+                        context: sharedModelContainer.mainContext)
+                }
         }
         .modelContainer(sharedModelContainer)
     }

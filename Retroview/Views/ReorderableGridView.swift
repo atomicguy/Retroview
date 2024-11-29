@@ -8,88 +8,134 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - Grid Item View
+
+private struct ReorderableGridItem: View {
+    let card: CardSchemaV1.StereoCard
+    let selectedCard: CardSchemaV1.StereoCard?
+    let onSelect: (CardSchemaV1.StereoCard) -> Void
+    @State private var isDragging = false
+
+    var body: some View {
+        SquareCropView(card: card)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                onSelect(card)
+            }
+            .overlay {
+                if selectedCard?.uuid == card.uuid {
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.accentColor, lineWidth: 3)
+                }
+            }
+            .draggable(card) {
+                SquareCropView(card: card)
+                    .frame(width: 200, height: 200)
+                    .opacity(0.8)
+            }
+            .opacity(isDragging ? 0.5 : 1.0)
+            .scaleEffect(isDragging ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.2), value: isDragging)
+    }
+}
+
+// MARK: - Grid Content View
+
+private struct ReorderableGridContent: View {
+    let cards: [CardSchemaV1.StereoCard]
+    let selectedCard: CardSchemaV1.StereoCard?
+    let onSelect: (CardSchemaV1.StereoCard) -> Void
+    let onReorder: ([CardSchemaV1.StereoCard]) -> Void
+
+    private let columns = [
+        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10)
+    ]
+    private let spacing: CGFloat = 10
+    private let minItemWidth: CGFloat = 250
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: spacing) {
+            ForEach(cards) { card in
+                ReorderableGridItem(
+                    card: card,
+                    selectedCard: selectedCard,
+                    onSelect: onSelect
+                )
+            }
+        }
+        .padding()
+    }
+
+    func calculateDropIndex(at location: CGPoint, containerWidth: CGFloat)
+        -> Int
+    {
+        let itemsPerRow = max(1, Int(containerWidth / (minItemWidth + spacing)))
+        let row = Int(location.y / (minItemWidth + spacing))
+        let column = Int(location.x / (minItemWidth + spacing))
+        let index = (row * itemsPerRow) + column
+        return min(max(0, index), cards.count)
+    }
+}
+
+// MARK: - Main View
+
 struct ReorderableCardGridView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard?
     let onReorder: ([CardSchemaV1.StereoCard]) -> Void
 
-    private let columns = [
-        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10)
-    ]
-
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(cards) { card in
-                    SquareCropView(card: card)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedCard = card
-                        }
-                        .overlay {
-                            if selectedCard?.uuid == card.uuid {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.accentColor, lineWidth: 3)
-                            }
-                        }
-                        .draggable(card) {
-                            // Preview while dragging
-                            SquareCropView(card: card)
-                                .frame(width: 200, height: 200)
-                                .opacity(0.8)
-                        }
-                }
-            }
-            .padding()
-            .dropDestination(for: CardSchemaV1.StereoCard.self) {
-                droppedItems, location in
-                handleDrop(of: droppedItems, at: location)
-            } isTargeted: { isTargeted in
-                // Add visual feedback when dragging over
-                if isTargeted {
-                    print("Drop target active")
+        GeometryReader { geometry in
+            ScrollView {
+                ReorderableGridContent(
+                    cards: cards,
+                    selectedCard: selectedCard,
+                    onSelect: { selectedCard = $0 },
+                    onReorder: onReorder
+                )
+                .dropDestination(for: String.self) { droppedIds, location in
+                    handleDrop(
+                        droppedIds: droppedIds, location: location,
+                        geometry: geometry
+                    )
                 }
             }
         }
     }
 
     private func handleDrop(
-        of droppedItems: [CardSchemaV1.StereoCard], at location: CGPoint
+        droppedIds: [String], location: CGPoint, geometry: GeometryProxy
     ) -> Bool {
-        guard let droppedCard = droppedItems.first else { return false }
-
-        // If card doesn't exist in collection, add it
-        if !cards.contains(where: { $0.uuid == droppedCard.uuid }) {
-            cards.append(droppedCard)
-            onReorder(cards)
-            return true
-        }
-
-        // Otherwise, handle reordering
-        guard
-            let sourceIndex = cards.firstIndex(where: {
-                $0.uuid == droppedCard.uuid
-            }),
-            let dropIndex = getDropIndex(location: location)
+        guard let droppedId = droppedIds.first,
+              let droppedUUID = UUID(uuidString: droppedId),
+              let sourceIndex = cards.firstIndex(where: { $0.uuid == droppedUUID }
+              )
         else { return false }
 
+        let content = ReorderableGridContent(
+            cards: cards,
+            selectedCard: selectedCard,
+            onSelect: { selectedCard = $0 },
+            onReorder: onReorder
+        )
+
+        let dropIndex = content.calculateDropIndex(
+            at: location, containerWidth: geometry.size.width
+        )
         var updatedCards = cards
+
         let movedCard = updatedCards.remove(at: sourceIndex)
         let actualDropIndex =
             dropIndex >= sourceIndex ? dropIndex - 1 : dropIndex
-        updatedCards.insert(movedCard, at: actualDropIndex)
+        updatedCards.insert(
+            movedCard, at: min(actualDropIndex, updatedCards.count)
+        )
 
         cards = updatedCards
         onReorder(updatedCards)
-        return true
-    }
 
-    private func getDropIndex(location: CGPoint) -> Int? {
-        let approximateRowHeight: CGFloat = 300
-        let row = Int(location.y / approximateRowHeight)
-        let approximateItemsPerRow = 4
-        return min(row * approximateItemsPerRow, cards.count)
+        return true
     }
 }
 

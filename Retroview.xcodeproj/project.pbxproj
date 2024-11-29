@@ -28,7 +28,10 @@
 		5C1454512CF84B5100D5C232 /* ReorderableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */; };
 		5C1454532CF84C7E00D5C232 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454522CF84C7900D5C232 /* CollectionView.swift */; };
 		5C1454572CF84E8D00D5C232 /* AddToCollectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */; };
+		5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */; };
 		5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */; };
+		5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C665F552CF9591A00838F37 /* FavoriteButton.swift */; };
+		5C665F582CF95EA500838F37 /* CardHoverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */; };
 		5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */; };
 		5C6676B42BC210F8002DD52E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B32BC210F8002DD52E /* Assets.xcassets */; };
 		5C6676B82BC210F8002DD52E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B72BC210F8002DD52E /* Preview Assets.xcassets */; };
@@ -104,8 +107,11 @@
 		5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderableGridView.swift; sourceTree = "<group>"; };
 		5C1454522CF84C7900D5C232 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCollectionMenu.swift; sourceTree = "<group>"; };
+		5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDefaults.swift; sourceTree = "<group>"; };
 		5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5C665F552CF9591A00838F37 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
+		5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHoverOverlay.swift; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewApp.swift; sourceTree = "<group>"; };
 		5C6676B32BC210F8002DD52E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -295,6 +301,9 @@
 		5CD0759B2BDF29AB002B463C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */,
+				5C665F552CF9591A00838F37 /* FavoriteButton.swift */,
+				5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */,
 				5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */,
 				5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */,
 				5C1454392CF7F5FA00D5C232 /* NavigationState.swift */,
@@ -478,6 +487,7 @@
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5C14542B2CF6D86500D5C232 /* SquareCropView.swift in Sources */,
 				5C1454342CF7A63D00D5C232 /* CardColorAnalyzer.swift in Sources */,
+				5C665F582CF95EA500838F37 /* CardHoverOverlay.swift in Sources */,
 				5C7014F42BF1AC01001D6CC3 /* CardView.swift in Sources */,
 				5C14543A2CF7F5FE00D5C232 /* NavigationState.swift in Sources */,
 				5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */,
@@ -490,6 +500,8 @@
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
 				5C14544A2CF83FF900D5C232 /* PlatformToolbarModifiers.swift in Sources */,
 				5C1454312CF6F74B00D5C232 /* LibraryView.swift in Sources */,
+				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
+				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5C1454442CF816F700D5C232 /* ImportService.swift in Sources */,

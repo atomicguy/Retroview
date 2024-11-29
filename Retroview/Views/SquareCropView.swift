@@ -28,7 +28,7 @@ struct SquareCropView: View {
         VStack(alignment: .center, spacing: 8) {
             GeometryReader { geometry in
                 if let image = viewModel.frontCGImage,
-                    let leftCrop = card.leftCrop
+                   let leftCrop = card.leftCrop
                 {
                     let cropWidth = CGFloat(leftCrop.y1 - leftCrop.y0)
                     let cropHeight = CGFloat(leftCrop.x1 - leftCrop.x0)
@@ -52,7 +52,7 @@ struct SquareCropView: View {
                             y: -CGFloat(leftCrop.x0) * CGFloat(image.height)
                                 * scale
                         )
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)  // Center in GeometryReader
+                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Center in GeometryReader
                         .clipped()
                 } else {
                     ProgressView()
@@ -66,10 +66,10 @@ struct SquareCropView: View {
                 .font(.system(.subheadline, design: .serif))
                 .lineLimit(2)
                 .foregroundStyle(.primary)
-                .multilineTextAlignment(.center)  // Center align text
-                .frame(maxWidth: .infinity)  // Make text use full width
+                .multilineTextAlignment(.center) // Center align text
+                .frame(maxWidth: .infinity) // Make text use full width
         }
-        .frame(maxWidth: .infinity)  // Ensure VStack takes full width
+        .frame(maxWidth: .infinity)
         .padding()
         .background(
             LinearGradient(
@@ -89,6 +89,15 @@ struct SquareCropView: View {
             x: 0,
             y: 4
         )
+        .withHoverEffect { isHovered in
+            if isHovered {
+                CardHoverOverlay(
+                    card: card,
+                    viewModel: viewModel,
+                    showingNewCollectionSheet: $showingNewCollectionSheet
+                )
+            }
+        }
         .task(priority: .high) {
             await withTaskGroup(of: Void.self) { group in
                 group.addTask {
@@ -105,7 +114,8 @@ struct SquareCropView: View {
         .draggable(card)
         .contextMenu {
             CollectionMenu(
-                showNewCollectionSheet: $showingNewCollectionSheet, card: card)
+                showNewCollectionSheet: $showingNewCollectionSheet, card: card
+            )
 
             ShareLink(
                 item: displayTitle,
@@ -127,11 +137,12 @@ struct SquareCropView: View {
 
 struct CollectionMenu: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \CollectionSchemaV1.Collection.name) private var collections: [CollectionSchemaV1.Collection]
+    @Query(sort: \CollectionSchemaV1.Collection.name) private var collections:
+        [CollectionSchemaV1.Collection]
     @Binding var showNewCollectionSheet: Bool
-    
+
     let card: CardSchemaV1.StereoCard
-    
+
     var body: some View {
         if collections.isEmpty {
             Text("No Collections")
@@ -142,23 +153,26 @@ struct CollectionMenu: View {
                     toggleCard(in: collection)
                 } label: {
                     if collection.hasCard(card) {
-                        Label(collection.name, systemImage: "checkmark.circle.fill")
+                        Label(
+                            collection.name,
+                            systemImage: "checkmark.circle.fill"
+                        )
                     } else {
                         Label(collection.name, systemImage: "circle")
                     }
                 }
             }
-            
+
             Divider()
         }
-        
+
         Button {
             showNewCollectionSheet = true
         } label: {
             Label("New Collection...", systemImage: "folder.badge.plus")
         }
     }
-    
+
     private func toggleCard(in collection: CollectionSchemaV1.Collection) {
         if collection.hasCard(card) {
             collection.removeCard(card)

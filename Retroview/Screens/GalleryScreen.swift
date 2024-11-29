@@ -25,10 +25,14 @@ private struct NavigationSidebar: View {
 
             Section("Collections") {
                 ForEach(collections) { collection in
-                    NavigationLink(
-                        value: NavigationDestination.collection(collection.id)
-                    ) {
-                        Label(collection.name, systemImage: "folder")
+                    let destination = NavigationDestination.collection(
+                        collection.id, collection.name
+                    )
+                    NavigationLink(value: destination) {
+                        Label(
+                            collection.name,
+                            systemImage: destination.systemImage
+                        )
                     }
                 }
             }
@@ -72,25 +76,26 @@ struct GalleryScreen: View {
             }
         #endif
     }
-    
+
     @ViewBuilder
     private var navigationDestinationView: some View {
         switch selectedDestination {
         case .library:
             LibraryView()
-        case .collection(let id):
+        case .collection(let id, _):
             if let collection = fetchCollection(id: id) {
                 CollectionView(collection: collection)
             } else {
                 ContentUnavailableView(
                     "Collection Not Found",
                     systemImage: "folder.badge.questionmark",
-                    description: Text("The selected collection could not be found")
+                    description: Text(
+                        "The selected collection could not be found")
                 )
             }
         }
     }
-    
+
     private func fetchCollection(id: UUID) -> CollectionSchemaV1.Collection? {
         let descriptor = FetchDescriptor<CollectionSchemaV1.Collection>(
             predicate: #Predicate<CollectionSchemaV1.Collection> { collection in
