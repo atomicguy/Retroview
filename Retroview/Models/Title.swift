@@ -1,5 +1,5 @@
 //
-//  Titles.swift
+//  Title.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 4/20/24.

@@ -26,10 +26,12 @@ struct CollectionContextMenu: View {
 
             CollectionToggleSection(
                 collections: collections, currentCollection: currentCollection,
-                card: card)
+                card: card
+            )
 
             AddToNewCollectionButton(
-                showNewCollectionSheet: $showNewCollectionSheet, card: card)
+                showNewCollectionSheet: $showNewCollectionSheet, card: card
+            )
         }
     }
 }

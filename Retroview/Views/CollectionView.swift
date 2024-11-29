@@ -45,8 +45,8 @@ struct CollectionView: View {
                         return firstIndex < secondIndex
                     }),
                 selectedCard: $selectedCard,
-                collection: collection)
-            { newOrder in
+                collection: collection
+            ) { newOrder in
                 collection.updateCards(newOrder)
                 try? modelContext.save()
             }
@@ -62,7 +62,8 @@ struct CollectionView: View {
                     ContentUnavailableView(
                         "No Card Selected",
                         systemImage: "photo.on.rectangle",
-                        description: Text("Select a card to view its details"))
+                        description: Text("Select a card to view its details")
+                    )
                 }
             }
             .frame(width: detailWidth)

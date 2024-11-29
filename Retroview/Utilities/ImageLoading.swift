@@ -112,7 +112,7 @@ extension DefaultImageLoader {
     struct MockImageLoader: ImageLoading {
         var mockImage: CGImage?
 
-        func createCGImage(from data: Data) async -> CGImage? {
+        func createCGImage(from _: Data) async -> CGImage? {
             return mockImage
         }
     }

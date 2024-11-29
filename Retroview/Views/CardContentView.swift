@@ -14,7 +14,8 @@ private extension Font {
     static let cardTitle = Font.system(.title, design: .serif)
     static let cardHeadline = Font.system(.headline, design: .serif)
     static let cardSubheadline = Font.system(
-        .title2, design: .serif)
+        .title2, design: .serif
+    )
     static let cardBody = Font.system(.body, design: .serif)
     static let cardCaption = Font.system(.caption, design: .serif)
 }
@@ -92,11 +93,14 @@ struct CardContentView: View {
                     // Metadata Lists
                     VStack(alignment: .leading, spacing: 16) {
                         MetadataListView(
-                            title: "Authors", items: card.authors.map(\.name))
+                            title: "Authors", items: card.authors.map(\.name)
+                        )
                         MetadataListView(
-                            title: "Dates", items: card.dates.map(\.text))
+                            title: "Dates", items: card.dates.map(\.text)
+                        )
                         MetadataListView(
-                            title: "Subjects", items: card.subjects.map(\.name))
+                            title: "Subjects", items: card.subjects.map(\.name)
+                        )
                     }
 
                     OrnamentalDivider()
@@ -139,13 +143,15 @@ private struct CardImageContainer: View {
                 BackCardView(viewModel: viewModel)
                     .frame(
                         width: geometry.size.width,
-                        height: geometry.size.width / 2)
+                        height: geometry.size.width / 2
+                    )
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             } else {
                 FrontCardView(viewModel: viewModel)
                     .frame(
                         width: geometry.size.width,
-                        height: geometry.size.width / 2)
+                        height: geometry.size.width / 2
+                    )
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }

@@ -5,8 +5,8 @@
 //  Created by Adam Schuster on 11/28/24.
 //
 
-import SwiftData
 import Foundation
+import SwiftData
 
 extension ModelContext {
     func previewCollection() -> CollectionSchemaV1.Collection? {

@@ -1,5 +1,5 @@
 //
-//  ReorderableCardGridView.swift
+//  ReorderableGridView.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 11/27/24.
@@ -50,7 +50,7 @@ private struct ReorderableGridContent: View {
     let onReorder: ([CardSchemaV1.StereoCard]) -> Void
 
     private let columns = [
-        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10)
+        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10),
     ]
     private let spacing: CGFloat = 10
     private let minItemWidth: CGFloat = 250

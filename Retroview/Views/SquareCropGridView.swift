@@ -13,7 +13,7 @@ struct SquareCropGridView: View {
     @Binding var selectedCard: CardSchemaV1.StereoCard?
 
     private let columns = [
-        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10)
+        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10),
     ]
 
     var body: some View {

@@ -1,5 +1,5 @@
 //
-//  StereoCardView.swift
+//  FrontCardView.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 6/9/24.
@@ -12,7 +12,8 @@ struct FrontCardView: View {
 
     var body: some View {
         StereoCardImageView(
-            viewModel: viewModel, side: "front", contentMode: .fill)
+            viewModel: viewModel, side: "front", contentMode: .fill
+        )
     }
 }
 

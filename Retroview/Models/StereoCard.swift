@@ -1,5 +1,5 @@
 //
-//  Stereoview.swift
+//  StereoCard.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 4/6/24.
@@ -100,17 +100,21 @@ enum CardSchemaV1: VersionedSchema {
 
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            self.uuid = try container.decode(UUID.self, forKey: .uuid)
-            self.imageFrontId = try container.decodeIfPresent(
-                String.self, forKey: .imageFrontId)
-            self.imageBackId = try container.decodeIfPresent(
-                String.self, forKey: .imageBackId)
-            self.cardColor =
+            uuid = try container.decode(UUID.self, forKey: .uuid)
+            imageFrontId = try container.decodeIfPresent(
+                String.self, forKey: .imageFrontId
+            )
+            imageBackId = try container.decodeIfPresent(
+                String.self, forKey: .imageBackId
+            )
+            cardColor =
                 try container.decodeIfPresent(
-                    String.self, forKey: .cardColor) ?? "#F5E6D3"
-            self.colorOpacity =
+                    String.self, forKey: .cardColor
+                ) ?? "#F5E6D3"
+            colorOpacity =
                 try container.decodeIfPresent(
-                    Double.self, forKey: .colorOpacity) ?? 0.15
+                    Double.self, forKey: .colorOpacity
+                ) ?? 0.15
         }
 
         func encode(to encoder: Encoder) throws {
@@ -169,7 +173,8 @@ enum CardSchemaV1: VersionedSchema {
             guard let url = imageUrl(forSide: side) else {
                 let error = NSError(
                     domain: "", code: 0,
-                    userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]
+                )
                 print("Invalid URL for side: \(side)")
                 completion(.failure(error))
                 return
@@ -196,7 +201,8 @@ enum CardSchemaV1: VersionedSchema {
                         domain: "", code: 0,
                         userInfo: [
                             NSLocalizedDescriptionKey: "No data received",
-                        ])
+                        ]
+                    )
                     print("No data received for \(side)")
                     completion(.failure(error))
                     return
@@ -224,7 +230,7 @@ enum CardSchemaV1: VersionedSchema {
                     switch result {
                     case .success():
                         continuation.resume()
-                    case .failure(let error):
+                    case let .failure(error):
                         continuation.resume(throwing: error)
                     }
                 }
@@ -235,25 +241,30 @@ enum CardSchemaV1: VersionedSchema {
             StereoCard(
                 uuid: "a0056e40-c55a-012f-e57a-58d385a7bc34",
                 imageFrontId: "G91F230_029F",
-                imageBackId: "G91F230_029B"),
+                imageBackId: "G91F230_029B"
+            ),
             StereoCard(
                 uuid: "8f936cf0-c52e-012f-c9aa-58d385a7bc34",
                 imageFrontId: "G88F105_023F",
-                imageBackId: "G88F105_023B"),
+                imageBackId: "G88F105_023B"
+            ),
             StereoCard(
                 uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
                 imageFrontId: "G90F186_030F",
-                imageBackId: "G90F186_030B"),
+                imageBackId: "G90F186_030B"
+            ),
             StereoCard(
                 uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
                 imageFrontId: "G90F186_122F",
-                imageBackId: "G90F186_122B"),
+                imageBackId: "G90F186_122B"
+            ),
         ]
 
         private static func loadImageData(named imageName: String) -> Data? {
             guard
                 let url = Bundle.main.url(
-                    forResource: imageName, withExtension: "jpg")
+                    forResource: imageName, withExtension: "jpg"
+                )
             else {
                 return nil
             }

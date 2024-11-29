@@ -33,13 +33,15 @@ import SwiftUI
             let (leftTexture, rightTexture) = try await createTexturesFromCrops(
                 sourceImage: sourceImage,
                 leftCrop: leftCrop,
-                rightCrop: rightCrop)
+                rightCrop: rightCrop
+            )
 
             try await updateMaterialAndPlane(
                 content: content,
                 material: &material,
                 leftTexture: leftTexture,
-                rightTexture: rightTexture)
+                rightTexture: rightTexture
+            )
         }
 
         private func createTexturesFromCrops(
@@ -55,9 +57,11 @@ import SwiftUI
 
             // Create textures concurrently
             async let leftTexture = TextureResource(
-                image: leftImage, options: .init(semantic: .color))
+                image: leftImage, options: .init(semantic: .color)
+            )
             async let rightTexture = TextureResource(
-                image: rightImage, options: .init(semantic: .color))
+                image: rightImage, options: .init(semantic: .color)
+            )
 
             return try await (left: leftTexture, right: rightTexture)
         }
@@ -79,7 +83,8 @@ import SwiftUI
                     bytesPerRow: 0,
                     space: sourceImage.colorSpace
                         ?? CGColorSpaceCreateDeviceRGB(),
-                    bitmapInfo: sourceImage.bitmapInfo.rawValue)
+                    bitmapInfo: sourceImage.bitmapInfo.rawValue
+                )
             else {
                 throw StereoError.imageProcessingFailed
             }
@@ -93,14 +98,17 @@ import SwiftUI
             croppedContext.clip(
                 to: CGRect(
                     x: Int(-xOffset), y: Int(-yOffset), width: cropWidth,
-                    height: cropHeight))
+                    height: cropHeight
+                ))
 
             // Draw the image
             croppedContext.draw(
                 sourceImage,
                 in: CGRect(
                     x: 0, y: 0, width: sourceImage.width,
-                    height: sourceImage.height))
+                    height: sourceImage.height
+                )
+            )
 
             guard let croppedImage = croppedContext.makeImage() else {
                 throw StereoError.imageProcessingFailed
@@ -117,13 +125,16 @@ import SwiftUI
             rightTexture: TextureResource
         ) async throws {
             try material.setParameter(
-                name: "Left", value: .textureResource(leftTexture))
+                name: "Left", value: .textureResource(leftTexture)
+            )
             try material.setParameter(
-                name: "Right", value: .textureResource(rightTexture))
+                name: "Right", value: .textureResource(rightTexture)
+            )
 
             let dimensions = calculatePlaneDimensions(
                 textureWidth: Float(leftTexture.width),
-                textureHeight: Float(leftTexture.height))
+                textureHeight: Float(leftTexture.height)
+            )
 
             if let existingPlane = content.entities.first as? ModelEntity {
                 updateExistingPlane(existingPlane, with: material)
@@ -131,7 +142,8 @@ import SwiftUI
                 let plane = createPlane(
                     width: dimensions.width,
                     height: dimensions.height,
-                    material: material)
+                    material: material
+                )
                 content.add(plane)
             }
         }

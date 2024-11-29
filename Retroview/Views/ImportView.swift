@@ -19,7 +19,7 @@ struct ImportView: View {
     @State private var showConfirmation = false
     @State private var pendingImportURL: URL?
     @State private var fileCount = 0
-    
+
     enum ProcessingState {
         case ready
         case analyzing
@@ -27,24 +27,24 @@ struct ImportView: View {
         case completed(totalImported: Int)
         case failed(error: String)
         case cancelled
-        
+
         var isImporting: Bool {
             if case .importing = self { return true }
             return false
         }
     }
-    
+
     init(modelContext: ModelContext) {
         _batchImportService = StateObject(
             wrappedValue: BatchImportService(modelContext: modelContext))
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
                 statusView
                     .padding(.vertical)
-                
+
                 actionButtons
             }
             .padding()
@@ -84,7 +84,7 @@ struct ImportView: View {
             }
         }
     }
-    
+
     private var actionButtons: some View {
         HStack(spacing: 16) {
             if case .importing = processingState {
@@ -96,7 +96,7 @@ struct ImportView: View {
                 }
                 .buttonStyle(.bordered)
             }
-            
+
             Button {
                 switch processingState {
                 case .ready, .failed, .cancelled:
@@ -117,7 +117,7 @@ struct ImportView: View {
             .disabled(processingState.isImporting)
         }
     }
-    
+
     private func analyzeDirectory(_ url: URL) async {
         processingState = .analyzing
         do {
@@ -129,14 +129,14 @@ struct ImportView: View {
             await handleError(error)
         }
     }
-    
+
     private func startImport() {
         guard let url = pendingImportURL else { return }
-        
+
         Task {
             do {
                 processingState = .importing(filesProcessed: 0, totalFiles: fileCount)
-                
+
                 let progressTask = Task {
                     for await progress in batchImportService.progressUpdates {
                         if Task.isCancelled { break }
@@ -148,10 +148,10 @@ struct ImportView: View {
                         }
                     }
                 }
-                
+
                 try await batchImportService.importDirectory(at: url)
                 progressTask.cancel()
-                
+
                 await MainActor.run {
                     processingState = .completed(totalImported: fileCount)
                 }
@@ -160,7 +160,7 @@ struct ImportView: View {
             }
         }
     }
-    
+
     private func handleError(_ error: Error) async {
         await MainActor.run {
             errorMessage = error.localizedDescription
@@ -214,27 +214,28 @@ private struct DismissToolbarModifier: ViewModifier {
 }
 
 // MARK: - ImportConfirmationDialog
+
 struct ImportConfirmationDialog: View {
     let fileCount: Int
     let onConfirm: () -> Void
     let onCancel: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Import Confirmation")
                 .font(.headline)
-            
+
             Text("Found \(fileCount) files to import.")
                 .font(.body)
-            
+
             Text("Would you like to proceed?")
                 .font(.body)
                 .foregroundStyle(.secondary)
-            
+
             HStack(spacing: 16) {
                 Button("Cancel", role: .cancel, action: onCancel)
                     .buttonStyle(.bordered)
-                
+
                 Button("Import", action: onConfirm)
                     .buttonStyle(.borderedProminent)
             }
@@ -243,7 +244,6 @@ struct ImportConfirmationDialog: View {
         .frame(minWidth: 300)
     }
 }
-
 
 // MARK: - ProcessingState Extensions
 
@@ -257,7 +257,7 @@ extension ImportView {
             } description: {
                 Text("Choose a folder containing JSON files to import")
             }
-            
+
         case .analyzing:
             VStack(spacing: 12) {
                 ProgressView()
@@ -265,12 +265,12 @@ extension ImportView {
                 Text("Analyzing directory contents...")
                     .foregroundStyle(.secondary)
             }
-            
-        case .importing(let processed, let total):
+
+        case let .importing(processed, total):
             VStack(spacing: 16) {
                 ProgressView()
                     .controlSize(.large)
-                
+
                 VStack(spacing: 8) {
                     // Progress bar
                     ProgressView(
@@ -278,7 +278,7 @@ extension ImportView {
                         total: Double(total)
                     )
                     .progressViewStyle(.linear)
-                    
+
                     // Progress details
                     HStack {
                         Text("\(processed) of \(total)")
@@ -293,44 +293,44 @@ extension ImportView {
                 .frame(maxWidth: 300)
             }
 
-        case .completed(let total):
+        case let .completed(total):
             VStack(spacing: 12) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 48))
                     .foregroundStyle(.green)
-                
+
                 Text("Import Complete")
                     .font(.headline)
-                
+
                 Text("Successfully imported \(total) files")
                     .foregroundStyle(.secondary)
             }
-            
-        case .failed(let error):
+
+        case let .failed(error):
             VStack(spacing: 12) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 48))
                     .foregroundStyle(.red)
-                
+
                 Text("Import Failed")
                     .font(.headline)
-                
+
                 Text(error)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 300)
             }
-            
+
         case .cancelled:
             VStack(spacing: 12) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 48))
                     .foregroundStyle(.orange)
-                
+
                 Text("Import Cancelled")
                     .font(.headline)
-                
+
                 Text("The import operation was cancelled")
                     .foregroundStyle(.secondary)
             }
@@ -339,6 +339,7 @@ extension ImportView {
 }
 
 // MARK: - Processing State Button Properties
+
 extension ImportView.ProcessingState {
     var buttonLabel: String {
         switch self {
@@ -356,7 +357,7 @@ extension ImportView.ProcessingState {
             return "Select Folder"
         }
     }
-    
+
     var buttonIcon: String {
         switch self {
         case .ready:
@@ -374,6 +375,7 @@ extension ImportView.ProcessingState {
         }
     }
 }
+
 // MARK: - Preview Provider
 
 #Preview("Import View - macOS Light") {

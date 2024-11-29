@@ -32,7 +32,8 @@ struct StereoCardImageView: View {
                         .aspectRatio(contentMode: contentMode)
                         .frame(
                             width: geometry.size.width,
-                            height: geometry.size.height)
+                            height: geometry.size.height
+                        )
                 } else {
                     Rectangle()
                         .fill(Color.gray.opacity(0.2))

@@ -18,7 +18,7 @@ enum NavigationDestination: Hashable {
             return "Library"
         case .subjects:
             return "Subjects"
-        case .collection(_, let name):
+        case let .collection(_, name):
             return name
         }
     }
@@ -29,7 +29,7 @@ enum NavigationDestination: Hashable {
             return "photo.on.rectangle.angled"
         case .subjects:
             return "tag"
-        case .collection(_, let name):
+        case let .collection(_, name):
             return name == CollectionDefaults.favoritesName
                 ? "heart.fill" : "folder"
         }

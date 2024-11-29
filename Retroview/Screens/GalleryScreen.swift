@@ -35,7 +35,7 @@ struct GalleryScreen: View {
             LibraryView()
         case .subjects:
             SubjectsView()
-        case .collection(let id, _):
+        case let .collection(id, _):
             if let collection = fetchCollection(id: id) {
                 CollectionView(collection: collection)
             } else {

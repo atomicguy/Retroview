@@ -1,5 +1,5 @@
 //
-//  Untitled.swift
+//  ColorUtility.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 11/27/24.
@@ -30,11 +30,11 @@ extension Color {
         let g: UInt64
         let b: UInt64
         switch hex.count {
-        case 3:  // RGB (12-bit)
+        case 3: // RGB (12-bit)
             (r, g, b) = (
                 (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17
             )
-        case 6:  // RGB (24-bit)
+        case 6: // RGB (24-bit)
             (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
         default:
             return nil
@@ -42,21 +42,22 @@ extension Color {
         self.init(
             red: Double(r) / 255,
             green: Double(g) / 255,
-            blue: Double(b) / 255)
+            blue: Double(b) / 255
+        )
     }
 
     func toHex() -> String? {
         #if os(macOS)
             let color = NSColor(self)
             guard let components = color.cgColor.components,
-                components.count >= 3
+                  components.count >= 3
             else {
                 return nil
             }
         #else
             let color = UIColor(self)
             guard let components = color.cgColor.components,
-                components.count >= 3
+                  components.count >= 3
             else {
                 return nil
             }
@@ -69,6 +70,7 @@ extension Color {
             format: "#%02lX%02lX%02lX",
             lroundf(r * 255),
             lroundf(g * 255),
-            lroundf(b * 255))
+            lroundf(b * 255)
+        )
     }
 }

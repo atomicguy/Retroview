@@ -59,7 +59,7 @@ import SwiftUI
             }
         }
 
-        private func mainView(geometry: GeometryProxy) -> some View {
+        private func mainView(geometry _: GeometryProxy) -> some View {
             RealityView { content in
                 self.content = content
             } update: { content in
@@ -71,7 +71,8 @@ import SwiftUI
                                 content: contentCopy,
                                 sourceImage: image,
                                 leftCrop: card.leftCrop,
-                                rightCrop: card.rightCrop)
+                                rightCrop: card.rightCrop
+                            )
                         } catch {
                             print("Error updating reality view: \(error)")
                         }

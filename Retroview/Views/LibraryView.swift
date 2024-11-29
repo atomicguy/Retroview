@@ -59,7 +59,7 @@ private struct AdaptiveGridView: View {
         ScrollView {
             LazyVGrid(
                 columns: [
-                    GridItem(.adaptive(minimum: minItemWidth), spacing: spacing)
+                    GridItem(.adaptive(minimum: minItemWidth), spacing: spacing),
                 ],
                 spacing: spacing
             ) {

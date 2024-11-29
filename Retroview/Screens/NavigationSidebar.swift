@@ -89,7 +89,7 @@ struct NavigationSidebar: View {
             listSelection = NavigationDestination.library.id
         case .subjects:
             listSelection = NavigationDestination.subjects.id
-        case .collection(let id, _):
+        case let .collection(id, _):
             listSelection = id.uuidString
         }
     }
@@ -103,7 +103,7 @@ extension NavigationDestination {
             return "library"
         case .subjects:
             return "subjects"
-        case .collection(let id, _):
+        case let .collection(id, _):
             return id.uuidString
         }
     }

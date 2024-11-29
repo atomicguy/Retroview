@@ -17,7 +17,7 @@ enum MaterialLoadingError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .failedToLoadMaterial(let message):
+        case let .failedToLoadMaterial(message):
             return "Failed to load material: \(message)"
         }
     }
@@ -65,7 +65,7 @@ struct StereoMaterialView: View {
             case .success:
                 Text("Material loaded successfully!")
                     .foregroundColor(.green)
-            case .error(let error):
+            case let .error(error):
                 VStack {
                     Text("Error loading material:")
                         .foregroundColor(.red)

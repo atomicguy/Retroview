@@ -76,7 +76,7 @@ final class PreviewContainer {
         insert(DateSchemaV1.Date.sampleData)
     }
 
-    private func setupRelationships(in context: ModelContext) {
+    private func setupRelationships(in _: ModelContext) {
         // Setup and verify relationships with detailed logging
         for (index, card) in CardSchemaV1.StereoCard.sampleData.enumerated() {
             setupCardRelationships(card: card, index: index)
@@ -136,9 +136,9 @@ final class PreviewContainer {
         case 1:
             return Array(SubjectSchemaV1.Subject.sampleData.prefix(4))
         case 2:
-            return Array(SubjectSchemaV1.Subject.sampleData[7...13])
+            return Array(SubjectSchemaV1.Subject.sampleData[7 ... 13])
         case 3:
-            return Array(SubjectSchemaV1.Subject.sampleData[14...17])
+            return Array(SubjectSchemaV1.Subject.sampleData[14 ... 17])
         default:
             return []
         }

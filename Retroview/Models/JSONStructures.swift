@@ -5,7 +5,6 @@
 //  Created by Adam Schuster on 11/27/24.
 //
 
-
 import Foundation
 
 struct StereoCardJSON: Codable {
@@ -17,7 +16,7 @@ struct StereoCardJSON: Codable {
     let imageIds: ImageIDs
     let left: CropData
     let right: CropData
-    
+
     enum CodingKeys: String, CodingKey {
         case uuid, titles, subjects, authors, dates
         case imageIds = "image_ids"

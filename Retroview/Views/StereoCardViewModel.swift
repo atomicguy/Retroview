@@ -73,8 +73,9 @@ class StereoCardViewModel: ObservableObject {
                     throw NSError(
                         domain: "", code: 0,
                         userInfo: [
-                            NSLocalizedDescriptionKey: "Failed to create image"
-                        ])
+                            NSLocalizedDescriptionKey: "Failed to create image",
+                        ]
+                    )
                 }
             } else {
                 try await downloadAndLoadImage(forSide: side)

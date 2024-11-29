@@ -26,52 +26,52 @@ enum CollectionSchemaV1: VersionedSchema {
         private var cardOrder: String
 
         init(name: String, cards: [CardSchemaV1.StereoCard] = []) {
-            self.id = UUID()
+            id = UUID()
             self.name = name
-            self.createdAt = Date()
-            self.updatedAt = Date()
-            self.cardOrder = cards.map { $0.uuid.uuidString }.joined(
+            createdAt = Date()
+            updatedAt = Date()
+            cardOrder = cards.map { $0.uuid.uuidString }.joined(
                 separator: ",")
         }
 
         // Helper to get the array of card UUIDs
         var cardUUIDs: [String] {
-            self.cardOrder.isEmpty
-                ? [] : self.cardOrder.split(separator: ",").map(String.init)
+            cardOrder.isEmpty
+                ? [] : cardOrder.split(separator: ",").map(String.init)
         }
 
         // Update the cards in the collection
         func updateCards(_ cards: [CardSchemaV1.StereoCard]) {
-            self.cardOrder = cards.map { $0.uuid.uuidString }.joined(
+            cardOrder = cards.map { $0.uuid.uuidString }.joined(
                 separator: ",")
-            self.updatedAt = Date()
+            updatedAt = Date()
             verifyCardOrder()
         }
 
         // Add a single card
         func addCard(_ card: CardSchemaV1.StereoCard) {
-            var uuids = self.cardUUIDs
+            var uuids = cardUUIDs
             if !uuids.contains(card.uuid.uuidString) {
                 uuids.append(card.uuid.uuidString)
-                self.cardOrder = uuids.joined(separator: ",")
-                self.updatedAt = Date()
+                cardOrder = uuids.joined(separator: ",")
+                updatedAt = Date()
                 verifyCardOrder()
             }
         }
 
         // Remove a single card
         func removeCard(_ card: CardSchemaV1.StereoCard) {
-            var uuids = self.cardUUIDs
+            var uuids = cardUUIDs
             if let index = uuids.firstIndex(of: card.uuid.uuidString) {
                 uuids.remove(at: index)
-                self.cardOrder = uuids.joined(separator: ",")
-                self.updatedAt = Date()
+                cardOrder = uuids.joined(separator: ",")
+                updatedAt = Date()
                 verifyCardOrder()
             }
         }
 
         func hasCard(_ card: CardSchemaV1.StereoCard) -> Bool {
-            self.cardUUIDs.contains(card.uuid.uuidString)
+            cardUUIDs.contains(card.uuid.uuidString)
         }
 
         static let sampleData = [

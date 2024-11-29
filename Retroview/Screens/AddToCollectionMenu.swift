@@ -29,7 +29,8 @@ struct AddToCollectionMenu: View {
                         if collection.hasCard(card) {
                             Label(
                                 collection.name,
-                                systemImage: "checkmark.circle.fill")
+                                systemImage: "checkmark.circle.fill"
+                            )
                         } else {
                             Label(collection.name, systemImage: "circle")
                         }
