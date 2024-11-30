@@ -5,13 +5,6 @@
 //  Created by Adam Schuster on 11/27/24.
 //
 
-//
-//  Color+Utils.swift
-//  Retroview
-//
-//  Created by Adam Schuster on 11/27/24.
-//
-
 import SwiftUI
 
 #if os(macOS)

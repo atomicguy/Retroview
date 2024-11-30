@@ -86,8 +86,8 @@ struct SquareCropView: View {
             x: 0,
             y: 4
         )
-        .withHoverEffect { isHovered in
-            if isHovered {
+        .withCardInteraction { isActive in
+            if isActive {
                 CardHoverOverlay(
                     card: card,
                     viewModel: viewModel,

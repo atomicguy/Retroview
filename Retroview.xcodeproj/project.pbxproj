@@ -61,6 +61,8 @@
 		5CD075962BD60B3E002B463C /* Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD075952BD60B3E002B463C /* Crop.swift */; };
 		5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDEFC242CE04E4C0046FD60 /* StereoViewer */; };
 		5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */; };
+		5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */; };
+		5CEFA7692CFA83AE00D410EA /* InteractionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7682CFA83A800D410EA /* InteractionState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +154,8 @@
 		5CD075952BD60B3E002B463C /* Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crop.swift; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardImageView.swift; sourceTree = "<group>"; };
+		5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenu.swift; sourceTree = "<group>"; };
+		5CEFA7682CFA83A800D410EA /* InteractionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +195,7 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5CEFA7682CFA83A800D410EA /* InteractionState.swift */,
 				5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */,
 				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 				5C1454432CF816EF00D5C232 /* ImportService.swift */,
@@ -321,14 +326,15 @@
 		5CD0759B2BDF29AB002B463C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */,
 				5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */,
 				5C665F552CF9591A00838F37 /* FavoriteButton.swift */,
 				5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */,
 				5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */,
 				5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */,
 				5C1454392CF7F5FA00D5C232 /* NavigationState.swift */,
-				5C14542E2CF6F5EC00D5C232 /* GalleryScreen.swift */,
 				5C43BC522CF9A9530053FAFD /* NavigationSidebar.swift */,
+				5C14542E2CF6F5EC00D5C232 /* GalleryScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -489,6 +495,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CEFA7692CFA83AE00D410EA /* InteractionState.swift in Sources */,
 				5C43BC4D2CF99D380053FAFD /* SubjectListView.swift in Sources */,
 				5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */,
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
@@ -530,6 +537,7 @@
 				5C43BC492CF98D910053FAFD /* ModelContextPreviewExtension.swift in Sources */,
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
+				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5C1454442CF816F700D5C232 /* ImportService.swift in Sources */,
 				5C1454462CF8173100D5C232 /* BatchImportService.swift in Sources */,

@@ -12,7 +12,7 @@ struct GalleryScreen: View {
     @Environment(\.modelContext) private var modelContext
     @State private var selectedDestination: NavigationDestination = .library
     @State private var showingImport = false
-
+    
     var body: some View {
         NavigationSplitView {
             NavigationSidebar(selectedDestination: $selectedDestination)
@@ -26,6 +26,16 @@ struct GalleryScreen: View {
         .sheet(isPresented: $showingImport) {
             ImportView(modelContext: modelContext)
         }
+        #if os(iOS)
+        .navigationViewStyle(.stack)
+        .ignoresSafeArea(.keyboard)
+        #endif
+        // Use GeometryReader to fill available space
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        // Ensure content fills the safe area
+        .ignoresSafeArea(.container, edges: [.leading, .trailing])
+        // Add platform-specific styling
+        .modifier(PlatformSpecificModifier())
     }
 
     @ViewBuilder
@@ -33,18 +43,21 @@ struct GalleryScreen: View {
         switch selectedDestination {
         case .library:
             LibraryView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         case .subjects:
             SubjectsView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         case let .collection(id, _):
             if let collection = fetchCollection(id: id) {
                 CollectionView(collection: collection)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ContentUnavailableView(
                     "Collection Not Found",
                     systemImage: "folder.badge.questionmark",
-                    description: Text(
-                        "The selected collection could not be found")
+                    description: Text("The selected collection could not be found")
                 )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
     }
@@ -59,8 +72,29 @@ struct GalleryScreen: View {
     }
 }
 
+// Platform-specific styling
+private struct PlatformSpecificModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        #if os(iOS)
+        content
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(uiColor: .systemBackground))
+        #elseif os(macOS)
+        content
+            .background(Color(nsColor: .windowBackgroundColor))
+        #else
+        content
+        #endif
+    }
+}
+
 #Preview("Gallery") {
     GalleryScreen()
         .withPreviewContainer()
         .frame(width: 1200, height: 800)
+}
+
+#Preview("Gallery - iPad") {
+    GalleryScreen()
+        .withPreviewContainer()
 }

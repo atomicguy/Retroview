@@ -22,7 +22,7 @@ struct PlatformToolbarModifiers: ViewModifier {
                 }
                 #if DEBUG
                     ToolbarItem(placement: .topBarTrailing) {
-                        debugButtons
+                        DebugMenu()
                     }
                 #endif
             #else
@@ -35,24 +35,12 @@ struct PlatformToolbarModifiers: ViewModifier {
                 }
                 #if DEBUG
                     ToolbarItem(placement: .automatic) {
-                        debugButtons
+                        DebugMenu()
                     }
                 #endif
             #endif
         }
     }
-
-    #if DEBUG
-        private var debugButtons: some View {
-            Menu("Debug") {
-                Button(role: .destructive) {
-                    RetroviewApp.clearAllData()
-                } label: {
-                    Label("Clear All Data", systemImage: "trash")
-                }
-            }
-        }
-    #endif
 }
 
 extension View {
