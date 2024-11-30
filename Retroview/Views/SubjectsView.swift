@@ -23,6 +23,7 @@ struct SubjectsView: View {
         .onChange(of: selectedSubject) { _, _ in
             selectedCard = nil
         }
+        .platformNavigationTitle("Subjects")
     }
 
     private var subjectsList: some View {
@@ -31,11 +32,12 @@ struct SubjectsView: View {
                 subject: subject,
                 isSelected: selectedSubject?.id == subject.id,
                 action: {
-                    selectedSubject = subject
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        selectedSubject = subject
+                    }
                 }
             )
         }
-        .navigationTitle("Subjects")
     }
 
     private var subjectGrid: some View {
@@ -56,15 +58,13 @@ struct SubjectsView: View {
                 )
             }
         }
-        .transition(
-            .asymmetric(
-                insertion: .move(edge: .top).combined(with: .opacity),
-                removal: .move(edge: .bottom).combined(with: .opacity)
-            ))
+        .animation(.easeInOut(duration: 0.3), value: selectedCard)
+        .transition(.move(edge: .trailing))
     }
 }
 
 // MARK: - Supporting Views
+
 private struct SubjectRow: View {
     let subject: SubjectSchemaV1.Subject
     let isSelected: Bool

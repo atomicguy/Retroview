@@ -5,19 +5,19 @@
 //  Created by Adam Schuster on 11/29/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct CardGridView: View {
     let cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard?
     let currentCollection: CollectionSchemaV1.Collection?
     let title: String?
-    
+
     private let columns = [
         GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10)
     ]
-    
+
     var body: some View {
         ScrollView {
             if cards.isEmpty {
@@ -29,17 +29,17 @@ struct CardGridView: View {
             } else {
                 LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(cards) { card in
-                        SquareCropView(card: card, currentCollection: currentCollection)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                selectedCard = card
+                        SquareCropView(
+                            card: card,
+                            currentCollection: currentCollection,
+                            onSelect: { selectedCard = $0 }
+                        )
+                        .overlay {
+                            if selectedCard?.uuid == card.uuid {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(Color.accentColor, lineWidth: 3)
                             }
-                            .overlay {
-                                if selectedCard?.uuid == card.uuid {
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(Color.accentColor, lineWidth: 3)
-                                }
-                            }
+                        }
                     }
                 }
                 .padding()

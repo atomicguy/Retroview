@@ -68,15 +68,23 @@ struct CollectionView: View {
             }
             .frame(width: detailWidth)
         }
-        .navigationTitle(collection.name)
-        .toolbar {
-            ToolbarItem {
-                Button {
-                    showingAddCards = true
-                } label: {
-                    Label("Add Cards", systemImage: "plus")
-                }
+        .platformNavigationTitle(collection.name)
+        .platformToolbar {
+            EmptyView()
+        } trailing: {
+            toolbarButton(
+                title: "Add Cards",
+                systemImage: "plus"
+            ) {
+                showingAddCards = true
             }
         }
     }
+}
+
+#Preview("Collection View") {
+    let collection = CollectionSchemaV1.Collection(name: "Preview Collection")
+    return CollectionView(collection: collection)
+        .withPreviewContainer()
+        .frame(width: 1200, height: 800)
 }

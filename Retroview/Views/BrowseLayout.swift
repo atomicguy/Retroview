@@ -45,7 +45,7 @@ struct BrowseLayout<ListContent: View, GridContent: View>: View {
                 if let card = selectedCard {
                     CardContentView(card: card)
                         .id(card.uuid)
-                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .transition(.move(edge: .trailing))
                 } else {
                     ContentUnavailableView(
                         "No Card Selected",

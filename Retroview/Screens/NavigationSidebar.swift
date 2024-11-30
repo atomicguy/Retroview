@@ -27,7 +27,8 @@ struct NavigationSidebar: View {
                         // Convert selection ID back to destination
                         if newValue == NavigationDestination.library.id {
                             selectedDestination = .library
-                        } else if newValue == NavigationDestination.subjects.id {
+                        } else if newValue == NavigationDestination.subjects.id
+                        {
                             selectedDestination = .subjects
                         } else if let uuid = UUID(uuidString: newValue) {
                             // Find matching collection
@@ -35,8 +36,7 @@ struct NavigationSidebar: View {
                                 $0.id == uuid
                             }) {
                                 selectedDestination = .collection(
-                                    uuid, collection.name
-                                )
+                                    uuid, collection.name)
                             }
                         }
                     }
@@ -46,32 +46,27 @@ struct NavigationSidebar: View {
             NavigationLink(value: NavigationDestination.library.id) {
                 Label(
                     NavigationDestination.library.label,
-                    systemImage: NavigationDestination.library.systemImage
-                )
+                    systemImage: NavigationDestination.library.systemImage)
             }
 
             NavigationLink(value: NavigationDestination.subjects.id) {
                 Label(
                     NavigationDestination.subjects.label,
-                    systemImage: NavigationDestination.subjects.systemImage
-                )
+                    systemImage: NavigationDestination.subjects.systemImage)
             }
 
             Section("Collections") {
                 ForEach(collections) { collection in
                     let destination = NavigationDestination.collection(
-                        collection.id, collection.name
-                    )
+                        collection.id, collection.name)
                     NavigationLink(value: collection.id.uuidString) {
                         Label(
                             collection.name,
-                            systemImage: destination.systemImage
-                        )
+                            systemImage: destination.systemImage)
                     }
                 }
             }
         }
-        .navigationTitle("Retroview")
         .frame(idealWidth: 100)
         .onChange(of: selectedDestination) { _, newValue in
             // Update list selection when destination changes externally

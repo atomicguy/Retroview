@@ -22,7 +22,6 @@
 		5C1454442CF816F700D5C232 /* ImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454432CF816EF00D5C232 /* ImportService.swift */; };
 		5C1454462CF8173100D5C232 /* BatchImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454452CF8172900D5C232 /* BatchImportService.swift */; };
 		5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454472CF8174700D5C232 /* ImportView.swift */; };
-		5C14544A2CF83FF900D5C232 /* PlatformToolbarModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */; };
 		5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14544E2CF849D700D5C232 /* Collection.swift */; };
 		5C1454512CF84B5100D5C232 /* ReorderableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */; };
 		5C1454532CF84C7E00D5C232 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454522CF84C7900D5C232 /* CollectionView.swift */; };
@@ -62,6 +61,7 @@
 		5CEFA7692CFA83AE00D410EA /* InteractionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7682CFA83A800D410EA /* InteractionState.swift */; };
 		5CEFA76F2CFA8E9000D410EA /* CardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA76E2CFA8E8A00D410EA /* CardGridView.swift */; };
 		5CEFA7712CFA8EC600D410EA /* BrowseLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7702CFA8EBC00D410EA /* BrowseLayout.swift */; };
+		5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,7 +109,6 @@
 		5C1454432CF816EF00D5C232 /* ImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportService.swift; sourceTree = "<group>"; };
 		5C1454452CF8172900D5C232 /* BatchImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchImportService.swift; sourceTree = "<group>"; };
 		5C1454472CF8174700D5C232 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
-		5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformToolbarModifiers.swift; sourceTree = "<group>"; };
 		5C14544E2CF849D700D5C232 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderableGridView.swift; sourceTree = "<group>"; };
 		5C1454522CF84C7900D5C232 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
@@ -154,6 +153,7 @@
 		5CEFA7682CFA83A800D410EA /* InteractionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionState.swift; sourceTree = "<group>"; };
 		5CEFA76E2CFA8E8A00D410EA /* CardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGridView.swift; sourceTree = "<group>"; };
 		5CEFA7702CFA8EBC00D410EA /* BrowseLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseLayout.swift; sourceTree = "<group>"; };
+		5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformModifiers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,16 +193,17 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
+				5C1454332CF7A63600D5C232 /* CardColorAnalyzer.swift */,
+				5C14543B2CF7FF8800D5C232 /* ColorUtility.swift */,
+				5C1454102CF5760300D5C232 /* ImageLoading.swift */,
+				5C1454432CF816EF00D5C232 /* ImportService.swift */,
 				5CEFA7682CFA83A800D410EA /* InteractionState.swift */,
 				5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */,
-				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
-				5C1454432CF816EF00D5C232 /* ImportService.swift */,
-				5C14543B2CF7FF8800D5C232 /* ColorUtility.swift */,
+				5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */,
 				5C1454372CF7ED0B00D5C232 /* SquareAspectRatioModifier.swift */,
-				5C1454332CF7A63600D5C232 /* CardColorAnalyzer.swift */,
-				5C1454102CF5760300D5C232 /* ImageLoading.swift */,
-				5C1454112CF5760300D5C232 /* StereoViewCoordinator.swift */,
 				5CCDA5762CE196A600CA97AE /* StereoMaterialLoader.swift */,
+				5C1454112CF5760300D5C232 /* StereoViewCoordinator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -277,22 +278,22 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C8C88CE2C1FF11300874E19 /* BackCardView.swift */,
 				5CEFA7702CFA8EBC00D410EA /* BrowseLayout.swift */,
-				5C43BC4E2CF99D8D0053FAFD /* SubjectsView.swift */,
+				5C1454212CF5834000D5C232 /* CardContentView.swift */,
 				5CEFA76E2CFA8E8A00D410EA /* CardGridView.swift */,
+				5C7014F32BF1AC01001D6CC3 /* CardView.swift */,
 				5C43BC462CF98BF20053FAFD /* CollectionMenuView.swift */,
 				5C1454522CF84C7900D5C232 /* CollectionView.swift */,
-				5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */,
+				5C9BCA532C166AD600668900 /* FrontCardView.swift */,
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C1454302CF6F74600D5C232 /* LibraryView.swift */,
+				5C1454502CF84B4000D5C232 /* ReorderableGridView.swift */,
 				5C14542A2CF6D86000D5C232 /* SquareCropView.swift */,
-				5C1454212CF5834000D5C232 /* CardContentView.swift */,
-				5C9BCA532C166AD600668900 /* FrontCardView.swift */,
-				5C8C88CE2C1FF11300874E19 /* BackCardView.swift */,
-				5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */,
-				5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */,
 				5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */,
-				5C7014F32BF1AC01001D6CC3 /* CardView.swift */,
+				5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */,
+				5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */,
+				5C43BC4E2CF99D8D0053FAFD /* SubjectsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -323,14 +324,13 @@
 		5CD0759B2BDF29AB002B463C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */,
-				5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */,
-				5C665F552CF9591A00838F37 /* FavoriteButton.swift */,
-				5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */,
 				5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */,
-				5C1454492CF83FF100D5C232 /* PlatformToolbarModifiers.swift */,
-				5C1454392CF7F5FA00D5C232 /* NavigationState.swift */,
+				5C665F572CF95E9F00838F37 /* CardHoverOverlay.swift */,
+				5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */,
+				5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */,
+				5C665F552CF9591A00838F37 /* FavoriteButton.swift */,
 				5C43BC522CF9A9530053FAFD /* NavigationSidebar.swift */,
+				5C1454392CF7F5FA00D5C232 /* NavigationState.swift */,
 				5C14542E2CF6F5EC00D5C232 /* GalleryScreen.swift */,
 			);
 			path = Screens;
@@ -501,6 +501,7 @@
 				5C14543C2CF7FF8B00D5C232 /* ColorUtility.swift in Sources */,
 				5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */,
 				5C1454222CF5834400D5C232 /* CardContentView.swift in Sources */,
+				5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
 				5C43BC4F2CF99D910053FAFD /* SubjectsView.swift in Sources */,
 				5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */,
@@ -527,7 +528,6 @@
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5C1454532CF84C7E00D5C232 /* CollectionView.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
-				5C14544A2CF83FF900D5C232 /* PlatformToolbarModifiers.swift in Sources */,
 				5C1454312CF6F74B00D5C232 /* LibraryView.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5C43BC492CF98D910053FAFD /* ModelContextPreviewExtension.swift in Sources */,

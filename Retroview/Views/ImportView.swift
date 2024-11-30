@@ -50,6 +50,14 @@ struct ImportView: View {
             .padding()
             .frame(minWidth: 400, minHeight: 200)
             .disabled(processingState.isImporting)
+            .platformNavigationTitle("Import Cards", displayMode: .inline)
+            .platformToolbar {
+                EmptyView()
+            } trailing: {
+                Button("Cancel") {
+                    dismiss()
+                }
+            }
             .sheet(isPresented: $showConfirmation) {
                 ImportConfirmationDialog(
                     fileCount: fileCount,
@@ -135,14 +143,16 @@ struct ImportView: View {
 
         Task {
             do {
-                processingState = .importing(filesProcessed: 0, totalFiles: fileCount)
+                processingState = .importing(
+                    filesProcessed: 0, totalFiles: fileCount)
 
                 let progressTask = Task {
                     for await progress in batchImportService.progressUpdates {
                         if Task.isCancelled { break }
                         await MainActor.run {
                             processingState = .importing(
-                                filesProcessed: Int(progress.completedUnitCount),
+                                filesProcessed: Int(
+                                    progress.completedUnitCount),
                                 totalFiles: Int(progress.totalUnitCount)
                             )
                         }
@@ -284,8 +294,10 @@ extension ImportView {
                         Text("\(processed) of \(total)")
                             .monospacedDigit()
                         Text("•")
-                        Text("\((Double(processed) / Double(total) * 100).formatted(.number.precision(.fractionLength(1))))%")
-                            .monospacedDigit()
+                        Text(
+                            "\((Double(processed) / Double(total) * 100).formatted(.number.precision(.fractionLength(1))))%"
+                        )
+                        .monospacedDigit()
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)

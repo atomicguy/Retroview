@@ -29,8 +29,7 @@ struct AddToCollectionMenu: View {
                         if collection.hasCard(card) {
                             Label(
                                 collection.name,
-                                systemImage: "checkmark.circle.fill"
-                            )
+                                systemImage: "checkmark.circle.fill")
                         } else {
                             Label(collection.name, systemImage: "circle")
                         }
@@ -74,20 +73,17 @@ struct NewCollectionSheet: View {
             Form {
                 TextField("Collection Name", text: $collectionName)
             }
-            .modifier(PlatformNavigationTitleModifier(title: "New Collection"))
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
+            .platformNavigationTitle("New Collection")
+            .platformToolbar {
+                platformDismissButton {
+                    dismiss()
                 }
-
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Create") {
-                        createCollection()
-                    }
-                    .disabled(collectionName.isEmpty)
+            } trailing: {
+                toolbarButton(title: "Create", systemImage: "folder.badge.plus")
+                {
+                    createCollection()
                 }
+                .disabled(collectionName.isEmpty)
             }
         }
         .frame(minWidth: 300, minHeight: 150)
@@ -99,23 +95,6 @@ struct NewCollectionSheet: View {
         modelContext.insert(collection)
         try? modelContext.save()
         dismiss()
-    }
-}
-
-// MARK: - Platform-Specific Modifiers
-
-private struct PlatformNavigationTitleModifier: ViewModifier {
-    let title: String
-
-    func body(content: Content) -> some View {
-        #if os(macOS)
-            content
-                .navigationTitle(title)
-        #else
-            content
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.inline)
-        #endif
     }
 }
 

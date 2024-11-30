@@ -14,11 +14,18 @@ struct SquareCropView: View {
     @StateObject private var viewModel: StereoCardViewModel
     @State private var showingNewCollectionSheet = false
     let currentCollection: CollectionSchemaV1.Collection?
+    var onSelect: ((CardSchemaV1.StereoCard) -> Void)?
 
-    init(card: CardSchemaV1.StereoCard, currentCollection: CollectionSchemaV1.Collection? = nil) {
+    init(
+        card: CardSchemaV1.StereoCard,
+        currentCollection: CollectionSchemaV1.Collection? = nil,
+        onSelect: ((CardSchemaV1.StereoCard) -> Void)? = nil
+    ) {
         self.card = card
         self.currentCollection = currentCollection
-        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
+        self.onSelect = onSelect
+        _viewModel = StateObject(
+            wrappedValue: StereoCardViewModel(stereoCard: card))
     }
 
     var displayTitle: String {
@@ -29,13 +36,15 @@ struct SquareCropView: View {
         VStack(alignment: .center, spacing: 8) {
             GeometryReader { geometry in
                 if let image = viewModel.frontCGImage,
-                   let leftCrop = card.leftCrop
+                    let leftCrop = card.leftCrop
                 {
                     let cropWidth = CGFloat(leftCrop.y1 - leftCrop.y0)
                     let cropHeight = CGFloat(leftCrop.x1 - leftCrop.x0)
                     let scale = min(
-                        geometry.size.width / (cropWidth * CGFloat(image.width)),
-                        geometry.size.height / (cropHeight * CGFloat(image.height))
+                        geometry.size.width
+                            / (cropWidth * CGFloat(image.width)),
+                        geometry.size.height
+                            / (cropHeight * CGFloat(image.height))
                     )
 
                     Image(decorative: image, scale: 1.0)
@@ -46,8 +55,10 @@ struct SquareCropView: View {
                             height: CGFloat(image.height) * scale
                         )
                         .offset(
-                            x: -CGFloat(leftCrop.y0) * CGFloat(image.width) * scale,
-                            y: -CGFloat(leftCrop.x0) * CGFloat(image.height) * scale
+                            x: -CGFloat(leftCrop.y0) * CGFloat(image.width)
+                                * scale,
+                            y: -CGFloat(leftCrop.x0) * CGFloat(image.height)
+                                * scale
                         )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .clipped()
@@ -86,6 +97,9 @@ struct SquareCropView: View {
             x: 0,
             y: 4
         )
+        .onTapGesture {
+            onSelect?(card)
+        }
         .withCardInteraction { isActive in
             if isActive {
                 CardHoverOverlay(
