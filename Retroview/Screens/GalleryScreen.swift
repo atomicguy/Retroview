@@ -58,6 +58,9 @@ struct GalleryScreen: View {
         case .subjects:
             SubjectsView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .authors:
+            AuthorsView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         case let .collection(id, _):
             if let collection = fetchCollection(id: id) {
                 CollectionView(collection: collection)

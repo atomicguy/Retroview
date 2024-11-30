@@ -59,7 +59,11 @@ struct SubjectsView: View {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: selectedCard)
-        .transition(.move(edge: .trailing))
+        .transition(
+            .asymmetric(
+                insertion: .move(edge: .bottom).combined(with: .opacity),
+                removal: .move(edge: .top).combined(with: .opacity)
+            ))
     }
 }
 

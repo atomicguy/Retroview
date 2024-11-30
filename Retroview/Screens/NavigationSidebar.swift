@@ -30,6 +30,8 @@ struct NavigationSidebar: View {
                         } else if newValue == NavigationDestination.subjects.id
                         {
                             selectedDestination = .subjects
+                        } else if newValue == NavigationDestination.authors.id {
+                            selectedDestination = .authors
                         } else if let uuid = UUID(uuidString: newValue) {
                             // Find matching collection
                             if let collection = collections.first(where: {
@@ -53,6 +55,12 @@ struct NavigationSidebar: View {
                 Label(
                     NavigationDestination.subjects.label,
                     systemImage: NavigationDestination.subjects.systemImage)
+            }
+
+            NavigationLink(value: NavigationDestination.authors.id) {
+                Label(
+                    NavigationDestination.authors.label,
+                    systemImage: NavigationDestination.authors.systemImage)
             }
 
             Section("Collections") {
@@ -84,6 +92,8 @@ struct NavigationSidebar: View {
             listSelection = NavigationDestination.library.id
         case .subjects:
             listSelection = NavigationDestination.subjects.id
+        case .authors:
+            listSelection = NavigationDestination.authors.id
         case let .collection(id, _):
             listSelection = id.uuidString
         }
@@ -98,6 +108,8 @@ extension NavigationDestination {
             return "library"
         case .subjects:
             return "subjects"
+        case .authors:
+            return "authors"
         case let .collection(id, _):
             return id.uuidString
         }

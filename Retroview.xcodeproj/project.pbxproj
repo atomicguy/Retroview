@@ -53,6 +53,7 @@
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
 		5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C82BD47ABA005811DA /* Date.swift */; };
+		5CCC2B842CFAD968005ED10E /* AuthorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC2B832CFAD964005ED10E /* AuthorsView.swift */; };
 		5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCDA5762CE196A600CA97AE /* StereoMaterialLoader.swift */; };
 		5CD075962BD60B3E002B463C /* Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD075952BD60B3E002B463C /* Crop.swift */; };
 		5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDEFC242CE04E4C0046FD60 /* StereoViewer */; };
@@ -145,6 +146,7 @@
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
 		5CC5A5C82BD47ABA005811DA /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		5CCC2B832CFAD964005ED10E /* AuthorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorsView.swift; sourceTree = "<group>"; };
 		5CCDA5762CE196A600CA97AE /* StereoMaterialLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoMaterialLoader.swift; sourceTree = "<group>"; };
 		5CD075952BD60B3E002B463C /* Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crop.swift; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -293,6 +295,7 @@
 				5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */,
 				5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */,
 				5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */,
+				5CCC2B832CFAD964005ED10E /* AuthorsView.swift */,
 				5C43BC4E2CF99D8D0053FAFD /* SubjectsView.swift */,
 			);
 			path = Views;
@@ -509,6 +512,7 @@
 				5C14542F2CF6F5F100D5C232 /* GalleryScreen.swift in Sources */,
 				5C1454162CF5760300D5C232 /* ImageLoading.swift in Sources */,
 				5C1454172CF5760300D5C232 /* StereoViewCoordinator.swift in Sources */,
+				5CCC2B842CFAD968005ED10E /* AuthorsView.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,

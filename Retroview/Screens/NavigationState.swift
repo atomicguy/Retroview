@@ -10,6 +10,7 @@ import Foundation
 enum NavigationDestination: Hashable {
     case library
     case subjects
+    case authors
     case collection(UUID, String)
 
     var label: String {
@@ -18,6 +19,8 @@ enum NavigationDestination: Hashable {
             return "Library"
         case .subjects:
             return "Subjects"
+        case .authors:
+            return "Authors"
         case let .collection(_, name):
             return name
         }
@@ -29,6 +32,8 @@ enum NavigationDestination: Hashable {
             return "photo.on.rectangle.angled"
         case .subjects:
             return "tag"
+        case .authors:
+            return "person"
         case let .collection(_, name):
             return name == CollectionDefaults.favoritesName
                 ? "heart.fill" : "folder"
