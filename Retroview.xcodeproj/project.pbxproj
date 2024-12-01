@@ -50,6 +50,11 @@
 		5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA532C166AD600668900 /* FrontCardView.swift */; };
 		5C9DDB042C0C0C5500D83DE3 /* MyStereoviews.store in Resources */ = {isa = PBXBuildFile; fileRef = 5C9DDB032C0C0C5500D83DE3 /* MyStereoviews.store */; };
 		5CC0DB142CFBCB010054E48D /* DevelopmentFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0DB132CFBCAFE0054E48D /* DevelopmentFlags.swift */; };
+		5CC0DB1D2CFBFC600054E48D /* ThumbnailOrnamentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0DB1C2CFBFC590054E48D /* ThumbnailOrnamentView.swift */; };
+		5CC0DB1F2CFBFDC00054E48D /* StereoCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0DB1E2CFBFDBB0054E48D /* StereoCollectionView.swift */; };
+		5CC0DB212CFC08DE0054E48D /* VisionGalleryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0DB202CFC08D70054E48D /* VisionGalleryScreen.swift */; };
+		5CC0DB232CFC0E2D0054E48D /* CollectionThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0DB222CFC0E2D0054E48D /* CollectionThumbnailView.swift */; };
+		5CC0DB252CFC0E6D0054E48D /* VisionCollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0DB242CFC0E690054E48D /* VisionCollectionsView.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
@@ -144,6 +149,11 @@
 		5C9BCA532C166AD600668900 /* FrontCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontCardView.swift; sourceTree = "<group>"; };
 		5C9DDB032C0C0C5500D83DE3 /* MyStereoviews.store */ = {isa = PBXFileReference; lastKnownFileType = file; path = MyStereoviews.store; sourceTree = "<group>"; };
 		5CC0DB132CFBCAFE0054E48D /* DevelopmentFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentFlags.swift; sourceTree = "<group>"; };
+		5CC0DB1C2CFBFC590054E48D /* ThumbnailOrnamentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailOrnamentView.swift; sourceTree = "<group>"; };
+		5CC0DB1E2CFBFDBB0054E48D /* StereoCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCollectionView.swift; sourceTree = "<group>"; };
+		5CC0DB202CFC08D70054E48D /* VisionGalleryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionGalleryScreen.swift; sourceTree = "<group>"; };
+		5CC0DB222CFC0E2D0054E48D /* CollectionThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionThumbnailView.swift; sourceTree = "<group>"; };
+		5CC0DB242CFC0E690054E48D /* VisionCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionCollectionsView.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -283,6 +293,10 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5CC0DB242CFC0E690054E48D /* VisionCollectionsView.swift */,
+				5CC0DB222CFC0E2D0054E48D /* CollectionThumbnailView.swift */,
+				5CC0DB1E2CFBFDBB0054E48D /* StereoCollectionView.swift */,
+				5CC0DB1C2CFBFC590054E48D /* ThumbnailOrnamentView.swift */,
 				5C8C88CE2C1FF11300874E19 /* BackCardView.swift */,
 				5CEFA7702CFA8EBC00D410EA /* BrowseLayout.swift */,
 				5C1454212CF5834000D5C232 /* CardContentView.swift */,
@@ -337,6 +351,7 @@
 				5C665F552CF9591A00838F37 /* FavoriteButton.swift */,
 				5C43BC522CF9A9530053FAFD /* NavigationSidebar.swift */,
 				5C1454392CF7F5FA00D5C232 /* NavigationState.swift */,
+				5CC0DB202CFC08D70054E48D /* VisionGalleryScreen.swift */,
 				5C14542E2CF6F5EC00D5C232 /* GalleryScreen.swift */,
 			);
 			path = Screens;
@@ -503,11 +518,14 @@
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
 				5C43BC472CF98BF70053FAFD /* CollectionMenuView.swift in Sources */,
 				5C43BC532CF9A9530053FAFD /* NavigationSidebar.swift in Sources */,
+				5CC0DB1F2CFBFDC00054E48D /* StereoCollectionView.swift in Sources */,
 				5C9BCA522C166A2D00668900 /* StereoCardViewModel.swift in Sources */,
 				5C14543C2CF7FF8B00D5C232 /* ColorUtility.swift in Sources */,
 				5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */,
 				5C1454222CF5834400D5C232 /* CardContentView.swift in Sources */,
+				5CC0DB1D2CFBFC600054E48D /* ThumbnailOrnamentView.swift in Sources */,
 				5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */,
+				5CC0DB212CFC08DE0054E48D /* VisionGalleryScreen.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
 				5C43BC4F2CF99D910053FAFD /* SubjectsView.swift in Sources */,
 				5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */,
@@ -515,9 +533,11 @@
 				5C14542F2CF6F5F100D5C232 /* GalleryScreen.swift in Sources */,
 				5C1454162CF5760300D5C232 /* ImageLoading.swift in Sources */,
 				5C1454172CF5760300D5C232 /* StereoViewCoordinator.swift in Sources */,
+				5CC0DB232CFC0E2D0054E48D /* CollectionThumbnailView.swift in Sources */,
 				5CCC2B842CFAD968005ED10E /* AuthorsView.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
+				5CC0DB252CFC0E6D0054E48D /* VisionCollectionsView.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5CEFA76F2CFA8E9000D410EA /* CardGridView.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,

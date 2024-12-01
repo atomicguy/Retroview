@@ -90,7 +90,7 @@ enum CardSchemaV1: VersionedSchema {
             }
             set {
                 cardColor = newValue.toHex() ?? "#F5E6D3"
-                colorOpacity = 0.15 // Default opacity when setting new color
+                colorOpacity = 0.15  // Default opacity when setting new color
             }
         }
 
@@ -200,7 +200,7 @@ enum CardSchemaV1: VersionedSchema {
                     let error = NSError(
                         domain: "", code: 0,
                         userInfo: [
-                            NSLocalizedDescriptionKey: "No data received",
+                            NSLocalizedDescriptionKey: "No data received"
                         ]
                     )
                     print("No data received for \(side)")
@@ -239,6 +239,26 @@ enum CardSchemaV1: VersionedSchema {
 
         static let sampleData: [StereoCard] = [
             StereoCard(
+                uuid: "f886fee0-c53b-012f-de2a-58d385a7bc34",
+                imageFrontId: "G90F186_140F",
+                imageBackId: "G90F186_140B"
+            ),
+            StereoCard(
+                uuid: "f3489f60-c53b-012f-42ca-58d385a7bc34",
+                imageFrontId: "G90F186_128F",
+                imageBackId: "G90F186_128B"
+            ),
+            StereoCard(
+                uuid: "0b3e2190-c533-012f-c206-58d385a7bc34",
+                imageFrontId: "G89F383_045F",
+                imageBackId: "G89F383_045B"
+            ),
+            StereoCard(
+                uuid: "0eafabc0-c56f-012f-5289-58d385a7bc34",
+                imageFrontId: "G92F094_011F",
+                imageBackId: "G92F094_011B"
+            ),
+            StereoCard(
                 uuid: "a0056e40-c55a-012f-e57a-58d385a7bc34",
                 imageFrontId: "G91F230_029F",
                 imageBackId: "G91F230_029B"
@@ -275,7 +295,8 @@ enum CardSchemaV1: VersionedSchema {
 
 extension CardSchemaV1.StereoCard: Transferable {
     static var transferRepresentation: some TransferRepresentation {
-        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: { card in
+        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: {
+            card in
             card.uuid.uuidString
         })
     }

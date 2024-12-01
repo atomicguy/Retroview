@@ -25,11 +25,11 @@ enum DateSchemaV1: VersionedSchema {
         }
 
         static let sampleData = [
+            Date(text: "1893"),
+            Date(text: "Unknown"),
             Date(text: "1901"),
             Date(text: "c1902-1903"),
-            Date(text: "1893"),
             Date(text: "1865"),
-            Date(text: "Unknown"),
         ]
     }
 }

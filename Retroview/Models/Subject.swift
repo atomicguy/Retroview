@@ -25,25 +25,31 @@ enum SubjectSchemaV1: VersionedSchema {
         }
 
         static let sampleData = [
-            Subject(name: "Chicago (Ill.)"),
-            Subject(name: "Illinois"),
-            Subject(
-                name: "World's Columbian Exposition (1893 : Chicago, Ill.)"),
-            Subject(name: "Exhibitions"),
-            Subject(name: "Saratoga Springs (N.Y.)"),
-            Subject(name: "Springhouses"),
-            Subject(name: "New York (State)"),
-            Subject(name: "Zoos"),
-            Subject(name: "Manhattan (New York, N.Y.)"),
-            Subject(name: "Central Park (New York, N.Y.)"),
-            Subject(name: "Animals"),
-            Subject(name: "Parks"),
-            Subject(name: "New York (N.Y.)"),
-            Subject(name: "New York (State)"),
-            Subject(name: "Sightseers"),
-            Subject(name: "Colorado River (Colo.-Mexico)"),
-            Subject(name: "Grand Canyon (Ariz.)"),
-            Subject(name: "Arizona"),
-        ]
+                // World's Fair Subjects
+                Subject(name: "Chicago (Ill.)"),
+                Subject(name: "Illinois"),
+                Subject(name: "World's Columbian Exposition (1893 : Chicago, Ill.)"),
+                Subject(name: "Exhibitions"),
+                
+                // California/Cathedral Rocks Subject
+                Subject(name: "California"),
+                
+                // Yellowstone Subjects
+                Subject(name: "Yellowstone National Park"),
+                Subject(name: "Buttes"),
+                Subject(name: "Wyoming"),
+                Subject(name: "Rocks"),
+                Subject(name: "National parks & reserves"),
+                
+                // New York Subjects
+                Subject(name: "Saratoga Springs (N.Y.)"),
+                Subject(name: "Springhouses"),
+                Subject(name: "New York (State)"),
+                Subject(name: "Zoos"),
+                Subject(name: "Manhattan (New York, N.Y.)"),
+                Subject(name: "Central Park (New York, N.Y.)"),
+                Subject(name: "Animals"),
+                Subject(name: "Parks")
+            ]
     }
 }
