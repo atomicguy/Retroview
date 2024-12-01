@@ -23,8 +23,8 @@ import SwiftUI
             leftCrop: CropSchemaV1.Crop?,
             rightCrop: CropSchemaV1.Crop?
         ) async throws {
-            guard let leftCrop = leftCrop,
-                  let rightCrop = rightCrop,
+            guard let leftCrop,
+                  let rightCrop,
                   var material = stereoMaterial
             else {
                 throw StereoError.missingRequiredData

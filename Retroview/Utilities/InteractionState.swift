@@ -10,13 +10,13 @@ import SwiftUI
 @MainActor
 class InteractionState: ObservableObject {
     @Published var isActive = false
-    
+
     func activate() {
         withAnimation(.easeInOut(duration: 0.2)) {
             isActive = true
         }
     }
-    
+
     func deactivate() {
         withAnimation(.easeInOut(duration: 0.2)) {
             isActive = false
@@ -27,7 +27,7 @@ class InteractionState: ObservableObject {
 struct CardInteractionModifier: ViewModifier {
     @StateObject private var interactionState = InteractionState()
     let content: (Bool) -> AnyView
-    
+
     func body(content: Content) -> some View {
         content
             .overlay {
@@ -56,8 +56,8 @@ struct CardInteractionModifier: ViewModifier {
 }
 
 extension View {
-    func withCardInteraction<Content: View>(
-        @ViewBuilder content: @escaping (Bool) -> Content
+    func withCardInteraction(
+        @ViewBuilder content: @escaping (Bool) -> some View
     ) -> some View {
         modifier(
             CardInteractionModifier(content: { isActive in

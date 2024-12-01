@@ -113,7 +113,7 @@ extension DefaultImageLoader {
         var mockImage: CGImage?
 
         func createCGImage(from _: Data) async -> CGImage? {
-            return mockImage
+            mockImage
         }
     }
 #endif

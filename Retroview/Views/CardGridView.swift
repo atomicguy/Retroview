@@ -15,7 +15,7 @@ struct CardGridView: View {
     let title: String?
 
     private let columns = [
-        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10)
+        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10),
     ]
 
     var body: some View {

@@ -16,26 +16,26 @@ enum NavigationDestination: Hashable {
     var label: String {
         switch self {
         case .library:
-            return "Library"
+            "Library"
         case .subjects:
-            return "Subjects"
+            "Subjects"
         case .authors:
-            return "Authors"
+            "Authors"
         case let .collection(_, name):
-            return name
+            name
         }
     }
 
     var systemImage: String {
         switch self {
         case .library:
-            return "photo.on.rectangle.angled"
+            "photo.on.rectangle.angled"
         case .subjects:
-            return "tag"
+            "tag"
         case .authors:
-            return "person"
+            "person"
         case let .collection(_, name):
-            return name == CollectionDefaults.favoritesName
+            name == CollectionDefaults.favoritesName
                 ? "heart.fill" : "folder"
         }
     }

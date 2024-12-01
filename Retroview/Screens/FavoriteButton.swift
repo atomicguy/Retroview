@@ -37,7 +37,7 @@ struct FavoriteButton: View {
     }
 
     private var isFavorite: Bool {
-        guard let favorites = favorites else { return false }
+        guard let favorites else { return false }
         return favorites.hasCard(card)
     }
 
@@ -55,7 +55,7 @@ struct FavoriteButton: View {
     }
 
     private func toggleFavorite() {
-        guard let favorites = favorites else { return }
+        guard let favorites else { return }
 
         withAnimation(.bouncy) {
             if isFavorite {
@@ -69,8 +69,8 @@ struct FavoriteButton: View {
 }
 
 extension View {
-    func withHoverEffect<Content: View>(
-        @ViewBuilder content: @escaping (Bool) -> Content
+    func withHoverEffect(
+        @ViewBuilder content: @escaping (Bool) -> some View
     ) -> some View {
         modifier(
             HoverEffectModifier(content: { isHovered in

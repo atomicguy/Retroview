@@ -144,7 +144,8 @@ struct ImportView: View {
         Task {
             do {
                 processingState = .importing(
-                    filesProcessed: 0, totalFiles: fileCount)
+                    filesProcessed: 0, totalFiles: fileCount
+                )
 
                 let progressTask = Task {
                     for await progress in batchImportService.progressUpdates {
@@ -356,34 +357,34 @@ extension ImportView.ProcessingState {
     var buttonLabel: String {
         switch self {
         case .ready:
-            return "Select Folder"
+            "Select Folder"
         case .analyzing:
-            return "Analyzing..."
+            "Analyzing..."
         case .importing:
-            return "Importing..."
+            "Importing..."
         case .completed:
-            return "Done"
+            "Done"
         case .failed:
-            return "Try Again"
+            "Try Again"
         case .cancelled:
-            return "Select Folder"
+            "Select Folder"
         }
     }
 
     var buttonIcon: String {
         switch self {
         case .ready:
-            return "folder.badge.plus"
+            "folder.badge.plus"
         case .analyzing:
-            return "doc.text.magnifyingglass"
+            "doc.text.magnifyingglass"
         case .importing:
-            return "arrow.down.doc"
+            "arrow.down.doc"
         case .completed:
-            return "checkmark"
+            "checkmark"
         case .failed:
-            return "arrow.clockwise"
+            "arrow.clockwise"
         case .cancelled:
-            return "folder.badge.plus"
+            "folder.badge.plus"
         }
     }
 }

@@ -82,7 +82,7 @@ class StereoCardViewModel: ObservableObject {
             }
         }
 
-        if side == "back" && backCGImage != nil {
+        if side == "back", backCGImage != nil {
             // Update color when back image is loaded
             updateCardColor(from: backCGImage!)
         }

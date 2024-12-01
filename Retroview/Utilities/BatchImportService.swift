@@ -104,7 +104,7 @@ class BatchImportService: ObservableObject {
             var processedCount = 0
             var currentIndex = 0
 
-            while currentIndex < fileURLs.count && !Task.isCancelled {
+            while currentIndex < fileURLs.count, !Task.isCancelled {
                 let batchEnd = min(currentIndex + batchSize, fileURLs.count)
                 let batch = fileURLs[currentIndex ..< batchEnd]
 
@@ -156,13 +156,13 @@ enum ImportError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .securityScopedResourceAccessDenied:
-            return "Access to the selected directory was denied"
+            "Access to the selected directory was denied"
         case let .invalidFileFormat(details):
-            return "Invalid file format: \(details)"
+            "Invalid file format: \(details)"
         case let .processingError(details):
-            return "Error processing import: \(details)"
+            "Error processing import: \(details)"
         case .cancelled:
-            return "Import cancelled"
+            "Import cancelled"
         }
     }
 }

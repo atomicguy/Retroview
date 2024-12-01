@@ -18,7 +18,7 @@ enum MaterialLoadingError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .failedToLoadMaterial(message):
-            return "Failed to load material: \(message)"
+            "Failed to load material: \(message)"
         }
     }
 }

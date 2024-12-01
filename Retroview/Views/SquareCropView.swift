@@ -36,7 +36,7 @@ struct SquareCropView: View {
         VStack(alignment: .center, spacing: 8) {
             GeometryReader { geometry in
                 if let image = viewModel.frontCGImage,
-                    let leftCrop = card.leftCrop
+                   let leftCrop = card.leftCrop
                 {
                     let cropWidth = CGFloat(leftCrop.y1 - leftCrop.y0)
                     let cropHeight = CGFloat(leftCrop.x1 - leftCrop.x0)

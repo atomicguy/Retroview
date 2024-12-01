@@ -100,9 +100,9 @@ enum NavigationTitleDisplayMode {
     #if !os(macOS)
         var navigationBarDisplayMode: NavigationBarItem.TitleDisplayMode {
             switch self {
-            case .automatic: return .automatic
-            case .inline: return .inline
-            case .large: return .large
+            case .automatic: .automatic
+            case .inline: .inline
+            case .large: .large
             }
         }
     #endif
@@ -117,7 +117,8 @@ extension View {
     ) -> some View {
         modifier(
             PlatformNavigationTitleModifier(
-                title: title, displayMode: displayMode))
+                title: title, displayMode: displayMode
+            ))
     }
 
     func platformToolbar(

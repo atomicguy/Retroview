@@ -41,8 +41,8 @@ struct GalleryScreen: View {
             ImportView(modelContext: modelContext)
         }
         #if os(iOS)
-            .navigationViewStyle(.stack)
-            .ignoresSafeArea(.keyboard)
+        .navigationViewStyle(.stack)
+        .ignoresSafeArea(.keyboard)
         #endif
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(.container, edges: [.leading, .trailing])

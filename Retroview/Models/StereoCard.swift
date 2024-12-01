@@ -90,7 +90,7 @@ enum CardSchemaV1: VersionedSchema {
             }
             set {
                 cardColor = newValue.toHex() ?? "#F5E6D3"
-                colorOpacity = 0.15  // Default opacity when setting new color
+                colorOpacity = 0.15 // Default opacity when setting new color
             }
         }
 
@@ -184,7 +184,7 @@ enum CardSchemaV1: VersionedSchema {
 
             let task = URLSession.shared.dataTask(with: url) {
                 data, response, error in
-                if let error = error {
+                if let error {
                     print("Download error for \(side): \(error)")
                     completion(.failure(error))
                     return
@@ -196,11 +196,11 @@ enum CardSchemaV1: VersionedSchema {
                     )
                 }
 
-                guard let data = data else {
+                guard let data else {
                     let error = NSError(
                         domain: "", code: 0,
                         userInfo: [
-                            NSLocalizedDescriptionKey: "No data received"
+                            NSLocalizedDescriptionKey: "No data received",
                         ]
                     )
                     print("No data received for \(side)")
@@ -225,7 +225,7 @@ enum CardSchemaV1: VersionedSchema {
 
         // Add the async version right after it in the class
         nonisolated func downloadImage(forSide side: String) async throws {
-            return try await withCheckedThrowingContinuation { continuation in
+            try await withCheckedThrowingContinuation { continuation in
                 downloadImage(forSide: side) { result in
                     switch result {
                     case .success():

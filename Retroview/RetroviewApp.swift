@@ -97,7 +97,7 @@ struct RetroviewApp: App {
             "default.store",
             "default.store-shm",
             "default.store-wal",
-            "MyStereoviews",  // directory
+            "MyStereoviews", // directory
         ]
 
         // Delete all possible store files and directories
@@ -159,9 +159,9 @@ extension RetroviewApp {
         ) {
             let storeURL =
                 containerPath
-                .appendingPathComponent("Library")
-                .appendingPathComponent("Application Support")
-                .appendingPathComponent("MyStereoviews.store")
+                    .appendingPathComponent("Library")
+                    .appendingPathComponent("Application Support")
+                    .appendingPathComponent("MyStereoviews.store")
             try? FileManager.default.removeItem(at: storeURL)
             print("Deleted container store: \(storeURL.path)")
         }

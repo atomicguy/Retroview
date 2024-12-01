@@ -46,26 +46,26 @@ final class PreviewContainer {
     // MARK: - Sample Data Setup
 
     private func setupSampleData() {
-            let context = modelContainer.mainContext
+        let context = modelContainer.mainContext
 
-            // Insert base entities
-            insertBaseEntities(in: context)
+        // Insert base entities
+        insertBaseEntities(in: context)
 
-            // Setup relationships
-            setupRelationships(in: context)
+        // Setup relationships
+        setupRelationships(in: context)
 
-            // Add and populate sample collections
-            setupSampleCollections(in: context)
+        // Add and populate sample collections
+        setupSampleCollections(in: context)
 
-            do {
-                try context.save()
-            } catch {
-                print("Failed to save preview context: \(error)")
-            }
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save preview context: \(error)")
         }
+    }
 
     private func insertBaseEntities(in context: ModelContext) {
-        func insert<T: PersistentModel>(_ entities: [T]) {
+        func insert(_ entities: [some PersistentModel]) {
             entities.forEach { context.insert($0) }
         }
 
@@ -114,11 +114,11 @@ final class PreviewContainer {
         case 0: // First World's Fair card (lighthouse lens)
             return Array(TitleSchemaV1.Title.sampleData.prefix(2))
         case 1: // Second World's Fair card (Little-me-too)
-            return Array(TitleSchemaV1.Title.sampleData[2...3])
+            return Array(TitleSchemaV1.Title.sampleData[2 ... 3])
         case 2: // Cathedral Rocks card
-            return Array(TitleSchemaV1.Title.sampleData[4...5])
+            return Array(TitleSchemaV1.Title.sampleData[4 ... 5])
         case 3: // Yellowstone card
-            return Array(TitleSchemaV1.Title.sampleData[6...7])
+            return Array(TitleSchemaV1.Title.sampleData[6 ... 7])
         default:
             // For remaining cards, try to get a single title if available
             if index < TitleSchemaV1.Title.sampleData.count {
@@ -150,23 +150,23 @@ final class PreviewContainer {
 
     private func getSubjectsForCard(card: CardSchemaV1.StereoCard) -> [SubjectSchemaV1.Subject] {
         let subjects = SubjectSchemaV1.Subject.sampleData
-        
+
         // Check if any of the card's titles contain World's Fair related terms
         let isWorldsFairCard = card.titles.contains { title in
             title.text.contains("World's") ||
-            title.text.contains("Columbian Exposition") ||
-            title.text.contains("World's Fair")
+                title.text.contains("Columbian Exposition") ||
+                title.text.contains("World's Fair")
         }
-        
+
         if isWorldsFairCard {
             return subjects.filter { subject in
                 subject.name.contains("Chicago") ||
-                subject.name.contains("Illinois") ||
-                subject.name.contains("World's Columbian Exposition") ||
-                subject.name.contains("Exhibitions")
+                    subject.name.contains("Illinois") ||
+                    subject.name.contains("World's Columbian Exposition") ||
+                    subject.name.contains("Exhibitions")
             }
         }
-        
+
         // Rest of the existing cases...
         switch card.imageFrontId {
         case "G89F383_045F": // Cathedral Rocks
@@ -176,20 +176,20 @@ final class PreviewContainer {
         case "G92F094_011F": // Yellowstone
             return subjects.filter { subject in
                 subject.name.contains("Yellowstone") ||
-                subject.name.contains("Buttes") ||
-                subject.name.contains("Wyoming") ||
-                subject.name.contains("Rocks") ||
-                subject.name.contains("National parks")
+                    subject.name.contains("Buttes") ||
+                    subject.name.contains("Wyoming") ||
+                    subject.name.contains("Rocks") ||
+                    subject.name.contains("National parks")
             }
         // Handle Central Park cards
         case _ where card.titles.contains(where: { $0.text.contains("Central Park") }):
             return subjects.filter { subject in
                 subject.name.contains("New York") ||
-                subject.name.contains("Manhattan") ||
-                subject.name.contains("Central Park") ||
-                subject.name.contains("Zoos") ||
-                subject.name.contains("Animals") ||
-                subject.name.contains("Parks")
+                    subject.name.contains("Manhattan") ||
+                    subject.name.contains("Central Park") ||
+                    subject.name.contains("Zoos") ||
+                    subject.name.contains("Animals") ||
+                    subject.name.contains("Parks")
             }
         default:
             return []
@@ -229,7 +229,7 @@ final class PreviewContainer {
         leftCrop.card = card
         rightCrop.card = card
     }
-    
+
     private func setupSampleCollections(in context: ModelContext) {
         // Create sample collections
         let favorites = CollectionSchemaV1.Collection(name: "Favorites")
@@ -237,29 +237,30 @@ final class PreviewContainer {
         let newYork = CollectionSchemaV1.Collection(name: "New York City")
         let wonders = CollectionSchemaV1.Collection(name: "Natural Wonders")
         let parks = CollectionSchemaV1.Collection(name: "National Parks")
-        
+
         for card in CardSchemaV1.StereoCard.sampleData {
             // Add first card to favorites
             if card == CardSchemaV1.StereoCard.sampleData.first {
                 favorites.addCard(card)
             }
-            
+
             // Add cards to appropriate collections based on subjects
             for subject in card.subjects {
                 if subject.name.contains("World's Columbian Exposition") || subject.name.contains("Chicago") || subject.name.contains("Illinois") || subject.name.contains("Exhibitions") {
                     worldsFair.addCard(card)
-                } else if subject.name.contains("New York") || subject.name.contains("Manhattan") || subject.name.contains("Central Park")  || subject.name.contains("N.Y.") {
+                } else if subject.name.contains("New York") || subject.name.contains("Manhattan") || subject.name.contains("Central Park") || subject.name.contains("N.Y.") {
                     newYork.addCard(card)
                 } else if subject.name.contains("California") || subject.name.contains("Rocks") {
                     wonders.addCard(card)
                 } else if subject.name.contains("Yellowstone") ||
-                          subject.name.contains("National parks") {
+                    subject.name.contains("National parks")
+                {
                     parks.addCard(card)
                     wonders.addCard(card) // Also add to Natural Wonders
                 }
             }
         }
-        
+
         // Insert collections
         [favorites, worldsFair, newYork, wonders, parks].forEach { context.insert($0) }
     }

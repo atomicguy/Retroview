@@ -29,7 +29,8 @@ struct AddToCollectionMenu: View {
                         if collection.hasCard(card) {
                             Label(
                                 collection.name,
-                                systemImage: "checkmark.circle.fill")
+                                systemImage: "checkmark.circle.fill"
+                            )
                         } else {
                             Label(collection.name, systemImage: "circle")
                         }
@@ -79,8 +80,7 @@ struct NewCollectionSheet: View {
                     dismiss()
                 }
             } trailing: {
-                toolbarButton(title: "Create", systemImage: "folder.badge.plus")
-                {
+                toolbarButton(title: "Create", systemImage: "folder.badge.plus") {
                     createCollection()
                 }
                 .disabled(collectionName.isEmpty)

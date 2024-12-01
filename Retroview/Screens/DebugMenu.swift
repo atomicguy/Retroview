@@ -9,52 +9,53 @@ import SwiftData
 import SwiftUI
 
 #if DEBUG
-struct DebugMenu: View {
-    @Environment(\.modelContext) private var modelContext
-    @State private var showingRestartAlert = false
-    
-    var body: some View {
-        Menu {
-            Section {
-                Button(role: .destructive) {
-                    showingRestartAlert = true
-                } label: {
-                    Label("Reset Store & Restart", systemImage: "trash")
+    struct DebugMenu: View {
+        @Environment(\.modelContext) private var modelContext
+        @State private var showingRestartAlert = false
+
+        var body: some View {
+            Menu {
+                Section {
+                    Button(role: .destructive) {
+                        showingRestartAlert = true
+                    } label: {
+                        Label("Reset Store & Restart", systemImage: "trash")
+                    }
                 }
-            }
-            
-            Section {
-                Button {
-                    loadSampleData()
-                } label: {
-                    Label("Load Sample Data", systemImage: "square.and.arrow.down")
+
+                Section {
+                    Button {
+                        loadSampleData()
+                    } label: {
+                        Label("Load Sample Data", systemImage: "square.and.arrow.down")
+                    }
                 }
+            } label: {
+                Label("Debug", systemImage: "ladybug")
             }
-        } label: {
-            Label("Debug", systemImage: "ladybug")
-        }
-        .alert("Reset Data Store",
-               isPresented: $showingRestartAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Reset & Restart", role: .destructive) {
-                DevelopmentFlags.shouldResetStore = true
-                restartApp()
+            .alert("Reset Data Store",
+                   isPresented: $showingRestartAlert)
+            {
+                Button("Cancel", role: .cancel) {}
+                Button("Reset & Restart", role: .destructive) {
+                    DevelopmentFlags.shouldResetStore = true
+                    restartApp()
+                }
+            } message: {
+                Text("This will delete all data and restart the app. Are you sure?")
             }
-        } message: {
-            Text("This will delete all data and restart the app. Are you sure?")
         }
-    }
-    
-    private func restartApp() {
-        #if os(macOS)
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: Bundle.main.executablePath!)
-        try? task.run()
-        NSApp.terminate(nil)
-        #else
-        exit(0)
-        #endif
-    }
+
+        private func restartApp() {
+            #if os(macOS)
+                let task = Process()
+                task.executableURL = URL(fileURLWithPath: Bundle.main.executablePath!)
+                try? task.run()
+                NSApp.terminate(nil)
+            #else
+                exit(0)
+            #endif
+        }
 
         private func loadSampleData() {
             // Insert base entities
@@ -89,7 +90,7 @@ struct DebugMenu: View {
         }
 
         private func insertBaseEntities() {
-            func insert<T: PersistentModel>(_ entities: [T]) {
+            func insert(_ entities: [some PersistentModel]) {
                 entities.forEach { modelContext.insert($0) }
             }
 
@@ -102,8 +103,7 @@ struct DebugMenu: View {
 
         private func setupRelationships() {
             // Setup relationships with detailed logging
-            for (index, card) in CardSchemaV1.StereoCard.sampleData.enumerated()
-            {
+            for (index, card) in CardSchemaV1.StereoCard.sampleData.enumerated() {
                 setupCardRelationships(card: card, index: index)
             }
         }
@@ -150,19 +150,18 @@ struct DebugMenu: View {
             return AuthorSchemaV1.Author.sampleData[index]
         }
 
-        private func getSubjectsForCard(index: Int) -> [SubjectSchemaV1.Subject]
-        {
+        private func getSubjectsForCard(index: Int) -> [SubjectSchemaV1.Subject] {
             switch index {
             case 0:
-                return Array(SubjectSchemaV1.Subject.sampleData.prefix(4))
+                Array(SubjectSchemaV1.Subject.sampleData.prefix(4))
             case 1:
-                return Array(SubjectSchemaV1.Subject.sampleData.prefix(4))
+                Array(SubjectSchemaV1.Subject.sampleData.prefix(4))
             case 2:
-                return Array(SubjectSchemaV1.Subject.sampleData[7...13])
+                Array(SubjectSchemaV1.Subject.sampleData[7 ... 13])
             case 3:
-                return Array(SubjectSchemaV1.Subject.sampleData[14...17])
+                Array(SubjectSchemaV1.Subject.sampleData[14 ... 17])
             default:
-                return []
+                []
             }
         }
 
