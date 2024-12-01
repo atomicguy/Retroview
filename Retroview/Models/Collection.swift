@@ -10,70 +10,90 @@ import SwiftData
 
 enum CollectionSchemaV1: VersionedSchema {
     static var versionIdentifier: Schema.Version = .init(1, 0, 0)
-
+    
     static var models: [any PersistentModel.Type] {
         [Collection.self]
     }
-
+    
     @Model
     class Collection {
+        // MARK: - Properties
         @Attribute(.unique) var id: UUID
         var name: String
         var createdAt: Date
         var updatedAt: Date
-
-        // Store card UUIDs to maintain order and handle deleted cards gracefully
-        private var cardOrder: String
-
+        
+        // Store card UUIDs to maintain order
+        private var cardOrder: [String] = []
+        
+        // MARK: - Initialization
         init(name: String, cards: [CardSchemaV1.StereoCard] = []) {
-            id = UUID()
+            self.id = UUID()
             self.name = name
-            createdAt = Date()
-            updatedAt = Date()
-            cardOrder = cards.map { $0.uuid.uuidString }.joined(
-                separator: ",")
+            self.createdAt = Date()
+            self.updatedAt = Date()
+            self.cardOrder = cards.map { $0.uuid.uuidString }
         }
-
-        // Helper to get the array of card UUIDs
-        var cardUUIDs: [String] {
-            cardOrder.isEmpty
-                ? [] : cardOrder.split(separator: ",").map(String.init)
-        }
-
-        // Update the cards in the collection
-        func updateCards(_ cards: [CardSchemaV1.StereoCard]) {
-            cardOrder = cards.map { $0.uuid.uuidString }.joined(
-                separator: ",")
-            updatedAt = Date()
-            verifyCardOrder()
-        }
-
-        // Add a single card
+        
+        // MARK: - Card Management
         func addCard(_ card: CardSchemaV1.StereoCard) {
-            var uuids = cardUUIDs
-            if !uuids.contains(card.uuid.uuidString) {
-                uuids.append(card.uuid.uuidString)
-                cardOrder = uuids.joined(separator: ",")
-                updatedAt = Date()
-                verifyCardOrder()
-            }
+            guard !hasCard(card) else { return }
+            cardOrder.append(card.uuid.uuidString)
+            updatedAt = Date()
         }
-
-        // Remove a single card
+        
         func removeCard(_ card: CardSchemaV1.StereoCard) {
-            var uuids = cardUUIDs
-            if let index = uuids.firstIndex(of: card.uuid.uuidString) {
-                uuids.remove(at: index)
-                cardOrder = uuids.joined(separator: ",")
-                updatedAt = Date()
-                verifyCardOrder()
+            guard let index = cardOrder.firstIndex(of: card.uuid.uuidString) else { return }
+            cardOrder.remove(at: index)
+            updatedAt = Date()
+        }
+        
+        func hasCard(_ card: CardSchemaV1.StereoCard) -> Bool {
+            cardOrder.contains(card.uuid.uuidString)
+        }
+        
+        func updateCards(_ cards: [CardSchemaV1.StereoCard]) {
+            cardOrder = cards.map { $0.uuid.uuidString }
+            updatedAt = Date()
+        }
+        
+        func moveCard(from source: Int, to destination: Int) {
+            guard source >= 0, source < cardOrder.count,
+                  destination >= 0, destination <= cardOrder.count else { return }
+            
+            let card = cardOrder.remove(at: source)
+            cardOrder.insert(card, at: destination)
+            updatedAt = Date()
+        }
+        
+        // MARK: - Card Access
+        var cardUUIDs: [String] {
+            cardOrder
+        }
+        
+        func fetchCards(context: ModelContext) -> [CardSchemaV1.StereoCard] {
+            guard !cardOrder.isEmpty else { return [] }
+            
+            // Create UUID objects from strings
+            let cardUUIDObjects = cardOrder.compactMap { UUID(uuidString: $0) }
+            
+            // Create a predicate that specifically matches the UUIDs for this collection
+            let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+                predicate: #Predicate<CardSchemaV1.StereoCard> { card in
+                    cardUUIDObjects.contains(card.uuid)
+                }
+            )
+            
+            // Fetch and maintain order
+            let fetchedCards = (try? context.fetch(descriptor)) ?? []
+            
+            // Return cards in the exact order specified by cardOrder
+            return cardOrder.compactMap { uuid in
+                fetchedCards.first { $0.uuid.uuidString == uuid }
             }
         }
-
-        func hasCard(_ card: CardSchemaV1.StereoCard) -> Bool {
-            cardUUIDs.contains(card.uuid.uuidString)
-        }
-
+        
+        // MARK: - Sample Data
         static let sampleData = [
             Collection(name: "Favorites"),
             Collection(name: "World's Fair"),
@@ -83,45 +103,5 @@ enum CollectionSchemaV1: VersionedSchema {
     }
 }
 
-// MARK: - Collection Card Fetching
-
-extension CollectionSchemaV1.Collection {
-    func fetchCards(context: ModelContext) -> [CardSchemaV1.StereoCard] {
-        let uuids = cardUUIDs
-        guard !uuids.isEmpty else { return [] }
-
-        // Create UUID objects from strings
-        let cardUUIDObjects = uuids.compactMap { UUID(uuidString: $0) }
-
-        // Create a predicate that specifically matches the UUIDs for this collection
-        let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
-            predicate: #Predicate<CardSchemaV1.StereoCard> { card in
-                cardUUIDObjects.contains(card.uuid)
-            },
-            sortBy: [SortDescriptor(\CardSchemaV1.StereoCard.uuid)]
-        )
-
-        // Fetch and maintain order
-        let fetchedCards = (try? context.fetch(descriptor)) ?? []
-
-        // Return cards in the exact order specified by cardOrder
-        return uuids.compactMap { uuid in
-            fetchedCards.first { $0.uuid.uuidString == uuid }
-        }
-    }
-
-    // Helper method to verify collection integrity
-    func verifyCardOrder() {
-        // Remove any UUIDs that might be duplicated
-        let uniqueUUIDs = Array(Set(cardUUIDs))
-        if uniqueUUIDs.count != cardUUIDs.count {
-            // Fix the card order by removing duplicates while maintaining order
-            let orderedUniqueUUIDs = cardUUIDs.enumerated()
-                .filter { idx, uuid in cardUUIDs.firstIndex(of: uuid) == idx }
-                .map { _, uuid in uuid }
-            cardOrder = orderedUniqueUUIDs.joined(separator: ",")
-        }
-    }
-}
-
+// MARK: - Identifiable Conformance
 extension CollectionSchemaV1.Collection: Identifiable {}

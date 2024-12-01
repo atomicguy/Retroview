@@ -10,6 +10,14 @@ import SwiftUI
 
 @main
 struct RetroviewApp: App {
+    init() {
+        // Only clear store if development flag is set
+        if DevelopmentFlags.shouldResetStore {
+            print("Development flag set: Clearing store...")
+            Self.forceDeleteStore()
+        }
+    }
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CardSchemaV1.StereoCard.self,
@@ -20,26 +28,37 @@ struct RetroviewApp: App {
             CropSchemaV1.Crop.self,
             CollectionSchemaV1.Collection.self,
         ])
-
+        
         let modelConfiguration = ModelConfiguration(
             "MyStereoviews",
             schema: schema,
             isStoredInMemoryOnly: false,
             allowsSave: true
         )
-
+        
         do {
             return try ModelContainer(
                 for: schema,
                 configurations: [modelConfiguration]
             )
         } catch {
-            fatalError(
-                "Could not create ModelContainer: \(error.localizedDescription)"
-            )
+            print("Failed to create ModelContainer: \(error.localizedDescription)")
+            print("Attempting to force delete and recreate store...")
+            
+            // If that fails, force delete the store and try again
+            Self.forceDeleteStore()
+            
+            do {
+                return try ModelContainer(
+                    for: schema,
+                    configurations: [modelConfiguration]
+                )
+            } catch {
+                fatalError("Could not create ModelContainer even after store deletion: \(error.localizedDescription)")
+            }
         }
     }()
-
+    
     var body: some Scene {
         WindowGroup {
             GalleryScreen()
@@ -49,6 +68,48 @@ struct RetroviewApp: App {
                 }
         }
         .modelContainer(sharedModelContainer)
+    }
+    
+    // More aggressive store deletion that runs before SwiftData initialization
+    static func forceDeleteStore() {
+        guard let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+            return
+        }
+        
+        let paths = [
+            "MyStereoviews.store",
+            "MyStereoviews.store-shm",
+            "MyStereoviews.store-wal",
+            "default.store",
+            "default.store-shm",
+            "default.store-wal",
+            "MyStereoviews"  // directory
+        ]
+        
+        // Delete all possible store files and directories
+        for path in paths {
+            let url = appSupport.appendingPathComponent(path)
+            try? FileManager.default.removeItem(at: url)
+            print("Attempted to delete: \(url.path)")
+        }
+        
+        // Delete app group container if used
+        if let containerPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "net.atompowered.Retroview") {
+            let groupPaths = [
+                "Library/Application Support/MyStereoviews.store",
+                "Library/Application Support/MyStereoviews.store-shm",
+                "Library/Application Support/MyStereoviews.store-wal",
+                "Library/Application Support/default.store",
+                "Library/Application Support/default.store-shm",
+                "Library/Application Support/default.store-wal"
+            ]
+            
+            for path in groupPaths {
+                let url = containerPath.appendingPathComponent(path)
+                try? FileManager.default.removeItem(at: url)
+                print("Attempted to delete group container: \(url.path)")
+            }
+        }
     }
 }
 

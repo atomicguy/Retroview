@@ -9,32 +9,52 @@ import SwiftData
 import SwiftUI
 
 #if DEBUG
-    struct DebugMenu: View {
-        @Environment(\.modelContext) private var modelContext
-
-        var body: some View {
-            Menu {
-                Section {
-                    Button(role: .destructive) {
-                        RetroviewApp.clearAllData()
-                    } label: {
-                        Label("Clear All Data", systemImage: "trash")
-                    }
+struct DebugMenu: View {
+    @Environment(\.modelContext) private var modelContext
+    @State private var showingRestartAlert = false
+    
+    var body: some View {
+        Menu {
+            Section {
+                Button(role: .destructive) {
+                    showingRestartAlert = true
+                } label: {
+                    Label("Reset Store & Restart", systemImage: "trash")
                 }
-
-                Section {
-                    Button {
-                        loadSampleData()
-                    } label: {
-                        Label(
-                            "Load Sample Data",
-                            systemImage: "square.and.arrow.down")
-                    }
-                }
-            } label: {
-                Label("Debug", systemImage: "ladybug")
             }
+            
+            Section {
+                Button {
+                    loadSampleData()
+                } label: {
+                    Label("Load Sample Data", systemImage: "square.and.arrow.down")
+                }
+            }
+        } label: {
+            Label("Debug", systemImage: "ladybug")
         }
+        .alert("Reset Data Store",
+               isPresented: $showingRestartAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reset & Restart", role: .destructive) {
+                DevelopmentFlags.shouldResetStore = true
+                restartApp()
+            }
+        } message: {
+            Text("This will delete all data and restart the app. Are you sure?")
+        }
+    }
+    
+    private func restartApp() {
+        #if os(macOS)
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: Bundle.main.executablePath!)
+        try? task.run()
+        NSApp.terminate(nil)
+        #else
+        exit(0)
+        #endif
+    }
 
         private func loadSampleData() {
             // Insert base entities
