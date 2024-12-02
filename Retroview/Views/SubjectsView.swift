@@ -9,8 +9,17 @@ import SwiftData
 import SwiftUI
 
 struct SubjectsView: View {
-    @Query(sort: \SubjectSchemaV1.Subject.name) private var subjects:
-        [SubjectSchemaV1.Subject]
+    var body: some View {
+        #if os(visionOS)
+            VisionSubjectsView()
+        #else
+            DesktopSubjectsView()
+        #endif
+    }
+}
+
+private struct DesktopSubjectsView: View {
+    @Query(sort: \SubjectSchemaV1.Subject.name) private var subjects: [SubjectSchemaV1.Subject]
     @State private var selectedSubject: SubjectSchemaV1.Subject?
     @State private var selectedCard: CardSchemaV1.StereoCard?
 
@@ -43,13 +52,7 @@ struct SubjectsView: View {
     private var subjectGrid: some View {
         Group {
             if let subject = selectedSubject {
-                CardGridView(
-                    cards: subject.cards,
-                    selectedCard: $selectedCard,
-                    currentCollection: nil,
-                    title: "\(subject.name) (\(subject.cards.count) cards)"
-                )
-                .id(subject.id)
+                SubjectGridView(subject: subject, selectedCard: $selectedCard)
             } else {
                 ContentUnavailableView(
                     "No Subject Selected",
@@ -58,12 +61,6 @@ struct SubjectsView: View {
                 )
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: selectedCard)
-        .transition(
-            .asymmetric(
-                insertion: .move(edge: .bottom).combined(with: .opacity),
-                removal: .move(edge: .top).combined(with: .opacity)
-            ))
     }
 }
 

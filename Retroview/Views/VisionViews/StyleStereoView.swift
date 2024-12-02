@@ -8,6 +8,7 @@
 import SwiftData
 import SwiftUI
 
+#if os(visionOS)
 struct StyleStereoView: View {
     let card: CardSchemaV1.StereoCard
     @Environment(\.dismiss) private var dismiss
@@ -50,3 +51,4 @@ struct StyleStereoView: View {
         StyleStereoView(card: card)
     }
 }
+#endif

@@ -53,3 +53,5 @@ enum SubjectSchemaV1: VersionedSchema {
         ]
     }
 }
+
+extension SubjectSchemaV1.Subject: Identifiable {}

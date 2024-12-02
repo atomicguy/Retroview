@@ -8,6 +8,7 @@
 import SwiftData
 import SwiftUI
 
+#if os(visionOS)
 struct StereoSpatialViewer: View {
     let cards: [CardSchemaV1.StereoCard]
     @State private var selectedCard: CardSchemaV1.StereoCard?
@@ -59,3 +60,4 @@ struct StereoSpatialViewer: View {
         )
     }
 }
+#endif

@@ -8,6 +8,7 @@
 import SwiftData
 import SwiftUI
 
+#if os(visionOS)
 struct StereoBrowser: View {
     let cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard
@@ -91,3 +92,4 @@ struct StereoBrowser: View {
         )
     }
 }
+#endif
