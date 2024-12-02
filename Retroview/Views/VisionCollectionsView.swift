@@ -74,11 +74,11 @@ import SwiftUI
                 .cornerRadius(8)
                 .padding(16)
             }
-            .ornament(visibility: .visible, attachmentAnchor: .scene(.bottom)) {
-                StereoCardThumbnailOrnament(cards: cards) { card in
-                    selectedCard = card
-                }
-            }
+//            .ornament(visibility: .visible, attachmentAnchor: .scene(.bottom)) {
+//                StereoCardThumbnailOrnament(cards: cards) { card in
+//                    selectedCard = card
+//                }
+//            }
         }
     }
 
