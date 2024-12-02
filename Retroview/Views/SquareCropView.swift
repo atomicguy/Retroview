@@ -13,7 +13,7 @@ struct SquareCropView: View {
     let card: CardSchemaV1.StereoCard
     let currentCollection: CollectionSchemaV1.Collection?
     let onSelect: ((CardSchemaV1.StereoCard) -> Void)?
-    
+
     var body: some View {
         CroppedCardView(card: card)
             .modifier(InteractiveCardModifier(
@@ -52,11 +52,11 @@ struct SquareCropView: View {
     CardPreviewContainer { card in
         LazyVGrid(
             columns: [
-                GridItem(.adaptive(minimum: 250, maximum: 300))
+                GridItem(.adaptive(minimum: 250, maximum: 300)),
             ],
             spacing: 10
         ) {
-            ForEach(0..<4) { _ in
+            ForEach(0 ..< 4) { _ in
                 SquareCropView(
                     card: card,
                     currentCollection: nil,

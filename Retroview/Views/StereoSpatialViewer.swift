@@ -5,15 +5,15 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct StereoSpatialViewer: View {
     let cards: [CardSchemaV1.StereoCard]
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var isViewerVisible = false
     let currentCollection: CollectionSchemaV1.Collection?
-    
+
     var body: some View {
         ZStack {
             ScrollView {
@@ -34,7 +34,7 @@ struct StereoSpatialViewer: View {
                 .padding()
             }
             .opacity(isViewerVisible ? 0 : 1)
-            
+
             if let selected = selectedCard {
                 StereoBrowser(
                     cards: cards,

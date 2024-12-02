@@ -5,8 +5,8 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ThumbnailView: View {
     let card: CardSchemaV1.StereoCard

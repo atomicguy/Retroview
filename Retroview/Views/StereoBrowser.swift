@@ -5,15 +5,15 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct StereoBrowser: View {
     let cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard
     @Binding var isVisible: Bool
     let currentCollection: CollectionSchemaV1.Collection?
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             Button {
@@ -30,14 +30,14 @@ struct StereoBrowser: View {
             }
             .padding(20)
             .zIndex(1)
-            
+
             VStack(spacing: 0) {
                 StyleStereoView(
                     card: selectedCard
                 )
                 .id(selectedCard.uuid)
                 .frame(maxHeight: .infinity)
-                
+
                 CenteredThumbnailStrip(
                     cards: cards,
                     selectedCard: selectedCard,
@@ -70,10 +70,10 @@ struct StereoBrowser: View {
                 }
         )
     }
-    
+
     private func navigateCards(direction: Int) {
         guard let currentIndex = cards.firstIndex(of: selectedCard) else { return }
-              
+
         let newIndex = (currentIndex + direction + cards.count) % cards.count
         withAnimation(.spring) {
             selectedCard = cards[newIndex]

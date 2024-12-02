@@ -5,10 +5,10 @@
 ////  Created by Adam Schuster on 11/30/24.
 ////
 //
-//import SwiftData
-//import SwiftUI
+// import SwiftData
+// import SwiftUI
 //
-//#if os(visionOS)
+// #if os(visionOS)
 //    struct StereoCollectionView: View {
 //        @Query private var cards: [CardSchemaV1.StereoCard]
 //        @State private var selectedCard: CardSchemaV1.StereoCard?
@@ -43,4 +43,4 @@
 //            .frame(width: 800, height: 600)
 //    }
 //
-//#endif
+// #endif

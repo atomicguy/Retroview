@@ -5,15 +5,15 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct InteractiveCardModifier: ViewModifier {
     let card: CardSchemaV1.StereoCard
     let currentCollection: CollectionSchemaV1.Collection?
     @State private var showingNewCollectionSheet = false
     let onSelect: ((CardSchemaV1.StereoCard) -> Void)?
-    
+
     func body(content: Content) -> some View {
         content
             .onTapGesture {

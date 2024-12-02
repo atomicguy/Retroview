@@ -5,13 +5,13 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ViewerSquareCropView: View {
     let card: CardSchemaV1.StereoCard
     let currentCollection: CollectionSchemaV1.Collection?
-    
+
     var body: some View {
         CroppedCardView(card: card)
             .contentShape(Rectangle())
@@ -41,7 +41,7 @@ struct ViewerSquareCropView: View {
 }
 
 #Preview("Loading State") {
-    CardPreviewContainer { card in
+    CardPreviewContainer { _ in
         let loadingCard = CardSchemaV1.StereoCard(
             uuid: "test",
             imageFrontId: "nonexistent"

@@ -5,29 +5,29 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct CenteredThumbnailStrip: View {
     let cards: [CardSchemaV1.StereoCard]
     let selectedCard: CardSchemaV1.StereoCard
     let onSelect: (CardSchemaV1.StereoCard) -> Void
     @Namespace private var animation
-    
+
     // Constants for layout
     private let thumbnailSize: CGFloat = 80
     private let baseSpacing: CGFloat = 8
     private let selectedScale: CGFloat = 1.5
-    
+
     // Calculate extra spacing for selected card
     private var spacingForCard: (CardSchemaV1.StereoCard) -> CGFloat {
         { card in
             card.id == selectedCard.id ?
-            thumbnailSize + (thumbnailSize * (selectedScale - 1)) :
+                thumbnailSize + (thumbnailSize * (selectedScale - 1)) :
                 baseSpacing
         }
     }
-    
+
     var body: some View {
         GeometryReader { geometry in
             ScrollViewReader { proxy in
@@ -37,7 +37,7 @@ struct CenteredThumbnailStrip: View {
                         LazyHStack(spacing: 0) {
                             Color.clear
                                 .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
-                            
+
                             ForEach(cards) { card in
                                 if card.id != selectedCard.id {
                                     ThumbnailView(card: card)
@@ -54,17 +54,17 @@ struct CenteredThumbnailStrip: View {
                                         .padding(.horizontal, spacingForCard(card))
                                 }
                             }
-                            
+
                             Color.clear
                                 .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
                         }
                         .frame(minWidth: geometry.size.width)
-                        
+
                         // Selected thumbnail on top
                         LazyHStack(spacing: 0) {
                             Color.clear
                                 .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
-                            
+
                             ForEach(cards) { card in
                                 if card.id == selectedCard.id {
                                     ThumbnailView(card: card)
@@ -82,7 +82,7 @@ struct CenteredThumbnailStrip: View {
                                         .padding(.horizontal, spacingForCard(card))
                                 }
                             }
-                            
+
                             Color.clear
                                 .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
                         }
@@ -99,7 +99,7 @@ struct CenteredThumbnailStrip: View {
         }
         .frame(height: thumbnailSize * selectedScale + baseSpacing * 2)
     }
-    
+
     private func scrollToCurrentCard(proxy: ScrollViewProxy) {
         withAnimation(.smooth) {
             proxy.scrollTo(selectedCard.id, anchor: .center)
@@ -107,7 +107,7 @@ struct CenteredThumbnailStrip: View {
     }
 }
 
-#Preview ("Strip of Thumbnails") {
+#Preview("Strip of Thumbnails") {
     CardsPreviewContainer { cards in
         CenteredThumbnailStrip(
             cards: cards,
@@ -119,11 +119,11 @@ struct CenteredThumbnailStrip: View {
     }
 }
 
-//#Preview ("in situ") {
+// #Preview ("in situ") {
 //    CardsPreviewContainer { cards in
 //        StereoSpatialViewer(
 //            cards: cards,
 //            currentCollection: nil
 //        )
 //    }
-//}
+// }

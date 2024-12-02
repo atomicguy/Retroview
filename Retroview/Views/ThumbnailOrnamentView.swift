@@ -5,10 +5,10 @@
 ////  Created by Adam Schuster on 11/30/24.
 ////
 //
-//import SwiftData
-//import SwiftUI
+// import SwiftData
+// import SwiftUI
 //
-//struct StereoCardThumbnailOrnament: View {
+// struct StereoCardThumbnailOrnament: View {
 //    let cards: [CardSchemaV1.StereoCard]
 //    let onSelect: (CardSchemaV1.StereoCard) -> Void
 //
@@ -27,9 +27,9 @@
 //        }
 //        .frame(height: 96)
 //    }
-//}
+// }
 //
-//private struct ThumbnailView: View {
+// private struct ThumbnailView: View {
 //    let card: CardSchemaV1.StereoCard
 //    @StateObject private var viewModel: StereoCardViewModel
 //
@@ -53,11 +53,11 @@
 //            try? await viewModel.loadImage(forSide: "front")
 //        }
 //    }
-//}
+// }
 //
-//#Preview("Thumbnail Ornament") {
+// #Preview("Thumbnail Ornament") {
 //    CardsPreviewContainer { cards in
 //        StereoCardThumbnailOrnament(cards: cards) { _ in }
 //            .background(.regularMaterial)
 //    }
-//}
+// }

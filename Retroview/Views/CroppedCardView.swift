@@ -5,22 +5,22 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct CroppedCardView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     @StateObject private var viewModel: StereoCardViewModel
-    
+
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
         _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
     }
-    
+
     var displayTitle: String {
         card.titlePick?.text ?? card.titles.first?.text ?? "Untitled"
     }
-    
+
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
             GeometryReader { geometry in
@@ -33,7 +33,7 @@ struct CroppedCardView: View {
                         geometry.size.width / (cropWidth * CGFloat(image.width)),
                         geometry.size.height / (cropHeight * CGFloat(image.height))
                     )
-                    
+
                     Image(decorative: image, scale: 1.0)
                         .resizable()
                         .scaledToFill()
@@ -54,7 +54,7 @@ struct CroppedCardView: View {
             }
             .aspectRatio(1, contentMode: .fit)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            
+
             Text(displayTitle)
                 .font(.system(.subheadline, design: .serif))
                 .lineLimit(2)
@@ -97,7 +97,7 @@ struct CroppedCardView: View {
 }
 
 #Preview("Loading State") {
-    CardPreviewContainer { card in
+    CardPreviewContainer { _ in
         let loadingCard = CardSchemaV1.StereoCard(
             uuid: "test",
             imageFrontId: "nonexistent"
@@ -111,7 +111,7 @@ struct CroppedCardView: View {
 #Preview("Grid Layout") {
     CardPreviewContainer { card in
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 250, maximum: 300))], spacing: 10) {
-            ForEach(0..<4) { _ in
+            ForEach(0 ..< 4) { _ in
                 CroppedCardView(card: card)
             }
         }
