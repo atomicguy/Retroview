@@ -347,3 +347,29 @@ struct AsyncPreviewContainer<Content: View>: View {
         }
     }
 }
+
+extension PreviewContainer {
+    func previewCollection(named name: String) -> CollectionSchemaV1.Collection {
+        let descriptor = FetchDescriptor<CollectionSchemaV1.Collection>(
+            predicate: #Predicate<CollectionSchemaV1.Collection> { collection in
+                collection.name == name
+            }
+        )
+
+        return (try? modelContainer.mainContext.fetch(descriptor))?.first ??
+            CollectionSchemaV1.Collection(name: "Preview Collection")
+    }
+
+    // Convenience var for commonly used collections
+    var worldsFairCollection: CollectionSchemaV1.Collection {
+        previewCollection(named: "World's Fair")
+    }
+
+    var naturalWondersCollection: CollectionSchemaV1.Collection {
+        previewCollection(named: "Natural Wonders")
+    }
+
+    var newYorkCollection: CollectionSchemaV1.Collection {
+        previewCollection(named: "New York City")
+    }
+}

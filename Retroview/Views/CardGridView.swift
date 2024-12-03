@@ -29,17 +29,14 @@ struct CardGridView: View {
             } else {
                 LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(cards) { card in
-                        SquareCropView(
-                            card: card,
-                            currentCollection: currentCollection,
-                            onSelect: { selectedCard = $0 }
-                        )
-                        .overlay {
-                            if selectedCard?.uuid == card.uuid {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.accentColor, lineWidth: 3)
+                        CardSquareView(card: card)
+                            .withTitle()
+                            .overlay {
+                                if selectedCard?.uuid == card.uuid {
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(Color.accentColor, lineWidth: 3)
+                                }
                             }
-                        }
                     }
                 }
                 .padding()

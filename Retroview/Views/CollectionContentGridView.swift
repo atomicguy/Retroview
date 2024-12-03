@@ -5,15 +5,15 @@
 //  Created by Adam Schuster on 12/1/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct CollectionContentGridView<T: Identifiable>: View {
     let title: String
     let items: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard?
     let parentId: T.ID
-    
+
     var body: some View {
         CardGridView(
             cards: items,
@@ -34,7 +34,7 @@ struct CollectionContentGridView<T: Identifiable>: View {
 struct SubjectGridView: View {
     let subject: SubjectSchemaV1.Subject
     @Binding var selectedCard: CardSchemaV1.StereoCard?
-    
+
     var body: some View {
         CollectionContentGridView<SubjectSchemaV1.Subject>(
             title: "\(subject.name) (\(subject.cards.count) cards)",
@@ -49,7 +49,7 @@ struct SubjectGridView: View {
 struct AuthorGridView: View {
     let author: AuthorSchemaV1.Author
     @Binding var selectedCard: CardSchemaV1.StereoCard?
-    
+
     var body: some View {
         CollectionContentGridView<AuthorSchemaV1.Author>(
             title: "\(author.name) (\(author.cards.count) cards)",
@@ -76,4 +76,4 @@ private struct PreviewItem: Identifiable {
         )
         .frame(width: 1200, height: 800)
     }
-} 
+}

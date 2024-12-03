@@ -33,3 +33,10 @@ struct ThumbnailView: View {
         }
     }
 }
+
+#Preview {
+    CardPreviewContainer { card in
+        ThumbnailView(card: card)
+            .frame(width: 400, height: 200)
+    }
+}

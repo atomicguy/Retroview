@@ -19,7 +19,7 @@ enum CollectionDefaults {
         let descriptor = FetchDescriptor<CollectionSchemaV1.Collection>()
         let existingCollections = (try? context.fetch(descriptor)) ?? []
         let existingNames = existingCollections.map(\.name)
-        
+
         // Create Favorites if needed
         if !existingNames.contains(favoritesName) {
             context.insert(favorites)
@@ -28,21 +28,21 @@ enum CollectionDefaults {
         // Create Library if needed
         if !existingNames.contains(libraryName) {
             context.insert(library)
-            
+
             // Fetch and add all cards
             let cardsDescriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
             if let allCards = try? context.fetch(cardsDescriptor) {
                 allCards.forEach { library.addCard($0) }
             }
         }
-        
+
         try? context.save()
     }
 
     static func isFavorites(_ collection: CollectionSchemaV1.Collection) -> Bool {
         collection.name == favoritesName
     }
-    
+
     static func isLibrary(_ collection: CollectionSchemaV1.Collection) -> Bool {
         collection.name == libraryName
     }

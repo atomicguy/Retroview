@@ -18,30 +18,34 @@ private struct ReorderableGridItem: View {
     @State private var isDragging = false
 
     var body: some View {
-        SquareCropView(
-            card: card,
-            currentCollection: currentCollection,
-            onSelect: onSelect
-        )
-        .contentShape(Rectangle())
-        .overlay {
-            if selectedCard?.uuid == card.uuid {
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.accentColor, lineWidth: 3)
-            }
-        }
-        .draggable(card) {
-            SquareCropView(
+        CardSquareView(card: card)
+            .withTitle()
+            .cardInteractive(
                 card: card,
                 currentCollection: currentCollection,
                 onSelect: onSelect
             )
-            .frame(width: 200, height: 200)
-            .opacity(0.8)
-        }
-        .opacity(isDragging ? 0.5 : 1.0)
-        .scaleEffect(isDragging ? 0.95 : 1.0)
-        .animation(.easeInOut(duration: 0.2), value: isDragging)
+            .contentShape(Rectangle())
+            .overlay {
+                if selectedCard?.uuid == card.uuid {
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.accentColor, lineWidth: 3)
+                }
+            }
+            .draggable(card) {
+                CardSquareView(card: card)
+                    .withTitle()
+                    .cardInteractive(
+                        card: card,
+                        currentCollection: currentCollection,
+                        onSelect: onSelect
+                    )
+                    .frame(width: 200, height: 200)
+                    .opacity(0.8)
+            }
+            .opacity(isDragging ? 0.5 : 1.0)
+            .scaleEffect(isDragging ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.2), value: isDragging)
     }
 }
 
