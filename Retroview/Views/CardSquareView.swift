@@ -14,20 +14,23 @@ struct CardSquareView: View {
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
-        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
+        _viewModel = StateObject(
+            wrappedValue: StereoCardViewModel(stereoCard: card))
     }
 
     var body: some View {
-        VStack(alignment: .center, spacing: 8) {
-            GeometryReader { geometry in
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
                 if let image = viewModel.frontCGImage,
-                   let leftCrop = card.leftCrop
+                    let leftCrop = card.leftCrop
                 {
                     let cropWidth = CGFloat(leftCrop.y1 - leftCrop.y0)
                     let cropHeight = CGFloat(leftCrop.x1 - leftCrop.x0)
                     let scale = min(
-                        geometry.size.width / (cropWidth * CGFloat(image.width)),
-                        geometry.size.height / (cropHeight * CGFloat(image.height))
+                        geometry.size.width
+                            / (cropWidth * CGFloat(image.width)),
+                        geometry.size.height
+                            / (cropHeight * CGFloat(image.height))
                     )
 
                     Image(decorative: image, scale: 1.0)
@@ -38,8 +41,10 @@ struct CardSquareView: View {
                             height: CGFloat(image.height) * scale
                         )
                         .offset(
-                            x: -CGFloat(leftCrop.y0) * CGFloat(image.width) * scale,
-                            y: -CGFloat(leftCrop.x0) * CGFloat(image.height) * scale
+                            x: -CGFloat(leftCrop.y0) * CGFloat(image.width)
+                                * scale,
+                            y: -CGFloat(leftCrop.x0) * CGFloat(image.height)
+                                * scale
                         )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .clipped()
@@ -48,11 +53,12 @@ struct CardSquareView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .aspectRatio(1, contentMode: .fit)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .frame(maxWidth: .infinity)
+        .aspectRatio(1, contentMode: .fit)
+//        .frame(height: 280)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .padding()
+        .frame(maxWidth: .infinity)
         .background(
             LinearGradient(
                 colors: [
@@ -63,7 +69,6 @@ struct CardSquareView: View {
                 endPoint: .bottomTrailing
             )
         )
-        .squareAspectRatio()
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(
             color: card.color.opacity(0.5),
@@ -74,25 +79,32 @@ struct CardSquareView: View {
         .task(priority: .high) {
             try? await viewModel.loadImage(forSide: "front")
         }
+        .onTapGesture {
+            print("CardSquareView tapped")
+        }
     }
 }
 
-// MARK: - View Modifiers
+// MARK: - Title Modifier
 
 struct CardTitleModifier: ViewModifier {
     let title: String
 
     func body(content: Content) -> some View {
-        VStack(spacing: 8) {
+        ZStack(alignment: .bottom) {
             content
 
             Text(title)
                 .font(.system(.subheadline, design: .serif))
                 .lineLimit(2)
-                .foregroundStyle(.primary)
+                .truncationMode(.tail)
                 .multilineTextAlignment(.center)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
                 .frame(maxWidth: .infinity)
+                .background(.ultraThickMaterial)
         }
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 
@@ -143,11 +155,12 @@ extension View {
         currentCollection: CollectionSchemaV1.Collection? = nil,
         onSelect: ((CardSchemaV1.StereoCard) -> Void)? = nil
     ) -> some View {
-        modifier(CardInteractiveModifier(
-            card: card,
-            currentCollection: currentCollection,
-            onSelect: onSelect
-        ))
+        modifier(
+            CardInteractiveModifier(
+                card: card,
+                currentCollection: currentCollection,
+                onSelect: onSelect
+            ))
     }
 }
 
@@ -155,7 +168,8 @@ extension View {
 
 extension CardSquareView {
     func withTitle() -> some View {
-        withCardTitle(card.titlePick?.text ?? card.titles.first?.text ?? "Untitled")
+        withCardTitle(
+            card.titlePick?.text ?? card.titles.first?.text ?? "Untitled")
     }
 
     func interactive(
@@ -218,7 +232,10 @@ extension CardSquareView {
 #Preview("Grid Layout") {
     CardsPreviewContainer { cards in
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 250, maximum: 300))], spacing: 10) {
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 250, maximum: 300))],
+                spacing: 10
+            ) {
                 ForEach(cards) { card in
                     CardSquareView(card: card)
                         .withTitle()

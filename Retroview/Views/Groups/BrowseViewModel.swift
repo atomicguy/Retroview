@@ -8,7 +8,7 @@
 import SwiftUI
 
 @MainActor
-class BrowseViewModel<T: CardCollection>: ObservableObject {
+class BrowseViewModel<T: CardGrouping>: ObservableObject {
     @Published var collections: [T]
     @Published var selectedCollection: T?
     @Published var selectedCard: CardSchemaV1.StereoCard?

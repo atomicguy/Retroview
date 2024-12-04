@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CollectionRow<T: CardCollection>: View {
+struct GropuingRow<T: CardGrouping>: View {
     let collection: T
 
     var body: some View {
@@ -21,9 +21,9 @@ struct CollectionRow<T: CardCollection>: View {
     }
 }
 
-#Preview("Collection Row") {
+#Preview("Grouping Row") {
     CardPreviewContainer { _ in
-        CollectionRow(
+        GropuingRow(
             collection: SubjectSchemaV1.Subject(
                 name: "Sample Subject"
             )

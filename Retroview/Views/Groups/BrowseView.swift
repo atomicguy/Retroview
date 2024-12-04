@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BrowseView<T: CardCollection>: View {
+struct BrowseView<T: CardGrouping>: View {
     @StateObject var viewModel: BrowseViewModel<T>
     let title: String
 
@@ -27,14 +27,14 @@ struct BrowseView<T: CardCollection>: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
                     ForEach(viewModel.collections) { collection in
                         NavigationLink(value: collection) {
-                            CollectionPreview(collection: collection)
+                            GroupingPreview(collection: collection)
                         }
                     }
                 }
                 .padding()
             }
             .navigationDestination(for: T.self) { collection in
-                CardCollectionGrid(
+                CardGroupingGrid(
                     cards: collection.cards,
                     selectedCard: $viewModel.selectedCard
                 )
@@ -48,7 +48,7 @@ struct BrowseView<T: CardCollection>: View {
         HStack(spacing: 0) {
             // Collections List
             List(viewModel.collections, selection: $viewModel.selectedCollection) { collection in
-                CollectionRow(collection: collection)
+                GropuingRow(collection: collection)
             }
             .frame(width: 220)
 
@@ -56,7 +56,7 @@ struct BrowseView<T: CardCollection>: View {
 
             // Cards Grid
             if let selectedCollection = viewModel.selectedCollection {
-                CardCollectionGrid(
+                CardGroupingGrid(
                     cards: selectedCollection.cards,
                     selectedCard: $viewModel.selectedCard
                 )

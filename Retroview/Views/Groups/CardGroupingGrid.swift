@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardCollectionGrid: View {
+struct CardGroupingGrid: View {
     let cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard?
 
@@ -36,9 +36,9 @@ struct CardCollectionGrid: View {
     }
 }
 
-#Preview("Card Collection Grid") {
+#Preview("Card Grouping Grid") {
     CardsPreviewContainer { cards in
-        CardCollectionGrid(
+        CardGroupingGrid(
             cards: cards,
             selectedCard: .constant(cards.first)
         )

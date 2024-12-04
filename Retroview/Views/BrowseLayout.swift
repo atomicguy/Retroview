@@ -28,19 +28,16 @@ struct BrowseLayout<ListContent: View, GridContent: View>: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            // List section
             listContent
                 .frame(width: listWidth)
 
             Divider()
 
-            // Grid section
             gridContent
                 .frame(maxWidth: .infinity)
 
             Divider()
 
-            // Detail section
             Group {
                 if let card = selectedCard {
                     CardContentView(card: card)

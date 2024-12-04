@@ -9,26 +9,26 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-protocol CardCollection: Identifiable, Hashable {
+protocol CardGrouping: Identifiable, Hashable {
     var name: String { get }
     var cards: [CardSchemaV1.StereoCard] { get }
 }
 
 // MARK: - Collection Type Conformance
 
-extension SubjectSchemaV1.Subject: CardCollection {
+extension SubjectSchemaV1.Subject: CardGrouping {
     func hash(into hasher: inout Hasher) {
         hasher.combine(persistentModelID)
     }
 }
 
-extension AuthorSchemaV1.Author: CardCollection {
+extension AuthorSchemaV1.Author: CardGrouping {
     func hash(into hasher: inout Hasher) {
         hasher.combine(persistentModelID)
     }
 }
 
-extension CollectionSchemaV1.Collection: CardCollection {
+extension CollectionSchemaV1.Collection: CardGrouping {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -39,9 +39,9 @@ extension CollectionSchemaV1.Collection: CardCollection {
     }
 }
 
-#Preview("Collection Preview") {
+#Preview("Card Grouping Preview") {
     CardPreviewContainer { _ in
-        CollectionPreview(
+        GroupingPreview(
             collection: SubjectSchemaV1.Subject(
                 name: "Sample Subject"
             )
