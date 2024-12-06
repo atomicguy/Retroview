@@ -26,19 +26,26 @@ struct BrowseView<T: CardGrouping>: View {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
                     ForEach(viewModel.collections) { collection in
-                        NavigationLink(value: collection) {
-                            GroupingPreview(collection: collection)
+                        GroupingPreview(
+                            collection: collection,
+                            isSelected: viewModel.selectedCollection?.id == collection.id
+                        )
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            viewModel.navigate(to: collection)
                         }
                     }
                 }
                 .padding()
             }
-            .navigationDestination(for: T.self) { collection in
-                CardGroupingGrid(
-                    cards: collection.cards,
-                    selectedCard: $viewModel.selectedCard
-                )
-                .navigationTitle(collection.name)
+            .navigationDestination(isPresented: $viewModel.isNavigating) {
+                if let navigatingTo = viewModel.navigatingToCollection {
+                    CardGroupingGrid(
+                        cards: navigatingTo.cards,
+                        selectedCard: $viewModel.selectedCard
+                    )
+                    .navigationTitle(navigatingTo.name)
+                }
             }
             .navigationTitle(title)
         }
@@ -48,9 +55,14 @@ struct BrowseView<T: CardGrouping>: View {
         HStack(spacing: 0) {
             // Collections List
             List(viewModel.collections, selection: $viewModel.selectedCollection) { collection in
-                GropuingRow(collection: collection)
+                GroupingPreview(
+                    collection: collection,
+                    isSelected: viewModel.selectedCollection?.id == collection.id
+                )
+                .tag(collection)
+                .frame(height: 280)
             }
-            .frame(width: 220)
+            .frame(width: 280)
 
             Divider()
 
@@ -93,12 +105,42 @@ struct BrowseView<T: CardGrouping>: View {
     }
 }
 
+// MARK: - Selection Handling
+private struct CardSelectionModifier: ViewModifier {
+    let onSelect: (CardSchemaV1.StereoCard) -> Void
+    
+    func body(content: Content) -> some View {
+        #if os(visionOS)
+        content
+        #else
+        content.environment(\.onCardSelect, onSelect)
+        #endif
+    }
+}
+
+private struct CardSelectionKey: EnvironmentKey {
+    static let defaultValue: (CardSchemaV1.StereoCard) -> Void = { _ in }
+}
+
+private extension EnvironmentValues {
+    var onCardSelect: (CardSchemaV1.StereoCard) -> Void {
+        get { self[CardSelectionKey.self] }
+        set { self[CardSelectionKey.self] = newValue }
+    }
+}
+
+extension View {
+    func onSelectCard(perform action: @escaping (CardSchemaV1.StereoCard) -> Void) -> some View {
+        modifier(CardSelectionModifier(onSelect: action))
+    }
+}
+
 #Preview("Browse View - Desktop") {
     BrowseView(
         viewModel: BrowseViewModel(
             collections: [
-                SubjectSchemaV1.Subject(name: "Sample Subject"),
-                SubjectSchemaV1.Subject(name: "Another Subject"),
+                PreviewContainer.shared.worldsFairCollection,
+                PreviewContainer.shared.naturalWondersCollection,
             ]
         ),
         title: "Browse Subjects"

@@ -6,16 +6,10 @@
 //
 
 import SwiftUI
-import UIKit
 
 #if os(visionOS)
-struct GlanceHighlightModifier: ViewModifier {
-    @Environment(\.glanceDirection.horizontal) private var horizontalDirection: UIGestureRecognizer.GlanceDirection.Horizontal?
-    @Environment(\.glanceDirection.vertical) private var verticalDirection: UIGestureRecognizer.GlanceDirection.Vertical?
-    
-    var isGlancing: Bool {
-        horizontalDirection != nil || verticalDirection != nil
-    }
+struct HoverHighlightModifier: ViewModifier {
+    @State private var isHovering = false
     
     func body(content: Content) -> some View {
         content
@@ -23,16 +17,19 @@ struct GlanceHighlightModifier: ViewModifier {
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.clear)
                     .background(.ultraThinMaterial.tertiary)
-                    .opacity(isGlancing ? 0.6 : 0)
+                    .opacity(isHovering ? 0.6 : 0)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .animation(.smooth, value: isGlancing)
+                    .animation(.smooth, value: isHovering)
+            }
+            .onHover { hovering in
+                isHovering = hovering
             }
     }
 }
 
 extension View {
-    func glanceHighlight() -> some View {
-        modifier(GlanceHighlightModifier())
+    func hoverHighlight() -> some View {
+        modifier(HoverHighlightModifier())
     }
 }
 #endif

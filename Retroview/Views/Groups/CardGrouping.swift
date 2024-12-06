@@ -44,7 +44,7 @@ extension CollectionSchemaV1.Collection: CardGrouping {
         GroupingPreview(
             collection: SubjectSchemaV1.Subject(
                 name: "Sample Subject"
-            )
+            ), isSelected: false
         )
         .frame(width: 300)
         .padding()

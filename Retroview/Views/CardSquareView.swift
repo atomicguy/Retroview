@@ -55,7 +55,6 @@ struct CardSquareView: View {
             }
         }
         .aspectRatio(1, contentMode: .fit)
-//        .frame(height: 280)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .padding()
         .frame(maxWidth: .infinity)
@@ -79,9 +78,7 @@ struct CardSquareView: View {
         .task(priority: .high) {
             try? await viewModel.loadImage(forSide: "front")
         }
-        .onTapGesture {
-            print("CardSquareView tapped")
-        }
+        
     }
 }
 
@@ -110,12 +107,12 @@ struct CardTitleModifier: ViewModifier {
 
 struct CardInteractiveModifier: ViewModifier {
     let card: CardSchemaV1.StereoCard
-    let currentCollection: CollectionSchemaV1.Collection?
     let onSelect: ((CardSchemaV1.StereoCard) -> Void)?
     @State private var showingNewCollectionSheet = false
 
     func body(content: Content) -> some View {
         content
+            .contentShape(Rectangle())
             .onTapGesture {
                 onSelect?(card)
             }
@@ -125,7 +122,7 @@ struct CardInteractiveModifier: ViewModifier {
                         card: card,
                         viewModel: StereoCardViewModel(stereoCard: card),
                         showingNewCollectionSheet: $showingNewCollectionSheet,
-                        currentCollection: currentCollection
+                        currentCollection: nil
                     )
                 }
             }
@@ -134,7 +131,7 @@ struct CardInteractiveModifier: ViewModifier {
                 CollectionMenuContent(
                     showNewCollectionSheet: $showingNewCollectionSheet,
                     card: card,
-                    currentCollection: currentCollection
+                    currentCollection: nil
                 )
             }
             .sheet(isPresented: $showingNewCollectionSheet) {
@@ -158,7 +155,6 @@ extension View {
         modifier(
             CardInteractiveModifier(
                 card: card,
-                currentCollection: currentCollection,
                 onSelect: onSelect
             ))
     }

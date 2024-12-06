@@ -93,6 +93,7 @@ struct CollectionContextMenu: View {
             )
         } label: {
             Text("Open Menu")
+                .font(.system(.body, design: .serif))
         }
     }
 }

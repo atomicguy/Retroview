@@ -11,9 +11,10 @@ import SwiftUI
 #if os(visionOS)
     struct StereoSpatialViewer: View {
         let cards: [CardSchemaV1.StereoCard]
+        let currentCollection: CollectionSchemaV1.Collection?
         @State private var selectedCard: CardSchemaV1.StereoCard?
         @State private var isViewerVisible = false
-        let currentCollection: CollectionSchemaV1.Collection?
+        @State private var isGridVisible = true
 
         var body: some View {
             ZStack {
@@ -24,16 +25,18 @@ import SwiftUI
                                 .withTitle()
                                 .contentShape(Rectangle())
                                 .onTapGesture {
-                                    withAnimation(.spring) {
+                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                                         selectedCard = card
                                         isViewerVisible = true
+                                        isGridVisible = false
                                     }
                                 }
                         }
                     }
                     .padding()
                 }
-                .opacity(isViewerVisible ? 0 : 1)
+                .opacity(isGridVisible ? 1 : 0)
+                .animation(.easeInOut(duration: 0.3), value: isGridVisible)
 
                 if let selected = selectedCard {
                     StereoBrowser(
@@ -46,8 +49,14 @@ import SwiftUI
                         currentCollection: currentCollection
                     )
                     .opacity(isViewerVisible ? 1 : 0)
+                    .onChange(of: isViewerVisible) { _, newValue in
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isGridVisible = !newValue
+                        }
+                    }
                 }
             }
+            .animation(.easeInOut, value: selectedCard)
         }
     }
 

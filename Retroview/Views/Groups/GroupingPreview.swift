@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GroupingPreview<T: CardGrouping>: View {
     let collection: T
+    let isSelected: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -31,7 +32,7 @@ struct GroupingPreview<T: CardGrouping>: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
                 .frame(maxWidth: .infinity)
-                .background(.ultraThickMaterial)
+                .background(.ultraThinMaterial)
         }
         .aspectRatio(1, contentMode: .fit)
         .frame(height: 280)
@@ -44,10 +45,15 @@ struct GroupingPreview<T: CardGrouping>: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(radius: 5)
+        #if os(visionOS)
+        .opacity(isSelected ? 1.0 : 0.8)
+        .animation(.smooth, value: isSelected)
+        #endif
     }
 }
+
 #Preview("Collection Preview - With Cards") {
-    GroupingPreview(collection: PreviewContainer.shared.worldsFairCollection)
+    GroupingPreview(collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
         .frame(width: 300, height: 200)
         .padding()
         .withPreviewContainer()
@@ -55,7 +61,8 @@ struct GroupingPreview<T: CardGrouping>: View {
 
 #Preview("Collection Preview - Empty") {
     GroupingPreview(
-        collection: CollectionSchemaV1.Collection(name: "Empty Collection")
+        collection: CollectionSchemaV1
+            .Collection(name: "Empty Collection" ), isSelected: false
     )
     .frame(width: 300, height: 200)
     .padding()
@@ -67,7 +74,7 @@ struct GroupingPreview<T: CardGrouping>: View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
             ForEach(0..<4) { _ in
                 GroupingPreview(
-                    collection: PreviewContainer.shared.worldsFairCollection)
+                    collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
             }
         }
         .padding()
@@ -80,11 +87,11 @@ struct GroupingPreview<T: CardGrouping>: View {
     ScrollView {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
             GroupingPreview(
-                collection: PreviewContainer.shared.worldsFairCollection)
+                collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
             GroupingPreview(
-                collection: PreviewContainer.shared.naturalWondersCollection)
+                collection: PreviewContainer.shared.naturalWondersCollection, isSelected: false)
             GroupingPreview(
-                collection: PreviewContainer.shared.newYorkCollection)
+                collection: PreviewContainer.shared.newYorkCollection, isSelected: false)
         }
         .padding()
     }

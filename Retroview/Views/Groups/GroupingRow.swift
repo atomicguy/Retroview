@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct GropuingRow<T: CardGrouping>: View {
+struct GroupingRow<T: CardGrouping>: View {
     let collection: T
 
     var body: some View {
         HStack {
             Text(collection.name)
+                .font(.system(.headline, design: .serif))
             Spacer()
             Text("\(collection.cards.count)")
                 .foregroundStyle(.secondary)
@@ -23,7 +24,7 @@ struct GropuingRow<T: CardGrouping>: View {
 
 #Preview("Grouping Row") {
     CardPreviewContainer { _ in
-        GropuingRow(
+        GroupingRow(
             collection: SubjectSchemaV1.Subject(
                 name: "Sample Subject"
             )

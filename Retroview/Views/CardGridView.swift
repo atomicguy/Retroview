@@ -15,7 +15,7 @@ struct CardGridView: View {
     let title: String?
 
     private let columns = [
-        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10)
+        GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 10),
     ]
 
     var body: some View {
@@ -30,14 +30,11 @@ struct CardGridView: View {
                 LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(cards) { card in
                         CardSquareView(card: card)
-                                .withTitle()
-                            .onTapGesture {
-                                print("Setting selected card to: \(card.uuid)")
-                                selectedCard = card
-                                print(
-                                    "Selected card is now: \(String(describing: selectedCard?.uuid))"
-                                )
-                            }
+                            .withTitle()
+                            .cardInteractive(
+                                card: card,
+                                onSelect: { selectedCard = $0 }
+                            )
                             .overlay {
                                 if selectedCard?.uuid == card.uuid {
                                     RoundedRectangle(cornerRadius: 16)

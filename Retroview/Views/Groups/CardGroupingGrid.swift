@@ -20,9 +20,11 @@ struct CardGroupingGrid: View {
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(cards) { card in
                     CardSquareView(card: card)
-                        .onTapGesture {
-                            selectedCard = card
-                        }
+                        .withTitle()
+                        .cardInteractive(
+                            card: card,
+                            onSelect: { selectedCard = $0 }
+                        )
                         .overlay {
                             if selectedCard?.uuid == card.uuid {
                                 RoundedRectangle(cornerRadius: 16)
