@@ -5,72 +5,65 @@
 //  Created by Adam Schuster on 12/2/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct BrowseView<T: CardGrouping>: View {
-    @StateObject var viewModel: BrowseViewModel<T>
+    @StateObject private var viewModel: BrowseViewModel<T>
     let title: String
-
+    
+    init(collections: [T], title: String) {
+        _viewModel = StateObject(wrappedValue: BrowseViewModel(collections: collections))
+        self.title = title
+    }
+    
     var body: some View {
         #if os(visionOS)
-            visionLayout
+        visionOSLayout
         #else
-            desktopLayout
+        defaultLayout
         #endif
     }
-
-    // MARK: - Platform-specific layouts
-
-    private var visionLayout: some View {
+    
+    // MARK: - Platform Specific Layouts
+    
+    private var visionOSLayout: some View {
         NavigationStack {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
-                    ForEach(viewModel.collections) { collection in
-                        GroupingPreview(
-                            collection: collection,
-                            isSelected: viewModel.selectedCollection?.id == collection.id
-                        )
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            viewModel.navigate(to: collection)
-                        }
-                    }
-                }
-                .padding()
-            }
+            CollectionsGrid(
+                collections: viewModel.collections,
+                selectedCollection: $viewModel.selectedCollection
+            )
             .navigationDestination(isPresented: $viewModel.isNavigating) {
-                if let navigatingTo = viewModel.navigatingToCollection {
+                if let collection = viewModel.navigatingToCollection {
                     CardGroupingGrid(
-                        cards: navigatingTo.cards,
-                        selectedCard: $viewModel.selectedCard
+                        cards: collection.cards,
+                        selectedCard: $viewModel.selectedCard,
+                        currentCollection: nil
                     )
-                    .navigationTitle(navigatingTo.name)
+                    .navigationTitle(collection.name)
                 }
             }
             .navigationTitle(title)
         }
     }
-
-    private var desktopLayout: some View {
+    
+    private var defaultLayout: some View {
         HStack(spacing: 0) {
             // Collections List
-            List(viewModel.collections, selection: $viewModel.selectedCollection) { collection in
-                GroupingPreview(
-                    collection: collection,
-                    isSelected: viewModel.selectedCollection?.id == collection.id
-                )
-                .tag(collection)
-                .frame(height: 280)
-            }
+            CollectionsList(
+                collections: viewModel.collections,
+                selectedCollection: $viewModel.selectedCollection
+            )
             .frame(width: 280)
-
+            
             Divider()
-
+            
             // Cards Grid
             if let selectedCollection = viewModel.selectedCollection {
                 CardGroupingGrid(
                     cards: selectedCollection.cards,
-                    selectedCard: $viewModel.selectedCard
+                    selectedCard: $viewModel.selectedCard,
+                    currentCollection: nil
                 )
                 .frame(maxWidth: .infinity)
             } else {
@@ -81,69 +74,88 @@ struct BrowseView<T: CardGrouping>: View {
                 )
                 .frame(maxWidth: .infinity)
             }
-
+            
             Divider()
-
+            
             // Card Details
-            Group {
-                if let selectedCard = viewModel.selectedCard {
-                    CardContentView(card: selectedCard)
-                        .id(selectedCard.uuid)
-                        .transition(.move(edge: .trailing))
-                } else {
-                    ContentUnavailableView(
-                        "No Card Selected",
-                        systemImage: "photo.on.rectangle",
-                        description: Text("Select a card to view its details")
-                    )
-                    .transition(.opacity)
-                }
-            }
-            .frame(width: 300)
-            .animation(.smooth, value: viewModel.selectedCard)
+            CardDetailsPanel(selectedCard: viewModel.selectedCard)
+                .frame(width: 300)
         }
     }
 }
 
-// MARK: - Selection Handling
-private struct CardSelectionModifier: ViewModifier {
-    let onSelect: (CardSchemaV1.StereoCard) -> Void
+// MARK: - Supporting Views
+
+private struct CollectionsGrid<T: CardGrouping>: View {
+    let collections: [T]
+    @Binding var selectedCollection: T?
     
-    func body(content: Content) -> some View {
-        #if os(visionOS)
-        content
-        #else
-        content.environment(\.onCardSelect, onSelect)
-        #endif
+    private let columns = [
+        GridItem(.adaptive(minimum: 300, maximum: 350), spacing: 20)
+    ]
+    
+    var body: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) {
+                ForEach(collections) { collection in
+                    GroupingPreview(collection: collection, isSelected: selectedCollection?.id == collection.id)
+                        #if os(visionOS)
+                        .hoverHighlight()
+                        #endif
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedCollection = collection
+                        }
+                }
+            }
+            .padding()
+        }
     }
 }
 
-private struct CardSelectionKey: EnvironmentKey {
-    static let defaultValue: (CardSchemaV1.StereoCard) -> Void = { _ in }
-}
-
-private extension EnvironmentValues {
-    var onCardSelect: (CardSchemaV1.StereoCard) -> Void {
-        get { self[CardSelectionKey.self] }
-        set { self[CardSelectionKey.self] = newValue }
+private struct CollectionsList<T: CardGrouping>: View {
+    let collections: [T]
+    @Binding var selectedCollection: T?
+    
+    var body: some View {
+        List(collections, selection: $selectedCollection) { collection in
+            GroupingRow(collection: collection)
+                .tag(collection)
+        }
     }
 }
 
-extension View {
-    func onSelectCard(perform action: @escaping (CardSchemaV1.StereoCard) -> Void) -> some View {
-        modifier(CardSelectionModifier(onSelect: action))
+private struct CardDetailsPanel: View {
+    let selectedCard: CardSchemaV1.StereoCard?
+    
+    var body: some View {
+        Group {
+            if let card = selectedCard {
+                CardContentView(card: card)
+                    .id(card.uuid)
+                    .transition(.move(edge: .trailing))
+            } else {
+                ContentUnavailableView(
+                    "No Card Selected",
+                    systemImage: "photo.on.rectangle",
+                    description: Text("Select a card to view its details")
+                )
+                .transition(.opacity)
+            }
+        }
+        .animation(.smooth, value: selectedCard)
     }
 }
+
+// MARK: - Preview Support
 
 #Preview("Browse View - Desktop") {
     BrowseView(
-        viewModel: BrowseViewModel(
-            collections: [
-                PreviewContainer.shared.worldsFairCollection,
-                PreviewContainer.shared.naturalWondersCollection,
-            ]
-        ),
-        title: "Browse Subjects"
+        collections: [
+            PreviewContainer.shared.worldsFairCollection,
+            PreviewContainer.shared.naturalWondersCollection,
+        ],
+        title: "Browse Collections"
     )
     .withPreviewContainer()
     .frame(width: 1200, height: 800)
@@ -151,13 +163,11 @@ extension View {
 
 #Preview("Browse View - Vision") {
     BrowseView(
-        viewModel: BrowseViewModel(
-            collections: [
-                PreviewContainer.shared.worldsFairCollection,
-                PreviewContainer.shared.naturalWondersCollection,
-            ]
-        ),
-        title: "Browse Subjects"
+        collections: [
+            PreviewContainer.shared.worldsFairCollection,
+            PreviewContainer.shared.naturalWondersCollection,
+        ],
+        title: "Browse Collections"
     )
     .withPreviewContainer()
 }

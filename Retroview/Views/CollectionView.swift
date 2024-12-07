@@ -14,7 +14,6 @@ struct CollectionView: View {
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var showingAddCards = false
 
-    // Query cards based on the collection's cardUUIDs
     var cards: [CardSchemaV1.StereoCard] {
         let uuids = collection.cardUUIDs.compactMap { UUID(uuidString: $0) }
         let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
@@ -25,31 +24,27 @@ struct CollectionView: View {
         return (try? modelContext.fetch(descriptor)) ?? []
     }
 
-    // Fixed width for details panel
     private let detailWidth: CGFloat = 300
 
     var body: some View {
         HStack(spacing: 0) {
-            ReorderableCardGridView(
-                cards: .constant(
-                    cards.sorted { first, second in
-                        // Sort based on the collection's cardOrder
-                        guard
-                            let firstIndex = collection.cardUUIDs.firstIndex(
-                                of: first.uuid.uuidString),
-                            let secondIndex = collection.cardUUIDs.firstIndex(
-                                of: second.uuid.uuidString)
-                        else {
-                            return false
-                        }
-                        return firstIndex < secondIndex
-                    }),
+            CardGroupingGrid(
+                cards: cards.sorted { first, second in
+                    // Sort based on the collection's cardOrder
+                    guard let firstIndex = collection.cardUUIDs.firstIndex(of: first.uuid.uuidString),
+                          let secondIndex = collection.cardUUIDs.firstIndex(of: second.uuid.uuidString)
+                    else {
+                        return false
+                    }
+                    return firstIndex < secondIndex
+                },
                 selectedCard: $selectedCard,
-                collection: collection
-            ) { newOrder in
-                collection.updateCards(newOrder)
-                try? modelContext.save()
-            }
+                currentCollection: collection,
+                onReorder: { newOrder in
+                    collection.updateCards(newOrder)
+                    try? modelContext.save()
+                }
+            )
             .frame(maxWidth: .infinity)
 
             Divider()
