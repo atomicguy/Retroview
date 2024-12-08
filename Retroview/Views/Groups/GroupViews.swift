@@ -102,35 +102,35 @@ struct VisionCollectionsView: View {
 
 #Preview("Subjects View") {
     SubjectsView()
-        .withPreviewContainer()
+        .withPreviewData()
         .frame(width: 1200, height: 800)
 }
 
 #Preview("Authors View") {
     AuthorsView()
-        .withPreviewContainer()
+        .withPreviewData()
         .frame(width: 1200, height: 800)
 }
 
 #Preview("Collections View") {
     CollectionsView()
-        .withPreviewContainer()
+        .withPreviewData()
         .frame(width: 1200, height: 800)
 }
 
 #if os(visionOS)
 #Preview("Vision Subjects View") {
     VisionSubjectsView()
-        .withPreviewContainer()
+        .withPreviewData()
 }
 
 #Preview("Vision Authors View") {
     VisionAuthorsView()
-        .withPreviewContainer()
+        .withPreviewData()
 }
 
 #Preview("Vision Collections View") {
     VisionCollectionsView()
-        .withPreviewContainer()
+        .withPreviewData()
 }
 #endif

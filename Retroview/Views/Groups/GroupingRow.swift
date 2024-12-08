@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct GroupingRow<T: CardGrouping>: View {
     let collection: T
@@ -23,12 +24,11 @@ struct GroupingRow<T: CardGrouping>: View {
 }
 
 #Preview("Grouping Row") {
-    CardPreviewContainer { _ in
-        GroupingRow(
-            collection: SubjectSchemaV1.Subject(
-                name: "Sample Subject"
-            )
-        )
+    let container = try! PreviewDataManager.shared.container()
+    let subjectDescriptor = FetchDescriptor<SubjectSchemaV1.Subject>()
+    let subject = try! container.mainContext.fetch(subjectDescriptor).first!
+    
+    return GroupingRow(collection: subject)
         .padding()
-    }
+        .withPreviewData()
 }

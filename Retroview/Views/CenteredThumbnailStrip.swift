@@ -108,16 +108,20 @@ struct CenteredThumbnailStrip: View {
 }
 
 #Preview("Strip of Thumbnails") {
-    CardsPreviewContainer { cards in
-        CenteredThumbnailStrip(
-            cards: cards,
-            selectedCard: cards[0],
-            onSelect: { _ in }
-        )
-        .padding()
-        .background(.regularMaterial)
-    }
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let cards = try! container.mainContext.fetch(descriptor)
+    
+    return CenteredThumbnailStrip(
+        cards: cards,
+        selectedCard: cards[0],
+        onSelect: { _ in }
+    )
+    .padding()
+    .background(.regularMaterial)
+    .withPreviewData()
 }
+
 
 // #Preview ("in situ") {
 //    CardsPreviewContainer { cards in

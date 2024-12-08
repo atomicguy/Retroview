@@ -99,5 +99,10 @@ struct NewCollectionSheet: View {
 }
 
 #Preview("New Collection Sheet") {
-    NewCollectionSheet(card: PreviewContainer.shared.previewCard)
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return NewCollectionSheet(card: card)
+        .withPreviewData()
 }

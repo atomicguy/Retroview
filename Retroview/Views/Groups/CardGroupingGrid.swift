@@ -100,24 +100,27 @@ private struct ReorderingModifier: ViewModifier {
 // MARK: - Preview Provider
 
 #Preview("Card Grid - Basic") {
-    CardsPreviewContainer { cards in
-        CardGroupingGrid(
-            cards: cards,
-            selectedCard: .constant(nil),
-            currentCollection: nil
-        )
-        .frame(width: 1200, height: 800)
-    }
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let cards = try! container.mainContext.fetch(descriptor)
+    
+    return CardGroupingGrid(
+        cards: cards,
+        selectedCard: .constant(nil),
+        currentCollection: nil
+    )
+    .frame(width: 1200, height: 800)
+    .withPreviewData()
 }
 
-#Preview("Card Grid - With Reordering") {
-    CardsPreviewContainer { cards in
-        CardGroupingGrid(
-            cards: cards,
-            selectedCard: .constant(nil),
-            currentCollection: PreviewContainer.shared.worldsFairCollection,
-            onReorder: { _ in }
-        )
-        .frame(width: 1200, height: 800)
-    }
-}
+//#Preview("Card Grid - With Reordering") {
+//    CardsPreviewContainer { cards in
+//        CardGroupingGrid(
+//            cards: cards,
+//            selectedCard: .constant(nil),
+//            currentCollection: PreviewContainer.shared.worldsFairCollection,
+//            onReorder: { _ in }
+//        )
+//        .frame(width: 1200, height: 800)
+//    }
+//}

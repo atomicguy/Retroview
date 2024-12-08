@@ -83,31 +83,32 @@ struct CollectionContextMenu: View {
     }
 }
 
-#Preview("Collection Menu - No Collection") {
-    CardPreviewContainer { card in
-        Menu {
-            CollectionMenuContent(
+#Preview {
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return Text("Right click to see menu")
+        .contextMenu {
+            CollectionContextMenu(
                 showNewCollectionSheet: .constant(false),
                 card: card,
                 currentCollection: nil
             )
-        } label: {
-            Text("Open Menu")
-                .font(.system(.body, design: .serif))
         }
-    }
+        .withPreviewData()
 }
 
-#Preview("Collection Menu - In Collection") {
-    CardPreviewContainer { card in
-        Menu {
-            CollectionMenuContent(
-                showNewCollectionSheet: .constant(false),
-                card: card,
-                currentCollection: CollectionSchemaV1.Collection.preview
-            )
-        } label: {
-            Text("Open Menu")
-        }
-    }
-}
+//#Preview("Collection Menu - In Collection") {
+//    CardPreviewContainer { card in
+//        Menu {
+//            CollectionMenuContent(
+//                showNewCollectionSheet: .constant(false),
+//                card: card,
+//                currentCollection: CollectionSchemaV1.Collection.preview
+//            )
+//        } label: {
+//            Text("Open Menu")
+//        }
+//    }
+//}

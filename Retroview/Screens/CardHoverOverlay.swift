@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CardHoverOverlay: View {
     let card: CardSchemaV1.StereoCard
@@ -59,27 +60,29 @@ struct CardHoverOverlay: View {
 }
 
 #Preview {
-    CardPreviewContainer { card in
-        CardHoverOverlay(
-            card: card,
-            viewModel: StereoCardViewModel(stereoCard: card),
-            showingNewCollectionSheet: .constant(false),
-            currentCollection: nil
-        )
-        .frame(width: 300, height: 300)
-        .background(Color.black.opacity(0.3))
-    }
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return CardHoverOverlay(
+        card: card,
+        viewModel: StereoCardViewModel(stereoCard: card),
+        showingNewCollectionSheet: .constant(false),
+        currentCollection: nil
+    )
+    .frame(width: 300, height: 300)
+    .background(Color.black.opacity(0.3))
+    .withPreviewData()
 }
-
-#Preview("In Collection") {
-    CardPreviewContainer { card in
-        CardHoverOverlay(
-            card: card,
-            viewModel: StereoCardViewModel(stereoCard: card),
-            showingNewCollectionSheet: .constant(false),
-            currentCollection: CollectionSchemaV1.Collection.preview
-        )
-        .frame(width: 300, height: 300)
-        .background(Color.black.opacity(0.3))
-    }
-}
+//#Preview("In Collection") {
+//    CardPreviewContainer { card in
+//        CardHoverOverlay(
+//            card: card,
+//            viewModel: StereoCardViewModel(stereoCard: card),
+//            showingNewCollectionSheet: .constant(false),
+//            currentCollection: CollectionSchemaV1.Collection.preview
+//        )
+//        .frame(width: 300, height: 300)
+//        .background(Color.black.opacity(0.3))
+//    }
+//}

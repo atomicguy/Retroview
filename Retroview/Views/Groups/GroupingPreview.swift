@@ -53,47 +53,55 @@ struct GroupingPreview<T: CardGrouping>: View {
 }
 
 #Preview("Collection Preview - With Cards") {
-    GroupingPreview(collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
+    let container = try! PreviewDataManager.shared.container()
+    let collectionDescriptor = FetchDescriptor<CollectionSchemaV1.Collection>(
+        predicate: #Predicate<CollectionSchemaV1.Collection> { collection in
+            collection.name == "World's Fair"
+        }
+    )
+    let collection = try! container.mainContext.fetch(collectionDescriptor).first!
+    
+    return GroupingPreview(collection: collection, isSelected: false)
         .frame(width: 300, height: 200)
         .padding()
-        .withPreviewContainer()
+        .withPreviewData()
 }
 
-#Preview("Collection Preview - Empty") {
-    GroupingPreview(
-        collection: CollectionSchemaV1
-            .Collection(name: "Empty Collection" ), isSelected: false
-    )
-    .frame(width: 300, height: 200)
-    .padding()
-    .withPreviewContainer()
-}
-
-#Preview("Collection Preview - Grid Layout") {
-    ScrollView {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
-            ForEach(0..<4) { _ in
-                GroupingPreview(
-                    collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
-            }
-        }
-        .padding()
-    }
-    .withPreviewContainer()
-}
-
-// Optional: Preview showing different collection types
-#Preview("Collection Preview - Various Collections") {
-    ScrollView {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
-            GroupingPreview(
-                collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
-            GroupingPreview(
-                collection: PreviewContainer.shared.naturalWondersCollection, isSelected: false)
-            GroupingPreview(
-                collection: PreviewContainer.shared.newYorkCollection, isSelected: false)
-        }
-        .padding()
-    }
-    .withPreviewContainer()
-}
+//#Preview("Collection Preview - Empty") {
+//    GroupingPreview(
+//        collection: CollectionSchemaV1
+//            .Collection(name: "Empty Collection" ), isSelected: false
+//    )
+//    .frame(width: 300, height: 200)
+//    .padding()
+//    .withPreviewData()
+//}
+//
+//#Preview("Collection Preview - Grid Layout") {
+//    ScrollView {
+//        LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
+//            ForEach(0..<4) { _ in
+//                GroupingPreview(
+//                    collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
+//            }
+//        }
+//        .padding()
+//    }
+//    .withPreviewData()
+//}
+//
+//// Optional: Preview showing different collection types
+//#Preview("Collection Preview - Various Collections") {
+//    ScrollView {
+//        LazyVGrid(columns: [GridItem(.adaptive(minimum: 300))], spacing: 20) {
+//            GroupingPreview(
+//                collection: PreviewContainer.shared.worldsFairCollection, isSelected: false)
+//            GroupingPreview(
+//                collection: PreviewContainer.shared.naturalWondersCollection, isSelected: false)
+//            GroupingPreview(
+//                collection: PreviewContainer.shared.newYorkCollection, isSelected: false)
+//        }
+//        .padding()
+//    }
+//    .withPreviewData()
+//}

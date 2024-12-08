@@ -239,11 +239,11 @@ private struct NavigationSidebar: View {
 // MARK: - Preview Support
 #Preview("Gallery - Desktop") {
     GalleryScreen()
-        .withPreviewContainer()
+        .withPreviewData()
         .frame(width: 1200, height: 800)
 }
 
 #Preview("Gallery - Vision") {
     GalleryScreen()
-        .withPreviewContainer()
+        .withPreviewData()
 }

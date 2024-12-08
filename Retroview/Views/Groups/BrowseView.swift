@@ -150,24 +150,25 @@ private struct CardDetailsPanel: View {
 // MARK: - Preview Support
 
 #Preview("Browse View - Desktop") {
-    BrowseView(
-        collections: [
-            PreviewContainer.shared.worldsFairCollection,
-            PreviewContainer.shared.naturalWondersCollection,
-        ],
+    let container = try! PreviewDataManager.shared.container()
+    let collectionDescriptor = FetchDescriptor<CollectionSchemaV1.Collection>()
+    let collections = try! container.mainContext.fetch(collectionDescriptor)
+    
+    return BrowseView(
+        collections: collections,
         title: "Browse Collections"
     )
-    .withPreviewContainer()
+    .withPreviewData()
     .frame(width: 1200, height: 800)
 }
 
-#Preview("Browse View - Vision") {
-    BrowseView(
-        collections: [
-            PreviewContainer.shared.worldsFairCollection,
-            PreviewContainer.shared.naturalWondersCollection,
-        ],
-        title: "Browse Collections"
-    )
-    .withPreviewContainer()
-}
+//#Preview("Browse View - Vision") {
+//    BrowseView(
+//        collections: [
+//            PreviewContainer.shared.worldsFairCollection,
+//            PreviewContainer.shared.naturalWondersCollection,
+//        ],
+//        title: "Browse Collections"
+//    )
+//    .withPreviewData()
+//}

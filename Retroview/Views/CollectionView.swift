@@ -78,8 +78,11 @@ struct CollectionView: View {
 }
 
 #Preview("Collection View") {
-    let collection = CollectionSchemaV1.Collection(name: "Preview Collection")
+    let container = try! PreviewDataManager.shared.container()
+    let collectionDescriptor = FetchDescriptor<CollectionSchemaV1.Collection>()
+    let collection = try! container.mainContext.fetch(collectionDescriptor).first!
+    
     return CollectionView(collection: collection)
-        .withPreviewContainer()
+        .withPreviewData()
         .frame(width: 1200, height: 800)
 }

@@ -5,6 +5,7 @@
 //  Created by Adam Schuster on 11/27/24.
 //
 
+import SwiftData
 import CoreGraphics
 import SwiftUI
 
@@ -79,10 +80,11 @@ struct CardColorAnalyzerPreview: View {
     @StateObject private var viewModel: StereoCardViewModel
 
     init() {
-        _viewModel = StateObject(
-            wrappedValue: StereoCardViewModel(
-                stereoCard: PreviewContainer.shared.previewCard))
+        let container = try! PreviewDataManager.shared.container()
+        let card = try! container.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
+        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
     }
+
 
     var body: some View {
         VStack(spacing: 20) {
@@ -185,6 +187,6 @@ struct CardColorAnalyzerPreview: View {
 
 #Preview("Card Color Analyzer") {
     CardColorAnalyzerPreview()
-        .withPreviewContainer()
+        .withPreviewData()
         .frame(width: 600, height: 900)
 }

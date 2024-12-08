@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ThumbnailGrid: View {
     let cards: [CardSchemaV1.StereoCard]
@@ -35,19 +36,13 @@ struct ThumbnailGrid: View {
 }
 
 #Preview("ThumbnailGrid - Full") {
-    CardsPreviewContainer { cards in
-        ThumbnailGrid(cards: cards)
-            .padding()
-            .frame(width: 300)
-            .background(.ultraThinMaterial)
-    }
-}
-
-#Preview("ThumbnailGrid - Partial") {
-    CardsPreviewContainer { cards in
-        ThumbnailGrid(cards: Array(cards.prefix(2)))
-            .padding()
-            .frame(width: 300)
-            .background(.ultraThinMaterial)
-    }
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let cards = try! container.mainContext.fetch(descriptor)
+    
+    return ThumbnailGrid(cards: cards)
+        .padding()
+        .frame(width: 300)
+        .background(.ultraThinMaterial)
+        .withPreviewData()
 }

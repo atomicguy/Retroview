@@ -15,7 +15,11 @@ struct CardSquareView: View {
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
         _viewModel = StateObject(
-            wrappedValue: StereoCardViewModel(stereoCard: card))
+            wrappedValue: StereoCardViewModel(
+                stereoCard: card,
+                imageService: ImageServiceFactory.shared.getService()
+            )
+        )
     }
 
     var body: some View {
@@ -183,61 +187,48 @@ extension CardSquareView {
 // MARK: - Previews
 
 #Preview("Basic CardSquareView") {
-    CardPreviewContainer { card in
-        CardSquareView(card: card)
-            .frame(width: 300)
-            .padding()
-    }
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return CardSquareView(card: card)
+        .frame(width: 300)
+        .padding()
+        .withPreviewData()
 }
 
 #Preview("With Title") {
-    CardPreviewContainer { card in
-        CardSquareView(card: card)
-            .withTitle()
-            .frame(width: 300)
-            .padding()
-    }
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return CardSquareView(card: card)
+        .withTitle()
+        .frame(width: 300)
+        .padding()
+        .withPreviewData()
 }
 
 #Preview("Interactive") {
-    CardPreviewContainer { card in
-        CardSquareView(card: card)
-            .withTitle()
-            .cardInteractive(
-                card: card,
-                currentCollection: PreviewContainer.shared.worldsFairCollection,
-                onSelect: { _ in }
-            )
-            .frame(width: 300)
-            .padding()
-    }
-}
-
-#Preview("Loading State") {
-    CardPreviewContainer { _ in
-        let loadingCard = CardSchemaV1.StereoCard(
-            uuid: "test",
-            imageFrontId: "nonexistent"
-        )
-        CardSquareView(card: loadingCard)
-            .frame(width: 300)
-            .padding()
-    }
-}
-
-#Preview("Grid Layout") {
-    CardsPreviewContainer { cards in
-        ScrollView {
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 250, maximum: 300))],
-                spacing: 10
-            ) {
-                ForEach(cards) { card in
-                    CardSquareView(card: card)
-                        .withTitle()
-                }
-            }
-            .padding()
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    let collectionDescriptor = FetchDescriptor<CollectionSchemaV1.Collection>(
+        predicate: #Predicate<CollectionSchemaV1.Collection> { collection in
+            collection.name == "World's Fair"
         }
-    }
+    )
+    let collection = try! container.mainContext.fetch(collectionDescriptor).first!
+    
+    return CardSquareView(card: card)
+        .withTitle()
+        .cardInteractive(
+            card: card,
+            currentCollection: collection,
+            onSelect: { _ in }
+        )
+        .frame(width: 300)
+        .padding()
+        .withPreviewData()
 }

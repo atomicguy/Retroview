@@ -60,7 +60,11 @@ struct CardContentView: View {
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
         _viewModel = StateObject(
-            wrappedValue: StereoCardViewModel(stereoCard: card))
+            wrappedValue: StereoCardViewModel(
+                stereoCard: card,
+                imageService: ImageServiceFactory.shared.getService()
+            )
+        )
     }
 
     var selectedTitle: String {
@@ -208,16 +212,25 @@ private struct MetadataListView: View {
 
 // MARK: - Preview Provider
 
-#Preview("Card Content") {
-    CardPreviewContainer { card in
-        CardContentView(card: card)
-            .frame(width: 600)
-    }
+#Preview("Card Content View") {
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+        sortBy: [SortDescriptor(\.uuid)]
+    )
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return CardContentView(card: card)
+        .withPreviewData()
 }
 
-#Preview("Card Content - Narrow") {
-    CardPreviewContainer { card in
-        CardContentView(card: card)
-            .frame(width: 300)
-    }
+#Preview("Card Content View - Narrow") {
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+        sortBy: [SortDescriptor(\.uuid)]
+    )
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return CardContentView(card: card)
+        .withPreviewData()
+        .frame(width: 300)
 }

@@ -40,13 +40,15 @@ extension CollectionSchemaV1.Collection: CardGrouping {
 }
 
 #Preview("Card Grouping Preview") {
-    CardPreviewContainer { _ in
-        GroupingPreview(
-            collection: SubjectSchemaV1.Subject(
-                name: "Sample Subject"
-            ), isSelected: false
-        )
-        .frame(width: 300)
-        .padding()
-    }
+    let container = try! PreviewDataManager.shared.container()
+    let subject = SubjectSchemaV1.Subject(name: "Sample Subject")
+    container.mainContext.insert(subject)
+    
+    return GroupingPreview(
+        collection: subject,
+        isSelected: false
+    )
+    .frame(width: 300)
+    .padding()
+    .withPreviewData()
 }

@@ -14,7 +14,12 @@ struct ThumbnailView: View {
 
     init(card: CardSchemaV1.StereoCard) {
         self.card = card
-        _viewModel = StateObject(wrappedValue: StereoCardViewModel(stereoCard: card))
+        _viewModel = StateObject(
+            wrappedValue: StereoCardViewModel(
+                stereoCard: card,
+                imageService: ImageServiceFactory.shared.getService()
+            )
+        )
     }
 
     var body: some View {
@@ -35,8 +40,11 @@ struct ThumbnailView: View {
 }
 
 #Preview {
-    CardPreviewContainer { card in
-        ThumbnailView(card: card)
-            .frame(width: 400, height: 200)
-    }
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return ThumbnailView(card: card)
+        .frame(width: 400, height: 200)
+        .withPreviewData()
 }

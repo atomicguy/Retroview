@@ -5,6 +5,7 @@
 //  Created by Adam Schuster on 6/9/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct FrontCardView: View {
@@ -18,8 +19,13 @@ struct FrontCardView: View {
 }
 
 #Preview {
-    CardPreviewContainer { card in
-        FrontCardView(viewModel: StereoCardViewModel(stereoCard: card))
-            .frame(width: 400, height: 200)
+    @Previewable @Query var cards: [CardSchemaV1.StereoCard]
+    
+    return Group {
+        if let card = cards.first {
+            FrontCardView(viewModel: StereoCardViewModel(stereoCard: card))
+                .frame(width: 400, height: 200)
+        }
     }
+    .withPreviewData()
 }

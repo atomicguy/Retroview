@@ -14,6 +14,24 @@ import SwiftUI
         @Binding var selectedCard: CardSchemaV1.StereoCard
         @Binding var isVisible: Bool
         let currentCollection: CollectionSchemaV1.Collection?
+        @StateObject private var viewModel: StereoCardViewModel
+
+        init(
+            cards: [CardSchemaV1.StereoCard],
+            selectedCard: Binding<CardSchemaV1.StereoCard>,
+            isVisible: Binding<Bool>,
+            currentCollection: CollectionSchemaV1.Collection?
+        ) {
+            self.cards = cards
+            self._selectedCard = selectedCard
+            self._isVisible = isVisible
+            self.currentCollection = currentCollection
+            self._viewModel = StateObject(
+                wrappedValue: StereoCardViewModel(
+                    stereoCard: selectedCard.wrappedValue,
+                    imageService: ImageServiceFactory.shared.getService()
+                ))
+        }
 
         var body: some View {
             ZStack(alignment: .topLeading) {
@@ -34,7 +52,8 @@ import SwiftUI
 
                 VStack(spacing: 0) {
                     StyleStereoView(
-                        card: selectedCard
+                        card: selectedCard,
+                        viewModel: viewModel
                     )
                     .id(selectedCard.uuid)
                     .frame(maxHeight: .infinity)
@@ -45,51 +64,27 @@ import SwiftUI
                         onSelect: { card in
                             withAnimation(.spring) {
                                 selectedCard = card
+                                // Update the viewModel's card
+                                viewModel.stereoCard = card
                             }
                         }
                     )
                 }
             }
-            .gesture(
-                DragGesture()
-                    .onEnded { value in
-                        if value.translation.width > 100 {
-                            navigateCards(direction: -1)
-                        } else if value.translation.width < -100 {
-                            navigateCards(direction: 1)
-                        }
-                    }
-            )
-            .gesture(
-                MagnificationGesture()
-                    .onEnded { scale in
-                        if scale < 0.8 {
-                            withAnimation(.spring) {
-                                isVisible = false
-                            }
-                        }
-                    }
-            )
-        }
-
-        private func navigateCards(direction: Int) {
-            guard let currentIndex = cards.firstIndex(of: selectedCard) else { return }
-
-            let newIndex = (currentIndex + direction + cards.count) % cards.count
-            withAnimation(.spring) {
-                selectedCard = cards[newIndex]
-            }
         }
     }
 
-    #Preview {
-        CardsPreviewContainer { cards in
-            StereoBrowser(
-                cards: cards,
-                selectedCard: .constant(cards[0]),
-                isVisible: .constant(true),
-                currentCollection: nil
-            )
-        }
-    }
+#Preview {
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let cards = try! container.mainContext.fetch(descriptor)
+    
+    return StereoBrowser(
+        cards: cards,
+        selectedCard: .constant(cards[0]),
+        isVisible: .constant(true),
+        currentCollection: nil
+    )
+    .withPreviewData()
+}
 #endif

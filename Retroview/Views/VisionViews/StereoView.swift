@@ -134,8 +134,11 @@ import SwiftUI
 
 // MARK: - Preview Support
 
-#Preview {
-    CardPreviewContainer { card in
-        StereoView(card: card)
-    }
+#Preview("Stereo View") {
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let container = try! PreviewDataManager.shared.container()
+    let card = try! container.mainContext.fetch(descriptor).first!
+    
+    return StereoView(card: card)
+        .withPreviewData()
 }

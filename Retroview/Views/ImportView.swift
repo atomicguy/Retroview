@@ -392,22 +392,26 @@ extension ImportView.ProcessingState {
 // MARK: - Preview Provider
 
 #Preview("Import View - macOS Light") {
-    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
+    let container = try! PreviewDataManager.shared.container()
+    return ImportView(modelContext: container.mainContext)
+        .withPreviewData()
 }
 
 #Preview("Import View - macOS Dark") {
-    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
+    let container = try! PreviewDataManager.shared.container()
+    return ImportView(modelContext: container.mainContext)
         .preferredColorScheme(.dark)
+        .withPreviewData()
 }
 
-#Preview("Import View - iOS") {
-    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
-}
-
-#Preview("Import View - With Progress") {
-    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
-        .onAppear {
-            let progress = Progress(totalUnitCount: 100)
-            progress.completedUnitCount = 45
-        }
-}
+//#Preview("Import View - iOS") {
+//    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
+//}
+//
+//#Preview("Import View - With Progress") {
+//    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
+//        .onAppear {
+//            let progress = Progress(totalUnitCount: 100)
+//            progress.completedUnitCount = 45
+//        }
+//}

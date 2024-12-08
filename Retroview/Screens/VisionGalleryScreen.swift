@@ -93,8 +93,8 @@ struct VisionGalleryScreen: View {
     }
 }
 
-#Preview {
+#Preview("Vision Gallery") {
     VisionGalleryScreen()
-        .withPreviewContainer()
+        .withPreviewData()
 }
 #endif

@@ -47,8 +47,8 @@ struct LibraryView: View {
 
 // MARK: - Preview Provider
 
-#Preview("Library") {
+#Preview("Library View") {
     LibraryView()
-        .withPreviewContainer()
+        .withPreviewData()
         .frame(width: 1200, height: 800)
 }

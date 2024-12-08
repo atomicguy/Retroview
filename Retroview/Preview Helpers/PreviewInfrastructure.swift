@@ -309,7 +309,7 @@ struct CardPreviewContainer<Content: View>: View {
 
     var body: some View {
         content(PreviewContainer.shared.previewCard)
-            .withPreviewContainer()
+            .withPreviewData()
     }
 }
 
@@ -322,7 +322,7 @@ struct CardsPreviewContainer<Content: View>: View {
 
     var body: some View {
         content(PreviewContainer.shared.previewCards)
-            .withPreviewContainer()
+            .withPreviewData()
     }
 }
 
@@ -337,7 +337,7 @@ struct AsyncPreviewContainer<Content: View>: View {
     var body: some View {
         Group {
             if let loadedView {
-                loadedView.withPreviewContainer()
+                loadedView.withPreviewData()
             } else {
                 ProgressView("Loading preview...")
                     .task {
