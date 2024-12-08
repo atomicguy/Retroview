@@ -96,15 +96,6 @@ enum CollectionSchemaV1: VersionedSchema {
                 fetchedCards.first { $0.uuid.uuidString == uuid }
             }
         }
-
-        // MARK: - Sample Data
-
-        static let sampleData = [
-            Collection(name: "Favorites"),
-            Collection(name: "World's Fair"),
-            Collection(name: "New York City"),
-            Collection(name: "Natural Wonders"),
-        ]
     }
 }
 

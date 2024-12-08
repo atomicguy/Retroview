@@ -23,13 +23,5 @@ enum DateSchemaV1: VersionedSchema {
         init(text: String) {
             self.text = text
         }
-
-        static let sampleData = [
-            Date(text: "1893"),
-            Date(text: "Unknown"),
-            Date(text: "1901"),
-            Date(text: "c1902-1903"),
-            Date(text: "1865"),
-        ]
     }
 }

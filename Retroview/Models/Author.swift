@@ -23,14 +23,5 @@ enum AuthorSchemaV1: VersionedSchema {
         init(name: String) {
             self.name = name
         }
-
-        static let sampleData = [
-            Author(name: "Kilburn, B. W. (Benjamin West) (1827-1909)"),
-            Author(name: "Littleton View Co."),
-            Author(name: "Unknown"),
-            Author(name: "Young, R. Y."),
-            Author(name: "Underwood & Underwood"),
-            Author(name: "Baker & Record (Firm)"),
-        ]
     }
 }

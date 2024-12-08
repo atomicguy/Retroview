@@ -186,6 +186,14 @@ extension CardSquareView {
 
 // MARK: - Previews
 
+#Preview("Card Square View") {
+    CardPreviewContainer { card in
+        CardSquareView(card: card)
+            .frame(width: 300)
+            .padding()
+    }
+}
+
 #Preview("Basic CardSquareView") {
     let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
     let container = try! PreviewDataManager.shared.container()

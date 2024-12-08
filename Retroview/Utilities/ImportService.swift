@@ -7,13 +7,19 @@
 
 import Foundation
 import SwiftData
+import CoreGraphics
 
 @MainActor
 class ImportService {
     private let modelContext: ModelContext
-
-    init(modelContext: ModelContext) {
+    private let imageService: ImageServiceProtocol
+    
+    init(
+        modelContext: ModelContext,
+        imageService: ImageServiceProtocol = ImageServiceFactory.shared.getService()
+    ) {
         self.modelContext = modelContext
+        self.imageService = imageService
     }
 
     func importJSON(from url: URL) async throws {
@@ -82,11 +88,22 @@ class ImportService {
         modelContext.insert(card)
         try modelContext.save()
 
-        // Start image downloads after save
-        Task {
-            try? await card.downloadImage(forSide: "front")
-            try? await card.downloadImage(forSide: "back")
+        // Download images after save
+        if let frontId = card.imageFrontId {
+            if let frontImage = try? await imageService.loadImage(id: frontId, side: .front),
+               let imageData = ImageConversion.convert(cgImage: frontImage) {
+                card.imageFront = imageData
+            }
         }
+
+        if let backId = card.imageBackId {
+            if let backImage = try? await imageService.loadImage(id: backId, side: .back),
+               let imageData = ImageConversion.convert(cgImage: backImage) {
+                card.imageBack = imageData
+            }
+        }
+        
+        try modelContext.save()
     }
 
     // Helper methods for fetching or creating entities

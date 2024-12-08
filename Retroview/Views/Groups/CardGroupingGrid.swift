@@ -99,6 +99,16 @@ private struct ReorderingModifier: ViewModifier {
 
 // MARK: - Preview Provider
 
+#Preview("Card Grid") {
+    CardsPreviewContainer { cards in
+        CardGroupingGrid(
+            cards: cards,
+            selectedCard: .constant(nil),
+            currentCollection: nil
+        )
+    }
+}
+
 #Preview("Card Grid - Basic") {
     let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
     let container = try! PreviewDataManager.shared.container()

@@ -14,14 +14,13 @@ enum CardSchemaV1: VersionedSchema {
 
     static var models: [any PersistentModel.Type] {
         [
-            CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self,
-            AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self,
+            CardSchemaV1.StereoCard.self,
+            TitleSchemaV1.Title.self,
+            AuthorSchemaV1.Author.self,
+            SubjectSchemaV1.Subject.self,
             DateSchemaV1.Date.self,
         ]
     }
-
-    static var imageURLTemplate =
-        "https://iiif-prod.nypl.org/index.php?id=%@&t=w"
 
     @Model
     class StereoCard {
@@ -47,11 +46,9 @@ enum CardSchemaV1: VersionedSchema {
         @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
 
-        // Store all crops in a single array
         @Relationship(deleteRule: .cascade)
         var crops: [CropSchemaV1.Crop] = []
 
-        // Computed properties for accessing left and right crops
         var leftCrop: CropSchemaV1.Crop? {
             get { crops.first { $0.side == CropSchemaV1.Side.left.rawValue } }
             set {
@@ -82,7 +79,6 @@ enum CardSchemaV1: VersionedSchema {
             }
         }
 
-        // Helper for converting stored hex to Color
         var color: Color {
             get {
                 (Color(hex: cardColor) ?? Color(hex: "#F5E6D3")!)
@@ -90,7 +86,7 @@ enum CardSchemaV1: VersionedSchema {
             }
             set {
                 cardColor = newValue.toHex() ?? "#F5E6D3"
-                colorOpacity = 0.15 // Default opacity when setting new color
+                colorOpacity = 0.15  // Default opacity when setting new color
             }
         }
 
@@ -153,146 +149,10 @@ enum CardSchemaV1: VersionedSchema {
             self.dates = dates
             self.crops = crops
         }
-
-        func imageUrl(forSide side: String) -> URL? {
-            let baseUrl = "https://iiif-prod.nypl.org/index.php?id="
-            let sizeSuffix = "&t=w"
-            var imageName = imageFrontId
-            if side == "back" {
-                imageName = imageBackId
-            }
-            let imageUrl = baseUrl + (imageName ?? "unknown") + sizeSuffix
-            return URL(string: imageUrl)
-        }
-
-        // Function to download image and store it as external storage
-        func downloadImage(
-            forSide side: String,
-            completion: @escaping (Result<Void, Error>) -> Void
-        ) {
-            guard let url = imageUrl(forSide: side) else {
-                let error = NSError(
-                    domain: "", code: 0,
-                    userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]
-                )
-                print("Invalid URL for side: \(side)")
-                completion(.failure(error))
-                return
-            }
-
-            print("Starting download for \(side) image from URL: \(url)")
-
-            let task = URLSession.shared.dataTask(with: url) {
-                data, response, error in
-                if let error {
-                    print("Download error for \(side): \(error)")
-                    completion(.failure(error))
-                    return
-                }
-
-                if let httpResponse = response as? HTTPURLResponse {
-                    print(
-                        "HTTP Status code for \(side): \(httpResponse.statusCode)"
-                    )
-                }
-
-                guard let data else {
-                    let error = NSError(
-                        domain: "", code: 0,
-                        userInfo: [
-                            NSLocalizedDescriptionKey: "No data received",
-                        ]
-                    )
-                    print("No data received for \(side)")
-                    completion(.failure(error))
-                    return
-                }
-
-                print("Received \(data.count) bytes for \(side)")
-
-                if side == "front" {
-                    self.imageFront = data
-                } else if side == "back" {
-                    self.imageBack = data
-                }
-
-                print("Successfully stored \(side) image data")
-                completion(.success(()))
-            }
-
-            task.resume()
-        }
-
-        // Add the async version right after it in the class
-        nonisolated func downloadImage(forSide side: String) async throws {
-            try await withCheckedThrowingContinuation { continuation in
-                downloadImage(forSide: side) { result in
-                    switch result {
-                    case .success():
-                        continuation.resume()
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-            }
-        }
-
-        static let sampleData: [StereoCard] = [
-            StereoCard(
-                uuid: "f886fee0-c53b-012f-de2a-58d385a7bc34",
-                imageFrontId: "G90F186_140F",
-                imageBackId: "G90F186_140B"
-            ),
-            StereoCard(
-                uuid: "f3489f60-c53b-012f-42ca-58d385a7bc34",
-                imageFrontId: "G90F186_128F",
-                imageBackId: "G90F186_128B"
-            ),
-            StereoCard(
-                uuid: "0b3e2190-c533-012f-c206-58d385a7bc34",
-                imageFrontId: "G89F383_045F",
-                imageBackId: "G89F383_045B"
-            ),
-            StereoCard(
-                uuid: "0eafabc0-c56f-012f-5289-58d385a7bc34",
-                imageFrontId: "G92F094_011F",
-                imageBackId: "G92F094_011B"
-            ),
-            StereoCard(
-                uuid: "a0056e40-c55a-012f-e57a-58d385a7bc34",
-                imageFrontId: "G91F230_029F",
-                imageBackId: "G91F230_029B"
-            ),
-            StereoCard(
-                uuid: "8f936cf0-c52e-012f-c9aa-58d385a7bc34",
-                imageFrontId: "G88F105_023F",
-                imageBackId: "G88F105_023B"
-            ),
-            StereoCard(
-                uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
-                imageFrontId: "G90F186_030F",
-                imageBackId: "G90F186_030B"
-            ),
-            StereoCard(
-                uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
-                imageFrontId: "G90F186_122F",
-                imageBackId: "G90F186_122B"
-            ),
-        ]
-
-        private static func loadImageData(named imageName: String) -> Data? {
-            guard
-                let url = Bundle.main.url(
-                    forResource: imageName, withExtension: "jpg"
-                )
-            else {
-                return nil
-            }
-            return try? Data(contentsOf: url)
-        }
     }
 }
 
+// MARK: - Transferable Conformance
 extension CardSchemaV1.StereoCard: Transferable {
     static var transferRepresentation: some TransferRepresentation {
         ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: {

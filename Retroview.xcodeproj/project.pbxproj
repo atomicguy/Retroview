@@ -27,6 +27,13 @@
 		5C1454572CF84E8D00D5C232 /* AddToCollectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454562CF84E8500D5C232 /* AddToCollectionMenu.swift */; };
 		5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */; };
 		5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */; };
+		5C3DFECC2D053406003D3CF2 /* PreviewDataCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */; };
+		5C3DFECE2D053416003D3CF2 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFECD2D053413003D3CF2 /* PreviewSupport.swift */; };
+		5C3DFED02D0562CE003D3CF2 /* PreviewContainerHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFECF2D0562BE003D3CF2 /* PreviewContainerHelpers.swift */; };
+		5C3DFED22D0568E2003D3CF2 /* ImageConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */; };
+		5C3DFED42D057527003D3CF2 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFED32D057522003D3CF2 /* StoreManager.swift */; };
+		5C3DFED62D057926003D3CF2 /* StoreCleanupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFED52D057920003D3CF2 /* StoreCleanupService.swift */; };
+		5C3DFED82D057C3D003D3CF2 /* DebugDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFED72D057C36003D3CF2 /* DebugDataLoader.swift */; };
 		5C43BC472CF98BF70053FAFD /* CollectionMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC462CF98BF20053FAFD /* CollectionMenuView.swift */; };
 		5C43BC492CF98D910053FAFD /* ModelContextPreviewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */; };
 		5C43BC4B2CF993010053FAFD /* ImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC4A2CF992FB0053FAFD /* ImportServiceTests.swift */; };
@@ -130,6 +137,13 @@
 		5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDefaults.swift; sourceTree = "<group>"; };
 		5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewDataCreation.swift; sourceTree = "<group>"; };
+		5C3DFECD2D053413003D3CF2 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
+		5C3DFECF2D0562BE003D3CF2 /* PreviewContainerHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainerHelpers.swift; sourceTree = "<group>"; };
+		5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConversion.swift; sourceTree = "<group>"; };
+		5C3DFED32D057522003D3CF2 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		5C3DFED52D057920003D3CF2 /* StoreCleanupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCleanupService.swift; sourceTree = "<group>"; };
+		5C3DFED72D057C36003D3CF2 /* DebugDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDataLoader.swift; sourceTree = "<group>"; };
 		5C43BC462CF98BF20053FAFD /* CollectionMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionMenuView.swift; sourceTree = "<group>"; };
 		5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContextPreviewExtension.swift; sourceTree = "<group>"; };
 		5C43BC4A2CF992FB0053FAFD /* ImportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportServiceTests.swift; sourceTree = "<group>"; };
@@ -223,6 +237,9 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5C3DFED52D057920003D3CF2 /* StoreCleanupService.swift */,
+				5C3DFED32D057522003D3CF2 /* StoreManager.swift */,
+				5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */,
 				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 				5C1454332CF7A63600D5C232 /* CardColorAnalyzer.swift */,
 				5C14543B2CF7FF8800D5C232 /* ColorUtility.swift */,
@@ -393,6 +410,10 @@
 		5CC89F052BE835AF001ECF22 /* Preview Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				5C3DFED72D057C36003D3CF2 /* DebugDataLoader.swift */,
+				5C3DFECF2D0562BE003D3CF2 /* PreviewContainerHelpers.swift */,
+				5C3DFECD2D053413003D3CF2 /* PreviewSupport.swift */,
+				5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */,
 				5C65FB102D04FC84001A2E5B /* PreviewDataManager.swift */,
 			);
 			path = "Preview Helpers";
@@ -582,6 +603,7 @@
 				5C1454222CF5834400D5C232 /* CardContentView.swift in Sources */,
 				5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */,
 				5CC0DB212CFC08DE0054E48D /* VisionGalleryScreen.swift in Sources */,
+				5C3DFED82D057C3D003D3CF2 /* DebugDataLoader.swift in Sources */,
 				5C9709EA2CFECC63003CD884 /* GroupingRow.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
 				5C9709EC2CFECC9C003CD884 /* CardGroupingGrid.swift in Sources */,
@@ -595,6 +617,7 @@
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C9709E42CFECBFA003CD884 /* BrowseViewModel.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
+				5C3DFECC2D053406003D3CF2 /* PreviewDataCreation.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
 				5C9709E82CFECC3E003CD884 /* GroupingPreview.swift in Sources */,
@@ -604,6 +627,7 @@
 				5C9709E62CFECC19003CD884 /* BrowseView.swift in Sources */,
 				5CEFA7712CFA8EC600D410EA /* BrowseLayout.swift in Sources */,
 				5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */,
+				5C3DFECE2D053416003D3CF2 /* PreviewSupport.swift in Sources */,
 				5C1454382CF7ED1600D5C232 /* SquareAspectRatioModifier.swift in Sources */,
 				5CC0DB142CFBCB010054E48D /* DevelopmentFlags.swift in Sources */,
 				5C1454572CF84E8D00D5C232 /* AddToCollectionMenu.swift in Sources */,
@@ -614,15 +638,19 @@
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
 				5C1454312CF6F74B00D5C232 /* LibraryView.swift in Sources */,
 				5C8D2F282D0013D5004C5C7A /* ThumbnailGridView.swift in Sources */,
+				5C3DFED42D057527003D3CF2 /* StoreManager.swift in Sources */,
+				5C3DFED02D0562CE003D3CF2 /* PreviewContainerHelpers.swift in Sources */,
 				5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */,
 				5C65FB112D04FC8B001A2E5B /* PreviewDataManager.swift in Sources */,
 				5C9709F02CFECCC3003CD884 /* GroupViews.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5CE069202CFED8ED0067EBF6 /* CardSquareView.swift in Sources */,
+				5C3DFED62D057926003D3CF2 /* StoreCleanupService.swift in Sources */,
 				5C43BC492CF98D910053FAFD /* ModelContextPreviewExtension.swift in Sources */,
 				5C9709E22CFECA4B003CD884 /* CardGrouping.swift in Sources */,
 				5C120FA82CFD60BA000B7184 /* StereoBrowser.swift in Sources */,
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
+				5C3DFED22D0568E2003D3CF2 /* ImageConversion.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5C02AF2C2D016E8A00D629A2 /* HoverHighlightModifier.swift in Sources */,
 				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
