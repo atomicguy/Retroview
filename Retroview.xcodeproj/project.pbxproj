@@ -51,6 +51,7 @@
 		5C6676CE2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */; };
 		5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* StereoCard.swift */; };
 		5C6676EA2BC4EF30002DD52E /* all_examples.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676E92BC4EF2F002DD52E /* all_examples.json */; };
+		5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639822D06B0B80043EEFC /* MODSParsingService.swift */; };
 		5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7EA0F12CC5C631002FC3D2 /* StereoViewer */; };
 		5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8C88CE2C1FF11300874E19 /* BackCardView.swift */; };
 		5C8D2F282D0013D5004C5C7A /* ThumbnailGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8D2F272D0013CF004C5C7A /* ThumbnailGridView.swift */; };
@@ -166,6 +167,7 @@
 		5C6676DA2BC215C7002DD52E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5C6676DB2BC21881002DD52E /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
 		5C6676E92BC4EF2F002DD52E /* all_examples.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = all_examples.json; sourceTree = "<group>"; };
+		5C7639822D06B0B80043EEFC /* MODSParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSParsingService.swift; sourceTree = "<group>"; };
 		5C8C88CE2C1FF11300874E19 /* BackCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackCardView.swift; sourceTree = "<group>"; };
 		5C8D2F272D0013CF004C5C7A /* ThumbnailGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailGridView.swift; sourceTree = "<group>"; };
 		5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoSpatialViewer.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5C7639822D06B0B80043EEFC /* MODSParsingService.swift */,
 				5C3DFED52D057920003D3CF2 /* StoreCleanupService.swift */,
 				5C3DFED32D057522003D3CF2 /* StoreManager.swift */,
 				5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */,
@@ -645,6 +648,7 @@
 				5C9709F02CFECCC3003CD884 /* GroupViews.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5CE069202CFED8ED0067EBF6 /* CardSquareView.swift in Sources */,
+				5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */,
 				5C3DFED62D057926003D3CF2 /* StoreCleanupService.swift in Sources */,
 				5C43BC492CF98D910053FAFD /* ModelContextPreviewExtension.swift in Sources */,
 				5C9709E22CFECA4B003CD884 /* CardGrouping.swift in Sources */,

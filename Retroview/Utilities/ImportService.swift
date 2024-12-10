@@ -5,18 +5,19 @@
 //  Created by Adam Schuster on 11/27/24.
 //
 
+import CoreGraphics
 import Foundation
 import SwiftData
-import CoreGraphics
 
 @MainActor
 class ImportService {
     private let modelContext: ModelContext
     private let imageService: ImageServiceProtocol
-    
+
     init(
         modelContext: ModelContext,
-        imageService: ImageServiceProtocol = ImageServiceFactory.shared.getService()
+        imageService: ImageServiceProtocol = ImageServiceFactory.shared
+            .getService()
     ) {
         self.modelContext = modelContext
         self.imageService = imageService
@@ -24,10 +25,17 @@ class ImportService {
 
     func importJSON(from url: URL) async throws {
         let data = try Data(contentsOf: url)
-        let decoder = JSONDecoder()
-        let cardData = try decoder.decode(StereoCardJSON.self, from: data)
 
-        try await importCard(from: cardData)
+        // Try parsing as simplified JSON first
+        do {
+            let cardData = try JSONDecoder().decode(
+                StereoCardJSON.self, from: data)
+            try await importCard(from: cardData)
+        } catch {
+            // If simplified JSON parsing fails, try MODS format
+            let cardData = try MODSParsingService.convertMODSToStereoCard(data)
+            try await importCard(from: cardData)
+        }
     }
 
     private func importCard(from cardData: StereoCardJSON) async throws {
@@ -90,19 +98,23 @@ class ImportService {
 
         // Download images after save
         if let frontId = card.imageFrontId {
-            if let frontImage = try? await imageService.loadImage(id: frontId, side: .front),
-               let imageData = ImageConversion.convert(cgImage: frontImage) {
+            if let frontImage = try? await imageService.loadImage(
+                id: frontId, side: .front),
+                let imageData = ImageConversion.convert(cgImage: frontImage)
+            {
                 card.imageFront = imageData
             }
         }
 
         if let backId = card.imageBackId {
-            if let backImage = try? await imageService.loadImage(id: backId, side: .back),
-               let imageData = ImageConversion.convert(cgImage: backImage) {
+            if let backImage = try? await imageService.loadImage(
+                id: backId, side: .back),
+                let imageData = ImageConversion.convert(cgImage: backImage)
+            {
                 card.imageBack = imageData
             }
         }
-        
+
         try modelContext.save()
     }
 
