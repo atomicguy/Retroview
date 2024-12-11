@@ -9,10 +9,13 @@ import Foundation
 
 final class ImageServiceFactory {
     static let shared = ImageServiceFactory()
-    
+
     private init() {}
-    
+
     func getService() async -> ImageService {
-        await ImageService.shared()
+        return await ImageService(
+            cache: ImageCache(sizeLimit: 500 * 1024 * 1024),
+            loader: DefaultImageLoader()
+        )
     }
 }

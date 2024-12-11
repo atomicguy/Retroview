@@ -8,28 +8,27 @@
 import Foundation
 import CoreGraphics
 
+import Foundation
+import CoreGraphics
+
 @Observable @MainActor
 final class ImageService {
-    // MARK: - Singleton Access
-    private static let _shared: ImageService = {
-        let cache = ImageCache(sizeLimit: 500 * 1024 * 1024)
-        let loader = DefaultImageLoader()
-        return ImageService(cache: cache, loader: loader)
-    }()
+    private static let instance = ImageService(
+        cache: ImageCache(sizeLimit: 500 * 1024 * 1024),
+        loader: DefaultImageLoader()
+    )
     
-    static func shared() -> ImageService {
-        return _shared
+    static func getShared() async -> ImageService {
+        await MainActor.run { instance }
     }
     
-    // MARK: - Properties
     private let cache: ImageCache
     private let loader: ImageLoading
     private let processingQueue: OperationQueue
     
-    // MARK: - Initialization
     init(
-        cache: ImageCache,
-        loader: ImageLoading
+        cache: ImageCache = ImageCache(sizeLimit: 500 * 1024 * 1024),
+        loader: ImageLoading = DefaultImageLoader()
     ) {
         self.cache = cache
         self.loader = loader
@@ -39,19 +38,30 @@ final class ImageService {
     
     // MARK: - Public Methods
     func loadImage(id: String, side: CardSide) async throws -> CGImage {
+        guard !id.isEmpty else {
+            throw AppError.invalidData("Image ID cannot be empty")
+        }
+        
         let cacheKey = "\(id)_\(side.rawValue)"
         
         if let cached = await cache.get(cacheKey) {
             return cached
         }
         
-        let imageData = try await downloadImage(id: id)
-        guard let image = await loader.createCGImage(from: imageData) else {
-            throw ImageServiceError.processingFailed
+        do {
+            let imageData = try await downloadImage(id: id)
+            
+            guard let image = await loader.createCGImage(from: imageData) else {
+                throw AppError.imageProcessingFailed
+            }
+            
+            await cache.insert(image, forKey: cacheKey)
+            return image
+        } catch let error as AppError {
+            throw error
+        } catch {
+            throw AppError.imageLoadFailed(id)
         }
-        
-        await cache.insert(image, forKey: cacheKey)
-        return image
     }
     
     func clearCache() {
@@ -63,24 +73,36 @@ final class ImageService {
     // MARK: - Private Methods
     private func downloadImage(id: String) async throws -> Data {
         let baseURL = "https://iiif-prod.nypl.org/index.php"
-        var components = URLComponents(string: baseURL)!
+        guard var components = URLComponents(string: baseURL) else {
+            throw AppError.invalidURL
+        }
+        
         components.queryItems = [
             URLQueryItem(name: "id", value: id),
             URLQueryItem(name: "t", value: "w")
         ]
         
         guard let url = components.url else {
-            throw ImageServiceError.invalidURL
+            throw AppError.invalidURL
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            throw ImageServiceError.downloadFailed
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw AppError.responseError("Invalid response type")
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                throw AppError.serverError(httpResponse.statusCode)
+            }
+            
+            return data
+        } catch let error as AppError {
+            throw error
+        } catch {
+            throw AppError.networkError(error)
         }
-        
-        return data
     }
 }
 

@@ -10,12 +10,8 @@ import SwiftUI
 
 struct ImportView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var viewModel: ImportViewModel
+    @State private var viewModel = ImportViewModel()
     @State private var isShowingPicker = false
-    
-    init(modelContext: ModelContext) {
-        _viewModel = State(initialValue: ImportViewModel())
-    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -32,6 +28,18 @@ struct ImportView: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
+            }
+            
+            if let error = viewModel.error {
+                VStack {
+                    Text("Import Failed")
+                        .font(.headline)
+                        .foregroundColor(.red)
+                    Text(error.localizedDescription)
+                        .font(.subheadline)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
             }
         }
         .padding()
@@ -50,8 +58,14 @@ struct ImportView: View {
             allowsMultipleSelection: false
         ) { result in
             Task {
-                if let url = try? result.get().first {
-                    await viewModel.importFiles(at: url)
+                do {
+                    guard let url = try result.get().first else {
+                        viewModel.setError(AppError.invalidData("No folder selected"))
+                        return
+                    }
+                    try await viewModel.importFiles(at: url)
+                } catch {
+                    viewModel.setError(AppError.fileAccessDenied("Could not access selected folder"))
                 }
             }
         }

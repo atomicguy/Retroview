@@ -13,6 +13,8 @@
 		5C17C7512D07EDEB00F79567 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C17C7502D07EDE800F79567 /* ContentView.swift */; };
 		5C17C7532D07F03F00F79567 /* ImageServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C17C7522D07F03600F79567 /* ImageServiceFactory.swift */; };
 		5C17C7552D07F05300F79567 /* ImageConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C17C7542D07F04E00F79567 /* ImageConversion.swift */; };
+		5C17C7572D080E0900F79567 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C17C7562D080E0300F79567 /* AppError.swift */; };
+		5C17C7592D08153800F79567 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C17C7582D08153500F79567 /* ErrorView.swift */; };
 		5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */; };
 		5C3DFECC2D053406003D3CF2 /* PreviewDataCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */; };
 		5C43BC4B2CF993010053FAFD /* ImportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43BC4A2CF992FB0053FAFD /* ImportServiceTests.swift */; };
@@ -116,6 +118,8 @@
 		5C17C7502D07EDE800F79567 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5C17C7522D07F03600F79567 /* ImageServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServiceFactory.swift; sourceTree = "<group>"; };
 		5C17C7542D07F04E00F79567 /* ImageConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConversion.swift; sourceTree = "<group>"; };
+		5C17C7562D080E0300F79567 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		5C17C7582D08153500F79567 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewDataCreation.swift; sourceTree = "<group>"; };
@@ -343,6 +347,7 @@
 		5CFF7EF52D07CE4900C59DA9 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				5C17C7562D080E0300F79567 /* AppError.swift */,
 				5CC0DB132CFBCAFE0054E48D /* DevelopmentFlags.swift */,
 				5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */,
 			);
@@ -494,6 +499,7 @@
 		5CFF7F322D07DD5F00C59DA9 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				5C17C7582D08153500F79567 /* ErrorView.swift */,
 				5CFF7F3D2D07DF5300C59DA9 /* Modifiers */,
 				5CFF7F332D07DD6600C59DA9 /* Components */,
 			);
@@ -773,6 +779,7 @@
 				5C3DFECC2D053406003D3CF2 /* PreviewDataCreation.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CFF7F3F2D07DF6800C59DA9 /* InteractionModifier.swift in Sources */,
+				5C17C7592D08153800F79567 /* ErrorView.swift in Sources */,
 				5CFF7F372D07DE5B00C59DA9 /* StereoBrowser.swift in Sources */,
 				5CFF7F5B2D07E58700C59DA9 /* SwiftData+Extensions.swift in Sources */,
 				5CFF7F132D07D51F00C59DA9 /* CardContentView.swift in Sources */,
@@ -792,6 +799,7 @@
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
 				5CFF7F112D07D48400C59DA9 /* CroppedImageView.swift in Sources */,
 				5CFF7F092D07D2D300C59DA9 /* CardImageView.swift in Sources */,
+				5C17C7572D080E0900F79567 /* AppError.swift in Sources */,
 				5CFF7F002D07D1B700C59DA9 /* ImportViewModel.swift in Sources */,
 				5CFF7EFC2D07D0F700C59DA9 /* StereoViewModel.swift in Sources */,
 				5CFF7F352D07DE0F00C59DA9 /* CardStrip.swift in Sources */,

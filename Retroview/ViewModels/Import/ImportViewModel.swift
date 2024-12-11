@@ -5,27 +5,54 @@
 //  Created by Adam Schuster on 12/9/24.
 //
 
+import SwiftData
 import SwiftUI
 
-@Observable final class ImportViewModel {
+@Observable
+final class ImportViewModel {
     private(set) var progress: Progress?
-    private(set) var error: Error?
-    private let importService: ImportService
+    private(set) var error: AppError?
+    private var importService: ImportService?
     
-    init(importService: ImportService = .shared) {
-        self.importService = importService
+    func setError(_ error: AppError) {
+        self.error = error
     }
     
-    func importFiles(at url: URL) async {
+    func clearError() {
+        self.error = nil
+    }
+    
+    func importFiles(at url: URL) async throws {
+        clearError()
+        
         do {
-            progress = Progress(totalUnitCount: 1)
-            for try await currentProgress in await importService
+            guard try url.checkResourceIsReachable() else {
+                setError(AppError.fileNotFound(url.path))
+                return
+            }
+            
+            let importService = await ImportService(
+                modelContext: ModelContext.shared
+            )
+            
+            for try await currentProgress in try await importService
                 .importCards(from: url) {
-                progress = currentProgress
+                await MainActor.run {
+                    self.progress = currentProgress
+                }
+            }
+            
+            await MainActor.run {
+                self.progress = nil
             }
         } catch {
-            self.error = error
+            await MainActor.run {
+                if let appError = error as? AppError {
+                    self.setError(appError)
+                } else {
+                    self.setError(AppError.importFailed(error))
+                }
+            }
         }
     }
 }
-
