@@ -14,14 +14,12 @@ struct RetroviewApp: App {
     
     init() {
         do {
-            // Initialize the model container with our schema
             let schema = Schema([
                 StereoCard.self,
                 Collection.self,
                 Author.self,
                 Subject.self,
                 DateReference.self,
-                MODSDate.self,
                 StereoCrop.self
             ])
             
@@ -41,8 +39,9 @@ struct RetroviewApp: App {
     
     var body: some Scene {
         WindowGroup {
-            CardsTableView()
+            ImportTestView()
         }
         .modelContainer(modelContainer)
     }
 }
+

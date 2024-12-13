@@ -15,6 +15,6 @@ enum StereoCardSchemaV1: VersionedSchema {
     
     static var models: [any PersistentModel.Type] {
         [StereoCard.self, StereoCrop.self, Collection.self,
-         Author.self, Subject.self, DateReference.self, MODSDate.self]
+         Author.self, Subject.self, DateReference.self]
     }
 }

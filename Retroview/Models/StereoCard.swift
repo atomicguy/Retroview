@@ -10,10 +10,18 @@ import SwiftData
 
 @Model
 final class StereoCard {
-    // MARK: - Properties
+    // MARK: - Core Properties
     @Attribute(.unique) var uuid: UUID
-    @Attribute(.transformable(by: NSSecureUnarchiveFromDataTransformer.self)) var titles: [String]
+    @Attribute(originalName: "titles") private var _titleArray: [String]
     var primaryTitle: String
+    
+    var titles: [String] {
+        get { _titleArray }
+        set {
+            _titleArray = newValue
+            primaryTitle = newValue.first ?? "Untitled"
+        }
+    }
     
     // MARK: - Image Data
     var imageFrontId: String?
@@ -31,36 +39,65 @@ final class StereoCard {
     @Relationship var authors: [Author]
     @Relationship var subjects: [Subject]
     @Relationship var dates: [DateReference]
-    @Relationship var modsDates: [MODSDate]
+    
+    // MARK: - MODS Metadata
+    var modsIdentifiers: [String: String]
+    var rightsStatement: String?
+    @Attribute(originalName: "notes") private var _notesArray: [String]
+    
+    var notes: [String] {
+        get { _notesArray }
+        set { _notesArray = newValue }
+    }
     
     // MARK: - Initialization
     init(uuid: UUID = UUID(),
+         titles: [String],
          imageFrontId: String? = nil,
          imageBackId: String? = nil,
          cardColor: String = "#F5E6D3",
          colorOpacity: Double = 0.15,
-         titles: [String] = []) {
+         modsIdentifiers: [String: String] = [:],
+         rightsStatement: String? = nil,
+         notes: [String] = []) {
         self.uuid = uuid
+        self._titleArray = titles
+        self.primaryTitle = titles.first ?? "Untitled"
         self.imageFrontId = imageFrontId
         self.imageBackId = imageBackId
         self.cardColor = cardColor
         self.colorOpacity = colorOpacity
-        self.titles = titles
-        self.primaryTitle = titles.first ?? "Untitled"
+        self.modsIdentifiers = modsIdentifiers
+        self.rightsStatement = rightsStatement
+        self._notesArray = notes
         
-        // Initialize relationship arrays
+        // Initialize empty relationships
         self.crops = []
         self.collections = []
         self.authors = []
         self.subjects = []
         self.dates = []
-        self.modsDates = []
     }
 }
 
-// Add convenience methods to StereoCard:
+// MARK: - Convenience Methods
 extension StereoCard {
+    var imageUrl: URL? {
+        guard let imageFrontId else { return nil }
+        return URL(
+            string:
+                "https://iiif-prod.nypl.org/index.php?id=\(imageFrontId)&t=w")
+    }
+
+    var backImageUrl: URL? {
+        guard let imageBackId else { return nil }
+        return URL(
+            string: "https://iiif-prod.nypl.org/index.php?id=\(imageBackId)&t=w"
+        )
+    }
+
     func addToCollection(_ collection: Collection) {
+        guard !collections.contains(collection) else { return }
         collections.append(collection)
         collection.addCard(self)
     }

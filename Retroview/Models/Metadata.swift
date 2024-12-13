@@ -12,11 +12,17 @@ import Foundation
 @Model
 final class Author {
     @Attribute(.unique) var name: String
-    @Relationship(deleteRule: .nullify, inverse: \StereoCard.authors) var cards: [StereoCard]
+    var authority: String?
+    var authorityURI: URL?
     
-    init(name: String) {
+    @Relationship(deleteRule: .nullify, inverse: \StereoCard.authors)
+    var cards: [StereoCard]
+    
+    init(name: String, authority: String? = nil, authorityURI: URL? = nil) {
         self.name = name
-        self.cards = []  // Initialize the relationship array
+        self.authority = authority
+        self.authorityURI = authorityURI
+        self.cards = []
     }
 }
 
@@ -24,11 +30,19 @@ final class Author {
 @Model
 final class Subject {
     @Attribute(.unique) var name: String
-    @Relationship(deleteRule: .nullify, inverse: \StereoCard.subjects) var cards: [StereoCard]
+    var authority: String?
+    var authorityURI: URL?
+    var valueURI: URL?
     
-    init(name: String) {
+    @Relationship(deleteRule: .nullify, inverse: \StereoCard.subjects)
+    var cards: [StereoCard]
+    
+    init(name: String, authority: String? = nil, authorityURI: URL? = nil, valueURI: URL? = nil) {
         self.name = name
-        self.cards = []  // Initialize the relationship array
+        self.authority = authority
+        self.authorityURI = authorityURI
+        self.valueURI = valueURI
+        self.cards = []
     }
 }
 
@@ -37,11 +51,23 @@ final class Subject {
 final class DateReference {
     var date: Date
     var dateString: String
-    @Relationship(deleteRule: .nullify, inverse: \StereoCard.dates) var cards: [StereoCard]
+    var encoding: String?
+    var point: String?  // "start" or "end" for date ranges
+    var qualifier: String? // "approximate", "inferred", or "questionable"
     
-    init(date: Date, dateString: String) {
+    @Relationship(deleteRule: .nullify, inverse: \StereoCard.dates)
+    var cards: [StereoCard]
+    
+    init(date: Date,
+         dateString: String,
+         encoding: String? = nil,
+         point: String? = nil,
+         qualifier: String? = nil) {
         self.date = date
         self.dateString = dateString
-        self.cards = []  // Initialize the relationship array
+        self.encoding = encoding
+        self.point = point
+        self.qualifier = qualifier
+        self.cards = []
     }
 }

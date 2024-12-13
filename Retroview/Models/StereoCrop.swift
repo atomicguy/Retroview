@@ -23,7 +23,8 @@ final class StereoCrop {
     var score: Float
     var side: Side
     
-    @Relationship(deleteRule: .nullify, inverse: \StereoCard.crops) var card: StereoCard?
+    @Relationship(deleteRule: .nullify, inverse: \StereoCard.crops)
+    var card: StereoCard?
     
     // MARK: - Computed Properties
     var width: Float { x1 - x0 }

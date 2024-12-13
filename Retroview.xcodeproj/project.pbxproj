@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454412CF816D100D5C232 /* JSONStructures.swift */; };
+		5C1FBBCB2D0947A600AB4CFC /* MODSContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1FBBCA2D0947A200AB4CFC /* MODSContent.swift */; };
+		5C1FBBCF2D094ABD00AB4CFC /* StereoCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1FBBCE2D094AB100AB4CFC /* StereoCardListView.swift */; };
+		5C1FBBD12D094C6300AB4CFC /* ImportTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1FBBD02D094C6000AB4CFC /* ImportTestView.swift */; };
 		5C6676B42BC210F8002DD52E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B32BC210F8002DD52E /* Assets.xcassets */; };
 		5C6676B82BC210F8002DD52E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B72BC210F8002DD52E /* Preview Assets.xcassets */; };
 		5C6676C22BC210F8002DD52E /* RetroviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676C12BC210F8002DD52E /* RetroviewTests.swift */; };
@@ -18,23 +20,17 @@
 		5C7639312D06350C0043EEFC /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639302D0635060043EEFC /* StereoCard.swift */; };
 		5C7639332D06359D0043EEFC /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639322D06359B0043EEFC /* Metadata.swift */; };
 		5C7639352D0635BD0043EEFC /* StereoCrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639342D0635B80043EEFC /* StereoCrop.swift */; };
-		5C7639372D063BB00043EEFC /* MODSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639362D063BAE0043EEFC /* MODSDate.swift */; };
-		5C7639392D063EA30043EEFC /* MODSImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639382D063E9F0043EEFC /* MODSImporter.swift */; };
-		5C76393C2D063F3E0043EEFC /* MODSIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76393B2D063F320043EEFC /* MODSIdentifier.swift */; };
-		5C7639442D0643360043EEFC /* StereoCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76393D2D06402D0043EEFC /* StereoCardTests.swift */; };
-		5C7639452D0643360043EEFC /* MODSDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76393F2D0640650043EEFC /* MODSDateTests.swift */; };
-		5C7639462D0643360043EEFC /* CollectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639422D06408B0043EEFC /* CollectionTests.swift */; };
-		5C7639482D0658A10043EEFC /* StereoCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639472D0658990043EEFC /* StereoCardViewModel.swift */; };
-		5C76394B2D0659720043EEFC /* ColorUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76394A2D06596A0043EEFC /* ColorUtilities.swift */; };
-		5C76394F2D06A54E0043EEFC /* MODSJSONImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76394E2D06A5470043EEFC /* MODSJSONImporter.swift */; };
-		5C7639512D06A56D0043EEFC /* CardsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639502D06A5670043EEFC /* CardsTableView.swift */; };
-		5C7639532D06A5940043EEFC /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639522D06A58E0043EEFC /* CardDetailView.swift */; };
 		5C7639552D06A6600043EEFC /* RetroviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639542D06A65C0043EEFC /* RetroviewApp.swift */; };
-		5C7639572D06A8F00043EEFC /* CardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639562D06A8ED0043EEFC /* CardRow.swift */; };
-		5C7639592D06A90E0043EEFC /* ImportProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639582D06A9090043EEFC /* ImportProgressView.swift */; };
-		5C76395B2D06A9550043EEFC /* CardsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C76395A2D06A94A0043EEFC /* CardsListView.swift */; };
 		5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7EA0F12CC5C631002FC3D2 /* StereoViewer */; };
 		5C9DDB042C0C0C5500D83DE3 /* MyStereoviews.store in Resources */ = {isa = PBXBuildFile; fileRef = 5C9DDB032C0C0C5500D83DE3 /* MyStereoviews.store */; };
+		5CD200A72D0A8E4700C1486A /* MODSImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200A62D0A8E4000C1486A /* MODSImportService.swift */; };
+		5CD200A92D0A8E6B00C1486A /* CardImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200A82D0A8E6500C1486A /* CardImportManager.swift */; };
+		5CD200AB2D0A957E00C1486A /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200AA2D0A957800C1486A /* PersistenceService.swift */; };
+		5CD200AF2D0A9A6F00C1486A /* MODSContentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200AE2D0A9A6000C1486A /* MODSContentTypes.swift */; };
+		5CD200B42D0A9C0D00C1486A /* MODSBaseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200B32D0A9C0700C1486A /* MODSBaseModels.swift */; };
+		5CD200B62D0A9C3E00C1486A /* MODSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200B52D0A9C3900C1486A /* MODSResponse.swift */; };
+		5CD200B82D0A9C6400C1486A /* MODSResponseContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200B72D0A9C5F00C1486A /* MODSResponseContent.swift */; };
+		5CD200BA2D0A9F4000C1486A /* SetTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD200B92D0A9F3B00C1486A /* SetTransformer.swift */; };
 		5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDEFC242CE04E4C0046FD60 /* StereoViewer */; };
 /* End PBXBuildFile section */
 
@@ -68,7 +64,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5C1454412CF816D100D5C232 /* JSONStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONStructures.swift; sourceTree = "<group>"; };
+		5C1FBBCA2D0947A200AB4CFC /* MODSContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSContent.swift; sourceTree = "<group>"; };
+		5C1FBBCE2D094AB100AB4CFC /* StereoCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardListView.swift; sourceTree = "<group>"; };
+		5C1FBBD02D094C6000AB4CFC /* ImportTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTestView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C6676B32BC210F8002DD52E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -85,22 +83,16 @@
 		5C7639302D0635060043EEFC /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
 		5C7639322D06359B0043EEFC /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 		5C7639342D0635B80043EEFC /* StereoCrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCrop.swift; sourceTree = "<group>"; };
-		5C7639362D063BAE0043EEFC /* MODSDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSDate.swift; sourceTree = "<group>"; };
-		5C7639382D063E9F0043EEFC /* MODSImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSImporter.swift; sourceTree = "<group>"; };
-		5C76393B2D063F320043EEFC /* MODSIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSIdentifier.swift; sourceTree = "<group>"; };
-		5C76393D2D06402D0043EEFC /* StereoCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardTests.swift; sourceTree = "<group>"; };
-		5C76393F2D0640650043EEFC /* MODSDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSDateTests.swift; sourceTree = "<group>"; };
-		5C7639422D06408B0043EEFC /* CollectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTests.swift; sourceTree = "<group>"; };
-		5C7639472D0658990043EEFC /* StereoCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardViewModel.swift; sourceTree = "<group>"; };
-		5C76394A2D06596A0043EEFC /* ColorUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtilities.swift; sourceTree = "<group>"; };
-		5C76394E2D06A5470043EEFC /* MODSJSONImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSJSONImporter.swift; sourceTree = "<group>"; };
-		5C7639502D06A5670043EEFC /* CardsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsTableView.swift; sourceTree = "<group>"; };
-		5C7639522D06A58E0043EEFC /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		5C7639542D06A65C0043EEFC /* RetroviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewApp.swift; sourceTree = "<group>"; };
-		5C7639562D06A8ED0043EEFC /* CardRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardRow.swift; sourceTree = "<group>"; };
-		5C7639582D06A9090043EEFC /* ImportProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProgressView.swift; sourceTree = "<group>"; };
-		5C76395A2D06A94A0043EEFC /* CardsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsListView.swift; sourceTree = "<group>"; };
 		5C9DDB032C0C0C5500D83DE3 /* MyStereoviews.store */ = {isa = PBXFileReference; lastKnownFileType = file; path = MyStereoviews.store; sourceTree = "<group>"; };
+		5CD200A62D0A8E4000C1486A /* MODSImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSImportService.swift; sourceTree = "<group>"; };
+		5CD200A82D0A8E6500C1486A /* CardImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImportManager.swift; sourceTree = "<group>"; };
+		5CD200AA2D0A957800C1486A /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
+		5CD200AE2D0A9A6000C1486A /* MODSContentTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSContentTypes.swift; sourceTree = "<group>"; };
+		5CD200B32D0A9C0700C1486A /* MODSBaseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSBaseModels.swift; sourceTree = "<group>"; };
+		5CD200B52D0A9C3900C1486A /* MODSResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSResponse.swift; sourceTree = "<group>"; };
+		5CD200B72D0A9C5F00C1486A /* MODSResponseContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSResponseContent.swift; sourceTree = "<group>"; };
+		5CD200B92D0A9F3B00C1486A /* SetTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTransformer.swift; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -138,39 +130,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5C3DFF052D0629BF003D3CF2 /* Core */ = {
+		5C1FBBC72D09475A00AB4CFC /* Serivces */ = {
 			isa = PBXGroup;
 			children = (
+				5CD200AA2D0A957800C1486A /* PersistenceService.swift */,
+				5CD200A82D0A8E6500C1486A /* CardImportManager.swift */,
+				5CD200A62D0A8E4000C1486A /* MODSImportService.swift */,
 			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		5C3DFF062D0629C8003D3CF2 /* App */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		5C3DFF072D062A08003D3CF2 /* Coordinators */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Coordinators;
-			sourceTree = "<group>";
-		};
-		5C4A27232D04E9DD009ECECE /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				5C7639472D0658990043EEFC /* StereoCardViewModel.swift */,
-			);
-			path = ViewModels;
+			path = Serivces;
 			sourceTree = "<group>";
 		};
 		5C6676A32BC210F7002DD52E = {
 			isa = PBXGroup;
 			children = (
-				5C7639542D06A65C0043EEFC /* RetroviewApp.swift */,
 				5C9DDB032C0C0C5500D83DE3 /* MyStereoviews.store */,
 				5C6676DA2BC215C7002DD52E /* .gitignore */,
 				5C6676AE2BC210F7002DD52E /* Retroview */,
@@ -194,13 +166,10 @@
 		5C6676AE2BC210F7002DD52E /* Retroview */ = {
 			isa = PBXGroup;
 			children = (
+				5C7639542D06A65C0043EEFC /* RetroviewApp.swift */,
+				5C1FBBC72D09475A00AB4CFC /* Serivces */,
 				5CB421B42BCCB9EA0065C130 /* Models */,
-				5C4A27232D04E9DD009ECECE /* ViewModels */,
 				5CB421B32BCCB9E20065C130 /* Views */,
-				5C3DFF072D062A08003D3CF2 /* Coordinators */,
-				5C3DFF052D0629BF003D3CF2 /* Core */,
-				5C7639492D0659510043EEFC /* Utilities */,
-				5C3DFF062D0629C8003D3CF2 /* App */,
 				5C6676B32BC210F8002DD52E /* Assets.xcassets */,
 				5C267EBA2CE3209600AE3493 /* Info.plist */,
 				5C6676B62BC210F8002DD52E /* Preview Content */,
@@ -220,9 +189,6 @@
 		5C6676C02BC210F8002DD52E /* RetroviewTests */ = {
 			isa = PBXGroup;
 			children = (
-				5C7639422D06408B0043EEFC /* CollectionTests.swift */,
-				5C76393F2D0640650043EEFC /* MODSDateTests.swift */,
-				5C76393D2D06402D0043EEFC /* StereoCardTests.swift */,
 				5C6676C12BC210F8002DD52E /* RetroviewTests.swift */,
 			);
 			path = RetroviewTests;
@@ -237,33 +203,11 @@
 			path = RetroviewUITests;
 			sourceTree = "<group>";
 		};
-		5C76393A2D063EB80043EEFC /* MODS */ = {
-			isa = PBXGroup;
-			children = (
-				5C76394E2D06A5470043EEFC /* MODSJSONImporter.swift */,
-				5C76393B2D063F320043EEFC /* MODSIdentifier.swift */,
-				5C7639382D063E9F0043EEFC /* MODSImporter.swift */,
-				5C7639362D063BAE0043EEFC /* MODSDate.swift */,
-			);
-			path = MODS;
-			sourceTree = "<group>";
-		};
-		5C7639492D0659510043EEFC /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				5C76394A2D06596A0043EEFC /* ColorUtilities.swift */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5C76395A2D06A94A0043EEFC /* CardsListView.swift */,
-				5C7639582D06A9090043EEFC /* ImportProgressView.swift */,
-				5C7639562D06A8ED0043EEFC /* CardRow.swift */,
-				5C7639522D06A58E0043EEFC /* CardDetailView.swift */,
-				5C7639502D06A5670043EEFC /* CardsTableView.swift */,
+				5C1FBBD02D094C6000AB4CFC /* ImportTestView.swift */,
+				5C1FBBCE2D094AB100AB4CFC /* StereoCardListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -271,15 +215,27 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5C76393A2D063EB80043EEFC /* MODS */,
 				5C76392C2D0632170043EEFC /* StereoCardSchema.swift */,
 				5C7639302D0635060043EEFC /* StereoCard.swift */,
 				5C7639322D06359B0043EEFC /* Metadata.swift */,
 				5C7639342D0635B80043EEFC /* StereoCrop.swift */,
 				5C76392E2D0634FA0043EEFC /* Collection.swift */,
-				5C1454412CF816D100D5C232 /* JSONStructures.swift */,
+				5CD200B22D0A9AA700C1486A /* MODS */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		5CD200B22D0A9AA700C1486A /* MODS */ = {
+			isa = PBXGroup;
+			children = (
+				5CD200B92D0A9F3B00C1486A /* SetTransformer.swift */,
+				5C1FBBCA2D0947A200AB4CFC /* MODSContent.swift */,
+				5CD200B32D0A9C0700C1486A /* MODSBaseModels.swift */,
+				5CD200B52D0A9C3900C1486A /* MODSResponse.swift */,
+				5CD200AE2D0A9A6000C1486A /* MODSContentTypes.swift */,
+				5CD200B72D0A9C5F00C1486A /* MODSResponseContent.swift */,
+			);
+			path = MODS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -437,24 +393,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C76394F2D06A54E0043EEFC /* MODSJSONImporter.swift in Sources */,
-				5C7639592D06A90E0043EEFC /* ImportProgressView.swift in Sources */,
+				5C1FBBCB2D0947A600AB4CFC /* MODSContent.swift in Sources */,
+				5CD200B82D0A9C6400C1486A /* MODSResponseContent.swift in Sources */,
+				5CD200AB2D0A957E00C1486A /* PersistenceService.swift in Sources */,
+				5C1FBBCF2D094ABD00AB4CFC /* StereoCardListView.swift in Sources */,
 				5C76392F2D0635010043EEFC /* Collection.swift in Sources */,
-				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
-				5C76395B2D06A9550043EEFC /* CardsListView.swift in Sources */,
-				5C7639392D063EA30043EEFC /* MODSImporter.swift in Sources */,
+				5CD200A72D0A8E4700C1486A /* MODSImportService.swift in Sources */,
 				5C7639552D06A6600043EEFC /* RetroviewApp.swift in Sources */,
+				5C1FBBD12D094C6300AB4CFC /* ImportTestView.swift in Sources */,
 				5C7639332D06359D0043EEFC /* Metadata.swift in Sources */,
 				5C76392D2D0632300043EEFC /* StereoCardSchema.swift in Sources */,
-				5C76393C2D063F3E0043EEFC /* MODSIdentifier.swift in Sources */,
 				5C7639352D0635BD0043EEFC /* StereoCrop.swift in Sources */,
+				5CD200B62D0A9C3E00C1486A /* MODSResponse.swift in Sources */,
 				5C7639312D06350C0043EEFC /* StereoCard.swift in Sources */,
-				5C7639572D06A8F00043EEFC /* CardRow.swift in Sources */,
-				5C7639512D06A56D0043EEFC /* CardsTableView.swift in Sources */,
-				5C7639482D0658A10043EEFC /* StereoCardViewModel.swift in Sources */,
-				5C76394B2D0659720043EEFC /* ColorUtilities.swift in Sources */,
-				5C7639372D063BB00043EEFC /* MODSDate.swift in Sources */,
-				5C7639532D06A5940043EEFC /* CardDetailView.swift in Sources */,
+				5CD200B42D0A9C0D00C1486A /* MODSBaseModels.swift in Sources */,
+				5CD200BA2D0A9F4000C1486A /* SetTransformer.swift in Sources */,
+				5CD200AF2D0A9A6F00C1486A /* MODSContentTypes.swift in Sources */,
+				5CD200A92D0A8E6B00C1486A /* CardImportManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,9 +417,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C7639442D0643360043EEFC /* StereoCardTests.swift in Sources */,
-				5C7639452D0643360043EEFC /* MODSDateTests.swift in Sources */,
-				5C7639462D0643360043EEFC /* CollectionTests.swift in Sources */,
 				5C6676C22BC210F8002DD52E /* RetroviewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
