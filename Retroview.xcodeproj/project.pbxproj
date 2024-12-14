@@ -78,6 +78,7 @@
 		5CCFB16C2CFD544600E5633E /* InteractiveCardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCFB16B2CFD543C00E5633E /* InteractiveCardModifier.swift */; };
 		5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCFB16D2CFD5AF600E5633E /* StyleStereoView.swift */; };
 		5CD075962BD60B3E002B463C /* Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD075952BD60B3E002B463C /* Crop.swift */; };
+		5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5770E2D0D2D83002FA8DB /* Array+Unique.swift */; };
 		5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDEFC242CE04E4C0046FD60 /* StereoViewer */; };
 		5CE069202CFED8ED0067EBF6 /* CardSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE0691F2CFED8E60067EBF6 /* CardSquareView.swift */; };
 		5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */; };
@@ -193,6 +194,7 @@
 		5CCFB16B2CFD543C00E5633E /* InteractiveCardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveCardModifier.swift; sourceTree = "<group>"; };
 		5CCFB16D2CFD5AF600E5633E /* StyleStereoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleStereoView.swift; sourceTree = "<group>"; };
 		5CD075952BD60B3E002B463C /* Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crop.swift; sourceTree = "<group>"; };
+		5CD5770E2D0D2D83002FA8DB /* Array+Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Unique.swift"; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE0691F2CFED8E60067EBF6 /* CardSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSquareView.swift; sourceTree = "<group>"; };
 		5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardImageView.swift; sourceTree = "<group>"; };
@@ -239,15 +241,13 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				5C7639822D06B0B80043EEFC /* MODSParsingService.swift */,
+				5CD5770E2D0D2D83002FA8DB /* Array+Unique.swift */,
 				5C3DFED52D057920003D3CF2 /* StoreCleanupService.swift */,
 				5C3DFED32D057522003D3CF2 /* StoreManager.swift */,
 				5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */,
-				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 				5C1454332CF7A63600D5C232 /* CardColorAnalyzer.swift */,
 				5C14543B2CF7FF8800D5C232 /* ColorUtility.swift */,
 				5C1454102CF5760300D5C232 /* ImageLoading.swift */,
-				5C1454432CF816EF00D5C232 /* ImportService.swift */,
 				5CEFA7682CFA83A800D410EA /* InteractionState.swift */,
 				5CCFB16B2CFD543C00E5633E /* InteractiveCardModifier.swift */,
 				5C43BC482CF98D880053FAFD /* ModelContextPreviewExtension.swift */,
@@ -262,8 +262,11 @@
 		5C4A271E2D04E954009ECECE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5C7639822D06B0B80043EEFC /* MODSParsingService.swift */,
 				5C4A27212D04E99A009ECECE /* ImageServiceFactory.swift */,
 				5C4A271F2D04E965009ECECE /* ImageService.swift */,
+				5C1454432CF816EF00D5C232 /* ImportService.swift */,
+				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C8C88CE2C1FF11300874E19 /* BackCardView.swift */,
 				5CEFA7702CFA8EBC00D410EA /* BrowseLayout.swift */,
 				5C1454212CF5834000D5C232 /* CardContentView.swift */,
@@ -387,7 +391,6 @@
 				5C1454522CF84C7900D5C232 /* CollectionView.swift */,
 				5C9BCA532C166AD600668900 /* FrontCardView.swift */,
 				5C9709E02CFEC873003CD884 /* Groups */,
-				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C1454302CF6F74600D5C232 /* LibraryView.swift */,
 				5C8F164B2CFD4A8700CB77F0 /* ThumbnailView.swift */,
 				5C66C10A2CFD807800BA5AC1 /* VisionViews */,
@@ -623,6 +626,7 @@
 				5C3DFECC2D053406003D3CF2 /* PreviewDataCreation.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
+				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5C9709E82CFECC3E003CD884 /* GroupingPreview.swift in Sources */,
 				5C4A271D2D04E408009ECECE /* CardHoverOverlay.swift in Sources */,
 				5C1454342CF7A63D00D5C232 /* CardColorAnalyzer.swift in Sources */,
