@@ -16,6 +16,11 @@ struct RetroviewApp: App {
             print("Development flag set: Clearing store...")
             Self.forceDeleteStore()
         }
+        #if DEBUG
+            ImportLogger.configure(logLevel: .debug)
+        #else
+            ImportLogger.configure(logLevel: .error)
+        #endif
     }
 
     var sharedModelContainer: ModelContainer = {

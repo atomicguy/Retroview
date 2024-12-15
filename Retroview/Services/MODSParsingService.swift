@@ -28,20 +28,18 @@ struct MODSParsingService {
         }
     }
 
-    static func convertMODSToStereoCard(_ data: Data) throws -> StereoCardJSON {
-        print("🔍 Starting MODS parsing...")
-        
-        // Preprocess the data to handle malformed JSON
-        let cleanedData = try preprocessJSONData(data)
-        
+    static func convertMODSToStereoCard(_ data: Data, fileName: String? = nil) throws -> StereoCardJSON {
         do {
+            ImportLogger.log(.debug, "Starting MODS parsing...", file: fileName)
+            
+            let cleanedData = try preprocessJSONData(data)
             guard let dict = try JSONSerialization.jsonObject(with: cleanedData) as? [String: Any] else {
-                print("❌ Failed to parse JSON: \(String(data: cleanedData, encoding: .utf8) ?? "invalid data")")
+                ImportLogger.log(.error, "Failed to parse JSON", file: fileName)
                 throw MODSParsingError.invalidJSON("Could not parse as dictionary")
             }
             
             guard let cardDict = dict["card"] as? [String: Any] else {
-                print("❌ Missing card object")
+                ImportLogger.log(.error, "Missing card object", file: fileName)
                 throw MODSParsingError.unexpectedDataStructure("Missing card object")
             }
             
@@ -86,8 +84,8 @@ struct MODSParsingService {
             
             return card
         } catch {
-            print("❌ Error during MODS parsing: \(error)")
-            throw MODSParsingError.processingError("JSON parsing failed: \(error.localizedDescription)")
+            ImportLogger.log(.error, "Failed to import: \(error.localizedDescription)", file: fileName)
+                    throw error
         }
     }
 

@@ -24,7 +24,7 @@ struct ImportView: View {
         case ready
         case analyzing
         case importing(filesProcessed: Int, totalFiles: Int)
-        case completed(totalImported: Int)
+        case completed(totalImported: Int, failedCount: Int)
         case failed(error: String)
         case cancelled
 
@@ -143,17 +143,14 @@ struct ImportView: View {
 
         Task {
             do {
-                processingState = .importing(
-                    filesProcessed: 0, totalFiles: fileCount
-                )
+                processingState = .importing(filesProcessed: 0, totalFiles: fileCount)
 
                 let progressTask = Task {
                     for await progress in batchImportService.progressUpdates {
                         if Task.isCancelled { break }
                         await MainActor.run {
                             processingState = .importing(
-                                filesProcessed: Int(
-                                    progress.completedUnitCount),
+                                filesProcessed: Int(progress.completedUnitCount),
                                 totalFiles: Int(progress.totalUnitCount)
                             )
                         }
@@ -164,7 +161,18 @@ struct ImportView: View {
                 progressTask.cancel()
 
                 await MainActor.run {
-                    processingState = .completed(totalImported: fileCount)
+                    let report = batchImportService.getImportReport()
+                    if report.failureCount > 0 {
+                        processingState = .completed(
+                            totalImported: report.successCount,
+                            failedCount: report.failureCount
+                        )
+                    } else {
+                        processingState = .completed(
+                            totalImported: fileCount,
+                            failedCount: 0
+                        )
+                    }
                 }
             } catch {
                 await handleError(error)
@@ -306,17 +314,18 @@ extension ImportView {
                 .frame(maxWidth: 300)
             }
 
-        case let .completed(total):
+        case let .completed(total, failed):
             VStack(spacing: 12) {
-                Image(systemName: "checkmark.circle.fill")
+                Image(systemName: failed > 0 ? "checkmark.circle.badge.exclamationmark" : "checkmark.circle.fill")
                     .font(.system(size: 48))
-                    .foregroundStyle(.green)
+                    .foregroundStyle(failed > 0 ? .yellow : .green)
 
-                Text("Import Complete")
+                Text(failed > 0 ? "Import Completed with Issues" : "Import Complete")
                     .font(.headline)
 
-                Text("Successfully imported \(total) files")
+                Text("\(total) files imported successfully" + (failed > 0 ? "\n\(failed) files failed" : ""))
                     .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
             }
 
         case let .failed(error):
@@ -404,14 +413,4 @@ extension ImportView.ProcessingState {
         .withPreviewData()
 }
 
-//#Preview("Import View - iOS") {
-//    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
-//}
-//
-//#Preview("Import View - With Progress") {
-//    ImportView(modelContext: PreviewContainer.shared.modelContainer.mainContext)
-//        .onAppear {
-//            let progress = Progress(totalUnitCount: 100)
-//            progress.completedUnitCount = 45
-//        }
-//}
+

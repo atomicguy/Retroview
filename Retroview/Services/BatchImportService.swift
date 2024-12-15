@@ -166,3 +166,16 @@ enum ImportError: LocalizedError {
         }
     }
 }
+
+extension BatchImportService {
+    func getImportReport() -> ImportReport {
+        let failedImports = ImportLogger.getFailedImports()
+        let report = ImportReport(
+            totalProcessed: Int(progress.totalUnitCount),
+            successCount: Int(progress.totalUnitCount) - failedImports.count,
+            failedImports: failedImports
+        )
+        ImportLogger.clearFailedImports()
+        return report
+    }
+}
