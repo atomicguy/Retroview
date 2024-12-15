@@ -13,6 +13,7 @@ import SwiftUI
         @Environment(\.modelContext) private var modelContext
         @State private var selectedTab: GalleryTab = .library
         @State private var showingImport = false
+        @State private var showingTransfer = false
 
         // Query all cards at this level to make them available to the container
         @Query private var allCards: [CardSchemaV1.StereoCard]
@@ -87,6 +88,13 @@ import SwiftUI
                             ) {
                                 showingImport = true
                             }
+                            
+                            toolbarButton(
+                                title: "Database Transfer",
+                                systemImage: "arrow.up.arrow.down.circle"
+                            ) {
+                                showingTransfer = true
+                            }
 
                             #if DEBUG
                                 DebugMenu()
@@ -97,6 +105,9 @@ import SwiftUI
             }
             .sheet(isPresented: $showingImport) {
                 ImportView(modelContext: modelContext)
+            }
+            .sheet(isPresented: $showingTransfer) {
+                DatabaseTransferView()
             }
             .onAppear {
                 print("VisionGalleryScreen appeared")

@@ -12,15 +12,12 @@ struct GalleryScreen: View {
     @Environment(\.modelContext) private var modelContext
     @State private var selectedDestination: AppDestination = .library
     @State private var showingImport = false
-    
+    @State private var showingTransfer = false
+
     var body: some View {
-        #if os(visionOS)
-        visionOSLayout
-        #else
         defaultLayout
-        #endif
     }
-    
+
     private var defaultLayout: some View {
         NavigationSplitView {
             NavigationSidebar(selectedDestination: $selectedDestination)
@@ -37,9 +34,16 @@ struct GalleryScreen: View {
                         ) {
                             showingImport = true
                         }
-                        
+
+                        toolbarButton(
+                            title: "Database Transfer",
+                            systemImage: "arrow.up.arrow.down.circle"
+                        ) {
+                            showingTransfer = true
+                        }
+
                         #if DEBUG
-                        DebugMenu()
+                            DebugMenu()
                         #endif
                     }
                 }
@@ -48,56 +52,14 @@ struct GalleryScreen: View {
         .sheet(isPresented: $showingImport) {
             ImportView(modelContext: modelContext)
         }
+        .sheet(isPresented: $showingTransfer) {
+            DatabaseTransferView()
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(.container, edges: [.leading, .trailing])
         .platformBackground()
     }
-    
-    #if os(visionOS)
-    private var visionOSLayout: some View {
-        TabView {
-            LibraryView()
-                .tabItem {
-                    Label("Library", systemImage: AppDestination.library.systemImage)
-                }
-            
-            SubjectsView()
-                .tabItem {
-                    Label("Subjects", systemImage: AppDestination.subjects.systemImage)
-                }
-            
-            AuthorsView()
-                .tabItem {
-                    Label("Authors", systemImage: AppDestination.authors.systemImage)
-                }
-            
-            CollectionsView()
-                .tabItem {
-                    Label("Collections", systemImage: "folder")
-                }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                HStack {
-                    toolbarButton(
-                        title: "Import Cards",
-                        systemImage: "square.and.arrow.down"
-                    ) {
-                        showingImport = true
-                    }
-                    
-                    #if DEBUG
-                    DebugMenu()
-                    #endif
-                }
-            }
-        }
-        .sheet(isPresented: $showingImport) {
-            ImportView(modelContext: modelContext)
-        }
-    }
-    #endif
-    
+
     @ViewBuilder
     private var navigationDestinationView: some View {
         switch selectedDestination {
@@ -118,13 +80,14 @@ struct GalleryScreen: View {
                 ContentUnavailableView(
                     "Collection Not Found",
                     systemImage: "folder.badge.questionmark",
-                    description: Text("The selected collection could not be found")
+                    description: Text(
+                        "The selected collection could not be found")
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
     }
-    
+
     private func fetchCollection(id: UUID) -> CollectionSchemaV1.Collection? {
         let descriptor = FetchDescriptor<CollectionSchemaV1.Collection>(
             predicate: #Predicate<CollectionSchemaV1.Collection> { collection in
@@ -141,22 +104,25 @@ struct GalleryScreen: View {
 private struct NavigationSidebar: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var selectedDestination: AppDestination
-    @Query(sort: \CollectionSchemaV1.Collection.name) private var collections: [CollectionSchemaV1.Collection]
-    
+    @Query(sort: \CollectionSchemaV1.Collection.name) private var collections:
+        [CollectionSchemaV1.Collection]
+
     @State private var listSelection: String?
-    
+
     var body: some View {
-        List(selection: Binding(
-            get: { listSelection },
-            set: { newValue in
-                listSelection = newValue
-                if let newValue {
-                    updateDestination(for: newValue)
+        List(
+            selection: Binding(
+                get: { listSelection },
+                set: { newValue in
+                    listSelection = newValue
+                    if let newValue {
+                        updateDestination(for: newValue)
+                    }
                 }
-            }
-        )) {
+            )
+        ) {
             navigationLinks
-            
+
             collectionsSection
         }
         .frame(idealWidth: 100)
@@ -167,7 +133,7 @@ private struct NavigationSidebar: View {
             updateListSelection(for: selectedDestination)
         }
     }
-    
+
     private var navigationLinks: some View {
         Group {
             NavigationLink(value: AppDestination.library.id) {
@@ -176,14 +142,14 @@ private struct NavigationSidebar: View {
                     systemImage: AppDestination.library.systemImage
                 )
             }
-            
+
             NavigationLink(value: AppDestination.subjects.id) {
                 Label(
                     AppDestination.subjects.label,
                     systemImage: AppDestination.subjects.systemImage
                 )
             }
-            
+
             NavigationLink(value: AppDestination.authors.id) {
                 Label(
                     AppDestination.authors.label,
@@ -192,7 +158,7 @@ private struct NavigationSidebar: View {
             }
         }
     }
-    
+
     private var collectionsSection: some View {
         Section("Collections") {
             ForEach(collections) { collection in
@@ -208,7 +174,7 @@ private struct NavigationSidebar: View {
             }
         }
     }
-    
+
     private func updateDestination(for id: String) {
         if id == AppDestination.library.id {
             selectedDestination = .library
@@ -217,11 +183,12 @@ private struct NavigationSidebar: View {
         } else if id == AppDestination.authors.id {
             selectedDestination = .authors
         } else if let uuid = UUID(uuidString: id),
-                  let collection = collections.first(where: { $0.id == uuid }) {
+            let collection = collections.first(where: { $0.id == uuid })
+        {
             selectedDestination = .collection(uuid, collection.name)
         }
     }
-    
+
     private func updateListSelection(for destination: AppDestination) {
         switch destination {
         case .library:

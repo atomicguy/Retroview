@@ -14,7 +14,7 @@ import CoreGraphics
 protocol ImageServiceProtocol {
     func loadImage(id: String, side: CardSide) async throws -> CGImage
     func loadThumbnail(id: String, side: CardSide, maxSize: CGFloat) async throws -> CGImage
-    func loadCrop(id: String, side: CardSide, crop: CropSchemaV1.Crop) async throws -> CGImage
+    func loadCrop(id: String, side: CardSide, cropParameters: CropParameters) async throws -> CGImage
     func clearCache()
 }
 
@@ -103,7 +103,7 @@ actor ImageCache {
 }
 
 // MARK: - Main Image Service Implementation
-final class ImageService: ImageServiceProtocol {
+class ImageService: ImageServiceProtocol {
     private let configuration: ImageServiceConfiguration
     private let cache: ImageCache
     private let imageLoader: ImageLoading
@@ -120,8 +120,6 @@ final class ImageService: ImageServiceProtocol {
         self.processingQueue = OperationQueue()
         self.processingQueue.maxConcurrentOperationCount = configuration.maxConcurrentOperations
     }
-    
-    // MARK: - Public Methods
     
     func loadImage(id: String, side: CardSide) async throws -> CGImage {
         let cacheKey = "\(id)_\(side.rawValue)_full"
@@ -154,15 +152,46 @@ final class ImageService: ImageServiceProtocol {
         let fullImage = try await loadImage(id: id, side: side)
         
         // Generate thumbnail
-        let thumbnail = try await generateThumbnail(from: fullImage, maxSize: maxSize)
+        let thumbnail = try await withCheckedThrowingContinuation { continuation in
+            processingQueue.addOperation {
+                let originalSize = CGSize(width: fullImage.width, height: fullImage.height)
+                let scale = maxSize / max(originalSize.width, originalSize.height)
+                let newSize = CGSize(
+                    width: originalSize.width * scale,
+                    height: originalSize.height * scale
+                )
+                
+                let context = CGContext(
+                    data: nil,
+                    width: Int(newSize.width),
+                    height: Int(newSize.height),
+                    bitsPerComponent: fullImage.bitsPerComponent,
+                    bytesPerRow: 0,
+                    space: fullImage.colorSpace ?? CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: fullImage.bitmapInfo.rawValue
+                )
+                
+                context?.interpolationQuality = .high
+                context?.draw(
+                    fullImage,
+                    in: CGRect(origin: .zero, size: newSize)
+                )
+                
+                if let thumbnail = context?.makeImage() {
+                    continuation.resume(returning: thumbnail)
+                } else {
+                    continuation.resume(throwing: ImageServiceError.processingFailed)
+                }
+            }
+        }
         
         // Cache the result
         await cache.insert(thumbnail, forKey: cacheKey)
         return thumbnail
     }
     
-    func loadCrop(id: String, side: CardSide, crop: CropSchemaV1.Crop) async throws -> CGImage {
-        let cacheKey = "\(id)_\(side.rawValue)_crop_\(crop.description)"
+    func loadCrop(id: String, side: CardSide, cropParameters: CropParameters) async throws -> CGImage {
+        let cacheKey = "\(id)_\(side.rawValue)_crop_\(cropParameters)"
         
         // Check cache first
         if let cached = await cache.get(cacheKey) {
@@ -173,7 +202,55 @@ final class ImageService: ImageServiceProtocol {
         let fullImage = try await loadImage(id: id, side: side)
         
         // Generate crop
-        let croppedImage = try await generateCrop(from: fullImage, crop: crop)
+        let croppedImage = try await withCheckedThrowingContinuation { continuation in
+            processingQueue.addOperation {
+                let cropWidth = Int(
+                    CGFloat(cropParameters.y1 - cropParameters.y0) * CGFloat(fullImage.width)
+                )
+                let cropHeight = Int(
+                    CGFloat(cropParameters.x1 - cropParameters.x0) * CGFloat(fullImage.height)
+                )
+                
+                let context = CGContext(
+                    data: nil,
+                    width: cropWidth,
+                    height: cropHeight,
+                    bitsPerComponent: fullImage.bitsPerComponent,
+                    bytesPerRow: 0,
+                    space: fullImage.colorSpace ?? CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: fullImage.bitmapInfo.rawValue
+                )
+                
+                let xOffset = -CGFloat(cropParameters.y0) * CGFloat(fullImage.width)
+                let yOffset = -CGFloat(cropParameters.x0) * CGFloat(fullImage.height)
+                
+                context?.translateBy(x: xOffset, y: yOffset)
+                context?.clip(
+                    to: CGRect(
+                        x: Int(-xOffset),
+                        y: Int(-yOffset),
+                        width: cropWidth,
+                        height: cropHeight
+                    )
+                )
+                
+                context?.draw(
+                    fullImage,
+                    in: CGRect(
+                        x: 0,
+                        y: 0,
+                        width: fullImage.width,
+                        height: fullImage.height
+                    )
+                )
+                
+                if let croppedImage = context?.makeImage() {
+                    continuation.resume(returning: croppedImage)
+                } else {
+                    continuation.resume(throwing: ImageServiceError.processingFailed)
+                }
+            }
+        }
         
         // Cache the result
         await cache.insert(croppedImage, forKey: cacheKey)
@@ -185,8 +262,6 @@ final class ImageService: ImageServiceProtocol {
             await cache.clear()
         }
     }
-    
-    // MARK: - Private Methods
     
     private func downloadImage(id: String, side: CardSide) async throws -> Data {
         var components = URLComponents(url: configuration.baseURL, resolvingAgainstBaseURL: true)!
@@ -207,93 +282,6 @@ final class ImageService: ImageServiceProtocol {
         }
         
         return data
-    }
-    
-    private func generateThumbnail(from image: CGImage, maxSize: CGFloat) async throws -> CGImage {
-        try await withCheckedThrowingContinuation { continuation in
-            processingQueue.addOperation {
-                let originalSize = CGSize(width: image.width, height: image.height)
-                let scale = maxSize / max(originalSize.width, originalSize.height)
-                let newSize = CGSize(
-                    width: originalSize.width * scale,
-                    height: originalSize.height * scale
-                )
-                
-                let context = CGContext(
-                    data: nil,
-                    width: Int(newSize.width),
-                    height: Int(newSize.height),
-                    bitsPerComponent: image.bitsPerComponent,
-                    bytesPerRow: 0,
-                    space: image.colorSpace ?? CGColorSpaceCreateDeviceRGB(),
-                    bitmapInfo: image.bitmapInfo.rawValue
-                )
-                
-                context?.interpolationQuality = .high
-                context?.draw(
-                    image,
-                    in: CGRect(origin: .zero, size: newSize)
-                )
-                
-                if let thumbnail = context?.makeImage() {
-                    continuation.resume(returning: thumbnail)
-                } else {
-                    continuation.resume(throwing: ImageServiceError.processingFailed)
-                }
-            }
-        }
-    }
-    
-    private func generateCrop(from image: CGImage, crop: CropSchemaV1.Crop) async throws -> CGImage {
-        try await withCheckedThrowingContinuation { continuation in
-            processingQueue.addOperation {
-                let cropWidth = Int(
-                    CGFloat(crop.y1 - crop.y0) * CGFloat(image.width)
-                )
-                let cropHeight = Int(
-                    CGFloat(crop.x1 - crop.x0) * CGFloat(image.height)
-                )
-                
-                let context = CGContext(
-                    data: nil,
-                    width: cropWidth,
-                    height: cropHeight,
-                    bitsPerComponent: image.bitsPerComponent,
-                    bytesPerRow: 0,
-                    space: image.colorSpace ?? CGColorSpaceCreateDeviceRGB(),
-                    bitmapInfo: image.bitmapInfo.rawValue
-                )
-                
-                let xOffset = -CGFloat(crop.y0) * CGFloat(image.width)
-                let yOffset = -CGFloat(crop.x0) * CGFloat(image.height)
-                
-                context?.translateBy(x: xOffset, y: yOffset)
-                context?.clip(
-                    to: CGRect(
-                        x: Int(-xOffset),
-                        y: Int(-yOffset),
-                        width: cropWidth,
-                        height: cropHeight
-                    )
-                )
-                
-                context?.draw(
-                    image,
-                    in: CGRect(
-                        x: 0,
-                        y: 0,
-                        width: image.width,
-                        height: image.height
-                    )
-                )
-                
-                if let croppedImage = context?.makeImage() {
-                    continuation.resume(returning: croppedImage)
-                } else {
-                    continuation.resume(throwing: ImageServiceError.processingFailed)
-                }
-            }
-        }
     }
 }
 

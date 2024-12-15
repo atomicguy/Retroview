@@ -81,6 +81,14 @@
 		5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */; };
 		5CD577132D0E39AE002FA8DB /* Array+StringNormalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577122D0E39A1002FA8DB /* Array+StringNormalizationTests.swift */; };
 		5CD577152D0E5BE6002FA8DB /* ImportLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577142D0E5BDF002FA8DB /* ImportLogger.swift */; };
+		5CD577192D0E7528002FA8DB /* DatabaseExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577182D0E7522002FA8DB /* DatabaseExportService.swift */; };
+		5CD5771B2D0E7544002FA8DB /* DatabaseTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */; };
+		5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */; };
+		5CD577212D0E79AB002FA8DB /* DatabaseTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */; };
+		5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */; };
+		5CD577252D0E891B002FA8DB /* UniformTypeIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577242D0E8913002FA8DB /* UniformTypeIdentifiers.swift */; };
+		5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577262D0E90E4002FA8DB /* PlatformFileHandler.swift */; };
+		5CD577292D0E94E0002FA8DB /* ImageService+Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577282D0E94D0002FA8DB /* ImageService+Crop.swift */; };
 		5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDEFC242CE04E4C0046FD60 /* StereoViewer */; };
 		5CE069202CFED8ED0067EBF6 /* CardSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE0691F2CFED8E60067EBF6 /* CardSquareView.swift */; };
 		5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */; };
@@ -199,6 +207,14 @@
 		5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+StringNormalization.swift"; sourceTree = "<group>"; };
 		5CD577122D0E39A1002FA8DB /* Array+StringNormalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+StringNormalizationTests.swift"; sourceTree = "<group>"; };
 		5CD577142D0E5BDF002FA8DB /* ImportLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportLogger.swift; sourceTree = "<group>"; };
+		5CD577182D0E7522002FA8DB /* DatabaseExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseExportService.swift; sourceTree = "<group>"; };
+		5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferView.swift; sourceTree = "<group>"; };
+		5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferTypes.swift; sourceTree = "<group>"; };
+		5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferManager.swift; sourceTree = "<group>"; };
+		5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferButton.swift; sourceTree = "<group>"; };
+		5CD577242D0E8913002FA8DB /* UniformTypeIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniformTypeIdentifiers.swift; sourceTree = "<group>"; };
+		5CD577262D0E90E4002FA8DB /* PlatformFileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformFileHandler.swift; sourceTree = "<group>"; };
+		5CD577282D0E94D0002FA8DB /* ImageService+Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageService+Crop.swift"; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE0691F2CFED8E60067EBF6 /* CardSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSquareView.swift; sourceTree = "<group>"; };
 		5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardImageView.swift; sourceTree = "<group>"; };
@@ -245,6 +261,8 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5CD577262D0E90E4002FA8DB /* PlatformFileHandler.swift */,
+				5CD577242D0E8913002FA8DB /* UniformTypeIdentifiers.swift */,
 				5CD577142D0E5BDF002FA8DB /* ImportLogger.swift */,
 				5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */,
 				5CD5770E2D0D2D83002FA8DB /* Array+Unique.swift */,
@@ -268,6 +286,9 @@
 		5C4A271E2D04E954009ECECE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5CD577282D0E94D0002FA8DB /* ImageService+Crop.swift */,
+				5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */,
+				5CD577182D0E7522002FA8DB /* DatabaseExportService.swift */,
 				5C7639822D06B0B80043EEFC /* MODSParsingService.swift */,
 				5C4A27212D04E99A009ECECE /* ImageServiceFactory.swift */,
 				5C4A271F2D04E965009ECECE /* ImageService.swift */,
@@ -387,6 +408,8 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */,
+				5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */,
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C8C88CE2C1FF11300874E19 /* BackCardView.swift */,
 				5CEFA7702CFA8EBC00D410EA /* BrowseLayout.swift */,
@@ -407,6 +430,7 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */,
 				5CC5A5C42BD47622005811DA /* Author.swift */,
 				5C14544E2CF849D700D5C232 /* Collection.swift */,
 				5CD075952BD60B3E002B463C /* Crop.swift */,
@@ -617,6 +641,7 @@
 				5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */,
 				5CC0DB212CFC08DE0054E48D /* VisionGalleryScreen.swift in Sources */,
 				5C3DFED82D057C3D003D3CF2 /* DebugDataLoader.swift in Sources */,
+				5CD577252D0E891B002FA8DB /* UniformTypeIdentifiers.swift in Sources */,
 				5C9709EA2CFECC63003CD884 /* GroupingRow.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
 				5C9709EC2CFECC9C003CD884 /* CardGroupingGrid.swift in Sources */,
@@ -624,6 +649,7 @@
 				5C14542F2CF6F5F100D5C232 /* GalleryScreen.swift in Sources */,
 				5C1454162CF5760300D5C232 /* ImageLoading.swift in Sources */,
 				5C1454172CF5760300D5C232 /* StereoViewCoordinator.swift in Sources */,
+				5CD577192D0E7528002FA8DB /* DatabaseExportService.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CCFB16C2CFD544600E5633E /* InteractiveCardModifier.swift in Sources */,
@@ -635,6 +661,8 @@
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5C9709E82CFECC3E003CD884 /* GroupingPreview.swift in Sources */,
+				5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */,
+				5CD5771B2D0E7544002FA8DB /* DatabaseTransferView.swift in Sources */,
 				5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */,
 				5C4A271D2D04E408009ECECE /* CardHoverOverlay.swift in Sources */,
 				5C1454342CF7A63D00D5C232 /* CardColorAnalyzer.swift in Sources */,
@@ -643,6 +671,7 @@
 				5CEFA7712CFA8EC600D410EA /* BrowseLayout.swift in Sources */,
 				5C8C88CF2C1FF11300874E19 /* BackCardView.swift in Sources */,
 				5C3DFECE2D053416003D3CF2 /* PreviewSupport.swift in Sources */,
+				5CD577212D0E79AB002FA8DB /* DatabaseTransferManager.swift in Sources */,
 				5C1454382CF7ED1600D5C232 /* SquareAspectRatioModifier.swift in Sources */,
 				5CC0DB142CFBCB010054E48D /* DevelopmentFlags.swift in Sources */,
 				5C1454572CF84E8D00D5C232 /* AddToCollectionMenu.swift in Sources */,
@@ -657,8 +686,11 @@
 				5C3DFED02D0562CE003D3CF2 /* PreviewContainerHelpers.swift in Sources */,
 				5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */,
 				5C65FB112D04FC8B001A2E5B /* PreviewDataManager.swift in Sources */,
+				5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */,
 				5C9709F02CFECCC3003CD884 /* GroupViews.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
+				5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */,
+				5CD577292D0E94E0002FA8DB /* ImageService+Crop.swift in Sources */,
 				5CE069202CFED8ED0067EBF6 /* CardSquareView.swift in Sources */,
 				5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */,
 				5C3DFED62D057926003D3CF2 /* StoreCleanupService.swift in Sources */,
