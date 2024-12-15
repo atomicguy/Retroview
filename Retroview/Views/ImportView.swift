@@ -12,6 +12,8 @@ import UniformTypeIdentifiers
 struct ImportView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var batchImportService: BatchImportService
+    @StateObject private var cropUpdateService: CropUpdateService
+    @State private var selectedImportType: ImportType = .mods
     @State private var isImporting = false
     @State private var showError = false
     @State private var errorMessage = ""
@@ -19,7 +21,7 @@ struct ImportView: View {
     @State private var showConfirmation = false
     @State private var pendingImportURL: URL?
     @State private var fileCount = 0
-
+    
     enum ProcessingState {
         case ready
         case analyzing
@@ -27,24 +29,28 @@ struct ImportView: View {
         case completed(totalImported: Int, failedCount: Int)
         case failed(error: String)
         case cancelled
-
+        
         var isImporting: Bool {
             if case .importing = self { return true }
             return false
         }
     }
-
+    
     init(modelContext: ModelContext) {
         _batchImportService = StateObject(
-            wrappedValue: BatchImportService(modelContext: modelContext))
+            wrappedValue: BatchImportService(modelContext: modelContext)
+        )
+        _cropUpdateService = StateObject(
+            wrappedValue: CropUpdateService(modelContext: modelContext)
+        )
     }
-
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
+                importTypePicker
                 statusView
                     .padding(.vertical)
-
                 actionButtons
             }
             .padding()
@@ -61,6 +67,7 @@ struct ImportView: View {
             .sheet(isPresented: $showConfirmation) {
                 ImportConfirmationDialog(
                     fileCount: fileCount,
+                    importType: selectedImportType,
                     onConfirm: {
                         showConfirmation = false
                         startImport()
@@ -92,7 +99,18 @@ struct ImportView: View {
             }
         }
     }
-
+    
+    private var importTypePicker: some View {
+        Picker("Import Type", selection: $selectedImportType) {
+            ForEach(ImportType.allCases) { type in
+                Label(type.rawValue, systemImage: type.icon)
+                    .tag(type)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal)
+    }
+    
     private var actionButtons: some View {
         HStack(spacing: 16) {
             if case .importing = processingState {
@@ -125,11 +143,14 @@ struct ImportView: View {
             .disabled(processingState.isImporting)
         }
     }
-
+    
     private func analyzeDirectory(_ url: URL) async {
         processingState = .analyzing
         do {
-            fileCount = try await batchImportService.analyzeDirectory(at: url)
+            fileCount = try await selectedImportType == .mods ?
+                batchImportService.analyzeDirectory(at: url) :
+                analyzeForCropUpdates(at: url)
+            
             pendingImportURL = url
             showConfirmation = true
             processingState = .ready
@@ -137,49 +158,64 @@ struct ImportView: View {
             await handleError(error)
         }
     }
-
+    
+    private func analyzeForCropUpdates(at url: URL) async throws -> Int {
+        guard url.startAccessingSecurityScopedResource() else {
+            throw ImportError.securityScopedResourceAccessDenied
+        }
+        defer { url.stopAccessingSecurityScopedResource() }
+        
+        let fileURLs = try FileManager.default.contentsOfDirectory(
+            at: url,
+            includingPropertiesForKeys: [.isRegularFileKey],
+            options: .skipsHiddenFiles
+        ).filter { $0.pathExtension.lowercased() == "json" }
+        
+        return fileURLs.count
+    }
+    
     private func startImport() {
         guard let url = pendingImportURL else { return }
-
+        
         Task {
             do {
                 processingState = .importing(filesProcessed: 0, totalFiles: fileCount)
-
-                let progressTask = Task {
-                    for await progress in batchImportService.progressUpdates {
-                        if Task.isCancelled { break }
-                        await MainActor.run {
-                            processingState = .importing(
-                                filesProcessed: Int(progress.completedUnitCount),
-                                totalFiles: Int(progress.totalUnitCount)
-                            )
-                        }
-                    }
+                
+                switch selectedImportType {
+                case .mods:
+                    try await batchImportService.importDirectory(at: url)
+                case .crops:
+                    try await importCropUpdates(from: url)
                 }
-
-                try await batchImportService.importDirectory(at: url)
-                progressTask.cancel()
-
+                
+                let report = batchImportService.getImportReport()
                 await MainActor.run {
-                    let report = batchImportService.getImportReport()
-                    if report.failureCount > 0 {
-                        processingState = .completed(
-                            totalImported: report.successCount,
-                            failedCount: report.failureCount
-                        )
-                    } else {
-                        processingState = .completed(
-                            totalImported: fileCount,
-                            failedCount: 0
-                        )
-                    }
+                    processingState = .completed(
+                        totalImported: report.successCount,
+                        failedCount: report.failureCount
+                    )
                 }
             } catch {
                 await handleError(error)
             }
         }
     }
-
+    
+    private func importCropUpdates(from url: URL) async throws {
+        guard url.startAccessingSecurityScopedResource() else {
+            throw ImportError.securityScopedResourceAccessDenied
+        }
+        defer { url.stopAccessingSecurityScopedResource() }
+        
+        let fileURLs = try FileManager.default.contentsOfDirectory(
+            at: url,
+            includingPropertiesForKeys: [.isRegularFileKey],
+            options: .skipsHiddenFiles
+        ).filter { $0.pathExtension.lowercased() == "json" }
+        
+        try await cropUpdateService.updateCropsInBatch(from: fileURLs)
+    }
+    
     private func handleError(_ error: Error) async {
         await MainActor.run {
             errorMessage = error.localizedDescription
@@ -236,6 +272,7 @@ private struct DismissToolbarModifier: ViewModifier {
 
 struct ImportConfirmationDialog: View {
     let fileCount: Int
+    let importType: ImportType  // Add this parameter
     let onConfirm: () -> Void
     let onCancel: () -> Void
 
@@ -244,10 +281,10 @@ struct ImportConfirmationDialog: View {
             Text("Import Confirmation")
                 .font(.headline)
 
-            Text("Found \(fileCount) files to import.")
+            Text("\(importType == .mods ? "Found" : "Will update") \(fileCount) files.")
                 .font(.body)
 
-            Text("Would you like to proceed?")
+            Text(importType.description)
                 .font(.body)
                 .foregroundStyle(.secondary)
 
@@ -316,7 +353,7 @@ extension ImportView {
 
         case let .completed(total, failed):
             VStack(spacing: 12) {
-                Image(systemName: failed > 0 ? "checkmark.circle.badge.exclamationmark" : "checkmark.circle.fill")
+                Image(systemName: failed > 0 ? "checkmark.circle.trianglebadge.exclamationmark" : "checkmark.circle.fill")
                     .font(.system(size: 48))
                     .foregroundStyle(failed > 0 ? .yellow : .green)
 

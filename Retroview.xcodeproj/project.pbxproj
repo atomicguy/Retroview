@@ -89,6 +89,9 @@
 		5CD577252D0E891B002FA8DB /* UniformTypeIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577242D0E8913002FA8DB /* UniformTypeIdentifiers.swift */; };
 		5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577262D0E90E4002FA8DB /* PlatformFileHandler.swift */; };
 		5CD577292D0E94E0002FA8DB /* ImageService+Crop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577282D0E94D0002FA8DB /* ImageService+Crop.swift */; };
+		5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */; };
+		5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577322D0EAED7002FA8DB /* ImportType.swift */; };
+		5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */; };
 		5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDEFC242CE04E4C0046FD60 /* StereoViewer */; };
 		5CE069202CFED8ED0067EBF6 /* CardSquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE0691F2CFED8E60067EBF6 /* CardSquareView.swift */; };
 		5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */; };
@@ -215,6 +218,9 @@
 		5CD577242D0E8913002FA8DB /* UniformTypeIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniformTypeIdentifiers.swift; sourceTree = "<group>"; };
 		5CD577262D0E90E4002FA8DB /* PlatformFileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformFileHandler.swift; sourceTree = "<group>"; };
 		5CD577282D0E94D0002FA8DB /* ImageService+Crop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageService+Crop.swift"; sourceTree = "<group>"; };
+		5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImportTypes.swift; sourceTree = "<group>"; };
+		5CD577322D0EAED7002FA8DB /* ImportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportType.swift; sourceTree = "<group>"; };
+		5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropUpdateService.swift; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CE0691F2CFED8E60067EBF6 /* CardSquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSquareView.swift; sourceTree = "<group>"; };
 		5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardImageView.swift; sourceTree = "<group>"; };
@@ -286,6 +292,7 @@
 		5C4A271E2D04E954009ECECE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */,
 				5CD577282D0E94D0002FA8DB /* ImageService+Crop.swift */,
 				5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */,
 				5CD577182D0E7522002FA8DB /* DatabaseExportService.swift */,
@@ -430,6 +437,8 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5CD577322D0EAED7002FA8DB /* ImportType.swift */,
+				5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */,
 				5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */,
 				5CC5A5C42BD47622005811DA /* Author.swift */,
 				5C14544E2CF849D700D5C232 /* Collection.swift */,
@@ -630,6 +639,7 @@
 				5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */,
 				5CEFA7692CFA83AE00D410EA /* InteractionState.swift in Sources */,
 				5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */,
+				5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */,
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
 				5C43BC472CF98BF70053FAFD /* CollectionMenuView.swift in Sources */,
 				5CD577152D0E5BE6002FA8DB /* ImportLogger.swift in Sources */,
@@ -646,6 +656,7 @@
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
 				5C9709EC2CFECC9C003CD884 /* CardGroupingGrid.swift in Sources */,
 				5C9BCA542C166AD600668900 /* FrontCardView.swift in Sources */,
+				5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */,
 				5C14542F2CF6F5F100D5C232 /* GalleryScreen.swift in Sources */,
 				5C1454162CF5760300D5C232 /* ImageLoading.swift in Sources */,
 				5C1454172CF5760300D5C232 /* StereoViewCoordinator.swift in Sources */,
@@ -661,6 +672,7 @@
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5C9709E82CFECC3E003CD884 /* GroupingPreview.swift in Sources */,
+				5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */,
 				5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */,
 				5CD5771B2D0E7544002FA8DB /* DatabaseTransferView.swift in Sources */,
 				5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */,
