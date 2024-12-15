@@ -395,64 +395,83 @@ extension MODSParsingService {
 
 extension MODSParsingService {
     private static func preprocessJSONData(_ data: Data) throws -> Data {
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            throw MODSParsingError.invalidJSON("Could not convert data to string")
-        }
-
-        print("🧹 Starting JSON preprocessing...")
+        // Try different encodings in order of likelihood
+        let encodings: [String.Encoding] = [
+            .utf8,
+            .ascii,
+            .isoLatin1,
+            .utf16LittleEndian,
+            .utf16BigEndian
+        ]
         
-        // First pass: clean any raw control characters from the entire string
-        var cleanedString = jsonString
-            .components(separatedBy: .controlCharacters)
-            .joined(separator: " ")
+        var lastError: Error? = nil
         
-        // Second pass: find and clean all string values in JSON
-        let pattern = ": ?\"[^\"]+\""  // Matches :"value" or : "value"
-        if let regex = try? NSRegularExpression(pattern: pattern) {
-            let nsString = NSString(string: cleanedString)
-            let matches = regex.matches(in: cleanedString, range: NSRange(location: 0, length: nsString.length))
-            
-            // Process matches in reverse to not invalidate ranges
-            for match in matches.reversed() {
-                let range = match.range
-                let stringValue = nsString.substring(with: range)
+        for encoding in encodings {
+            if let jsonString = String(data: data, encoding: encoding) {
+                print("🧹 Successfully decoded JSON with \(encoding) encoding")
                 
-                // Clean the string value:
-                // 1. Remove multi-spaces
-                // 2. Escape any remaining control chars
-                // 3. Ensure proper JSON string format
-                var cleaned = stringValue
-                    .replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
-                    .replacingOccurrences(of: "\t", with: "\\t")
-                    .replacingOccurrences(of: "\r", with: "\\r")
-                    .replacingOccurrences(of: "\n", with: "\\n")
-                    .trimmingCharacters(in: .whitespaces)
+                // First pass: clean any raw control characters from the entire string
+                var cleanedString = jsonString
+                    .components(separatedBy: .controlCharacters)
+                    .joined(separator: " ")
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
                 
-                // Ensure it starts with :" and ends with "
-                if cleaned.hasPrefix(":") {
-                    cleaned = ":" + cleaned.dropFirst().trimmingCharacters(in: .whitespaces)
-                }
-                if !cleaned.hasSuffix("\"") {
-                    cleaned += "\""
+                // Remove any BOM (Byte Order Mark) if present
+                if cleanedString.hasPrefix("\u{FEFF}") {
+                    cleanedString = String(cleanedString.dropFirst())
                 }
                 
-                cleanedString = (cleanedString as NSString).replacingCharacters(in: range, with: cleaned)
+                // Second pass: find and clean all string values in JSON
+                let pattern = ": ?\"[^\"]+\""  // Matches :"value" or : "value"
+                if let regex = try? NSRegularExpression(pattern: pattern) {
+                    let nsString = NSString(string: cleanedString)
+                    let matches = regex.matches(in: cleanedString, range: NSRange(location: 0, length: nsString.length))
+                    
+                    // Process matches in reverse to not invalidate ranges
+                    for match in matches.reversed() {
+                        let range = match.range
+                        let stringValue = nsString.substring(with: range)
+                        
+                        // Clean the string value
+                        var cleaned = stringValue
+                            .replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+                            .replacingOccurrences(of: "\t", with: "\\t")
+                            .replacingOccurrences(of: "\r", with: "\\r")
+                            .replacingOccurrences(of: "\n", with: "\\n")
+                            .trimmingCharacters(in: .whitespaces)
+                        
+                        // Ensure it starts with :" and ends with "
+                        if cleaned.hasPrefix(":") {
+                            cleaned = ":" + cleaned.dropFirst().trimmingCharacters(in: .whitespaces)
+                        }
+                        if !cleaned.hasSuffix("\"") {
+                            cleaned += "\""
+                        }
+                        
+                        cleanedString = (cleanedString as NSString).replacingCharacters(in: range, with: cleaned)
+                    }
+                }
+                
+                // Verify the cleaned string can be converted back to data
+                if let cleanedData = cleanedString.data(using: .utf8) {
+                    // Verify it's valid JSON
+                    do {
+                        _ = try JSONSerialization.jsonObject(with: cleanedData)
+                        print("✅ Successfully preprocessed and validated JSON")
+                        return cleanedData
+                    } catch {
+                        print("⚠️ Cleaned data failed JSON validation: \(error)")
+                        lastError = error
+                        continue
+                    }
+                }
             }
         }
         
-        print("🧹 Preprocessing complete")
-        
-        // For debugging, let's print the problematic area
-        let lines = cleanedString.components(separatedBy: .newlines)
-        if lines.count >= 42 {
-            print("📍 Line 42 content:")
-            print(lines[41])  // Arrays are 0-based
-        }
-        
-        guard let cleanedData = cleanedString.data(using: .utf8) else {
-            throw MODSParsingError.invalidJSON("Could not convert cleaned string back to data")
-        }
-        
-        return cleanedData
+        throw MODSParsingError.invalidJSON("""
+            Could not process JSON with any known encoding. \
+            Last error: \(lastError?.localizedDescription ?? "Unknown")
+            """
+        )
     }
 }
