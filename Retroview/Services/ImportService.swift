@@ -9,18 +9,25 @@ import CoreGraphics
 import Foundation
 import SwiftData
 
+enum MODSParsingError: Error {
+    case processingError(String)
+}
+
 @MainActor
 class ImportService {
     private let modelContext: ModelContext
     private let imageService: ImageServiceProtocol
+//    private let modsParser = MODSParsingService()
+    private let batchSize: Int
 
     init(
         modelContext: ModelContext,
-        imageService: ImageServiceProtocol = ImageServiceFactory.shared
-            .getService()
+        imageService: ImageServiceProtocol = ImageServiceFactory.shared.getService(),
+        batchSize: Int = 50
     ) {
         self.modelContext = modelContext
         self.imageService = imageService
+        self.batchSize = batchSize
     }
 
     func importJSON(from url: URL) async throws {
@@ -36,13 +43,80 @@ class ImportService {
         } catch {
             // If simplified JSON parsing fails, try MODS format
             print("⚠️ Trying MODS format for: \(url.lastPathComponent)")
-            let cardData = try MODSParsingService.convertMODSToStereoCard(data)
-            try await importCard(from: cardData)
-            try modelContext.save()
-            print("✅ Successfully imported: \(url.lastPathComponent)")
+            let cardData = try await processMODSData(data)
+            if let cardData {
+                try await importCard(from: cardData)
+                try modelContext.save()
+                print("✅ Successfully imported: \(url.lastPathComponent)")
+            } else {
+                throw MODSParsingError.processingError("Failed to parse MODS format")
+            }
         }
     }
 
+    func importBatch(from urls: [URL]) async throws {
+            print("\n📦 Processing batch of \(urls.count) files...")
+            
+            // Process in batches to manage memory
+            for batch in stride(from: 0, to: urls.count, by: batchSize) {
+                let end = min(batch + batchSize, urls.count)
+                let batchUrls = Array(urls[batch..<end])
+                
+                try await processBatch(batchUrls)
+                
+                // Clear context after each batch to manage memory
+                try modelContext.save()
+            }
+        }
+
+    private func processBatch(_ urls: [URL]) async throws {
+            // Load batch data
+            let batchData = try urls.map { try Data(contentsOf: $0) }
+            
+            // Try simplified JSON format first
+            let decodedCards = batchData.compactMap { data -> StereoCardJSON? in
+                try? JSONDecoder().decode(StereoCardJSON.self, from: data)
+            }
+            
+            // Process any successfully decoded JSON cards
+            for card in decodedCards {
+                try await importCard(from: card)
+            }
+            
+            // For remaining files, try MODS format
+            let remainingDataIndices = batchData.indices.filter { index in
+                if let decodedCard = try? JSONDecoder().decode(StereoCardJSON.self, from: batchData[index]) {
+                    return !decodedCards.contains { $0.uuid == decodedCard.uuid }
+                }
+                return true
+            }
+            
+            if !remainingDataIndices.isEmpty {
+                let remainingData = remainingDataIndices.map { batchData[$0] }
+                
+                // Process MODS data
+                try await withThrowingTaskGroup(of: StereoCardJSON?.self) { group in
+                    for data in remainingData {
+                        group.addTask {
+                            try MODSParsingService.convertMODSToStereoCard(data)
+                        }
+                    }
+                    
+                    for try await card in group {
+                        if let card {
+                            try await importCard(from: card)
+                        }
+                    }
+                }
+            }
+            
+            try modelContext.save()
+        }
+    
+    private func processMODSData(_ data: Data) async throws -> StereoCardJSON? {
+        try MODSParsingService.convertMODSToStereoCard(data)
+    }
+    
     private func importCard(from cardData: StereoCardJSON) async throws {
         let uuid = UUID(uuidString: cardData.uuid) ?? UUID()
         let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
@@ -59,10 +133,10 @@ class ImportService {
         }
 
         // Create or get existing entities
-        let titles = try await getTitles(from: cardData.titles)
-        let authors = try await getAuthors(from: cardData.authors)
-        let subjects = try await getSubjects(from: cardData.subjects)
-        let dates = try await getDates(from: cardData.dates)
+        async let titles = getTitles(from: cardData.titles)
+        async let authors = getAuthors(from: cardData.authors)
+        async let subjects = getSubjects(from: cardData.subjects)
+        async let dates = getDates(from: cardData.dates)
 
         // Create crops
         let leftCrop = CropSchemaV1.Crop(
@@ -83,23 +157,25 @@ class ImportService {
             side: cardData.right.side
         )
 
+        // Wait for all async operations to complete
+        let (titleResults, authorResults, subjectResults, dateResults) = try await (titles, authors, subjects, dates)
+
         // Create new card
         let card = CardSchemaV1.StereoCard(
             uuid: cardData.uuid,
             imageFrontId: cardData.imageIds.front,
             imageBackId: cardData.imageIds.back,
-            titles: titles,
-            authors: authors,
-            subjects: subjects,
-            dates: dates,
+            titles: titleResults,
+            authors: authorResults,
+            subjects: subjectResults,
+            dates: dateResults,
             crops: [leftCrop, rightCrop]
         )
 
         // Set the first title as the picked title
-        card.titlePick = titles.first
+        card.titlePick = titleResults.first
 
         modelContext.insert(card)
-        try modelContext.save()
 
         // Download images after save
         if let frontId = card.imageFrontId {
@@ -119,8 +195,6 @@ class ImportService {
                 card.imageBack = imageData
             }
         }
-
-        try modelContext.save()
     }
 
     // Helper methods for fetching or creating entities

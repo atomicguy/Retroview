@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MODSParsingService {
+actor MODSParsingService {
     enum MODSParsingError: LocalizedError {
         case invalidJSON(String)
         case missingRequiredField(String)
