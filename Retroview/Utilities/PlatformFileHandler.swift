@@ -11,43 +11,39 @@ import UniformTypeIdentifiers
 #if os(macOS)
 struct PlatformFileHandler {
     static func exportFile(data: Data, defaultName: String) async throws -> URL? {
-        // Run the panel setup on the main thread
-        let panel = await MainActor.run { () -> NSSavePanel in
+        // Run the panel on the main thread using MainActor
+        let url = await MainActor.run { () -> URL? in
             let panel = NSSavePanel()
             panel.allowedContentTypes = [.retroviewDatabase]
             panel.nameFieldStringValue = defaultName
-            return panel
+            
+            guard panel.runModal() == .OK else {
+                return nil
+            }
+            
+            return panel.url
         }
-
-        // Get the key window asynchronously
-        guard let window = await NSApp.keyWindow,
-              await panel.beginSheetModal(for: window) == .OK,
-              let url = await panel.url else {
-            return nil
-        }
-
+        
+        guard let url else { return nil }
+        
         // Write data to the selected URL
         try data.write(to: url, options: .atomic)
         return url
     }
-
+    
     static func importFile() async throws -> URL? {
-        // Run the panel setup on the main thread
-        let panel = await MainActor.run { () -> NSOpenPanel in
+        // Run the panel on the main thread using MainActor
+        await MainActor.run { () -> URL? in
             let panel = NSOpenPanel()
             panel.allowedContentTypes = [.retroviewDatabase]
             panel.allowsMultipleSelection = false
-            return panel
+            
+            guard panel.runModal() == .OK else {
+                return nil
+            }
+            
+            return panel.url
         }
-
-        // Get the key window asynchronously
-        guard let window = await NSApp.keyWindow,
-              await panel.beginSheetModal(for: window) == .OK,
-              let url = await panel.url else {
-            return nil
-        }
-
-        return url
     }
 }
 #else
