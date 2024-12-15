@@ -12,6 +12,7 @@ struct MODSParsingService {
         case invalidJSON(String)
         case missingRequiredField(String)
         case unexpectedDataStructure(String)
+        case processingError(String)
 
         var errorDescription: String? {
             switch self {
@@ -21,59 +22,73 @@ struct MODSParsingService {
                 return "Missing required field: \(field)"
             case .unexpectedDataStructure(let detail):
                 return "Unexpected data structure: \(detail)"
+            case .processingError(let detail):
+                return "Processing error: \(detail)"
             }
         }
     }
 
     static func convertMODSToStereoCard(_ data: Data) throws -> StereoCardJSON {
-        guard
-            let dict = try? JSONSerialization.jsonObject(with: data)
-                as? [String: Any],
-            let cardDict = dict["card"] as? [String: Any],
-            let nyplAPI = cardDict["nyplAPI"] as? [String: Any],
-            let response = nyplAPI["response"] as? [String: Any],
-            let mods = response["mods"] as? [String: Any]
-        else {
-            throw MODSParsingError.unexpectedDataStructure(
-                "Invalid MODS structure")
+        print("🔍 Starting MODS parsing...")
+        
+        // Preprocess the data to handle malformed JSON
+        let cleanedData = try preprocessJSONData(data)
+        
+        do {
+            guard let dict = try JSONSerialization.jsonObject(with: cleanedData) as? [String: Any] else {
+                print("❌ Failed to parse JSON: \(String(data: cleanedData, encoding: .utf8) ?? "invalid data")")
+                throw MODSParsingError.invalidJSON("Could not parse as dictionary")
+            }
+            
+            guard let cardDict = dict["card"] as? [String: Any] else {
+                print("❌ Missing card object")
+                throw MODSParsingError.unexpectedDataStructure("Missing card object")
+            }
+            
+            guard let nyplAPI = cardDict["nyplAPI"] as? [String: Any] else {
+                print("❌ Missing nyplAPI object")
+                throw MODSParsingError.unexpectedDataStructure("Missing nyplAPI object")
+            }
+            
+            guard let response = nyplAPI["response"] as? [String: Any] else {
+                print("❌ Missing response object")
+                throw MODSParsingError.unexpectedDataStructure("Missing response object")
+            }
+            
+            guard let mods = response["mods"] as? [String: Any] else {
+                print("❌ Missing mods object")
+                print("Response keys available: \(response.keys)")
+                throw MODSParsingError.unexpectedDataStructure("Missing mods object")
+            }
+            
+            // Extract all required fields
+            let uuid = try extractUUID(from: mods)
+            let titles = extractTitles(from: mods)
+            let dates = extractDates(from: mods)
+            let subjects = extractSubjects(from: mods)
+            let authors = extractAuthors(from: mods)
+            let imageIds = extractImageIDs(from: response)
+            
+            // Create and return the card
+            let card = StereoCardJSON(
+                uuid: uuid,
+                titles: titles,
+                subjects: subjects,
+                authors: authors,
+                dates: dates,
+                imageIds: imageIds,
+                left: CropData(x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "left"),
+                right: CropData(x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "right")
+            )
+            
+            // Log successful parsing
+            logImportedCard(card)
+            
+            return card
+        } catch {
+            print("❌ Error during MODS parsing: \(error)")
+            throw MODSParsingError.processingError("JSON parsing failed: \(error.localizedDescription)")
         }
-
-        // Extract UUID
-        let uuid = try extractUUID(from: mods)
-
-        // Extract titles
-        let titles = extractTitles(from: mods)
-
-        // Extract dates
-        let dates = extractDates(from: mods)
-
-        // Extract subjects
-        let subjects = extractSubjects(from: mods)
-
-        // Extract authors
-        let authors = try extractAuthors(from: mods)
-
-        // Extract image IDs
-        let imageIds = extractImageIDs(from: response)
-
-        // For MODS imports, we'll create placeholder crops if not provided
-        let defaultCrop = CropData(
-            x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "left")
-
-        let card = StereoCardJSON(
-            uuid: uuid,
-            titles: titles,
-            subjects: subjects,
-            authors: authors,
-            dates: dates,
-            imageIds: imageIds,
-            left: defaultCrop,
-            right: CropData(
-                x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "right")
-        )
-
-        logImportedCard(card)
-        return card
     }
 
     private static func extractUUID(from mods: [String: Any]) throws -> String {
@@ -125,48 +140,42 @@ struct MODSParsingService {
     private static func extractDates(from mods: [String: Any]) -> [String] {
         var dates: [String] = []
 
-        if let originInfoArrays = mods["originInfo"] as? [[Any]] {
-            for originInfoArray in originInfoArrays {
-                for originInfo in originInfoArray {
-                    if let originDict = originInfo as? [String: Any] {
-                        // Handle single dateCreated
-                        if let dateCreated = originDict["dateCreated"]
-                            as? [String: Any],
-                            let dateText = dateCreated["x_"] as? String
-                        {
-                            dates.append(dateText)
-                        }
+        if let originInfo = mods["originInfo"] as? [String: Any] {
+            // Handle single dateCreated
+            if let dateCreated = originInfo["dateCreated"] as? [String: Any],
+                let dateText = dateCreated["x_"] as? String
+            {
+                // Split on comma if multiple dates are present
+                dates.append(contentsOf: dateText.components(separatedBy: ", "))
+            }
 
-                        // Handle array of dateCreated arrays
-                        if let dateCreatedArrays = originDict["dateCreated"]
-                            as? [[Any]]
+            // Handle array of dateCreated
+            if let dateCreatedArrays = originInfo["dateCreated"] as? [[Any]] {
+                for dateArray in dateCreatedArrays {
+                    for date in dateArray {
+                        if let dateDict = date as? [String: Any],
+                            let dateText = dateDict["x_"] as? String
                         {
-                            for dateArray in dateCreatedArrays {
-                                for date in dateArray {
-                                    if let dateDict = date as? [String: Any],
-                                        let dateText = dateDict["x_"] as? String
-                                    {
-                                        dates.append(dateText)
-                                    }
-                                }
-                            }
+                            dates.append(
+                                contentsOf: dateText.components(
+                                    separatedBy: ", "))
                         }
                     }
                 }
             }
         }
 
-        return dates
+        return dates.filter { !$0.isEmpty }
     }
 
     private static func extractSubjects(from mods: [String: Any]) -> [String] {
         var subjects: [String] = []
 
-        // Extract direct subjects
-        if let subjectArrays = mods["subject"] as? [[Any]] {
-            for subjectArray in subjectArrays {
-                for subjectData in subjectArray {
-                    if let subjectDict = subjectData as? [String: Any] {
+        // Handle single subject array
+        if let subjectArray = mods["subject"] as? [[Any]] {
+            for subjectData in subjectArray {
+                for subject in subjectData {
+                    if let subjectDict = subject as? [String: Any] {
                         // Handle geographic subjects
                         if let geographic = subjectDict["geographic"]
                             as? [String: Any],
@@ -187,19 +196,20 @@ struct MODSParsingService {
         }
 
         // Handle single subject
-        if let subject = mods["subject"] as? [String: Any],
-            let geographic = subject["geographic"] as? [String: Any],
-            let name = geographic["x_"] as? String
-        {
-            subjects.append(name)
+        if let subject = mods["subject"] as? [String: Any] {
+            if let geographic = subject["geographic"] as? [String: Any],
+                let name = geographic["x_"] as? String
+            {
+                subjects.append(name)
+            }
+            if let topic = subject["topic"] as? [String: Any],
+                let name = topic["x_"] as? String
+            {
+                subjects.append(name)
+            }
         }
 
-        // Extract subjects from relatedItem titles
-        if let relatedItem = mods["relatedItem"] as? [String: Any] {
-            extractRelatedItemSubjects(from: relatedItem, into: &subjects)
-        }
-
-        return subjects.uniqued()
+        return subjects.normalizedUnique()
     }
 
     private static func extractRelatedItemSubjects(
@@ -310,5 +320,139 @@ extension MODSParsingService {
         print("  Front: \(card.imageIds.front)")
         print("  Back: \(card.imageIds.back)")
         print("━━━━━━━━━━━━━━━━━━━━━━\n")
+    }
+}
+
+extension MODSParsingService {
+    static func debugConvertMODSToStereoCard(_ data: Data) throws
+        -> StereoCardJSON
+    {
+        // Try parsing JSON
+        guard
+            let dict = try? JSONSerialization.jsonObject(with: data)
+                as? [String: Any]
+        else {
+            throw MODSParsingError.unexpectedDataStructure(
+                "Failed to parse initial JSON")
+        }
+
+        // Check for card
+        guard let cardDict = dict["card"] as? [String: Any] else {
+            throw MODSParsingError.unexpectedDataStructure(
+                "Missing or invalid 'card' object in JSON: \(dict.keys)")
+        }
+
+        // Check for nyplAPI
+        guard let nyplAPI = cardDict["nyplAPI"] as? [String: Any] else {
+            throw MODSParsingError.unexpectedDataStructure(
+                "Missing or invalid 'nyplAPI' in card: \(cardDict.keys)")
+        }
+
+        // Check for response
+        guard let response = nyplAPI["response"] as? [String: Any] else {
+            throw MODSParsingError.unexpectedDataStructure(
+                "Missing or invalid 'response' in nyplAPI: \(nyplAPI.keys)")
+        }
+
+        // Check for mods
+        guard let mods = response["mods"] as? [String: Any] else {
+            throw MODSParsingError.unexpectedDataStructure(
+                "Missing or invalid 'mods' in response: \(response.keys)")
+        }
+
+        // Continue with existing parsing logic...
+        let uuid = try extractUUID(from: mods)
+        let titles = extractTitles(from: mods)
+        let dates = extractDates(from: mods)
+        let subjects = extractSubjects(from: mods)
+        let authors = extractAuthors(from: mods)
+        let imageIds = extractImageIDs(from: response)
+
+        // Log the structure at each level
+        print("\n🔍 Debug - Document Structure:")
+        print("Root keys: \(dict.keys)")
+        print("Card keys: \(cardDict.keys)")
+        print("NYPL API keys: \(nyplAPI.keys)")
+        print("Response keys: \(response.keys)")
+        print("MODS keys: \(mods.keys)")
+
+        let defaultCrop = CropData(
+            x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "left")
+
+        return StereoCardJSON(
+            uuid: uuid,
+            titles: titles,
+            subjects: subjects,
+            authors: authors,
+            dates: dates,
+            imageIds: imageIds,
+            left: defaultCrop,
+            right: CropData(
+                x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "right")
+        )
+    }
+}
+
+extension MODSParsingService {
+    private static func preprocessJSONData(_ data: Data) throws -> Data {
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            throw MODSParsingError.invalidJSON("Could not convert data to string")
+        }
+
+        print("🧹 Starting JSON preprocessing...")
+        
+        // First pass: clean any raw control characters from the entire string
+        var cleanedString = jsonString
+            .components(separatedBy: .controlCharacters)
+            .joined(separator: " ")
+        
+        // Second pass: find and clean all string values in JSON
+        let pattern = ": ?\"[^\"]+\""  // Matches :"value" or : "value"
+        if let regex = try? NSRegularExpression(pattern: pattern) {
+            let nsString = NSString(string: cleanedString)
+            let matches = regex.matches(in: cleanedString, range: NSRange(location: 0, length: nsString.length))
+            
+            // Process matches in reverse to not invalidate ranges
+            for match in matches.reversed() {
+                let range = match.range
+                let stringValue = nsString.substring(with: range)
+                
+                // Clean the string value:
+                // 1. Remove multi-spaces
+                // 2. Escape any remaining control chars
+                // 3. Ensure proper JSON string format
+                var cleaned = stringValue
+                    .replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+                    .replacingOccurrences(of: "\t", with: "\\t")
+                    .replacingOccurrences(of: "\r", with: "\\r")
+                    .replacingOccurrences(of: "\n", with: "\\n")
+                    .trimmingCharacters(in: .whitespaces)
+                
+                // Ensure it starts with :" and ends with "
+                if cleaned.hasPrefix(":") {
+                    cleaned = ":" + cleaned.dropFirst().trimmingCharacters(in: .whitespaces)
+                }
+                if !cleaned.hasSuffix("\"") {
+                    cleaned += "\""
+                }
+                
+                cleanedString = (cleanedString as NSString).replacingCharacters(in: range, with: cleaned)
+            }
+        }
+        
+        print("🧹 Preprocessing complete")
+        
+        // For debugging, let's print the problematic area
+        let lines = cleanedString.components(separatedBy: .newlines)
+        if lines.count >= 42 {
+            print("📍 Line 42 content:")
+            print(lines[41])  // Arrays are 0-based
+        }
+        
+        guard let cleanedData = cleanedString.data(using: .utf8) else {
+            throw MODSParsingError.invalidJSON("Could not convert cleaned string back to data")
+        }
+        
+        return cleanedData
     }
 }

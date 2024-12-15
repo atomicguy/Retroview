@@ -24,17 +24,22 @@ class ImportService {
     }
 
     func importJSON(from url: URL) async throws {
+        print("\n📄 Processing file: \(url.lastPathComponent)")
         let data = try Data(contentsOf: url)
-
+        
         // Try parsing as simplified JSON first
         do {
-            let cardData = try JSONDecoder().decode(
-                StereoCardJSON.self, from: data)
+            let cardData = try JSONDecoder().decode(StereoCardJSON.self, from: data)
             try await importCard(from: cardData)
+            try modelContext.save()
+            print("✅ Successfully imported: \(url.lastPathComponent)")
         } catch {
             // If simplified JSON parsing fails, try MODS format
+            print("⚠️ Trying MODS format for: \(url.lastPathComponent)")
             let cardData = try MODSParsingService.convertMODSToStereoCard(data)
             try await importCard(from: cardData)
+            try modelContext.save()
+            print("✅ Successfully imported: \(url.lastPathComponent)")
         }
     }
 
