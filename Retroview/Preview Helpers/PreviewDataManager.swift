@@ -11,24 +11,15 @@ import SwiftUI
 @MainActor
 final class PreviewDataManager {
     static let shared = PreviewDataManager()
-    
-    private let previewStoreURL: URL
     private var modelContainer: ModelContainer?
-    
-    private init() {
-        let appSupport = FileManager.default.urls(
-            for: .applicationSupportDirectory, in: .userDomainMask
-        ).first!
-        let previewDir = appSupport.appendingPathComponent(
-            "PreviewData", isDirectory: true)
-        previewStoreURL = previewDir.appendingPathComponent("preview.store")
-    }
-    
+
+    private init() {}
+
     func container() throws -> ModelContainer {
         if let existing = modelContainer {
             return existing
         }
-        
+
         let schema = Schema([
             CardSchemaV1.StereoCard.self,
             TitleSchemaV1.Title.self,
@@ -38,64 +29,35 @@ final class PreviewDataManager {
             CropSchemaV1.Crop.self,
             CollectionSchemaV1.Collection.self,
         ])
-        
-        // Always create a fresh configuration
+
         let config = ModelConfiguration(
             schema: schema,
-            url: previewStoreURL,
-            allowsSave: true
+            isStoredInMemoryOnly: true  // Use in-memory storage for previews
         )
-        
+
         let container = try ModelContainer(
-            for: schema,
-            configurations: [config]
-        )
+            for: schema, configurations: [config])
         modelContainer = container
         return container
     }
-    
-    func reset() async throws {
-        // Close existing container
+
+    func reset() {
         modelContainer = nil
-        
-        // Wait for any pending operations to complete
-        try await Task.sleep(for: .milliseconds(100))
-        
-        // Delete store files
-        let storeURLs = [
-            previewStoreURL,
-            previewStoreURL.appendingPathExtension("shm"),
-            previewStoreURL.appendingPathExtension("wal")
-        ]
-        
-        for url in storeURLs {
-            try? FileManager.default.removeItem(at: url)
-        }
-        
-        // Create fresh directory structure
-        try? FileManager.default.createDirectory(
-            at: previewStoreURL.deletingLastPathComponent(),
-            withIntermediateDirectories: true
-        )
     }
-    
+
     func populatePreviewData() async throws {
-        // Always reset before populating
-        try await reset()
-        
-        print("Creating new preview container...")
+        reset()  // Clear existing container
+
         let container = try container()
         let context = container.mainContext
-        
-        print("Starting preview data population...")
-        
+
         // Create base entities
         let titles = createTitles(context: context)
         let authors = createAuthors(context: context)
         let subjects = createSubjects(context: context)
         let dates = createDates(context: context)
-        
-        // Create sample cards with relationships
+
+        // Create sample cards
         try await createSampleCards(
             context: context,
             titles: titles,
@@ -103,11 +65,7 @@ final class PreviewDataManager {
             subjects: subjects,
             dates: dates
         )
-        
-        // Create collections
-        createCollections(context: context)
-        
+
         try context.save()
-        print("Preview data population complete")
     }
 }

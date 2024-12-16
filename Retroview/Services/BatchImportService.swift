@@ -51,20 +51,23 @@ class BatchImportService: ObservableObject {
     private let importService: ImportService
     private var progressContinuation: AsyncStream<Progress>.Continuation?
     private var cancellationToken: Task<Void, Error>?
+    private let batchSize: Int
+    private let progressQueue = DispatchQueue(label: "com.retroview.importprogress")
 
     var progressUpdates: AsyncStream<Progress> {
         AsyncStream { continuation in
             self.progressContinuation = continuation
-            continuation.yield(progress)
+            continuation.yield(self.progress)
         }
     }
 
-    init(modelContext: ModelContext) {
-        importService = ImportService(modelContext: modelContext)
-        progress = Progress(totalUnitCount: 0)
-        progress.kind = .file
+    init(modelContext: ModelContext, batchSize: Int = 100) {
+        self.progress = Progress(totalUnitCount: 0)
+        self.importService = ImportService(modelContext: modelContext)
+        self.batchSize = batchSize
+        self.progress.kind = .file
     }
-
+    
     func cancelImport() {
         cancellationToken?.cancel()
         progressContinuation?.finish()
@@ -85,7 +88,7 @@ class BatchImportService: ObservableObject {
         return fileURLs.count
     }
 
-    func importDirectory(at url: URL, batchSize: Int = 10) async throws {
+    func importDirectory(at url: URL) async throws {
         guard url.startAccessingSecurityScopedResource() else {
             throw ImportError.securityScopedResourceAccessDenied
         }
@@ -97,37 +100,37 @@ class BatchImportService: ObservableObject {
             options: .skipsHiddenFiles
         ).filter { $0.pathExtension.lowercased() == "json" }
 
+        // Create new progress instance and immediately notify observers
         progress = Progress(totalUnitCount: Int64(fileURLs.count))
         progressContinuation?.yield(progress)
-
+        
+        var processedCount: Int64 = 0
+        
         cancellationToken = Task {
-            var processedCount = 0
-            var currentIndex = 0
-
-            while currentIndex < fileURLs.count, !Task.isCancelled {
-                let batchEnd = min(currentIndex + batchSize, fileURLs.count)
-                let batch = fileURLs[currentIndex ..< batchEnd]
-
+            // Process in batches
+            for batch in stride(from: 0, to: fileURLs.count, by: batchSize) {
+                if Task.isCancelled { break }
+                
+                let end = min(batch + batchSize, fileURLs.count)
+                let batchUrls = Array(fileURLs[batch..<end])
+                
                 try await withThrowingTaskGroup(of: Void.self) { group in
-                    for fileURL in batch {
+                    for fileURL in batchUrls {
                         if Task.isCancelled { break }
-
+                        
                         group.addTask {
                             try await self.importService.importJSON(from: fileURL)
+                            
+                            // Thread-safe increment and update
+                            await self.updateProgress(currentCount: &processedCount)
                         }
                     }
-
-                    for try await _ in group {
-                        processedCount += 1
-                        progress.completedUnitCount = Int64(processedCount)
-                        progressContinuation?.yield(progress)
-                    }
+                    
+                    try await group.waitForAll()
                 }
-
-                currentIndex = batchEnd
-                if !Task.isCancelled {
-                    try await Task.sleep(for: .milliseconds(100))
-                }
+                
+                // Brief pause between batches
+                try await Task.sleep(for: .milliseconds(50))
             }
 
             if Task.isCancelled {
@@ -135,15 +138,26 @@ class BatchImportService: ObservableObject {
             }
         }
 
-        do {
-            try await cancellationToken?.value
-        } catch is CancellationError {
-            // Handle cancellation gracefully
-            print("Import cancelled")
-            throw ImportError.cancelled
+        try await cancellationToken?.value
+    }
+    
+    private func updateProgress(currentCount: inout Int64) async {
+        await MainActor.run {
+            currentCount += 1
+            progress.completedUnitCount = currentCount
+            progressContinuation?.yield(progress)
         }
+    }
 
-        progressContinuation?.finish()
+    func getImportReport() -> ImportReport {
+        let failedImports = ImportLogger.getFailedImports()
+        let report = ImportReport(
+            totalProcessed: Int(progress.totalUnitCount),
+            successCount: Int(progress.completedUnitCount) - failedImports.count,
+            failedImports: failedImports
+        )
+        ImportLogger.clearFailedImports()
+        return report
     }
 }
 
@@ -164,18 +178,5 @@ enum ImportError: LocalizedError {
         case .cancelled:
             "Import cancelled"
         }
-    }
-}
-
-extension BatchImportService {
-    func getImportReport() -> ImportReport {
-        let failedImports = ImportLogger.getFailedImports()
-        let report = ImportReport(
-            totalProcessed: Int(progress.totalUnitCount),
-            successCount: Int(progress.totalUnitCount) - failedImports.count,
-            failedImports: failedImports
-        )
-        ImportLogger.clearFailedImports()
-        return report
     }
 }
