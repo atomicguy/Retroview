@@ -9,25 +9,23 @@ import CoreGraphics
 import Foundation
 import SwiftData
 
-enum MODSParsingError: Error {
-    case processingError(String)
-}
-
 @MainActor
 class ImportService {
-    private let modelContext: ModelContext
+    let modelContext: ModelContext
     private let imageService: ImageServiceProtocol
-//    private let modsParser = MODSParsingService()
     private let batchSize: Int
+    private let preloadImages: Bool
 
     init(
         modelContext: ModelContext,
         imageService: ImageServiceProtocol = ImageServiceFactory.shared.getService(),
-        batchSize: Int = 50
+        batchSize: Int = 50,
+        preloadImages: Bool = false
     ) {
         self.modelContext = modelContext
         self.imageService = imageService
         self.batchSize = batchSize
+        self.preloadImages = preloadImages
     }
 
     func importJSON(from url: URL) async throws {
@@ -43,80 +41,18 @@ class ImportService {
         } catch {
             // If simplified JSON parsing fails, try MODS format
             print("⚠️ Trying MODS format for: \(url.lastPathComponent)")
-            let cardData = try await processMODSData(data)
-            if let cardData {
+            do {
+                let cardData = try MODSParsingService.convertMODSToStereoCard(data, fileName: url.lastPathComponent)
                 try await importCard(from: cardData)
                 try modelContext.save()
-                print("✅ Successfully imported: \(url.lastPathComponent)")
-            } else {
-                throw MODSParsingError.processingError("Failed to parse MODS format")
+                print("✅ Successfully imported MODS data from: \(url.lastPathComponent)")
+            } catch {
+                ImportLogger.log(.error, "Failed to import MODS data: \(error.localizedDescription)", file: url.lastPathComponent)
+                throw error
             }
         }
     }
 
-    func importBatch(from urls: [URL]) async throws {
-            print("\n📦 Processing batch of \(urls.count) files...")
-            
-            // Process in batches to manage memory
-            for batch in stride(from: 0, to: urls.count, by: batchSize) {
-                let end = min(batch + batchSize, urls.count)
-                let batchUrls = Array(urls[batch..<end])
-                
-                try await processBatch(batchUrls)
-                
-                // Clear context after each batch to manage memory
-                try modelContext.save()
-            }
-        }
-
-    private func processBatch(_ urls: [URL]) async throws {
-            // Load batch data
-            let batchData = try urls.map { try Data(contentsOf: $0) }
-            
-            // Try simplified JSON format first
-            let decodedCards = batchData.compactMap { data -> StereoCardJSON? in
-                try? JSONDecoder().decode(StereoCardJSON.self, from: data)
-            }
-            
-            // Process any successfully decoded JSON cards
-            for card in decodedCards {
-                try await importCard(from: card)
-            }
-            
-            // For remaining files, try MODS format
-            let remainingDataIndices = batchData.indices.filter { index in
-                if let decodedCard = try? JSONDecoder().decode(StereoCardJSON.self, from: batchData[index]) {
-                    return !decodedCards.contains { $0.uuid == decodedCard.uuid }
-                }
-                return true
-            }
-            
-            if !remainingDataIndices.isEmpty {
-                let remainingData = remainingDataIndices.map { batchData[$0] }
-                
-                // Process MODS data
-                try await withThrowingTaskGroup(of: StereoCardJSON?.self) { group in
-                    for data in remainingData {
-                        group.addTask {
-                            try MODSParsingService.convertMODSToStereoCard(data)
-                        }
-                    }
-                    
-                    for try await card in group {
-                        if let card {
-                            try await importCard(from: card)
-                        }
-                    }
-                }
-            }
-            
-            try modelContext.save()
-        }
-    
-    private func processMODSData(_ data: Data) async throws -> StereoCardJSON? {
-        try MODSParsingService.convertMODSToStereoCard(data)
-    }
-    
     private func importCard(from cardData: StereoCardJSON) async throws {
         let uuid = UUID(uuidString: cardData.uuid) ?? UUID()
         let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
@@ -125,9 +61,8 @@ class ImportService {
             }
         )
 
-        let existingCard = try modelContext.fetch(descriptor).first
-
-        if existingCard != nil {
+        // Skip if card already exists
+        if try modelContext.fetch(descriptor).first != nil {
             print("Card \(cardData.uuid) already exists, skipping import")
             return
         }
@@ -177,30 +112,38 @@ class ImportService {
 
         modelContext.insert(card)
 
-        // Download images after save
+        // Create ImageStore instances
         if let frontId = card.imageFrontId {
-            if let frontImage = try? await imageService.loadImage(
-                id: frontId, side: .front),
-                let imageData = ImageConversion.convert(cgImage: frontImage)
-            {
-                card.imageFront = imageData
+            let frontStore = ImageStore(imageId: frontId, side: CardSide.front.rawValue)
+            modelContext.insert(frontStore)
+            card.imageStores.append(frontStore)
+            
+            // Optionally preload images during import
+            if preloadImages {
+                if let frontImage = try? await imageService.loadImage(id: frontId, side: .front),
+                   let imageData = ImageConversion.convert(cgImage: frontImage) {
+                    frontStore.setImage(imageData)
+                }
             }
         }
 
         if let backId = card.imageBackId {
-            if let backImage = try? await imageService.loadImage(
-                id: backId, side: .back),
-                let imageData = ImageConversion.convert(cgImage: backImage)
-            {
-                card.imageBack = imageData
+            let backStore = ImageStore(imageId: backId, side: CardSide.back.rawValue)
+            modelContext.insert(backStore)
+            card.imageStores.append(backStore)
+            
+            // Optionally preload images during import
+            if preloadImages {
+                if let backImage = try? await imageService.loadImage(id: backId, side: .back),
+                   let imageData = ImageConversion.convert(cgImage: backImage) {
+                    backStore.setImage(imageData)
+                }
             }
         }
     }
 
-    // Helper methods for fetching or creating entities
-    private func getTitles(from titleStrings: [String]) async throws
-        -> [TitleSchemaV1.Title]
-    {
+    // MARK: - Entity Creation Helpers
+    private func getTitles(from titleStrings: [String]) async throws -> [TitleSchemaV1.Title] {
         try await withThrowingTaskGroup(of: TitleSchemaV1.Title.self) { group in
             for titleString in titleStrings {
                 group.addTask {
@@ -216,11 +159,8 @@ class ImportService {
         }
     }
 
-    private func getAuthors(from authorStrings: [String]) async throws
-        -> [AuthorSchemaV1.Author]
-    {
-        try await withThrowingTaskGroup(of: AuthorSchemaV1.Author.self) {
-            group in
+    private func getAuthors(from authorStrings: [String]) async throws -> [AuthorSchemaV1.Author] {
+        try await withThrowingTaskGroup(of: AuthorSchemaV1.Author.self) { group in
             for authorString in authorStrings {
                 group.addTask {
                     try await self.getOrCreateAuthor(matching: authorString)
@@ -235,11 +175,8 @@ class ImportService {
         }
     }
 
-    private func getSubjects(from subjectStrings: [String]) async throws
-        -> [SubjectSchemaV1.Subject]
-    {
-        try await withThrowingTaskGroup(of: SubjectSchemaV1.Subject.self) {
-            group in
+    private func getSubjects(from subjectStrings: [String]) async throws -> [SubjectSchemaV1.Subject] {
+        try await withThrowingTaskGroup(of: SubjectSchemaV1.Subject.self) { group in
             for subjectString in subjectStrings {
                 group.addTask {
                     try await self.getOrCreateSubject(matching: subjectString)
@@ -254,9 +191,7 @@ class ImportService {
         }
     }
 
-    private func getDates(from dateStrings: [String]) async throws
-        -> [DateSchemaV1.Date]
-    {
+    private func getDates(from dateStrings: [String]) async throws -> [DateSchemaV1.Date] {
         try await withThrowingTaskGroup(of: DateSchemaV1.Date.self) { group in
             for dateString in dateStrings {
                 group.addTask {
@@ -272,10 +207,9 @@ class ImportService {
         }
     }
 
+    // MARK: - Entity Creation Methods
     @MainActor
-    private func getOrCreateTitle(matching text: String) throws
-        -> TitleSchemaV1.Title
-    {
+    private func getOrCreateTitle(matching text: String) throws -> TitleSchemaV1.Title {
         let descriptor = FetchDescriptor<TitleSchemaV1.Title>(
             predicate: #Predicate<TitleSchemaV1.Title> { title in
                 title.text == text
@@ -292,9 +226,7 @@ class ImportService {
     }
 
     @MainActor
-    private func getOrCreateAuthor(matching name: String) throws
-        -> AuthorSchemaV1.Author
-    {
+    private func getOrCreateAuthor(matching name: String) throws -> AuthorSchemaV1.Author {
         let descriptor = FetchDescriptor<AuthorSchemaV1.Author>(
             predicate: #Predicate<AuthorSchemaV1.Author> { author in
                 author.name == name
@@ -311,9 +243,7 @@ class ImportService {
     }
 
     @MainActor
-    private func getOrCreateSubject(matching name: String) throws
-        -> SubjectSchemaV1.Subject
-    {
+    private func getOrCreateSubject(matching name: String) throws -> SubjectSchemaV1.Subject {
         let descriptor = FetchDescriptor<SubjectSchemaV1.Subject>(
             predicate: #Predicate<SubjectSchemaV1.Subject> { subject in
                 subject.name == name
@@ -330,9 +260,7 @@ class ImportService {
     }
 
     @MainActor
-    private func getOrCreateDate(matching text: String) throws
-        -> DateSchemaV1.Date
-    {
+    private func getOrCreateDate(matching text: String) throws -> DateSchemaV1.Date {
         let descriptor = FetchDescriptor<DateSchemaV1.Date>(
             predicate: #Predicate<DateSchemaV1.Date> { date in
                 date.text == text

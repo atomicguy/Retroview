@@ -45,18 +45,18 @@ struct RetroviewApp: App {
                 configurations: [modelConfiguration]
             )
             
-            #if DEBUG
-            // Load demo data if needed
-            Task { @MainActor in
-                let context = container.mainContext
-                let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-                if let count = try? context.fetch(descriptor).count, count == 0 {
-                    print("Loading demo data...")
-                    try? await PreviewDataManager.shared.populatePreviewData()
-                    print("Demo data loaded")
-                }
-            }
-            #endif
+//            #if DEBUG
+//            // Load demo data if needed
+//            Task { @MainActor in
+//                let context = container.mainContext
+//                let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+//                if let count = try? context.fetch(descriptor).count, count == 0 {
+//                    print("Loading demo data...")
+//                    try? await PreviewDataManager.shared.populatePreviewData()
+//                    print("Demo data loaded")
+//                }
+//            }
+//            #endif
             
             self.sharedModelContainer = container
         } catch {
@@ -78,11 +78,7 @@ struct RetroviewApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                #if os(visionOS)
-                VisionGalleryScreen()
-                #else
                 LibraryGridView()
-                #endif
             }
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(

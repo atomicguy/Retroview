@@ -56,6 +56,7 @@ final class PreviewStoreManager {
             DateSchemaV1.Date.self,
             CropSchemaV1.Crop.self,
             CollectionSchemaV1.Collection.self,
+            ImageStore.self  // Add ImageStore to schema
         ])
 
         // First try loading from the preview store file
@@ -109,14 +110,16 @@ final class PreviewStoreManager {
 
         // Create 5 sample cards
         for i in 1...5 {
-            let card = CardSchemaV1.StereoCard(
-                uuid: UUID().uuidString,
-                titles: [title],
-                authors: [author],
-                subjects: [subject],
-                dates: [date]
-            )
+            let card = CardSchemaV1.StereoCard(uuid: UUID().uuidString)
+            
+            // Add relationships
+            card.titles = [title]
+            card.authors = [author]
+            card.subjects = [subject]
+            card.dates = [date]
+            card.titlePick = title
 
+            // Add crops
             let leftCrop = CropSchemaV1.Crop(
                 x0: 0.0, y0: 0.0,
                 x1: 0.5, y1: 1.0,
@@ -134,24 +137,30 @@ final class PreviewStoreManager {
             card.leftCrop = leftCrop
             card.rightCrop = rightCrop
 
-            // Add placeholder image data for previews
-            let placeholderImage = createPlaceholderImage(number: i)
-            card.imageFront = placeholderImage
+            // Create and attach ImageStore with placeholder
+            if let imageData = createPlaceholderImage(number: i) {
+                let store = ImageStore(
+                    imageId: "preview_\(i)",
+                    side: CardSide.front.rawValue,
+                    imageData: imageData
+                )
+                card.imageStores.append(store)
+                context.insert(store)
+            }
 
             context.insert(card)
         }
 
         // Create a test collection
         let collection = CollectionSchemaV1.Collection(name: "Test Collection")
-        let cards = try context.fetch(
-            FetchDescriptor<CardSchemaV1.StereoCard>())
+        let cards = try context.fetch(FetchDescriptor<CardSchemaV1.StereoCard>())
         cards.forEach { collection.addCard($0) }
         context.insert(collection)
 
         try context.save()
     }
 
-    private func createPlaceholderImage(number: Int) -> Data {
+    private func createPlaceholderImage(number: Int) -> Data? {
         // Create a renderer for a simple gradient image with a number
         let renderer = ImageRenderer(
             content: ZStack {
@@ -167,71 +176,54 @@ final class PreviewStoreManager {
             .frame(width: 400, height: 200)
         )
 
-        // Attempt to render the image for the current platform
         #if canImport(UIKit)
-        // For iOS/tvOS
-        return renderer.uiImage?.pngData() ?? Data()
+        return renderer.uiImage?.pngData()
         #elseif canImport(AppKit)
-        // For macOS
-        return renderer.nsImage?.tiffRepresentation ?? Data()
+        return renderer.nsImage?.tiffRepresentation
         #else
-        // Fallback for unsupported platforms
-        return Data()
+        return nil
         #endif
     }
-}
 
-// Preview container helper
-extension View {
-    func withPreviewStore() -> some View {
-        let container =
-            (try? PreviewStoreManager.shared.previewContainer())
-            ?? {
-                // Provide empty container as last resort
-                try! ModelContainer(
-                    for: CardSchemaV1.StereoCard.self,
-                    configurations: ModelConfiguration(
-                        isStoredInMemoryOnly: true))
-            }()
-        return modelContainer(container)
-    }
-}
-
-@MainActor
-extension PreviewStoreManager {
     func saveAsPreviewStore(from sourceContext: ModelContext) async throws {
         print("Saving current state as preview store...")
-
+        
         // Ensure directory exists
         try FileManager.default.createDirectory(
             at: previewStoreURL.deletingLastPathComponent(),
             withIntermediateDirectories: true
         )
-
+        
         // Get the current store URL
-        guard let sourceURL = sourceContext.container.configurations.first?.url
-        else {
+        guard let sourceURL = sourceContext.container.configurations.first?.url else {
             throw PreviewStoreError.noSourceStore
         }
-
+        
+        print("Source store URL: \(sourceURL.path)")
+        
+        // Check if source store file exists
+        guard FileManager.default.fileExists(atPath: sourceURL.path) else {
+            throw PreviewStoreError.verificationFailed("Source store file not found at \(sourceURL.path)")
+        }
+        
         // Remove existing preview store files
         let storeURLs = [
             previewStoreURL,
             previewStoreURL.appendingPathExtension("shm"),
-            previewStoreURL.appendingPathExtension("wal"),
+            previewStoreURL.appendingPathExtension("wal")
         ]
-
+        
         for url in storeURLs {
             try? FileManager.default.removeItem(at: url)
         }
-
+        
         // Wait for any pending operations
         try await Task.sleep(for: .milliseconds(100))
-
+        
         // Copy store files
         try FileManager.default.copyItem(at: sourceURL, to: previewStoreURL)
-
-        // Optional auxiliary files
+        
+        // Copy auxiliary files if they exist
         try? FileManager.default.copyItem(
             at: sourceURL.appendingPathExtension("shm"),
             to: previewStoreURL.appendingPathExtension("shm")
@@ -240,10 +232,24 @@ extension PreviewStoreManager {
             at: sourceURL.appendingPathExtension("wal"),
             to: previewStoreURL.appendingPathExtension("wal")
         )
-
+        
         print("Preview store saved successfully")
-
+        
         // Reset container to use new store
         modelContainer = nil
+    }
+}
+
+// MARK: - Preview Container Helper
+extension View {
+    func withPreviewStore() -> some View {
+        let container = (try? PreviewStoreManager.shared.previewContainer())
+            ?? {
+                try! ModelContainer(
+                    for: CardSchemaV1.StereoCard.self,
+                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                )
+            }()
+        return modelContainer(container)
     }
 }

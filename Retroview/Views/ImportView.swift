@@ -435,19 +435,19 @@ extension ImportView.ProcessingState {
     }
 }
 
-// MARK: - Preview Provider
-
-#Preview("Import View - macOS Light") {
-    let container = try! PreviewDataManager.shared.container()
-    return ImportView(modelContext: container.mainContext)
-        .withPreviewData()
-}
-
-#Preview("Import View - macOS Dark") {
-    let container = try! PreviewDataManager.shared.container()
-    return ImportView(modelContext: container.mainContext)
-        .preferredColorScheme(.dark)
-        .withPreviewData()
-}
-
-
+//// MARK: - Preview Provider
+//
+//#Preview("Import View - macOS Light") {
+//    let container = try! PreviewDataManager.shared.container()
+//    return ImportView(modelContext: container.mainContext)
+//        .withPreviewData()
+//}
+//
+//#Preview("Import View - macOS Dark") {
+//    let container = try! PreviewDataManager.shared.container()
+//    return ImportView(modelContext: container.mainContext)
+//        .preferredColorScheme(.dark)
+//        .withPreviewData()
+//}
+//
+//

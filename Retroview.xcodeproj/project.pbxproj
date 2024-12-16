@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C02AF2C2D016E8A00D629A2 /* HoverHighlightModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C02AF2B2D016E8100D629A2 /* HoverHighlightModifier.swift */; };
 		5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C02AF332D02BC1100D629A2 /* SpatialBrowserContainer.swift */; };
 		5C120FA82CFD60BA000B7184 /* StereoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C120FA72CFD60B1000B7184 /* StereoBrowser.swift */; };
 		5C1454162CF5760300D5C232 /* ImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454102CF5760300D5C232 /* ImageLoading.swift */; };
@@ -26,15 +25,17 @@
 		5C1DBD912D0FB0B20050B4DF /* StoreUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD902D0FB0AD0050B4DF /* StoreUtility.swift */; };
 		5C1DBD932D0FB7550050B4DF /* PreviewStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD922D0FB7510050B4DF /* PreviewStoreManager.swift */; };
 		5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */; };
-		5C3DFECC2D053406003D3CF2 /* PreviewDataCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */; };
-		5C3DFECE2D053416003D3CF2 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFECD2D053413003D3CF2 /* PreviewSupport.swift */; };
-		5C3DFED02D0562CE003D3CF2 /* PreviewContainerHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFECF2D0562BE003D3CF2 /* PreviewContainerHelpers.swift */; };
+		5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */; };
+		5C1DBD9C2D0FF5680050B4DF /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD9B2D0FF5640050B4DF /* ImageStore.swift */; };
+		5C1DBD9E2D0FF6C20050B4DF /* CardThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD9D2D0FF6BD0050B4DF /* CardThumbnailView.swift */; };
+		5C1DBDA02D0FFA550050B4DF /* ImportService+Predicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD9F2D0FFA4E0050B4DF /* ImportService+Predicates.swift */; };
+		5C1DBDA22D0FFF7C0050B4DF /* StereoCard+ImageLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBDA12D0FFF750050B4DF /* StereoCard+ImageLoading.swift */; };
+		5C1DBDA42D1000F10050B4DF /* CardSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBDA32D1000EF0050B4DF /* CardSide.swift */; };
+		5C1DBDA62D10029C0050B4DF /* StereoCard+ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBDA52D1002970050B4DF /* StereoCard+ImageStore.swift */; };
 		5C3DFED22D0568E2003D3CF2 /* ImageConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */; };
-		5C3DFED82D057C3D003D3CF2 /* DebugDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFED72D057C36003D3CF2 /* DebugDataLoader.swift */; };
 		5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A271A2D04DC01009ECECE /* AppDestination.swift */; };
 		5C4A27202D04E972009ECECE /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A271F2D04E965009ECECE /* ImageService.swift */; };
 		5C4A27222D04E99E009ECECE /* ImageServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A27212D04E99A009ECECE /* ImageServiceFactory.swift */; };
-		5C65FB112D04FC8B001A2E5B /* PreviewDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C65FB102D04FC84001A2E5B /* PreviewDataManager.swift */; };
 		5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C665F552CF9591A00838F37 /* FavoriteButton.swift */; };
 		5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */; };
 		5C6676B42BC210F8002DD52E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B32BC210F8002DD52E /* Assets.xcassets */; };
@@ -47,8 +48,6 @@
 		5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7EA0F12CC5C631002FC3D2 /* StereoViewer */; };
 		5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */; };
 		5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */; };
-		5C9BCA522C166A2D00668900 /* StereoCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */; };
-		5CC0DB142CFBCB010054E48D /* DevelopmentFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0DB132CFBCAFE0054E48D /* DevelopmentFlags.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
@@ -107,7 +106,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5C02AF2B2D016E8100D629A2 /* HoverHighlightModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverHighlightModifier.swift; sourceTree = "<group>"; };
 		5C02AF332D02BC1100D629A2 /* SpatialBrowserContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialBrowserContainer.swift; sourceTree = "<group>"; };
 		5C120FA72CFD60B1000B7184 /* StereoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoBrowser.swift; sourceTree = "<group>"; };
 		5C1454102CF5760300D5C232 /* ImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoading.swift; sourceTree = "<group>"; };
@@ -126,16 +124,18 @@
 		5C1DBD902D0FB0AD0050B4DF /* StoreUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreUtility.swift; sourceTree = "<group>"; };
 		5C1DBD922D0FB7510050B4DF /* PreviewStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewStoreManager.swift; sourceTree = "<group>"; };
 		5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDebugMenu.swift; sourceTree = "<group>"; };
+		5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
+		5C1DBD9B2D0FF5640050B4DF /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
+		5C1DBD9D2D0FF6BD0050B4DF /* CardThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardThumbnailView.swift; sourceTree = "<group>"; };
+		5C1DBD9F2D0FFA4E0050B4DF /* ImportService+Predicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImportService+Predicates.swift"; sourceTree = "<group>"; };
+		5C1DBDA12D0FFF750050B4DF /* StereoCard+ImageLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StereoCard+ImageLoading.swift"; sourceTree = "<group>"; };
+		5C1DBDA32D1000EF0050B4DF /* CardSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSide.swift; sourceTree = "<group>"; };
+		5C1DBDA52D1002970050B4DF /* StereoCard+ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StereoCard+ImageStore.swift"; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewDataCreation.swift; sourceTree = "<group>"; };
-		5C3DFECD2D053413003D3CF2 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
-		5C3DFECF2D0562BE003D3CF2 /* PreviewContainerHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainerHelpers.swift; sourceTree = "<group>"; };
 		5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConversion.swift; sourceTree = "<group>"; };
-		5C3DFED72D057C36003D3CF2 /* DebugDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDataLoader.swift; sourceTree = "<group>"; };
 		5C4A271A2D04DC01009ECECE /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		5C4A271F2D04E965009ECECE /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		5C4A27212D04E99A009ECECE /* ImageServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServiceFactory.swift; sourceTree = "<group>"; };
-		5C65FB102D04FC84001A2E5B /* PreviewDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewDataManager.swift; sourceTree = "<group>"; };
 		5C665F552CF9591A00838F37 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewApp.swift; sourceTree = "<group>"; };
@@ -152,8 +152,6 @@
 		5C7639822D06B0B80043EEFC /* MODSParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSParsingService.swift; sourceTree = "<group>"; };
 		5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoSpatialViewer.swift; sourceTree = "<group>"; };
 		5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredThumbnailStrip.swift; sourceTree = "<group>"; };
-		5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCardViewModel.swift; sourceTree = "<group>"; };
-		5CC0DB132CFBCAFE0054E48D /* DevelopmentFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentFlags.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -239,6 +237,7 @@
 		5C4A271E2D04E954009ECECE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5C1DBD9F2D0FFA4E0050B4DF /* ImportService+Predicates.swift */,
 				5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */,
 				5CD577282D0E94D0002FA8DB /* ImageService+Crop.swift */,
 				5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */,
@@ -250,14 +249,6 @@
 				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		5C4A27232D04E9DD009ECECE /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				5C9BCA512C166A2D00668900 /* StereoCardViewModel.swift */,
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		5C6676A32BC210F7002DD52E = {
@@ -286,12 +277,10 @@
 			isa = PBXGroup;
 			children = (
 				5C267EBA2CE3209600AE3493 /* Info.plist */,
-				5CC0DB132CFBCAFE0054E48D /* DevelopmentFlags.swift */,
 				5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */,
 				5CC89F052BE835AF001ECF22 /* Preview Helpers */,
 				5C1454322CF7A61400D5C232 /* Utilities */,
 				5C4A271E2D04E954009ECECE /* Services */,
-				5C4A27232D04E9DD009ECECE /* ViewModels */,
 				5CD0759B2BDF29AB002B463C /* Screens */,
 				5CB421B32BCCB9E20065C130 /* Views */,
 				5CB421B42BCCB9EA0065C130 /* Models */,
@@ -332,7 +321,6 @@
 			isa = PBXGroup;
 			children = (
 				5C19F16A2CC5B98E00BD7A2A /* StereoView.swift */,
-				5C02AF2B2D016E8100D629A2 /* HoverHighlightModifier.swift */,
 				5C02AF332D02BC1100D629A2 /* SpatialBrowserContainer.swift */,
 				5C120FA72CFD60B1000B7184 /* StereoBrowser.swift */,
 				5CE784992CEC46EB000F3D71 /* StereoCardImageView.swift */,
@@ -346,7 +334,9 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */,
 				5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */,
+				5C1DBD9D2D0FF6BD0050B4DF /* CardThumbnailView.swift */,
 				5C1DBD8E2D0FAF2B0050B4DF /* ThumbnailView.swift */,
 				5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */,
 				5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */,
@@ -359,6 +349,10 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5C1DBDA52D1002970050B4DF /* StereoCard+ImageStore.swift */,
+				5C1DBDA32D1000EF0050B4DF /* CardSide.swift */,
+				5C1DBDA12D0FFF750050B4DF /* StereoCard+ImageLoading.swift */,
+				5C1DBD9B2D0FF5640050B4DF /* ImageStore.swift */,
 				5CD577322D0EAED7002FA8DB /* ImportType.swift */,
 				5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */,
 				5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */,
@@ -379,11 +373,6 @@
 			children = (
 				5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */,
 				5C1DBD922D0FB7510050B4DF /* PreviewStoreManager.swift */,
-				5C3DFED72D057C36003D3CF2 /* DebugDataLoader.swift */,
-				5C3DFECF2D0562BE003D3CF2 /* PreviewContainerHelpers.swift */,
-				5C3DFECD2D053413003D3CF2 /* PreviewSupport.swift */,
-				5C3DFECB2D053401003D3CF2 /* PreviewDataCreation.swift */,
-				5C65FB102D04FC84001A2E5B /* PreviewDataManager.swift */,
 			);
 			path = "Preview Helpers";
 			sourceTree = "<group>";
@@ -553,17 +542,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C1DBDA42D1000F10050B4DF /* CardSide.swift in Sources */,
 				5C4A27222D04E99E009ECECE /* ImageServiceFactory.swift in Sources */,
 				5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */,
 				5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */,
 				5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */,
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
+				5C1DBD9E2D0FF6C20050B4DF /* CardThumbnailView.swift in Sources */,
 				5CD577152D0E5BE6002FA8DB /* ImportLogger.swift in Sources */,
-				5C9BCA522C166A2D00668900 /* StereoCardViewModel.swift in Sources */,
 				5C14543C2CF7FF8B00D5C232 /* ColorUtility.swift in Sources */,
 				5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */,
 				5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */,
-				5C3DFED82D057C3D003D3CF2 /* DebugDataLoader.swift in Sources */,
 				5C1DBD932D0FB7550050B4DF /* PreviewStoreManager.swift in Sources */,
 				5CD577252D0E891B002FA8DB /* UniformTypeIdentifiers.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
@@ -577,29 +566,29 @@
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
-				5C3DFECC2D053406003D3CF2 /* PreviewDataCreation.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */,
 				5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */,
+				5C1DBDA62D10029C0050B4DF /* StereoCard+ImageStore.swift in Sources */,
+				5C1DBDA02D0FFA550050B4DF /* ImportService+Predicates.swift in Sources */,
 				5CD5771B2D0E7544002FA8DB /* DatabaseTransferView.swift in Sources */,
 				5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */,
 				5C1454342CF7A63D00D5C232 /* CardColorAnalyzer.swift in Sources */,
 				5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */,
-				5C3DFECE2D053416003D3CF2 /* PreviewSupport.swift in Sources */,
 				5CD577212D0E79AB002FA8DB /* DatabaseTransferManager.swift in Sources */,
 				5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */,
-				5CC0DB142CFBCB010054E48D /* DevelopmentFlags.swift in Sources */,
+				5C1DBDA22D0FFF7C0050B4DF /* StereoCard+ImageLoading.swift in Sources */,
 				5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5C4A27202D04E972009ECECE /* ImageService.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
-				5C3DFED02D0562CE003D3CF2 /* PreviewContainerHelpers.swift in Sources */,
 				5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */,
-				5C65FB112D04FC8B001A2E5B /* PreviewDataManager.swift in Sources */,
 				5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
+				5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */,
+				5C1DBD9C2D0FF5680050B4DF /* ImageStore.swift in Sources */,
 				5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */,
 				5CD577292D0E94E0002FA8DB /* ImageService+Crop.swift in Sources */,
 				5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */,
@@ -607,7 +596,6 @@
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C3DFED22D0568E2003D3CF2 /* ImageConversion.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
-				5C02AF2C2D016E8A00D629A2 /* HoverHighlightModifier.swift in Sources */,
 				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5C1DBD8F2D0FAF2B0050B4DF /* ThumbnailView.swift in Sources */,

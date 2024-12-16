@@ -33,18 +33,6 @@ struct ImageServiceConfiguration {
     )
 }
 
-// MARK: - Card Side Enum
-enum CardSide: String {
-    case front, back
-    
-    var suffix: String {
-        switch self {
-        case .front: return "F"
-        case .back: return "B"
-        }
-    }
-}
-
 // MARK: - Image Cache
 actor ImageCache {
     private var cache: [String: CachedImage] = [:]

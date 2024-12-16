@@ -92,53 +92,15 @@ import SwiftUI
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
-
-#else
-    // macOS version - simplified view without stereo functionality
-    struct StereoView: View {
-        let card: CardSchemaV1.StereoCard
-        @StateObject private var viewModel: StereoCardViewModel
-
-        init(card: CardSchemaV1.StereoCard) {
-            self.card = card
-            _viewModel = StateObject(
-                wrappedValue: StereoCardViewModel(stereoCard: card))
-        }
-
-        var body: some View {
-            VStack(spacing: 16) {
-                Text("Stereo View")
-                    .font(.title)
-
-                if let frontImage = viewModel.frontCGImage {
-                    Image(decorative: frontImage, scale: 1.0)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxHeight: 400)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .padding()
-                }
-
-                Text("Stereo viewing is only available on Vision Pro")
-                    .foregroundStyle(.secondary)
-            }
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.ultraThinMaterial)
-            .task {
-                try? await viewModel.loadImage(forSide: "front")
-            }
-        }
-    }
 #endif
 
-// MARK: - Preview Support
-
-#Preview("Stereo View") {
-    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-    let container = try! PreviewDataManager.shared.container()
-    let card = try! container.mainContext.fetch(descriptor).first!
-    
-    return StereoView(card: card)
-        .withPreviewData()
-}
+//// MARK: - Preview Support
+//
+//#Preview("Stereo View") {
+//    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+//    let container = try! PreviewDataManager.shared.container()
+//    let card = try! container.mainContext.fetch(descriptor).first!
+//    
+//    return StereoView(card: card)
+//        .withPreviewData()
+//}

@@ -22,9 +22,9 @@ struct CenteredThumbnailStrip: View {
     // Calculate extra spacing for selected card
     private var spacingForCard: (CardSchemaV1.StereoCard) -> CGFloat {
         { card in
-            card.id == selectedCard.id ?
-                thumbnailSize + (thumbnailSize * (selectedScale - 1)) :
-                baseSpacing
+            card.id == selectedCard.id
+                ? thumbnailSize + (thumbnailSize * (selectedScale - 1))
+                : baseSpacing
         }
     }
 
@@ -36,13 +36,22 @@ struct CenteredThumbnailStrip: View {
                         // Base layer of unselected thumbnails
                         LazyHStack(spacing: 0) {
                             Color.clear
-                                .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
+                                .frame(
+                                    width: max(
+                                        0,
+                                        (geometry.size.width - thumbnailSize)
+                                            / 2))
 
                             ForEach(cards) { card in
                                 if card.id != selectedCard.id {
                                     ThumbnailView(card: card)
-                                        .frame(width: thumbnailSize, height: thumbnailSize)
-                                        .padding(.horizontal, spacingForCard(card))
+                                        .frame(
+                                            width: thumbnailSize,
+                                            height: thumbnailSize
+                                        )
+                                        .padding(
+                                            .horizontal, spacingForCard(card)
+                                        )
                                         .onTapGesture {
                                             withAnimation(.spring) {
                                                 onSelect(card)
@@ -50,27 +59,44 @@ struct CenteredThumbnailStrip: View {
                                         }
                                 } else {
                                     Color.clear
-                                        .frame(width: thumbnailSize, height: thumbnailSize)
-                                        .padding(.horizontal, spacingForCard(card))
+                                        .frame(
+                                            width: thumbnailSize,
+                                            height: thumbnailSize
+                                        )
+                                        .padding(
+                                            .horizontal, spacingForCard(card))
                                 }
                             }
 
                             Color.clear
-                                .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
+                                .frame(
+                                    width: max(
+                                        0,
+                                        (geometry.size.width - thumbnailSize)
+                                            / 2))
                         }
                         .frame(minWidth: geometry.size.width)
 
                         // Selected thumbnail on top
                         LazyHStack(spacing: 0) {
                             Color.clear
-                                .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
+                                .frame(
+                                    width: max(
+                                        0,
+                                        (geometry.size.width - thumbnailSize)
+                                            / 2))
 
                             ForEach(cards) { card in
                                 if card.id == selectedCard.id {
                                     ThumbnailView(card: card)
-                                        .frame(width: thumbnailSize, height: thumbnailSize)
+                                        .frame(
+                                            width: thumbnailSize,
+                                            height: thumbnailSize
+                                        )
                                         .scaleEffect(selectedScale)
-                                        .padding(.horizontal, spacingForCard(card))
+                                        .padding(
+                                            .horizontal, spacingForCard(card)
+                                        )
                                         .onTapGesture {
                                             withAnimation(.spring) {
                                                 onSelect(card)
@@ -78,13 +104,21 @@ struct CenteredThumbnailStrip: View {
                                         }
                                 } else {
                                     Color.clear
-                                        .frame(width: thumbnailSize, height: thumbnailSize)
-                                        .padding(.horizontal, spacingForCard(card))
+                                        .frame(
+                                            width: thumbnailSize,
+                                            height: thumbnailSize
+                                        )
+                                        .padding(
+                                            .horizontal, spacingForCard(card))
                                 }
                             }
 
                             Color.clear
-                                .frame(width: max(0, (geometry.size.width - thumbnailSize) / 2))
+                                .frame(
+                                    width: max(
+                                        0,
+                                        (geometry.size.width - thumbnailSize)
+                                            / 2))
                         }
                         .frame(minWidth: geometry.size.width)
                     }
@@ -107,21 +141,20 @@ struct CenteredThumbnailStrip: View {
     }
 }
 
-#Preview("Strip of Thumbnails") {
-    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-    let container = try! PreviewDataManager.shared.container()
-    let cards = try! container.mainContext.fetch(descriptor)
-    
-    return CenteredThumbnailStrip(
-        cards: cards,
-        selectedCard: cards[0],
-        onSelect: { _ in }
-    )
-    .padding()
-    .background(.regularMaterial)
-    .withPreviewData()
-}
-
+//#Preview("Strip of Thumbnails") {
+//    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+//    let container = try! PreviewDataManager.shared.container()
+//    let cards = try! container.mainContext.fetch(descriptor)
+//
+//    return CenteredThumbnailStrip(
+//        cards: cards,
+//        selectedCard: cards[0],
+//        onSelect: { _ in }
+//    )
+//    .padding()
+//    .background(.regularMaterial)
+//    .withPreviewData()
+//}
 
 // #Preview ("in situ") {
 //    CardsPreviewContainer { cards in
@@ -131,3 +164,15 @@ struct CenteredThumbnailStrip: View {
 //        )
 //    }
 // }
+
+//#Preview("Strip of Thumbnails") {
+//    let cards = PreviewStoreManager.shared.previewContainer().allCardSampleData()
+//    
+//    CenteredThumbnailStrip(
+//        cards: cards,
+//        selectedCard: cards[0],
+//        onSelect: { _ in }
+//    )
+//    .padding()
+//    .background(.regularMaterial)
+//}
