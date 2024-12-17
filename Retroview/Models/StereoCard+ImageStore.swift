@@ -41,7 +41,11 @@ extension CardSchemaV1.StereoCard {
         
         // Load and cache image
         let service = ImageServiceFactory.shared.getService()
-        let image = try await service.loadImage(id: imageId, side: side)
+        let image = try await service.loadImage(
+            id: imageId,
+            side: side,
+            quality: ImageQuality.standard
+        )
         
         // Cache the result
         if let data = ImageConversion.convert(cgImage: image) {

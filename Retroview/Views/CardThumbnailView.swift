@@ -12,14 +12,15 @@ struct CardThumbnail: View {
     let card: CardSchemaV1.StereoCard
     @State private var image: CGImage?
     @State private var loadingError = false
-    
+    @State private var isLoading = false
+
     var body: some View {
         NavigationLink(destination: CardDetailView(card: card)) {
             ZStack {
                 if let image {
                     Image(decorative: image, scale: 1.0)
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .clipped()
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 } else {
@@ -30,31 +31,49 @@ struct CardThumbnail: View {
             .aspectRatio(2, contentMode: .fit)
         }
         .buttonStyle(.plain)
-        .task(id: card.uuid) {
+        .task {
+            guard !isLoading else { return }
+            isLoading = true
+
             do {
-                image = try await card.loadThumbnail(for: .front)
+                // Use specialized thumbnail loader
+                image = try await card.loadGridThumbnail()
             } catch {
                 loadingError = true
             }
+
+            isLoading = false
         }
     }
-    
-    @ViewBuilder
+
     private var placeholderView: some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(.gray.opacity(0.2))
             .overlay {
                 if loadingError {
                     Image(systemName: "exclamationmark.triangle")
-                        .font(.largeTitle)
+                        .font(.title2)
                         .foregroundStyle(.secondary)
-                } else if card.imageFrontId != nil {
+                } else if isLoading {
                     ProgressView()
                 } else {
                     Image(systemName: "photo")
-                        .font(.largeTitle)
+                        .font(.title2)
                         .foregroundStyle(.secondary)
                 }
             }
+    }
+
+    private func loadThumbnail() async {
+        guard image == nil, !isLoading else { return }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            image = try await card.loadImage(side: .front, quality: .thumbnail)
+        } catch {
+            loadingError = true
+        }
     }
 }

@@ -12,11 +12,19 @@ import CoreGraphics
 // MARK: - Image Store
 @Model
 final class ImageStore {
-    // Make strings optional to handle missing IDs
     var imageId: String
     var side: String
-    @Attribute(.externalStorage) private var imageData: Data?
-    var lastAccessed: Date
+    
+    @Attribute(.externalStorage)
+    private var imageData: Data?
+    
+    @Transient
+    private var _lastAccessed: Date = Date()
+    
+    var lastAccessed: Date {
+        get { _lastAccessed }
+        set { _lastAccessed = newValue }
+    }
     
     var isDownloaded: Bool { imageData != nil }
     

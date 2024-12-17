@@ -40,35 +40,13 @@ class CropUpdateService: ObservableObject {
         
         print("\n🔍 Processing crop update for UUID: \(cropUpdate.uuid)")
         
-        // Fetch all cards and find the matching one
-        let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-        let cards = try modelContext.fetch(descriptor)
-        
-        print("📊 Found \(cards.count) total cards in database")
-        print("🔢 First 5 card UUIDs in database:")
-        cards.prefix(5).forEach { card in
-            print("   • \(card.uuid.uuidString)")
+        // Verify the card exists before attempting update
+        guard let card = try await findExistingCard(uuid: cropUpdate.uuid) else {
+            ImportLogger.log(.warning, "Skipping crop update - card not found", file: url.lastPathComponent)
+            return
         }
         
-        // Debug: Check UUID formats
-        let targetUUID = cropUpdate.uuid.lowercased()
-        let existingUUIDs = cards.map { $0.uuid.uuidString.lowercased() }
-        
-        print("\n🎯 Looking for UUID: \(targetUUID)")
-        print("📋 First 5 existing UUIDs:")
-        existingUUIDs.prefix(5).forEach { uuid in
-            print("   • \(uuid)")
-            print("   • Matches target: \(uuid == targetUUID)")
-        }
-        
-        guard let card = cards.first(where: {
-            $0.uuid.uuidString.lowercased() == targetUUID
-        }) else {
-            print("❌ No matching card found")
-            throw ImportError.processingError("Card not found: \(cropUpdate.uuid)")
-        }
-        
-        print("✅ Found matching card!")
+        print("✅ Found matching card, updating crops")
         
         // Update left crop
         let leftCrop = CropSchemaV1.Crop(
@@ -96,6 +74,28 @@ class CropUpdateService: ObservableObject {
         
         try modelContext.save()
         ImportLogger.log(.info, "Updated crops for card: \(cropUpdate.uuid)")
+    }
+    
+    private func findExistingCard(uuid: String) async throws -> CardSchemaV1.StereoCard? {
+        let cardUUID = UUID(uuidString: uuid.lowercased())
+        guard let cardUUID else {
+            print("❌ Invalid UUID format: \(uuid)")
+            return nil
+        }
+        
+        let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+            predicate: #Predicate<CardSchemaV1.StereoCard> { card in
+                card.uuid == cardUUID
+            }
+        )
+        
+        let cards = try modelContext.fetch(descriptor)
+        if cards.isEmpty {
+            print("❌ No card found with UUID: \(uuid)")
+            return nil
+        }
+        
+        return cards.first
     }
     
     func updateCropsInBatch(from urls: [URL]) async throws {

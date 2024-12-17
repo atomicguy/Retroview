@@ -30,28 +30,51 @@ class ImportService {
 
     func importJSON(from url: URL) async throws {
         print("\n📄 Processing file: \(url.lastPathComponent)")
-        let data = try Data(contentsOf: url)
         
-        // Try parsing as simplified JSON first
         do {
-            let cardData = try JSONDecoder().decode(StereoCardJSON.self, from: data)
-            try await importCard(from: cardData)
-            try modelContext.save()
-            print("✅ Successfully imported: \(url.lastPathComponent)")
-        } catch {
+            let data = try Data(contentsOf: url)
+            
+            // Try parsing as simplified JSON first
+            if let cardData = try? JSONDecoder().decode(StereoCardJSON.self, from: data) {
+                let uuid = UUID(uuidString: cardData.uuid) ?? UUID()
+                
+                // Check if card already exists
+                if try cardExists(uuid: uuid) {
+                    print("⏭️ Skipping existing card: \(cardData.uuid)")
+                    return
+                }
+                
+                try await importCard(from: cardData)
+                try modelContext.save()
+                print("✅ Successfully imported: \(url.lastPathComponent)")
+                return
+            }
+            
             // If simplified JSON parsing fails, try MODS format
             print("⚠️ Trying MODS format for: \(url.lastPathComponent)")
             do {
                 let cardData = try MODSParsingService.convertMODSToStereoCard(data, fileName: url.lastPathComponent)
+                let uuid = UUID(uuidString: cardData.uuid) ?? UUID()
+                
+                // Check if card already exists
+                if try cardExists(uuid: uuid) {
+                    print("⏭️ Skipping existing card: \(cardData.uuid)")
+                    return
+                }
+                
                 try await importCard(from: cardData)
                 try modelContext.save()
                 print("✅ Successfully imported MODS data from: \(url.lastPathComponent)")
             } catch {
                 ImportLogger.log(.error, "Failed to import MODS data: \(error.localizedDescription)", file: url.lastPathComponent)
-                throw error
+                return
             }
+        } catch {
+            ImportLogger.log(.error, "Failed to read file: \(error.localizedDescription)", file: url.lastPathComponent)
+            return
         }
     }
+
 
     private func importCard(from cardData: StereoCardJSON) async throws {
         let uuid = UUID(uuidString: cardData.uuid) ?? UUID()
@@ -120,8 +143,12 @@ class ImportService {
             
             // Optionally preload images during import
             if preloadImages {
-                if let frontImage = try? await imageService.loadImage(id: frontId, side: .front),
-                   let imageData = ImageConversion.convert(cgImage: frontImage) {
+                if let frontImage = try? await imageService.loadImage(
+                    id: frontId,
+                    side: .front,
+                    quality: .standard  // Use standard quality for preloaded images
+                ),
+                let imageData = ImageConversion.convert(cgImage: frontImage) {
                     frontStore.setImage(imageData)
                 }
             }
@@ -134,8 +161,12 @@ class ImportService {
             
             // Optionally preload images during import
             if preloadImages {
-                if let backImage = try? await imageService.loadImage(id: backId, side: .back),
-                   let imageData = ImageConversion.convert(cgImage: backImage) {
+                if let backImage = try? await imageService.loadImage(
+                    id: backId,
+                    side: .back,
+                    quality: .standard  // Use standard quality for preloaded images
+                ),
+                let imageData = ImageConversion.convert(cgImage: backImage) {
                     backStore.setImage(imageData)
                 }
             }
