@@ -19,7 +19,7 @@ enum CardSchemaV1: VersionedSchema {
             AuthorSchemaV1.Author.self,
             SubjectSchemaV1.Subject.self,
             DateSchemaV1.Date.self,
-            ImageStore.self
+            ImageStore.self,
         ]
     }
 
@@ -31,24 +31,24 @@ enum CardSchemaV1: VersionedSchema {
         var cardColor: String = "#F5E6D3"
         var colorOpacity: Double
 
-        @Relationship(inverse: \TitleSchemaV1.Title.cards)
+        @Relationship(deleteRule: .cascade, inverse: \TitleSchemaV1.Title.cards)
         var titles = [TitleSchemaV1.Title]()
-        
-        @Relationship(inverse: \TitleSchemaV1.Title.picks)
+
+        @Relationship(deleteRule: .nullify, inverse: \TitleSchemaV1.Title.picks)
         var titlePick: TitleSchemaV1.Title?
-        
+
         @Relationship(inverse: \AuthorSchemaV1.Author.cards)
         var authors = [AuthorSchemaV1.Author]()
-        
+
         @Relationship(inverse: \SubjectSchemaV1.Subject.cards)
         var subjects = [SubjectSchemaV1.Subject]()
-        
+
         @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
 
         @Relationship(deleteRule: .cascade)
         var crops: [CropSchemaV1.Crop] = []
-        
+
         // Image store relationship
         @Relationship(deleteRule: .cascade)
         var imageStores: [ImageStore] = []
@@ -106,7 +106,14 @@ enum CardSchemaV1: VersionedSchema {
             dates: [DateSchemaV1.Date] = [],
             crops: [CropSchemaV1.Crop] = []
         ) {
-            self.uuid = UUID(uuidString: uuid) ?? UUID()
+            if let parsedUUID = UUID(uuidString: uuid.lowercased()) {
+                self.uuid = parsedUUID
+            } else {
+                print(
+                    "⚠️ Warning: Invalid UUID provided: \(uuid), generating new UUID"
+                )
+                self.uuid = UUID()
+            }
             self.imageFrontId = imageFrontId
             self.imageBackId = imageBackId
             self.cardColor = cardColor
@@ -117,21 +124,21 @@ enum CardSchemaV1: VersionedSchema {
             self.dates = dates
             self.crops = crops
         }
-        
+
         // MARK: - Image Store Access
         @MainActor
         func getOrCreateImageStore(side: CardSide) -> ImageStore? {
             let imageId: String? = side == .front ? imageFrontId : imageBackId
-            
+
             guard let id = imageId else { return nil }
-            
+
             // Look for existing store
             if let existing = imageStores.first(where: {
                 $0.imageId == id && $0.side == side.rawValue
             }) {
                 return existing
             }
-            
+
             // Create new store
             let store = ImageStore(imageId: id, side: side.rawValue)
             imageStores.append(store)
@@ -143,7 +150,8 @@ enum CardSchemaV1: VersionedSchema {
 // MARK: - Transferable Conformance
 extension CardSchemaV1.StereoCard: Transferable {
     static var transferRepresentation: some TransferRepresentation {
-        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: { card in
+        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: {
+            card in
             card.uuid.uuidString
         })
     }

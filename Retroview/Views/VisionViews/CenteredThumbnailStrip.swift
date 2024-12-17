@@ -88,7 +88,7 @@ struct CenteredThumbnailStrip: View {
 
                             ForEach(cards) { card in
                                 if card.id == selectedCard.id {
-                                    ThumbnailView(card: card)
+                                    ThumbnailView(card: card, navigationEnabled: false)
                                         .frame(
                                             width: thumbnailSize,
                                             height: thumbnailSize

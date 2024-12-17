@@ -11,26 +11,23 @@ import CoreGraphics
 import Foundation
 
 // MARK: - Image Service Protocol
-protocol ImageServiceProtocol {
-    func loadImage(id: String, side: CardSide, quality: ImageQuality)
-        async throws -> CGImage
-    func loadThumbnail(id: String, side: CardSide, maxSize: CGFloat)
-        async throws -> CGImage
-    func loadCrop(id: String, side: CardSide, cropParameters: CropParameters)
-        async throws -> CGImage
-    func clearCache()
+protocol ImageServiceProtocol: Sendable {
+    func loadImage(id: String, side: CardSide, quality: ImageQuality) async throws -> CGImage
+    func loadThumbnail(id: String, side: CardSide, maxSize: CGFloat) async throws -> CGImage
+    func loadCrop(id: String, side: CardSide, cropParameters: CropParameters) async throws -> CGImage
+    nonisolated func clearCache()
 }
 
 // MARK: - Image Service Configuration
-struct ImageServiceConfiguration {
+struct ImageServiceConfiguration: Sendable {
     let baseURL: URL
-    let cacheSizeLimit: Int  // in bytes
+    let cacheSizeLimit: Int
     let maxConcurrentOperations: Int
     let defaultThumbnailSize: CGFloat
 
     static let `default` = ImageServiceConfiguration(
         baseURL: URL(string: "https://iiif-prod.nypl.org/index.php")!,
-        cacheSizeLimit: 500 * 1024 * 1024,  // 500MB
+        cacheSizeLimit: 500 * 1024 * 1024,
         maxConcurrentOperations: 4,
         defaultThumbnailSize: 800
     )
@@ -107,8 +104,8 @@ actor ImageCache {
 }
 
 // MARK: - Main Image Service Implementation
-class ImageService: ImageServiceProtocol {
-    private let configuration: ImageServiceConfiguration
+actor ImageService: ImageServiceProtocol {
+    nonisolated let configuration: ImageServiceConfiguration
     private let cache: ImageCache
     private let imageLoader: ImageLoading
     private let processingQueue: OperationQueue
@@ -120,10 +117,14 @@ class ImageService: ImageServiceProtocol {
         self.configuration = configuration
         self.cache = ImageCache(sizeLimit: configuration.cacheSizeLimit)
         self.imageLoader = imageLoader
-
+        
         self.processingQueue = OperationQueue()
-        self.processingQueue.maxConcurrentOperationCount =
-            configuration.maxConcurrentOperations
+        self.processingQueue.maxConcurrentOperationCount = configuration.maxConcurrentOperations
+    }
+    
+    // Implement nonisolated clearCache
+    nonisolated func clearCache() {
+        Task { await cache.clear() }
     }
 
     // Create cache keys based on image quality and ID
@@ -255,12 +256,6 @@ class ImageService: ImageServiceProtocol {
         }
 
         return data
-    }
-
-    func clearCache() {
-        Task {
-            await cache.clear()
-        }
     }
 }
 

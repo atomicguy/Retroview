@@ -71,167 +71,154 @@ struct FlowLayout: Layout {
 // MARK: - Card Detail View
 struct CardDetailView: View {
     let card: CardSchemaV1.StereoCard
-
-    @State private var frontImage: CGImage?
-    @State private var backImage: CGImage?
-    @State private var loadingError: CardSide?
-
-    // Track visibility for image loading
-    @State private var isViewVisible = false
-
+    
+    // Split the view into focused components
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                // Front image section
-                Group {
-                    Text("Front")
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-
-                    imageSection(image: frontImage, side: .front)
-                }
-
-                // Metadata sections
-                metadataSections
-                    .padding(.horizontal, 4)
-
-                // Back image section if available
+                // Image sections
+                CardImageSection(
+                    card: card,
+                    side: .front,
+                    title: "Front"
+                )
+                
+                // Metadata sections using relationships
+                CardMetadataSection(card: card)
+                
+                // Back image if available
                 if card.imageBackId != nil {
                     Divider()
-
-                    Group {
-                        Text("Back")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-
-                        imageSection(image: backImage, side: .back)
-                    }
+                    CardImageSection(
+                        card: card,
+                        side: .back,
+                        title: "Back"
+                    )
                 }
             }
             .padding()
         }
         .navigationTitle(card.titlePick?.text ?? "Untitled Card")
-        // Load images when view becomes visible
-        .task(id: isViewVisible) {
-            guard isViewVisible else { return }
-            await loadImages()
-        }
-        .onAppear { isViewVisible = true }
-        .onDisappear { isViewVisible = false }
     }
+}
 
-    private func loadImages() async {
-        // Load front image at standard quality
-        do {
-            frontImage = try await card.loadImage(
-                side: .front, quality: .standard)
-        } catch {
-            loadingError = .front
+// Break out image handling to its own view
+private struct CardImageSection: View {
+    let card: CardSchemaV1.StereoCard
+    let side: CardSide
+    let title: String
+    
+    @State private var image: CGImage?
+    @State private var loadingError = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+                .foregroundStyle(.secondary)
+            
+            if let image {
+                Image(decorative: image, scale: 1.0)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+            } else {
+                imagePlaceholder
+            }
         }
-
-        // Load back image if available
-        if card.imageBackId != nil {
+        .task {
             do {
-                backImage = try await card.loadImage(
-                    side: .back, quality: .standard)
+                image = try await card.loadImage(side: side, quality: .standard)
             } catch {
-                loadingError = .back
+                loadingError = true
             }
         }
     }
-
-    @ViewBuilder
-    private func imageSection(image: CGImage?, side: CardSide) -> some View {
-        if let image {
-            Image(decorative: image, scale: 1.0)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .frame(maxWidth: .infinity)
-        } else {
-            imagePlaceholder(side: side)
-        }
-    }
-
-    @ViewBuilder
-    private func imagePlaceholder(side: CardSide) -> some View {
-        let hasError = loadingError == side
-        let hasImageId =
-            side == .front ? card.imageFrontId != nil : card.imageBackId != nil
-
+    
+    private var imagePlaceholder: some View {
         RoundedRectangle(cornerRadius: 16)
             .fill(.gray.opacity(0.2))
             .aspectRatio(2, contentMode: .fit)
             .overlay {
-                if hasError {
+                if loadingError {
                     VStack(spacing: 8) {
                         Image(systemName: "exclamationmark.triangle")
                         Text("Failed to load image")
                             .font(.caption)
                     }
                     .foregroundStyle(.secondary)
-                } else if hasImageId {
-                    ProgressView()
                 } else {
-                    Image(systemName: "photo")
-                        .font(.largeTitle)
-                        .foregroundStyle(.secondary)
+                    ProgressView()
                 }
             }
     }
+}
 
-    private var metadataSections: some View {
-        Group {
-            // Titles section
+// Break out metadata into its own view
+private struct CardMetadataSection: View {
+    let card: CardSchemaV1.StereoCard
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Titles
             if !card.titles.isEmpty {
-                metadataSection("Titles") {
-                    ForEach(card.titles, id: \.text) { title in
-                        Text(title.text)
-                            .font(
-                                title.text == card.titlePick?.text
-                                    ? .body.bold() : .body)
-                    }
-                }
-            }
-
-            // Subjects section
-            if !card.subjects.isEmpty {
-                metadataSection("Subjects") {
-                    FlowLayout(spacing: 8) {
-                        ForEach(card.subjects, id: \.name) { subject in
-                            Text(subject.name)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(.secondary.opacity(0.2))
-                                .clipShape(Capsule())
+                metadataGroup("Titles") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        ForEach(card.titles, id: \.text) { title in
+                            Text(title.text)
+                                .font(title == card.titlePick ? .body.bold() : .body)
                         }
                     }
                 }
             }
-
-            // Authors section
-            if !card.authors.isEmpty {
-                metadataSection("Authors") {
-                    ForEach(card.authors, id: \.name) { author in
-                        Text(author.name)
+            
+            // Subjects with FlowLayout
+            if !card.subjects.isEmpty {
+                metadataGroup("Subjects") {
+                    FlowLayout(spacing: 8) {
+                        ForEach(card.subjects, id: \.name) { subject in
+                            NavigationLink(value: subject) {
+                                Text(subject.name)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(.secondary.opacity(0.2))
+                                    .clipShape(Capsule())
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                 }
             }
-
-            // Dates section
+            
+            // Authors
+            if !card.authors.isEmpty {
+                metadataGroup("Authors") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        ForEach(card.authors, id: \.name) { author in
+                            NavigationLink(value: author) {
+                                Text(author.name)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Dates
             if !card.dates.isEmpty {
-                metadataSection("Dates") {
-                    ForEach(card.dates, id: \.text) { date in
-                        Text(date.text)
+                metadataGroup("Dates") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        ForEach(card.dates, id: \.text) { date in
+                            Text(date.text)
+                        }
                     }
                 }
             }
         }
     }
-
-    @ViewBuilder
-    private func metadataSection<Content: View>(
-        _ title: String, @ViewBuilder content: () -> Content
+    
+    private func metadataGroup<Content: View>(
+        _ title: String,
+        @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
