@@ -14,59 +14,33 @@ import Foundation
     import UIKit
 #endif
 
-protocol ImageLoading {
+protocol ImageLoading: Sendable {
     func createCGImage(from data: Data) async -> CGImage?
 }
 
 struct DefaultImageLoader: ImageLoading {
     func createCGImage(from data: Data) async -> CGImage? {
-        print(
-            "Attempting to create CGImage from data of size: \(data.count) bytes"
-        )
-
         #if os(macOS)
             guard let nsImage = NSImage(data: data) else {
-                print("Failed to create NSImage from data")
                 return nil
             }
-            print("Successfully created NSImage")
-
+            
             guard let imageData = nsImage.tiffRepresentation else {
-                print("Failed to get TIFF representation from NSImage")
                 return nil
             }
-            print("Got TIFF representation")
-
+            
             guard let imageRep = NSBitmapImageRep(data: imageData) else {
-                print("Failed to create NSBitmapImageRep")
                 return nil
             }
-            print("Created NSBitmapImageRep")
-
-            guard let cgImage = imageRep.cgImage else {
-                print("Failed to get CGImage from NSBitmapImageRep")
-                return nil
-            }
-            print(
-                "Successfully created CGImage with size: \(cgImage.width)x\(cgImage.height)"
-            )
-            return cgImage
-
+            
+            return imageRep.cgImage
+            
         #else
             guard let uiImage = UIImage(data: data) else {
-                print("Failed to create UIImage from data")
                 return nil
             }
-            print("Successfully created UIImage")
-
-            guard let cgImage = uiImage.cgImage else {
-                print("Failed to get CGImage from UIImage")
-                return nil
-            }
-            print(
-                "Successfully created CGImage with size: \(cgImage.width)x\(cgImage.height)"
-            )
-            return cgImage
+            
+            return uiImage.cgImage
         #endif
     }
 }

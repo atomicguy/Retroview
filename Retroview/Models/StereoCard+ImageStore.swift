@@ -26,34 +26,34 @@ extension CardSchemaV1.StereoCard {
         return store
     }
     
-    @MainActor
-    func loadImage(for side: CardSide) async throws -> CGImage? {
-        guard let imageId = side == .front ? imageFrontId : imageBackId else {
-            return nil
-        }
-        
-        // Check the store first
-        let store = getOrCreateImageStore(for: side)
-        if let data = store.getImageData(),
-           let image = await DefaultImageLoader().createCGImage(from: data) {
-            return image
-        }
-        
-        // Load and cache image
-        let service = ImageServiceFactory.shared.getService()
-        let image = try await service.loadImage(
-            id: imageId,
-            side: side,
-            quality: ImageQuality.standard
-        )
-        
-        // Cache the result
-        if let data = ImageConversion.convert(cgImage: image) {
-            store.setImage(data)
-        }
-        
-        return image
-    }
+//    @MainActor
+//    func loadImage(for side: CardSide) async throws -> CGImage? {
+//        guard let imageId = side == .front ? imageFrontId : imageBackId else {
+//            return nil
+//        }
+//        
+//        // Check the store first
+//        let store = getOrCreateImageStore(for: side)
+//        if let data = store.getImageData(),
+//           let image = await DefaultImageLoader().createCGImage(from: data) {
+//            return image
+//        }
+//        
+//        // Load and cache image
+//        let service = ImageServiceFactory.shared.getService()
+//        let image = try await service.loadImage(
+//            id: imageId,
+//            side: side,
+//            quality: ImageQuality.standard
+//        )
+//        
+//        // Cache the result
+//        if let data = ImageConversion.convert(cgImage: image) {
+//            store.setImage(data)
+//        }
+//        
+//        return image
+//    }
     
     @MainActor
     func loadThumbnail(for side: CardSide) async throws -> CGImage? {

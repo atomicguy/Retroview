@@ -36,6 +36,7 @@
 		5C4A27222D04E99E009ECECE /* ImageServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A27212D04E99A009ECECE /* ImageServiceFactory.swift */; };
 		5C5913BB2D126EED0011C90D /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5913BA2D126EEA0011C90D /* FlowLayout.swift */; };
 		5C5913BD2D126F220011C90D /* CardImageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5913BC2D126F1F0011C90D /* CardImageSection.swift */; };
+		5C5913C12D129EFF0011C90D /* CardImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5913C02D129EFC0011C90D /* CardImageLoader.swift */; };
 		5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C665F552CF9591A00838F37 /* FavoriteButton.swift */; };
 		5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */; };
 		5C6676B42BC210F8002DD52E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B32BC210F8002DD52E /* Assets.xcassets */; };
@@ -139,6 +140,7 @@
 		5C4A27212D04E99A009ECECE /* ImageServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServiceFactory.swift; sourceTree = "<group>"; };
 		5C5913BA2D126EEA0011C90D /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		5C5913BC2D126F1F0011C90D /* CardImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageSection.swift; sourceTree = "<group>"; };
+		5C5913C02D129EFC0011C90D /* CardImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageLoader.swift; sourceTree = "<group>"; };
 		5C665F552CF9591A00838F37 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewApp.swift; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 		5CCB4C142D10F8CC00FD4005 /* ImageHandling */ = {
 			isa = PBXGroup;
 			children = (
+				5C5913C02D129EFC0011C90D /* CardImageLoader.swift */,
 				5CCB4C192D1143D000FD4005 /* ImageCacheService.swift */,
 				5C4A271F2D04E965009ECECE /* ImageService.swift */,
 				5CCB4C152D10F98800FD4005 /* ImageService+Quality.swift */,
@@ -584,6 +587,7 @@
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
+				5C5913C12D129EFF0011C90D /* CardImageLoader.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
