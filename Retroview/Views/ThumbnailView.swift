@@ -12,7 +12,7 @@ struct ThumbnailView: View {
     let card: CardSchemaV1.StereoCard
     var navigationEnabled = true
     
-    @State private var image: CGImage?
+    @State private var imageManager: CardImageManager?
     @State private var loadingError = false
     @State private var isLoading = false
     
@@ -34,7 +34,7 @@ struct ThumbnailView: View {
     
     private var thumbnailContent: some View {
         ZStack {
-            if let image {
+            if let image = imageManager?.storedImage {
                 Image(decorative: image, scale: 1.0)
                     .resizable()
                     .scaledToFill()
@@ -66,16 +66,25 @@ struct ThumbnailView: View {
             }
     }
     
+    @MainActor
     private func loadImage() async {
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
         
-        do {
-            // Always request thumbnail quality for grid views
-            image = try await card.loadImage(side: .front, quality: .thumbnail)
-        } catch {
-            loadingError = true
+        // Initialize image manager if needed
+        if imageManager == nil {
+            imageManager = CardImageManager(card: card, side: .front, quality: .thumbnail)
+        }
+        
+        // Try loading from URL if not in storage
+        if imageManager?.storedImage == nil, let url = imageManager?.imageURL {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                imageManager?.storeImageData(data)
+            } catch {
+                loadingError = true
+            }
         }
     }
 }

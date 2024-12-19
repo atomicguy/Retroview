@@ -12,6 +12,7 @@ import SwiftData
 @MainActor
 class ImportService {
     let modelContext: ModelContext
+    private let imagePreloader: ImagePreloadService
     private let batchSize: Int
     
     init(
@@ -19,6 +20,7 @@ class ImportService {
         batchSize: Int = 50
     ) {
         self.modelContext = modelContext
+        self.imagePreloader = ImagePreloadService()
         self.batchSize = batchSize
     }
     
@@ -119,29 +121,9 @@ class ImportService {
         card.titlePick = titles.first
         
         // Preload thumbnail before inserting
-        await preloadThumbnail(for: card)
+        await imagePreloader.preloadImages(for: card)
         
         modelContext.insert(card)
-    }
-    
-    private func preloadThumbnail(for card: CardSchemaV1.StereoCard) async {
-        // Only attempt front thumbnail
-        guard let frontId = card.imageFrontId else { return }
-        
-        do {
-            let urlString = "https://iiif-prod.nypl.org/index.php?id=\(frontId)&t=\(ImageQuality.thumbnail.rawValue)"
-            guard let url = URL(string: urlString) else { return }
-            
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            // Store only the thumbnail data
-            card.frontThumbnailData = data
-            
-            ImportLogger.log(.info, "Successfully loaded thumbnail for card: \(card.uuid)")
-        } catch {
-            ImportLogger.log(.warning, "Failed to load thumbnail for \(card.uuid): \(error.localizedDescription)")
-            // Continue import even if thumbnail load fails
-        }
     }
     
     private func getTitles(from titleStrings: [String]) async throws -> [TitleSchemaV1.Title] {
