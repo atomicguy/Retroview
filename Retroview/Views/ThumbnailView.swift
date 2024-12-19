@@ -10,13 +10,12 @@ import SwiftUI
 
 struct ThumbnailView: View {
     let card: CardSchemaV1.StereoCard
-    var navigationEnabled = true  // Add flag to control navigation
-
-    @Environment(\.imageCache) private var imageCache
+    var navigationEnabled = true
+    
     @State private var image: CGImage?
     @State private var loadingError = false
     @State private var isLoading = false
-
+    
     var body: some View {
         Group {
             if navigationEnabled {
@@ -29,10 +28,10 @@ struct ThumbnailView: View {
             }
         }
         .task {
-            await loadCachedImage()
+            await loadImage()
         }
     }
-
+    
     private var thumbnailContent: some View {
         ZStack {
             if let image {
@@ -48,7 +47,7 @@ struct ThumbnailView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .aspectRatio(2, contentMode: .fit)
     }
-
+    
     private var placeholderView: some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(.gray.opacity(0.2))
@@ -66,28 +65,15 @@ struct ThumbnailView: View {
                 }
             }
     }
-
-    private func loadCachedImage() async {
+    
+    private func loadImage() async {
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
-
-        // Check cache first
-        if let imageId = card.imageFrontId,
-            let cached = imageCache.image(for: imageId)
-        {
-            image = cached
-            return
-        }
-
-        // Load if not cached
+        
         do {
-            if let thumbnail = try await card.loadGridThumbnail() {
-                image = thumbnail
-                if let imageId = card.imageFrontId {
-                    imageCache.cache(thumbnail, for: imageId)
-                }
-            }
+            // Always request thumbnail quality for grid views
+            image = try await card.loadImage(side: .front, quality: .thumbnail)
         } catch {
             loadingError = true
         }

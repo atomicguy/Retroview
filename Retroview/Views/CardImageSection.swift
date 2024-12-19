@@ -12,61 +12,65 @@ struct CardImageSection: View {
     let side: CardSide
     let title: String
     
-    @State private var image: CGImage?
-    @State private var isLoading = false
-    @State private var error: Error?
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.headline)
                 .foregroundStyle(.secondary)
             
-            Group {
-                if let image {
-                    Image(decorative: image, scale: 1.0)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                } else {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(.gray.opacity(0.1))
-                        .aspectRatio(2/1, contentMode: .fit)
-                        .overlay {
-                            if isLoading {
-                                ProgressView()
-                            } else if error != nil {
-                                Label("Failed to load", systemImage: "exclamationmark.triangle")
-                                    .foregroundStyle(.secondary)
+            if let imageId = side == .front ? card.imageFrontId : card.imageBackId {
+                AsyncImage(
+                    url: URL(string: "https://iiif-prod.nypl.org/index.php?id=\(imageId)&t=\(ImageQuality.thumbnail.rawValue)")
+                ) { thumbnailPhase in
+                    switch thumbnailPhase {
+                    case .empty:
+                        loadingPlaceholder
+                    case .success(let thumbnail):
+                        AsyncImage(
+                            url: URL(string: "https://iiif-prod.nypl.org/index.php?id=\(imageId)&t=\(ImageQuality.high.rawValue)")
+                        ) { fullPhase in
+                            switch fullPhase {
+                            case .success(let fullImage):
+                                fullImage
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                                    .transition(.opacity)
+                            default:
+                                thumbnail
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
                             }
                         }
+                    case .failure:
+                        errorPlaceholder
+                    @unknown default:
+                        EmptyView()
+                    }
                 }
-            }
-            .task(id: card.uuid) {
-                await loadImage()
-            }
-            .refreshable {
-                await loadImage()
             }
         }
     }
     
-    private func loadImage() async {
-        guard !isLoading else { return }
-        
-        isLoading = true
-        error = nil
-        
-        do {
-            // First try thumbnail for quick loading
-            image = try await card.loadImage(side: side, quality: .thumbnail)
-            
-            // Then load full quality
-            image = try await card.loadImage(side: side, quality: .standard)
-        } catch {
-            self.error = error
-        }
-        
-        isLoading = false
+    private var loadingPlaceholder: some View {
+        Rectangle()
+            .fill(.gray.opacity(0.1))
+            .aspectRatio(2/1, contentMode: .fit)
+            .overlay {
+                ProgressView()
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+    
+    private var errorPlaceholder: some View {
+        Rectangle()
+            .fill(.gray.opacity(0.1))
+            .aspectRatio(2/1, contentMode: .fit)
+            .overlay {
+                Label("Failed to load", systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(.secondary)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }

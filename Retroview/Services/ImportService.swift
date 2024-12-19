@@ -12,22 +12,16 @@ import SwiftData
 @MainActor
 class ImportService {
     let modelContext: ModelContext
-    private let imageService: ImageServiceProtocol
     private let batchSize: Int
-    private let preloadImages: Bool
-
+    
     init(
         modelContext: ModelContext,
-        imageService: ImageServiceProtocol = ImageServiceFactory.shared.getService(),
-        batchSize: Int = 50,
-        preloadImages: Bool = false
+        batchSize: Int = 50
     ) {
         self.modelContext = modelContext
-        self.imageService = imageService
         self.batchSize = batchSize
-        self.preloadImages = preloadImages
     }
-
+    
     func importJSON(from url: URL) async throws {
         print("\n📄 Processing file: \(url.lastPathComponent)")
         
@@ -75,27 +69,21 @@ class ImportService {
         }
     }
 
-
-    private func importCard(from cardData: StereoCardJSON) async throws {
+    func importCard(from cardData: StereoCardJSON) async throws {
         let uuid = UUID(uuidString: cardData.uuid) ?? UUID()
-        let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
-            predicate: #Predicate<CardSchemaV1.StereoCard> { card in
-                card.uuid == uuid
-            }
-        )
-
+        
         // Skip if card already exists
-        if try modelContext.fetch(descriptor).first != nil {
+        if try cardExists(uuid: uuid) {
             print("Card \(cardData.uuid) already exists, skipping import")
             return
         }
-
+        
         // Create or get existing entities
-        async let titles = getTitles(from: cardData.titles)
-        async let authors = getAuthors(from: cardData.authors)
-        async let subjects = getSubjects(from: cardData.subjects)
-        async let dates = getDates(from: cardData.dates)
-
+        let titles = try await getTitles(from: cardData.titles)
+        let authors = try await getAuthors(from: cardData.authors)
+        let subjects = try await getSubjects(from: cardData.subjects)
+        let dates = try await getDates(from: cardData.dates)
+        
         // Create crops
         let leftCrop = CropSchemaV1.Crop(
             x0: cardData.left.x0,
@@ -105,7 +93,7 @@ class ImportService {
             score: cardData.left.score,
             side: cardData.left.side
         )
-
+        
         let rightCrop = CropSchemaV1.Crop(
             x0: cardData.right.x0,
             y0: cardData.right.y0,
@@ -114,29 +102,48 @@ class ImportService {
             score: cardData.right.score,
             side: cardData.right.side
         )
-
-        // Wait for all async operations to complete
-        let (titleResults, authorResults, subjectResults, dateResults) = try await (titles, authors, subjects, dates)
-
+        
         // Create new card
         let card = CardSchemaV1.StereoCard(
             uuid: cardData.uuid,
             imageFrontId: cardData.imageIds.front,
             imageBackId: cardData.imageIds.back,
-            titles: titleResults,
-            authors: authorResults,
-            subjects: subjectResults,
-            dates: dateResults,
+            titles: titles,
+            authors: authors,
+            subjects: subjects,
+            dates: dates,
             crops: [leftCrop, rightCrop]
         )
-
+        
         // Set the first title as the picked title
-        card.titlePick = titleResults.first
-
+        card.titlePick = titles.first
+        
+        // Preload thumbnail before inserting
+        await preloadThumbnail(for: card)
+        
         modelContext.insert(card)
     }
-
-    // MARK: - Entity Creation Helpers
+    
+    private func preloadThumbnail(for card: CardSchemaV1.StereoCard) async {
+        // Only attempt front thumbnail
+        guard let frontId = card.imageFrontId else { return }
+        
+        do {
+            let urlString = "https://iiif-prod.nypl.org/index.php?id=\(frontId)&t=\(ImageQuality.thumbnail.rawValue)"
+            guard let url = URL(string: urlString) else { return }
+            
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            // Store only the thumbnail data
+            card.frontThumbnailData = data
+            
+            ImportLogger.log(.info, "Successfully loaded thumbnail for card: \(card.uuid)")
+        } catch {
+            ImportLogger.log(.warning, "Failed to load thumbnail for \(card.uuid): \(error.localizedDescription)")
+            // Continue import even if thumbnail load fails
+        }
+    }
+    
     private func getTitles(from titleStrings: [String]) async throws -> [TitleSchemaV1.Title] {
         try await withThrowingTaskGroup(of: TitleSchemaV1.Title.self) { group in
             for titleString in titleStrings {
@@ -144,7 +151,7 @@ class ImportService {
                     try await self.getOrCreateTitle(matching: titleString)
                 }
             }
-
+            
             var titles = [TitleSchemaV1.Title]()
             for try await title in group {
                 titles.append(title)
@@ -152,7 +159,7 @@ class ImportService {
             return titles
         }
     }
-
+    
     private func getAuthors(from authorStrings: [String]) async throws -> [AuthorSchemaV1.Author] {
         try await withThrowingTaskGroup(of: AuthorSchemaV1.Author.self) { group in
             for authorString in authorStrings {
@@ -160,7 +167,7 @@ class ImportService {
                     try await self.getOrCreateAuthor(matching: authorString)
                 }
             }
-
+            
             var authors = [AuthorSchemaV1.Author]()
             for try await author in group {
                 authors.append(author)
@@ -168,7 +175,7 @@ class ImportService {
             return authors
         }
     }
-
+    
     private func getSubjects(from subjectStrings: [String]) async throws -> [SubjectSchemaV1.Subject] {
         try await withThrowingTaskGroup(of: SubjectSchemaV1.Subject.self) { group in
             for subjectString in subjectStrings {
@@ -176,7 +183,7 @@ class ImportService {
                     try await self.getOrCreateSubject(matching: subjectString)
                 }
             }
-
+            
             var subjects = [SubjectSchemaV1.Subject]()
             for try await subject in group {
                 subjects.append(subject)
@@ -184,7 +191,7 @@ class ImportService {
             return subjects
         }
     }
-
+    
     private func getDates(from dateStrings: [String]) async throws -> [DateSchemaV1.Date] {
         try await withThrowingTaskGroup(of: DateSchemaV1.Date.self) { group in
             for dateString in dateStrings {
@@ -192,7 +199,7 @@ class ImportService {
                     try await self.getOrCreateDate(matching: dateString)
                 }
             }
-
+            
             var dates = [DateSchemaV1.Date]()
             for try await date in group {
                 dates.append(date)
@@ -200,71 +207,66 @@ class ImportService {
             return dates
         }
     }
-
-    // MARK: - Entity Creation Methods
-    @MainActor
-    private func getOrCreateTitle(matching text: String) throws -> TitleSchemaV1.Title {
+    
+    private func getOrCreateTitle(matching text: String) async throws -> TitleSchemaV1.Title {
         let descriptor = FetchDescriptor<TitleSchemaV1.Title>(
             predicate: #Predicate<TitleSchemaV1.Title> { title in
                 title.text == text
             }
         )
-
+        
         if let existing = try modelContext.fetch(descriptor).first {
             return existing
         }
-
+        
         let newTitle = TitleSchemaV1.Title(text: text)
         modelContext.insert(newTitle)
         return newTitle
     }
-
-    @MainActor
-    private func getOrCreateAuthor(matching name: String) throws -> AuthorSchemaV1.Author {
+    
+    private func getOrCreateAuthor(matching name: String) async throws -> AuthorSchemaV1.Author {
         let descriptor = FetchDescriptor<AuthorSchemaV1.Author>(
             predicate: #Predicate<AuthorSchemaV1.Author> { author in
                 author.name == name
             }
         )
-
+        
         if let existing = try modelContext.fetch(descriptor).first {
             return existing
         }
-
+        
         let newAuthor = AuthorSchemaV1.Author(name: name)
         modelContext.insert(newAuthor)
         return newAuthor
     }
-
-    @MainActor
-    private func getOrCreateSubject(matching name: String) throws -> SubjectSchemaV1.Subject {
+    
+    private func getOrCreateSubject(matching name: String) async throws -> SubjectSchemaV1.Subject {
         let descriptor = FetchDescriptor<SubjectSchemaV1.Subject>(
             predicate: #Predicate<SubjectSchemaV1.Subject> { subject in
                 subject.name == name
             }
         )
-
+        
         if let existing = try modelContext.fetch(descriptor).first {
             return existing
         }
-
+        
         let newSubject = SubjectSchemaV1.Subject(name: name)
         modelContext.insert(newSubject)
         return newSubject
     }
-
-    @MainActor
-    private func getOrCreateDate(matching text: String) throws -> DateSchemaV1.Date {
+    
+    private func getOrCreateDate(matching text: String) async throws -> DateSchemaV1.Date {
         let descriptor = FetchDescriptor<DateSchemaV1.Date>(
             predicate: #Predicate<DateSchemaV1.Date> { date in
                 date.text == text
             }
         )
-
+        
         if let existing = try modelContext.fetch(descriptor).first {
             return existing
         }
-
+        
         let newDate = DateSchemaV1.Date(text: text)
         modelContext.insert(newDate)
         return newDate

@@ -69,7 +69,7 @@ struct RetroviewApp: App {
             Group {
                 LibraryGridView()
             }
-            .serifyText()
+            .environment(\.font, .system(.body, design: .serif))
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
                     context: sharedModelContainer.mainContext)
