@@ -10,28 +10,33 @@ import SwiftUI
 
 struct LibraryGridView: View {
     // Use @Query directly with proper sorting and filtering
-    @Query(sort: \CardSchemaV1.StereoCard.uuid) private var cards: [CardSchemaV1.StereoCard]
+    @Query(sort: \CardSchemaV1.StereoCard.uuid) private var cards:
+        [CardSchemaV1.StereoCard]
     @Environment(\.modelContext) private var modelContext
     @State private var showingImport = false
     @State private var showingTransfer = false
-    
+
     private let columns = [
         GridItem(.adaptive(minimum: 300, maximum: 400), spacing: 20)
     ]
-    
+
     var body: some View {
         NavigationStack {
             Group {
                 if cards.isEmpty {
                     ContentUnavailableView {
-                        Label("No Cards", systemImage: "photo.on.rectangle.angled")
+                        Label(
+                            "No Cards", systemImage: "photo.on.rectangle.angled"
+                        )
                     } description: {
                         Text("Import some cards to get started")
                     } actions: {
                         Button {
                             showingImport = true
                         } label: {
-                            Label("Import Cards", systemImage: "square.and.arrow.down")
+                            Label(
+                                "Import Cards",
+                                systemImage: "square.and.arrow.down")
                         }
                         .buttonStyle(.bordered)
                     }
@@ -43,6 +48,11 @@ struct LibraryGridView: View {
                             }
                         }
                         .padding()
+                        .task {
+                            let imageIds = cards.compactMap(\.imageFrontId)
+                            ImageCacheService.shared.prefetch(
+                                imageIds: imageIds)
+                        }
                     }
                 }
             }
@@ -53,17 +63,19 @@ struct LibraryGridView: View {
                         Button {
                             showingImport = true
                         } label: {
-                            Label("Import", systemImage: "square.and.arrow.down")
+                            Label(
+                                "Import", systemImage: "square.and.arrow.down")
                         }
-                        
+
                         Button {
                             showingTransfer = true
                         } label: {
-                            Label("Transfer", systemImage: "arrow.up.arrow.down")
+                            Label(
+                                "Transfer", systemImage: "arrow.up.arrow.down")
                         }
-                        
+
                         #if DEBUG
-                        StoreDebugMenu()
+                            StoreDebugMenu()
                         #endif
                     }
                 }

@@ -56,7 +56,6 @@ final class PreviewStoreManager {
             DateSchemaV1.Date.self,
             CropSchemaV1.Crop.self,
             CollectionSchemaV1.Collection.self,
-            ImageStore.self  // Add ImageStore to schema
         ])
 
         // First try loading from the preview store file
@@ -109,7 +108,7 @@ final class PreviewStoreManager {
         context.insert(date)
 
         // Create 5 sample cards
-        for i in 1...5 {
+        for _ in 1...5 {
             let card = CardSchemaV1.StereoCard(uuid: UUID().uuidString)
             
             // Add relationships
@@ -136,17 +135,6 @@ final class PreviewStoreManager {
 
             card.leftCrop = leftCrop
             card.rightCrop = rightCrop
-
-            // Create and attach ImageStore with placeholder
-            if let imageData = createPlaceholderImage(number: i) {
-                let store = ImageStore(
-                    imageId: "preview_\(i)",
-                    side: CardSide.front.rawValue,
-                    imageData: imageData
-                )
-                card.imageStores.append(store)
-                context.insert(store)
-            }
 
             context.insert(card)
         }

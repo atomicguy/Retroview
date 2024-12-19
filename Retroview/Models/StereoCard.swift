@@ -19,7 +19,6 @@ enum CardSchemaV1: VersionedSchema {
             AuthorSchemaV1.Author.self,
             SubjectSchemaV1.Subject.self,
             DateSchemaV1.Date.self,
-            ImageStore.self,
         ]
     }
 
@@ -48,10 +47,6 @@ enum CardSchemaV1: VersionedSchema {
 
         @Relationship(deleteRule: .cascade)
         var crops: [CropSchemaV1.Crop] = []
-
-        // Image store relationship
-        @Relationship(deleteRule: .cascade)
-        var imageStores: [ImageStore] = []
 
         var leftCrop: CropSchemaV1.Crop? {
             get { crops.first { $0.side == CropSchemaV1.Side.left.rawValue } }
@@ -123,26 +118,6 @@ enum CardSchemaV1: VersionedSchema {
             self.subjects = subjects
             self.dates = dates
             self.crops = crops
-        }
-
-        // MARK: - Image Store Access
-        @MainActor
-        func getOrCreateImageStore(side: CardSide) -> ImageStore? {
-            let imageId: String? = side == .front ? imageFrontId : imageBackId
-
-            guard let id = imageId else { return nil }
-
-            // Look for existing store
-            if let existing = imageStores.first(where: {
-                $0.imageId == id && $0.side == side.rawValue
-            }) {
-                return existing
-            }
-
-            // Create new store
-            let store = ImageStore(imageId: id, side: side.rawValue)
-            imageStores.append(store)
-            return store
         }
     }
 }

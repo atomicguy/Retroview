@@ -85,7 +85,7 @@ struct ThumbnailView: View {
             if let thumbnail = try await card.loadGridThumbnail() {
                 image = thumbnail
                 if let imageId = card.imageFrontId {
-                    await imageCache.cache(thumbnail, for: imageId)
+                    imageCache.cache(thumbnail, for: imageId)
                 }
             }
         } catch {

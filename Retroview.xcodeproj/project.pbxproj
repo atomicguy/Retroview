@@ -25,11 +25,9 @@
 		5C1DBD932D0FB7550050B4DF /* PreviewStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD922D0FB7510050B4DF /* PreviewStoreManager.swift */; };
 		5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */; };
 		5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */; };
-		5C1DBD9C2D0FF5680050B4DF /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD9B2D0FF5640050B4DF /* ImageStore.swift */; };
 		5C1DBD9E2D0FF6C20050B4DF /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD9D2D0FF6BD0050B4DF /* ThumbnailView.swift */; };
 		5C1DBDA02D0FFA550050B4DF /* ImportService+Predicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD9F2D0FFA4E0050B4DF /* ImportService+Predicates.swift */; };
 		5C1DBDA42D1000F10050B4DF /* CardSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBDA32D1000EF0050B4DF /* CardSide.swift */; };
-		5C1DBDA62D10029C0050B4DF /* StereoCard+ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBDA52D1002970050B4DF /* StereoCard+ImageStore.swift */; };
 		5C3DFED22D0568E2003D3CF2 /* ImageConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */; };
 		5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A271A2D04DC01009ECECE /* AppDestination.swift */; };
 		5C4A27202D04E972009ECECE /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A271F2D04E965009ECECE /* ImageService.swift */; };
@@ -37,6 +35,7 @@
 		5C5913BB2D126EED0011C90D /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5913BA2D126EEA0011C90D /* FlowLayout.swift */; };
 		5C5913BD2D126F220011C90D /* CardImageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5913BC2D126F1F0011C90D /* CardImageSection.swift */; };
 		5C5913C12D129EFF0011C90D /* CardImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5913C02D129EFC0011C90D /* CardImageLoader.swift */; };
+		5C5913C32D13AE0B0011C90D /* SerifModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5913C22D13AE060011C90D /* SerifModifier.swift */; };
 		5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C665F552CF9591A00838F37 /* FavoriteButton.swift */; };
 		5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */; };
 		5C6676B42BC210F8002DD52E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C6676B32BC210F8002DD52E /* Assets.xcassets */; };
@@ -128,11 +127,9 @@
 		5C1DBD922D0FB7510050B4DF /* PreviewStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewStoreManager.swift; sourceTree = "<group>"; };
 		5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDebugMenu.swift; sourceTree = "<group>"; };
 		5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
-		5C1DBD9B2D0FF5640050B4DF /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		5C1DBD9D2D0FF6BD0050B4DF /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		5C1DBD9F2D0FFA4E0050B4DF /* ImportService+Predicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImportService+Predicates.swift"; sourceTree = "<group>"; };
 		5C1DBDA32D1000EF0050B4DF /* CardSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSide.swift; sourceTree = "<group>"; };
-		5C1DBDA52D1002970050B4DF /* StereoCard+ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StereoCard+ImageStore.swift"; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5C3DFED12D0568DD003D3CF2 /* ImageConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConversion.swift; sourceTree = "<group>"; };
 		5C4A271A2D04DC01009ECECE /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
@@ -141,6 +138,7 @@
 		5C5913BA2D126EEA0011C90D /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		5C5913BC2D126F1F0011C90D /* CardImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageSection.swift; sourceTree = "<group>"; };
 		5C5913C02D129EFC0011C90D /* CardImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageLoader.swift; sourceTree = "<group>"; };
+		5C5913C22D13AE060011C90D /* SerifModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerifModifier.swift; sourceTree = "<group>"; };
 		5C665F552CF9591A00838F37 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewApp.swift; sourceTree = "<group>"; };
@@ -282,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				5C267EBA2CE3209600AE3493 /* Info.plist */,
+				5C5913C22D13AE060011C90D /* SerifModifier.swift */,
 				5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */,
 				5CC89F052BE835AF001ECF22 /* Preview Helpers */,
 				5C1454322CF7A61400D5C232 /* Utilities */,
@@ -355,9 +354,7 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5C1DBDA52D1002970050B4DF /* StereoCard+ImageStore.swift */,
 				5C1DBDA32D1000EF0050B4DF /* CardSide.swift */,
-				5C1DBD9B2D0FF5640050B4DF /* ImageStore.swift */,
 				5CD577322D0EAED7002FA8DB /* ImportType.swift */,
 				5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */,
 				5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */,
@@ -568,6 +565,7 @@
 				5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */,
 				5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */,
 				5CCB4C132D10F8B400FD4005 /* ImageQuality.swift in Sources */,
+				5C5913C32D13AE0B0011C90D /* SerifModifier.swift in Sources */,
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
 				5C1DBD9E2D0FF6C20050B4DF /* ThumbnailView.swift in Sources */,
 				5CD577152D0E5BE6002FA8DB /* ImportLogger.swift in Sources */,
@@ -593,7 +591,6 @@
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */,
 				5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */,
-				5C1DBDA62D10029C0050B4DF /* StereoCard+ImageStore.swift in Sources */,
 				5C1DBDA02D0FFA550050B4DF /* ImportService+Predicates.swift in Sources */,
 				5CD5771B2D0E7544002FA8DB /* DatabaseTransferView.swift in Sources */,
 				5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */,
@@ -613,7 +610,6 @@
 				5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */,
-				5C1DBD9C2D0FF5680050B4DF /* ImageStore.swift in Sources */,
 				5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */,
 				5CD577292D0E94E0002FA8DB /* ImageService+Crop.swift in Sources */,
 				5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */,

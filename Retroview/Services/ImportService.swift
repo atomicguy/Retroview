@@ -101,7 +101,7 @@ class ImportService {
             x0: cardData.left.x0,
             y0: cardData.left.y0,
             x1: cardData.left.x1,
-            y1: cardData.left.y1,
+            y1: cardData.right.y1,
             score: cardData.left.score,
             side: cardData.left.side
         )
@@ -134,43 +134,6 @@ class ImportService {
         card.titlePick = titleResults.first
 
         modelContext.insert(card)
-
-        // Create ImageStore instances
-        if let frontId = card.imageFrontId {
-            let frontStore = ImageStore(imageId: frontId, side: CardSide.front.rawValue)
-            modelContext.insert(frontStore)
-            card.imageStores.append(frontStore)
-            
-            // Optionally preload images during import
-            if preloadImages {
-                if let frontImage = try? await imageService.loadImage(
-                    id: frontId,
-                    side: .front,
-                    quality: .standard  // Use standard quality for preloaded images
-                ),
-                let imageData = ImageConversion.convert(cgImage: frontImage) {
-                    frontStore.setImage(imageData)
-                }
-            }
-        }
-
-        if let backId = card.imageBackId {
-            let backStore = ImageStore(imageId: backId, side: CardSide.back.rawValue)
-            modelContext.insert(backStore)
-            card.imageStores.append(backStore)
-            
-            // Optionally preload images during import
-            if preloadImages {
-                if let backImage = try? await imageService.loadImage(
-                    id: backId,
-                    side: .back,
-                    quality: .standard  // Use standard quality for preloaded images
-                ),
-                let imageData = ImageConversion.convert(cgImage: backImage) {
-                    backStore.setImage(imageData)
-                }
-            }
-        }
     }
 
     // MARK: - Entity Creation Helpers
