@@ -10,30 +10,30 @@ import SwiftUI
 
 struct CardDetailView: View {
     let card: CardSchemaV1.StereoCard
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 // Header
                 VStack(alignment: .leading, spacing: 8) {
                     Text(card.titlePick?.text ?? "Untitled")
-                        .font(.title)
-                    
+                        .font(.system(.title, design: .serif))
+
                     if !card.authors.isEmpty {
                         Text(card.authors.map(\.name).joined(separator: ", "))
                             .foregroundStyle(.secondary)
                     }
                 }
-                
+
                 // Images
                 if card.imageFrontId != nil {
                     CardImageSection(card: card, side: .front, title: "Front")
                 }
-                
+
                 if card.imageBackId != nil {
                     CardImageSection(card: card, side: .back, title: "Back")
                 }
-                
+
                 // Metadata
                 if !card.subjects.isEmpty {
                     metadataSection("Subjects") {
@@ -50,11 +50,12 @@ struct CardDetailView: View {
                         }
                     }
                 }
-                
+
                 if !card.titles.isEmpty {
                     metadataSection("Titles") {
                         ForEach(card.titles, id: \.text) { title in
                             Text(title.text)
+                                .font(.system(.title, design: .serif))
                         }
                     }
                 }
@@ -63,11 +64,13 @@ struct CardDetailView: View {
         }
         .navigationTitle(card.titlePick?.text ?? "Untitled Card")
     }
-    
-    private func metadataSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+
+    private func metadataSection<Content: View>(
+        _ title: String, @ViewBuilder content: () -> Content
+    ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.headline)
+                .font(.system(.headline, design: .serif))
             content()
         }
     }
