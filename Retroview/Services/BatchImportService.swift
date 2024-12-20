@@ -49,25 +49,21 @@ struct ImportProgress {
 class BatchImportService: ObservableObject {
     @Published private(set) var progress: Progress
     private let importService: ImportService
+    private let imagePreloader: ImagePreloadService
     private var progressContinuation: AsyncStream<Progress>.Continuation?
     private var cancellationToken: Task<Void, Error>?
     private let batchSize: Int
-    private let progressQueue = DispatchQueue(label: "com.retroview.importprogress")
-
-    var progressUpdates: AsyncStream<Progress> {
-        AsyncStream { continuation in
-            self.progressContinuation = continuation
-            continuation.yield(self.progress)
-        }
-    }
+    private let progressQueue = DispatchQueue(
+        label: "com.retroview.importprogress")
 
     init(modelContext: ModelContext, batchSize: Int = 100) {
         self.progress = Progress(totalUnitCount: 0)
         self.importService = ImportService(modelContext: modelContext)
+        self.imagePreloader = ImagePreloadService()
         self.batchSize = batchSize
         self.progress.kind = .file
     }
-    
+
     func cancelImport() {
         cancellationToken?.cancel()
         progressContinuation?.finish()
@@ -103,32 +99,34 @@ class BatchImportService: ObservableObject {
         // Create new progress instance and immediately notify observers
         progress = Progress(totalUnitCount: Int64(fileURLs.count))
         progressContinuation?.yield(progress)
-        
+
         var processedCount: Int64 = 0
-        
+
         cancellationToken = Task {
             // Process in batches
             for batch in stride(from: 0, to: fileURLs.count, by: batchSize) {
                 if Task.isCancelled { break }
-                
+
                 let end = min(batch + batchSize, fileURLs.count)
                 let batchUrls = Array(fileURLs[batch..<end])
-                
+
                 try await withThrowingTaskGroup(of: Void.self) { group in
                     for fileURL in batchUrls {
                         if Task.isCancelled { break }
-                        
+
                         group.addTask {
-                            try await self.importService.importJSON(from: fileURL)
-                            
+                            try await self.importService.importJSON(
+                                from: fileURL)
+
                             // Thread-safe increment and update
-                            await self.updateProgress(currentCount: &processedCount)
+                            await self.updateProgress(
+                                currentCount: &processedCount)
                         }
                     }
-                    
+
                     try await group.waitForAll()
                 }
-                
+
                 // Brief pause between batches
                 try await Task.sleep(for: .milliseconds(50))
             }
@@ -140,7 +138,7 @@ class BatchImportService: ObservableObject {
 
         try await cancellationToken?.value
     }
-    
+
     private func updateProgress(currentCount: inout Int64) async {
         await MainActor.run {
             currentCount += 1
@@ -153,7 +151,8 @@ class BatchImportService: ObservableObject {
         let failedImports = ImportLogger.getFailedImports()
         let report = ImportReport(
             totalProcessed: Int(progress.totalUnitCount),
-            successCount: Int(progress.completedUnitCount) - failedImports.count,
+            successCount: Int(progress.completedUnitCount)
+                - failedImports.count,
             failedImports: failedImports
         )
         ImportLogger.clearFailedImports()

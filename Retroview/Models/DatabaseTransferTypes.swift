@@ -10,20 +10,20 @@ import SwiftData
 
 // MARK: - Transfer Types
 struct CardTransfer: Codable {
-    let uuid: String
+    let uuid: UUID
     let imageFrontId: String?
     let imageBackId: String?
     let cardColor: String
     let colorOpacity: Double
     let titles: [String]  // Just store the text values
-    let authors: [String] // Just store the names
-    let subjects: [String] // Just store the names
-    let dates: [String] // Just store the text values
-    let titlePick: String? // Store the picked title text
+    let authors: [String]  // Just store the names
+    let subjects: [String]  // Just store the names
+    let dates: [String]  // Just store the text values
+    let titlePick: String?  // Store the picked title text
     let crops: [CropTransfer]
-    
+
     init(from card: CardSchemaV1.StereoCard) {
-        uuid = card.uuid.uuidString
+        uuid = card.uuid
         imageFrontId = card.imageFrontId
         imageBackId = card.imageBackId
         cardColor = card.cardColor
@@ -44,7 +44,7 @@ struct CropTransfer: Codable {
     let y1: Float
     let score: Float
     let side: String
-    
+
     init(from crop: CropSchemaV1.Crop) {
         x0 = crop.x0
         y0 = crop.y0
@@ -61,13 +61,13 @@ struct CollectionTransfer: Codable {
     let createdAt: Date
     let updatedAt: Date
     let cardOrder: [String]
-    
+
     init(from collection: CollectionSchemaV1.Collection) {
         id = collection.id
         name = collection.name
         createdAt = collection.createdAt
         updatedAt = collection.updatedAt
-        cardOrder = collection.cardUUIDs
+        cardOrder = collection.orderedCardIds.map { $0.uuidString }
     }
 }
 
@@ -76,8 +76,11 @@ struct DatabaseExport: Codable {
     let cards: [CardTransfer]
     let collections: [CollectionTransfer]
     let version: Int
-    
-    init(cards: [CardTransfer], collections: [CollectionTransfer], version: Int = 1) {
+
+    init(
+        cards: [CardTransfer], collections: [CollectionTransfer],
+        version: Int = 1
+    ) {
         self.cards = cards
         self.collections = collections
         self.version = version

@@ -69,7 +69,7 @@ actor MODSParsingService {
             
             // Create and return the card
             let card = StereoCardJSON(
-                uuid: uuid,
+                uuid: uuid.uuidString,
                 titles: titles,
                 subjects: subjects,
                 authors: authors,
@@ -89,7 +89,7 @@ actor MODSParsingService {
         }
     }
 
-    private static func extractUUID(from mods: [String: Any]) throws -> String {
+    private static func extractUUID(from mods: [String: Any]) throws -> UUID {
         guard let identifiers = mods["identifier"] as? [[Any]] else {
             throw MODSParsingError.missingRequiredField("identifiers")
         }
@@ -99,7 +99,8 @@ actor MODSParsingService {
                 .first(where: {
                     ($0 as? [String: Any])?["type"] as? String == "uuid"
                 }) as? [String: Any],
-            let uuid = uuidIdentifier["x_"] as? String
+            let uuidString = uuidIdentifier["x_"] as? String,
+            let uuid = UUID(uuidString: uuidString)
         else {
             throw MODSParsingError.missingRequiredField("UUID")
         }
@@ -376,9 +377,9 @@ extension MODSParsingService {
 
         let defaultCrop = CropData(
             x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "left")
-
+        
         return StereoCardJSON(
-            uuid: uuid,
+            uuid: uuid.uuidString,
             titles: titles,
             subjects: subjects,
             authors: authors,

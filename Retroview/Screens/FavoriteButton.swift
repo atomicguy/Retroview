@@ -31,19 +31,13 @@ struct HoverEffectModifier: ViewModifier {
 struct FavoriteButton: View {
     @Environment(\.modelContext) private var modelContext
     let card: CardSchemaV1.StereoCard
-
-    private var favorites: CollectionSchemaV1.Collection? {
-        try? modelContext.fetch(CollectionDefaults.favoritesDescriptor()).first
-    }
-
-    private var isFavorite: Bool {
-        guard let favorites else { return false }
-        return favorites.hasCard(card)
-    }
-
+    @State private var isFavorite = false
+    
     var body: some View {
         Button {
-            toggleFavorite()
+            Task {
+                await toggleFavorite()
+            }
         } label: {
             Image(systemName: isFavorite ? "heart.fill" : "heart")
                 .font(.title2)
@@ -52,19 +46,31 @@ struct FavoriteButton: View {
                 .contentTransition(.symbolEffect(.replace))
         }
         .buttonStyle(.plain)
-    }
-
-    private func toggleFavorite() {
-        guard let favorites else { return }
-
-        withAnimation(.bouncy) {
-            if isFavorite {
-                favorites.removeCard(card)
-            } else {
-                favorites.addCard(card)
-            }
-            try? modelContext.save()
+        .task {
+            // Check initial favorite status
+            await checkFavoriteStatus()
         }
+    }
+    
+    private func checkFavoriteStatus() async {
+        let descriptor = CollectionDefaults.favoritesDescriptor()
+        guard let favorites = try? modelContext.fetch(descriptor).first else { return }
+        isFavorite = favorites.hasCard(card)
+    }
+    
+    private func toggleFavorite() async {
+        let descriptor = CollectionDefaults.favoritesDescriptor()
+        guard let favorites = try? modelContext.fetch(descriptor).first else { return }
+        
+        if isFavorite {
+            favorites.removeCard(card)
+        } else {
+            favorites.addCard(card)
+        }
+        
+        // Update state after modifying collection
+        isFavorite.toggle()
+        try? modelContext.save()
     }
 }
 

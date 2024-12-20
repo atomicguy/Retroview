@@ -109,7 +109,7 @@ final class PreviewStoreManager {
 
         // Create 5 sample cards
         for _ in 1...5 {
-            let card = CardSchemaV1.StereoCard(uuid: UUID().uuidString)
+            let card = CardSchemaV1.StereoCard(uuid: UUID())
             
             // Add relationships
             card.titles = [title]

@@ -42,6 +42,9 @@
 		5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7EA0F12CC5C631002FC3D2 /* StereoViewer */; };
 		5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */; };
 		5C80F6A42D13F02E00C58E7D /* ImagePreloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */; };
+		5C80F6A62D150A8500C58E7D /* ThumbnailOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */; };
+		5C80F6A82D150AA700C58E7D /* CollectionMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A72D150AA200C58E7D /* CollectionMenuButton.swift */; };
+		5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A92D150ABB00C58E7D /* NewCollectionSheet.swift */; };
 		5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */; };
 		5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
@@ -142,6 +145,9 @@
 		5C7639822D06B0B80043EEFC /* MODSParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSParsingService.swift; sourceTree = "<group>"; };
 		5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageManager.swift; sourceTree = "<group>"; };
 		5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreloadService.swift; sourceTree = "<group>"; };
+		5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailOverlay.swift; sourceTree = "<group>"; };
+		5C80F6A72D150AA200C58E7D /* CollectionMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionMenuButton.swift; sourceTree = "<group>"; };
+		5C80F6A92D150ABB00C58E7D /* NewCollectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCollectionSheet.swift; sourceTree = "<group>"; };
 		5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoSpatialViewer.swift; sourceTree = "<group>"; };
 		5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredThumbnailStrip.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
@@ -323,6 +329,7 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */,
 				5C5913BC2D126F1F0011C90D /* CardImageSection.swift */,
 				5C5913BA2D126EEA0011C90D /* FlowLayout.swift */,
 				5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */,
@@ -371,6 +378,8 @@
 				5C4A271A2D04DC01009ECECE /* AppDestination.swift */,
 				5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */,
 				5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */,
+				5C80F6A72D150AA200C58E7D /* CollectionMenuButton.swift */,
+				5C80F6A92D150ABB00C58E7D /* NewCollectionSheet.swift */,
 				5C665F552CF9591A00838F37 /* FavoriteButton.swift */,
 			);
 			path = Screens;
@@ -545,6 +554,7 @@
 				5CD577252D0E891B002FA8DB /* UniformTypeIdentifiers.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
 				5C80F6A42D13F02E00C58E7D /* ImagePreloadService.swift in Sources */,
+				5C80F6A62D150A8500C58E7D /* ThumbnailOverlay.swift in Sources */,
 				5C1DBD892D0FAD290050B4DF /* LibraryGridView.swift in Sources */,
 				5C1DBD912D0FB0B20050B4DF /* StoreUtility.swift in Sources */,
 				5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */,
@@ -568,6 +578,7 @@
 				5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */,
 				5CD577212D0E79AB002FA8DB /* DatabaseTransferManager.swift in Sources */,
 				5C5913BB2D126EED0011C90D /* FlowLayout.swift in Sources */,
+				5C80F6A82D150AA700C58E7D /* CollectionMenuButton.swift in Sources */,
 				5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */,
 				5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
@@ -582,6 +593,7 @@
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
+				5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5C1454442CF816F700D5C232 /* ImportService.swift in Sources */,
 				5C1454462CF8173100D5C232 /* BatchImportService.swift in Sources */,

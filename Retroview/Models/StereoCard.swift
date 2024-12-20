@@ -52,9 +52,13 @@ enum CardSchemaV1: VersionedSchema {
 
         @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
+        
+        @Relationship(inverse: \CollectionSchemaV1.Collection.cards)
+        var collections: [CollectionSchemaV1.Collection] = []
 
         @Relationship(deleteRule: .cascade)
         var crops: [CropSchemaV1.Crop] = []
+        
 
         // MARK: - Computed Properties
         var leftCrop: CropSchemaV1.Crop? {
@@ -100,7 +104,7 @@ enum CardSchemaV1: VersionedSchema {
 
         // MARK: - Initialization
         init(
-            uuid: String,
+            uuid: UUID,
             imageFrontId: String? = nil,
             imageBackId: String? = nil,
             cardColor: String = "#F5E6D3",
@@ -111,12 +115,7 @@ enum CardSchemaV1: VersionedSchema {
             dates: [DateSchemaV1.Date] = [],
             crops: [CropSchemaV1.Crop] = []
         ) {
-            if let parsedUUID = UUID(uuidString: uuid.lowercased()) {
-                self.uuid = parsedUUID
-            } else {
-                print("⚠️ Warning: Invalid UUID provided: \(uuid), generating new UUID")
-                self.uuid = UUID()
-            }
+            self.uuid = uuid
             self.imageFrontId = imageFrontId
             self.imageBackId = imageBackId
             self.cardColor = cardColor
@@ -126,6 +125,11 @@ enum CardSchemaV1: VersionedSchema {
             self.subjects = subjects
             self.dates = dates
             self.crops = crops
+
+            self.frontThumbnailData = nil
+            self.frontStandardData = nil
+            self.backThumbnailData = nil
+            self.backStandardData = nil
         }
     }
 }

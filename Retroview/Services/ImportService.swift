@@ -107,7 +107,7 @@ class ImportService {
         
         // Create new card
         let card = CardSchemaV1.StereoCard(
-            uuid: cardData.uuid,
+            uuid: uuid,
             imageFrontId: cardData.imageIds.front,
             imageBackId: cardData.imageIds.back,
             titles: titles,
