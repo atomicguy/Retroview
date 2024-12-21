@@ -16,22 +16,56 @@ struct DatabaseTransferView: View {
     @State private var exportProgress = false
     @State private var importProgress = false
     @State private var errorMessage: String?
+    @State private var currentProgress: DatabaseTransferManager.ImportProgress?
+    @State private var progress: Double = 0
     
     private let transferManager = DatabaseTransferManager()
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    exportButton
-                    importButton
-                }
-                
-                if let errorMessage {
+            ZStack {
+                List {
                     Section {
-                        Text(errorMessage)
-                            .foregroundStyle(.red)
+                        exportButton
+                        importButton
                     }
+                    
+                    if let errorMessage {
+                        Section {
+                            Text(errorMessage)
+                                .foregroundStyle(.red)
+                        }
+                    }
+                }
+                .disabled(isProcessing)
+                
+                if isProcessing {
+                    ProgressView {
+                        VStack(spacing: 12) {
+                            Text(currentProgress?.message ?? "Processing...")
+                                .font(.headline)
+                            
+                            if case .importingCards(let completed, let total) = currentProgress?.phase {
+                                ProgressView(value: Double(completed), total: Double(total)) {
+                                    Text("\(completed) of \(total)")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(width: 200)
+                            }
+                            
+                            if case .importingCollections(let completed, let total) = currentProgress?.phase {
+                                ProgressView(value: Double(completed), total: Double(total)) {
+                                    Text("\(completed) of \(total)")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(width: 200)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.ultraThinMaterial)
                 }
             }
             .navigationTitle("Database Transfer")
@@ -46,6 +80,10 @@ struct DatabaseTransferView: View {
         .frame(minWidth: 400, minHeight: 200)
     }
     
+    private var isProcessing: Bool {
+        exportProgress || importProgress
+    }
+    
     private var exportButton: some View {
         Button {
             Task {
@@ -55,7 +93,7 @@ struct DatabaseTransferView: View {
             Label("Export Database", systemImage: "square.and.arrow.up")
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .disabled(exportProgress || importProgress)
+        .disabled(isProcessing)
     }
     
     private var importButton: some View {
@@ -67,7 +105,7 @@ struct DatabaseTransferView: View {
             Label("Import Database", systemImage: "square.and.arrow.down")
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .disabled(exportProgress || importProgress)
+        .disabled(isProcessing)
     }
     
     @MainActor
@@ -100,7 +138,12 @@ struct DatabaseTransferView: View {
         do {
             if let url = try await PlatformFileHandler.importFile() {
                 let data = try Data(contentsOf: url, options: .mappedIfSafe)
-                try await transferManager.importDatabase(from: data, into: modelContext)
+                try await transferManager.importDatabase(
+                    from: data,
+                    into: modelContext
+                ) { progress in
+                    currentProgress = progress
+                }
             }
         } catch {
             errorMessage = "Import failed: \(error.localizedDescription)"

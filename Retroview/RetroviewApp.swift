@@ -67,7 +67,7 @@ struct RetroviewApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                LibraryGridView()
+                MainView()
             }
             .environment(\.font, .system(.body, design: .serif))
             .onAppear {

@@ -13,6 +13,37 @@ import SwiftData
 final class DatabaseTransferManager {
     private let exportService = DatabaseExportService()
 
+    struct ImportProgress {
+        enum Phase {
+            case decompressing
+            case clearingData
+            case importingCards(completed: Int, total: Int)
+            case importingCollections(completed: Int, total: Int)
+            case saving
+
+            var description: String {
+                switch self {
+                case .decompressing: "Decompressing data..."
+                case .clearingData: "Clearing existing data..."
+                case .importingCards(let completed, let total):
+                    "Importing cards (\(completed)/\(total))..."
+                case .importingCollections(let completed, let total):
+                    "Importing collections (\(completed)/\(total))..."
+                case .saving: "Saving changes..."
+                }
+            }
+        }
+
+        let phase: Phase
+        let message: String
+
+        init(_ phase: Phase) {
+            self.phase = phase
+            self.message = phase.description
+            print("📊 \(message)")  // Console logging
+        }
+    }
+
     func exportDatabase(from context: ModelContext) async throws -> Data {
         print("📤 Starting database export...")
 
@@ -52,29 +83,28 @@ final class DatabaseTransferManager {
         }.value
     }
 
-    func importDatabase(from data: Data, into context: ModelContext)
-        async throws
-    {
+    func importDatabase(
+        from data: Data,
+        into context: ModelContext,
+        progress: @escaping (ImportProgress) -> Void
+    ) async throws {
         print("\n📥 Starting database import...")
-        print("📦 Received \(data.count) bytes")
+        print(
+            "📦 Received \(ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file))"
+        )
 
+        progress(ImportProgress(.decompressing))
         let exportData = try await Task.detached(priority: .userInitiated) {
             print("🗜️ Decompressing data...")
             let decompressedData = try await self.exportService
                 .decompressDataForImport(data)
-            print("✅ Decompressed to \(decompressedData.count) bytes")
+            print(
+                "✅ Decompressed to \(ByteCountFormatter.string(fromByteCount: Int64(decompressedData.count), countStyle: .file))"
+            )
 
-            print("🔄 Decoding data...")
+            print("🔄 Decoding JSON...")
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-
-            // Try to read the raw JSON for debugging
-            if let jsonString = String(data: decompressedData, encoding: .utf8)
-            {
-                print(
-                    "📃 First 200 characters of JSON:",
-                    String(jsonString.prefix(200)))
-            }
 
             return try decoder.decode(
                 DatabaseExport.self, from: decompressedData)
@@ -85,42 +115,220 @@ final class DatabaseTransferManager {
             "📊 Found \(exportData.cards.count) cards and \(exportData.collections.count) collections"
         )
 
+        // Clear data
+        progress(ImportProgress(.clearingData))
         try await clearExistingData(in: context)
 
-        // Import cards
-        for cardTransfer in exportData.cards {
-            let card = CardSchemaV1.StereoCard(
-                uuid: cardTransfer.uuid,
-                imageFrontId: cardTransfer.imageFrontId,
-                imageBackId: cardTransfer.imageBackId,
-                cardColor: cardTransfer.cardColor,
-                colorOpacity: cardTransfer.colorOpacity
-            )
+        // Import cards in batches
+        let batchSize = 1000
+        var processedCards = 0
 
-            // Create and link all related entities
-            card.titles = try cardTransfer.titles.map { text in
+        for batch in stride(from: 0, to: exportData.cards.count, by: batchSize)
+        {
+            let end = min(batch + batchSize, exportData.cards.count)
+            let cardBatch = exportData.cards[batch..<end]
+
+            progress(
+                ImportProgress(
+                    .importingCards(
+                        completed: processedCards,
+                        total: exportData.cards.count
+                    )))
+
+            try await withThrowingTaskGroup(
+                of: (CardTransfer, CardSchemaV1.StereoCard).self
+            ) { group in
+                for cardTransfer in cardBatch {
+                    group.addTask {
+                        // Create the card in a detached context
+                        let card = CardSchemaV1.StereoCard(
+                            uuid: cardTransfer.uuid,
+                            imageFrontId: cardTransfer.imageFrontId,
+                            imageBackId: cardTransfer.imageBackId,
+                            cardColor: cardTransfer.cardColor,
+                            colorOpacity: cardTransfer.colorOpacity
+                        )
+
+                        // Return both the transfer data and the card
+                        return (cardTransfer, card)
+                    }
+                }
+
+                // Process all cards on the MainActor where we have context access
+                for try await (transfer, card) in group {
+                    // Create and link all related entities
+                    card.titles = try transfer.titles.map { text in
+                        try getOrCreateTitle(text: text, context: context)
+                    }
+
+                    card.authors = try transfer.authors.map { name in
+                        try getOrCreateAuthor(name: name, context: context)
+                    }
+
+                    card.subjects = try transfer.subjects.map { name in
+                        try getOrCreateSubject(name: name, context: context)
+                    }
+
+                    card.dates = try transfer.dates.map { text in
+                        try getOrCreateDate(text: text, context: context)
+                    }
+
+                    if let titlePickText = transfer.titlePick {
+                        card.titlePick = try getOrCreateTitle(
+                            text: titlePickText, context: context)
+                    }
+
+                    // Create crops
+                    for cropTransfer in transfer.crops {
+                        let crop = CropSchemaV1.Crop(
+                            x0: cropTransfer.x0,
+                            y0: cropTransfer.y0,
+                            x1: cropTransfer.x1,
+                            y1: cropTransfer.y1,
+                            score: cropTransfer.score,
+                            side: cropTransfer.side
+                        )
+                        card.crops.append(crop)
+                        crop.card = card
+                    }
+
+                    context.insert(card)
+                }
+            }
+
+            processedCards += cardBatch.count
+
+            // Save periodically
+            if processedCards % (batchSize * 5) == 0 {
+                progress(ImportProgress(.saving))
+                try context.save()
+            }
+        }
+
+        // Import collections with progress
+        var processedCollections = 0
+        for collectionTransfer in exportData.collections {
+            progress(
+                ImportProgress(
+                    .importingCollections(
+                        completed: processedCollections,
+                        total: exportData.collections.count
+                    )))
+
+            let collection = try await importCollection(
+                from: collectionTransfer,
+                into: context
+            )
+            context.insert(collection)
+            processedCollections += 1
+        }
+
+        // Final save
+        progress(ImportProgress(.saving))
+        try context.save()
+        print("\n✅ Database import completed successfully!")
+    }
+
+    private func importCard(
+        from transfer: CardTransfer,
+        into context: ModelContext
+    ) async throws -> CardSchemaV1.StereoCard {
+        // First check if a card with this UUID already exists
+        let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+            predicate: #Predicate<CardSchemaV1.StereoCard> { card in
+                card.uuid == transfer.uuid
+            }
+        )
+
+        // If card exists, update it instead of creating new
+        if let existingCard = try context.fetch(descriptor).first {
+            print("📝 Updating existing card: \(transfer.uuid)")
+            // Update existing card
+            existingCard.imageFrontId = transfer.imageFrontId
+            existingCard.imageBackId = transfer.imageBackId
+            existingCard.cardColor = transfer.cardColor
+            existingCard.colorOpacity = transfer.colorOpacity
+
+            // Clear existing relationships
+            existingCard.titles.removeAll()
+            existingCard.authors.removeAll()
+            existingCard.subjects.removeAll()
+            existingCard.dates.removeAll()
+            existingCard.crops.removeAll()
+
+            // Update relationships
+            existingCard.titles = try transfer.titles.map { text in
                 try getOrCreateTitle(text: text, context: context)
             }
 
-            card.authors = try cardTransfer.authors.map { name in
+            existingCard.authors = try transfer.authors.map { name in
                 try getOrCreateAuthor(name: name, context: context)
             }
 
-            card.subjects = try cardTransfer.subjects.map { name in
+            existingCard.subjects = try transfer.subjects.map { name in
                 try getOrCreateSubject(name: name, context: context)
             }
 
-            card.dates = try cardTransfer.dates.map { text in
+            existingCard.dates = try transfer.dates.map { text in
                 try getOrCreateDate(text: text, context: context)
             }
 
-            if let titlePickText = cardTransfer.titlePick {
+            if let titlePickText = transfer.titlePick {
+                existingCard.titlePick = try getOrCreateTitle(
+                    text: titlePickText, context: context)
+            }
+
+            // Update crops
+            for cropTransfer in transfer.crops {
+                let crop = CropSchemaV1.Crop(
+                    x0: cropTransfer.x0,
+                    y0: cropTransfer.y0,
+                    x1: cropTransfer.x1,
+                    y1: cropTransfer.y1,
+                    score: cropTransfer.score,
+                    side: cropTransfer.side
+                )
+                existingCard.crops.append(crop)
+                crop.card = existingCard
+            }
+
+            return existingCard
+        } else {
+
+            // Create new card if it doesn't exist
+            print("✨ Creating new card: \(transfer.uuid)")
+            let card = CardSchemaV1.StereoCard(
+                uuid: transfer.uuid,
+                imageFrontId: transfer.imageFrontId,
+                imageBackId: transfer.imageBackId,
+                cardColor: transfer.cardColor,
+                colorOpacity: transfer.colorOpacity
+            )
+
+            // Create and link all related entities
+            card.titles = try transfer.titles.map { text in
+                try getOrCreateTitle(text: text, context: context)
+            }
+
+            card.authors = try transfer.authors.map { name in
+                try getOrCreateAuthor(name: name, context: context)
+            }
+
+            card.subjects = try transfer.subjects.map { name in
+                try getOrCreateSubject(name: name, context: context)
+            }
+
+            card.dates = try transfer.dates.map { text in
+                try getOrCreateDate(text: text, context: context)
+            }
+
+            if let titlePickText = transfer.titlePick {
                 card.titlePick = try getOrCreateTitle(
                     text: titlePickText, context: context)
             }
 
             // Create crops
-            for cropTransfer in cardTransfer.crops {
+            for cropTransfer in transfer.crops {
                 let crop = CropSchemaV1.Crop(
                     x0: cropTransfer.x0,
                     y0: cropTransfer.y0,
@@ -133,35 +341,33 @@ final class DatabaseTransferManager {
                 crop.card = card
             }
 
-            context.insert(card)
+            return card
         }
-
-        // Import collections
-        for collectionTransfer in exportData.collections {
-            let collection = CollectionSchemaV1.Collection(
-                name: collectionTransfer.name)
-            collection.id = collectionTransfer.id
-            collection.createdAt = collectionTransfer.createdAt
-            collection.updatedAt = collectionTransfer.updatedAt
-
-            // Convert string UUIDs back to UUID objects
-            collection.orderedCardIds = collectionTransfer.cardOrder.compactMap
-            { UUID(uuidString: $0) }
-
-            // Update the cards relationship
-            let cards = collectionTransfer.cardOrder.compactMap { uuidString -> CardSchemaV1.StereoCard? in
-                guard let uuid = UUID(uuidString: uuidString) else { return nil }
-                return CardSchemaV1.StereoCard(uuid: uuid)
-            }
-            collection.updateCards(cards)
-
-            context.insert(collection)
-        }
-
-        try context.save()
     }
 
-    // Helper methods remain the same but are now implicitly @MainActor
+    private func importCollection(
+        from transfer: CollectionTransfer,
+        into context: ModelContext
+    ) async throws -> CollectionSchemaV1.Collection {
+        let collection = CollectionSchemaV1.Collection(name: transfer.name)
+        collection.id = transfer.id
+        collection.createdAt = transfer.createdAt
+        collection.updatedAt = transfer.updatedAt
+
+        collection.orderedCardIds = transfer.cardOrder.compactMap {
+            UUID(uuidString: $0)
+        }
+
+        let cards = transfer.cardOrder.compactMap {
+            uuidString -> CardSchemaV1.StereoCard? in
+            guard let uuid = UUID(uuidString: uuidString) else { return nil }
+            return CardSchemaV1.StereoCard(uuid: uuid)
+        }
+        collection.updateCards(cards)
+
+        return collection
+    }
+
     private func getOrCreateTitle(text: String, context: ModelContext) throws
         -> TitleSchemaV1.Title
     {
@@ -253,62 +459,6 @@ final class DatabaseTransferManager {
         try context.fetch(dateDescriptor).forEach(context.delete)
 
         try context.save()
-    }
-
-    private func compressData(_ data: Data) throws -> Data {
-        let sourceBufferSize = data.count
-        let destinationBufferSize = sourceBufferSize
-        let destinationBuffer = UnsafeMutablePointer<UInt8>.allocate(
-            capacity: destinationBufferSize)
-        defer { destinationBuffer.deallocate() }
-
-        let compressedSize = data.withUnsafeBytes { sourceBuffer in
-            guard let baseAddress = sourceBuffer.baseAddress else {
-                return 0
-            }
-            return compression_encode_buffer(
-                destinationBuffer,
-                destinationBufferSize,
-                baseAddress.assumingMemoryBound(to: UInt8.self),
-                sourceBufferSize,
-                nil,
-                COMPRESSION_LZFSE
-            )
-        }
-
-        guard compressedSize > 0 else {
-            throw DatabaseTransferError.compressionFailed
-        }
-
-        return Data(bytes: destinationBuffer, count: compressedSize)
-    }
-
-    private func decompressData(_ data: Data) throws -> Data {
-        let sourceBufferSize = data.count
-        let destinationBufferSize = sourceBufferSize * 4  // Estimate decompressed size
-        let destinationBuffer = UnsafeMutablePointer<UInt8>.allocate(
-            capacity: destinationBufferSize)
-        defer { destinationBuffer.deallocate() }
-
-        let decompressedSize = data.withUnsafeBytes { sourceBuffer in
-            guard let baseAddress = sourceBuffer.baseAddress else {
-                return 0
-            }
-            return compression_decode_buffer(
-                destinationBuffer,
-                destinationBufferSize,
-                baseAddress.assumingMemoryBound(to: UInt8.self),
-                sourceBufferSize,
-                nil,
-                COMPRESSION_LZFSE
-            )
-        }
-
-        guard decompressedSize > 0 else {
-            throw DatabaseTransferError.decompressionFailed
-        }
-
-        return Data(bytes: destinationBuffer, count: decompressedSize)
     }
 }
 
