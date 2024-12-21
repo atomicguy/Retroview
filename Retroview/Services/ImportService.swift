@@ -254,3 +254,10 @@ class ImportService {
         return newDate
     }
 }
+
+extension ImportService {
+    func cardExists(uuid: UUID) throws -> Bool {
+        let descriptor = FetchDescriptor(predicate: ModelPredicates.Card.withUUID(uuid))
+        return try modelContext.fetch(descriptor).first != nil
+    }
+}

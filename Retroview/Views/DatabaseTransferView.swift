@@ -13,13 +13,12 @@ struct DatabaseTransferView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    @State private var exportProgress = false
-    @State private var importProgress = false
+    @State private var transferManager = DatabaseTransferManager()
     @State private var errorMessage: String?
-    @State private var currentProgress: DatabaseTransferManager.ImportProgress?
-    @State private var progress: Double = 0
     
-    private let transferManager = DatabaseTransferManager()
+    private var isProcessing: Bool {
+        transferManager.isProcessing
+    }
     
     var body: some View {
         NavigationStack {
@@ -42,10 +41,10 @@ struct DatabaseTransferView: View {
                 if isProcessing {
                     ProgressView {
                         VStack(spacing: 12) {
-                            Text(currentProgress?.message ?? "Processing...")
+                            Text(transferManager.currentProgress?.message ?? "Processing...")
                                 .font(.headline)
                             
-                            if case .importingCards(let completed, let total) = currentProgress?.phase {
+                            if case .importingCards(let completed, let total) = transferManager.currentProgress?.phase {
                                 ProgressView(value: Double(completed), total: Double(total)) {
                                     Text("\(completed) of \(total)")
                                         .font(.caption)
@@ -54,7 +53,7 @@ struct DatabaseTransferView: View {
                                 .frame(width: 200)
                             }
                             
-                            if case .importingCollections(let completed, let total) = currentProgress?.phase {
+                            if case .importingCollections(let completed, let total) = transferManager.currentProgress?.phase {
                                 ProgressView(value: Double(completed), total: Double(total)) {
                                     Text("\(completed) of \(total)")
                                         .font(.caption)
@@ -78,10 +77,6 @@ struct DatabaseTransferView: View {
             }
         }
         .frame(minWidth: 400, minHeight: 200)
-    }
-    
-    private var isProcessing: Bool {
-        exportProgress || importProgress
     }
     
     private var exportButton: some View {
@@ -110,9 +105,6 @@ struct DatabaseTransferView: View {
     
     @MainActor
     private func exportDatabase() async {
-        exportProgress = true
-        defer { exportProgress = false }
-        
         do {
             let data = try await transferManager.exportDatabase(from: modelContext)
             
@@ -121,7 +113,6 @@ struct DatabaseTransferView: View {
                 defaultName: "retroview_database.rvdb"
             ) {
                 #if !os(macOS)
-                // On iOS/visionOS, we need to present a share sheet for the exported file
                 await shareFile(at: url)
                 #endif
             }
@@ -132,37 +123,13 @@ struct DatabaseTransferView: View {
     
     @MainActor
     private func importDatabase() async {
-        importProgress = true
-        defer { importProgress = false }
-        
         do {
             if let url = try await PlatformFileHandler.importFile() {
                 let data = try Data(contentsOf: url, options: .mappedIfSafe)
-                try await transferManager.importDatabase(
-                    from: data,
-                    into: modelContext
-                ) { progress in
-                    currentProgress = progress
-                }
+                try await transferManager.importDatabase(from: data, into: modelContext)
             }
         } catch {
             errorMessage = "Import failed: \(error.localizedDescription)"
         }
     }
-    
-    #if !os(macOS)
-    private func shareFile(at url: URL) async {
-        let activityVC = UIActivityViewController(
-            activityItems: [url],
-            applicationActivities: nil
-        )
-        
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let controller = scene.windows.first?.rootViewController {
-            await MainActor.run {
-                controller.present(activityVC, animated: true)
-            }
-        }
-    }
-    #endif
 }

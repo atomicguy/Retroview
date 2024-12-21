@@ -45,16 +45,14 @@ struct ImportProgress {
 
 // MARK: - BatchImportService
 
-@MainActor
-class BatchImportService: ObservableObject {
-    @Published private(set) var progress: Progress
+@Observable @MainActor
+final class BatchImportService {
+    private(set) var progress: Progress
+    private(set) var importReport: ImportReport?
+    private(set) var isProcessing = false
     private let importService: ImportService
     private let imagePreloader: ImagePreloadService
-    private var progressContinuation: AsyncStream<Progress>.Continuation?
-    private var cancellationToken: Task<Void, Error>?
     private let batchSize: Int
-    private let progressQueue = DispatchQueue(
-        label: "com.retroview.importprogress")
 
     init(modelContext: ModelContext, batchSize: Int = 100) {
         self.progress = Progress(totalUnitCount: 0)
@@ -65,8 +63,8 @@ class BatchImportService: ObservableObject {
     }
 
     func cancelImport() {
-        cancellationToken?.cancel()
-        progressContinuation?.finish()
+        isProcessing = false
+        progress.cancel()
     }
 
     func analyzeDirectory(at url: URL) async throws -> Int {
@@ -75,13 +73,12 @@ class BatchImportService: ObservableObject {
         }
         defer { url.stopAccessingSecurityScopedResource() }
 
-        let fileURLs = try FileManager.default.contentsOfDirectory(
+        return try FileManager.default.contentsOfDirectory(
             at: url,
             includingPropertiesForKeys: [.isRegularFileKey],
             options: .skipsHiddenFiles
         ).filter { $0.pathExtension.lowercased() == "json" }
-
-        return fileURLs.count
+            .count
     }
 
     func importDirectory(at url: URL) async throws {
@@ -96,67 +93,42 @@ class BatchImportService: ObservableObject {
             options: .skipsHiddenFiles
         ).filter { $0.pathExtension.lowercased() == "json" }
 
-        // Create new progress instance and immediately notify observers
         progress = Progress(totalUnitCount: Int64(fileURLs.count))
-        progressContinuation?.yield(progress)
 
-        var processedCount: Int64 = 0
+        // Process in batches
+        for batch in stride(from: 0, to: fileURLs.count, by: batchSize) {
+            try Task.checkCancellation()
 
-        cancellationToken = Task {
-            // Process in batches
-            for batch in stride(from: 0, to: fileURLs.count, by: batchSize) {
-                if Task.isCancelled { break }
+            let end = min(batch + batchSize, fileURLs.count)
+            let batchUrls = Array(fileURLs[batch..<end])
 
-                let end = min(batch + batchSize, fileURLs.count)
-                let batchUrls = Array(fileURLs[batch..<end])
-
-                try await withThrowingTaskGroup(of: Void.self) { group in
-                    for fileURL in batchUrls {
-                        if Task.isCancelled { break }
-
-                        group.addTask {
-                            try await self.importService.importJSON(
-                                from: fileURL)
-
-                            // Thread-safe increment and update
-                            await self.updateProgress(
-                                currentCount: &processedCount)
-                        }
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                for fileURL in batchUrls {
+                    group.addTask {
+                        try await self.importService.importJSON(from: fileURL)
+                        await self.updateProgress()
                     }
-
-                    try await group.waitForAll()
                 }
 
-                // Brief pause between batches
-                try await Task.sleep(for: .milliseconds(50))
+                try await group.waitForAll()
             }
 
-            if Task.isCancelled {
-                throw CancellationError()
-            }
+            // Brief pause between batches
+            try await Task.sleep(for: .milliseconds(50))
         }
 
-        try await cancellationToken?.value
-    }
-
-    private func updateProgress(currentCount: inout Int64) async {
-        await MainActor.run {
-            currentCount += 1
-            progress.completedUnitCount = currentCount
-            progressContinuation?.yield(progress)
-        }
-    }
-
-    func getImportReport() -> ImportReport {
-        let failedImports = ImportLogger.getFailedImports()
-        let report = ImportReport(
+        // Generate final report
+        importReport = ImportReport(
             totalProcessed: Int(progress.totalUnitCount),
             successCount: Int(progress.completedUnitCount)
-                - failedImports.count,
-            failedImports: failedImports
+                - ImportLogger.getFailedImports().count,
+            failedImports: ImportLogger.getFailedImports()
         )
         ImportLogger.clearFailedImports()
-        return report
+    }
+
+    private func updateProgress() {
+        progress.completedUnitCount += 1
     }
 }
 

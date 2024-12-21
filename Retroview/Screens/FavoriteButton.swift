@@ -32,7 +32,7 @@ struct FavoriteButton: View {
     @Environment(\.modelContext) private var modelContext
     let card: CardSchemaV1.StereoCard
     @State private var isFavorite = false
-    
+
     var body: some View {
         Button {
             Task {
@@ -51,24 +51,29 @@ struct FavoriteButton: View {
             await checkFavoriteStatus()
         }
     }
-    
+
     private func checkFavoriteStatus() async {
-        let descriptor = CollectionDefaults.favoritesDescriptor()
-        guard let favorites = try? modelContext.fetch(descriptor).first else { return }
+        let descriptor = FetchDescriptor(
+            predicate: ModelPredicates.Collection.favorites)
+        guard let favorites = try? modelContext.fetch(descriptor).first else {
+            return
+        }
         isFavorite = favorites.hasCard(card)
     }
-    
+
     private func toggleFavorite() async {
-        let descriptor = CollectionDefaults.favoritesDescriptor()
-        guard let favorites = try? modelContext.fetch(descriptor).first else { return }
-        
+        let descriptor = FetchDescriptor(
+            predicate: ModelPredicates.Collection.favorites)
+        guard let favorites = try? modelContext.fetch(descriptor).first else {
+            return
+        }
+
         if isFavorite {
             favorites.removeCard(card)
         } else {
             favorites.addCard(card)
         }
-        
-        // Update state after modifying collection
+
         isFavorite.toggle()
         try? modelContext.save()
     }

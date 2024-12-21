@@ -14,23 +14,17 @@ import SwiftUI
         @Binding var selectedCard: CardSchemaV1.StereoCard
         @Binding var isVisible: Bool
         let currentCollection: CollectionSchemaV1.Collection?
-        @StateObject private var viewModel: StereoCardViewModel
+        let viewModel: StereoCardViewModel
 
-        init(
-            cards: [CardSchemaV1.StereoCard],
-            selectedCard: Binding<CardSchemaV1.StereoCard>,
-            isVisible: Binding<Bool>,
-            currentCollection: CollectionSchemaV1.Collection?
-        ) {
+        init(cards: [CardSchemaV1.StereoCard], selectedCard: Binding<CardSchemaV1.StereoCard>, isVisible: Binding<Bool>, currentCollection: CollectionSchemaV1.Collection?) {
             self.cards = cards
             self._selectedCard = selectedCard
             self._isVisible = isVisible
             self.currentCollection = currentCollection
-            self._viewModel = StateObject(
-                wrappedValue: StereoCardViewModel(
-                    stereoCard: selectedCard.wrappedValue,
-                    imageService: ImageServiceFactory.shared.getService()
-                ))
+            self.viewModel = StereoCardViewModel(
+                stereoCard: selectedCard.wrappedValue,
+                imageService: ImageServiceFactory.shared.getService()
+            )
         }
 
         var body: some View {
