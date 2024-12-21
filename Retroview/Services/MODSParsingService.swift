@@ -80,7 +80,7 @@ actor MODSParsingService {
             )
             
             // Log successful parsing
-            logImportedCard(card)
+//            logImportedCard(card)
             
             return card
         } catch {
@@ -265,12 +265,12 @@ actor MODSParsingService {
     private static func extractImageIDs(from response: [String: Any])
         -> ImageIDs
     {
-        print("\n🔍 Debug - Processing captures:")
+//        print("\n🔍 Debug - Processing captures:")
         var frontId = ""
         var backId = ""
 
         if let captures = response["capture"] as? [[Any]] {
-            print("Found capture arrays: \(captures.count)")
+//            print("Found capture arrays: \(captures.count)")
 
             for captureArray in captures {
                 for capture in captureArray {
@@ -282,17 +282,17 @@ actor MODSParsingService {
                         print("Found imageID: \(imageID)")
                         if imageID.hasSuffix("F") {
                             frontId = imageID
-                            print("✓ Set as front image: \(frontId)")
+//                            print("✓ Set as front image: \(frontId)")
                         } else if imageID.hasSuffix("B") {
                             backId = imageID
-                            print("✓ Set as back image: \(backId)")
+//                            print("✓ Set as back image: \(backId)")
                         }
                     }
                 }
             }
         }
 
-        print("\nFinal IDs - Front: \(frontId), Back: \(backId)\n")
+//        print("\nFinal IDs - Front: \(frontId), Back: \(backId)\n")
         return ImageIDs(front: frontId, back: backId)
     }
 }

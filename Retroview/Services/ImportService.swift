@@ -17,7 +17,7 @@ class ImportService {
     
     init(
         modelContext: ModelContext,
-        batchSize: Int = 50
+        batchSize: Int = 500
     ) {
         self.modelContext = modelContext
         self.imagePreloader = ImagePreloadService()

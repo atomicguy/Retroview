@@ -10,26 +10,15 @@ import SwiftUI
 
 struct ThumbnailView: View {
     let card: CardSchemaV1.StereoCard
-    var navigationEnabled = true
-
     @State private var imageManager: CardImageManager?
     @State private var loadingError = false
     @State private var isLoading = false
 
     var body: some View {
-        Group {
-            if navigationEnabled {
-                NavigationLink(destination: CardDetailView(card: card)) {
-                    thumbnailContent
-                }
-                .buttonStyle(.plain)
-            } else {
-                thumbnailContent
+        thumbnailContent
+            .task {
+                await loadImage()
             }
-        }
-        .task {
-            await loadImage()
-        }
     }
 
     private var thumbnailContent: some View {

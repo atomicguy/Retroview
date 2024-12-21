@@ -9,42 +9,27 @@ import SwiftUI
 
 struct ThumbnailOverlay: View {
     let card: CardSchemaV1.StereoCard
-    @State private var showingNewCollectionSheet = false
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
+        ZStack(alignment: .bottom) {
             // Semi-transparent gradient for better button visibility
             LinearGradient(
-                colors: [.black.opacity(0.3), .clear],
-                startPoint: .top,
-                endPoint: .center
+                colors: [.clear, .black.opacity(0.4)],
+                startPoint: .center,
+                endPoint: .bottom
             )
             
             // Button Layout
-            VStack {
-                HStack {
-                    Spacer()
-                    FavoriteButton(card: card)
-                        .padding(8)
-                }
+            HStack {
+                FavoriteButton(card: card)
+                    .padding(8)
                 
                 Spacer()
                 
-                HStack {
-                    CollectionMenuButton(
-                        card: card,
-                        showingNewCollectionSheet: $showingNewCollectionSheet
-                    )
+                CollectionMenuButton(card: card)
                     .padding(8)
-                    Spacer()
-                }
             }
-        }
-        .sheet(isPresented: $showingNewCollectionSheet) {
-            NewCollectionSheet(
-                card: card,
-                isPresented: $showingNewCollectionSheet
-            )
+            .padding(.bottom, 4)
         }
     }
 }
