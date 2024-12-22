@@ -9,9 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct LibraryGridView: View {
-    @Query(sort: \CardSchemaV1.StereoCard.uuid) private var cards:
-        [CardSchemaV1.StereoCard]
-
     @Environment(\.modelContext) private var modelContext
     @Environment(\.importManager) private var importManager
     @Environment(\.imageDownloadManager) private var imageDownloadManager
@@ -20,14 +17,20 @@ struct LibraryGridView: View {
     @State private var showingTransfer = false
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var navigationPath = NavigationPath()
-
+    @State private var totalCardCount: Int = 0
+    
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            CardGridView(
-                selectedCard: $selectedCard,
-                onCardSelected: { card in navigationPath.append(card) }
-            )
-            .navigationTitle("Library (\(cards.count) cards)")
+        NavigationStack {
+            PaginatedGrid { cards in
+                CardGridView(
+                    cards: cards,
+                    selectedCard: $selectedCard,
+                    onCardSelected: { card in
+                        navigationPath.append(card)
+                    }
+                )
+            }
+            .navigationTitle("Library (\(totalCardCount) cards)")
             .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
                 CardDetailView(card: card)
             }
@@ -53,8 +56,7 @@ struct LibraryGridView: View {
                             } label: {
                                 Label(
                                     "Download Missing Images",
-                                    systemImage:
-                                        "arrow.trianglehead.2.clockwise.rotate.90.circle"
+                                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle"
                                 )
                             }
                         }
@@ -73,8 +75,7 @@ struct LibraryGridView: View {
                         Button {
                             showingTransfer = true
                         } label: {
-                            Label(
-                                "Transfer", systemImage: "arrow.up.arrow.down")
+                            Label("Transfer", systemImage: "arrow.up.arrow.down")
                         }
 
                         #if DEBUG
@@ -83,16 +84,21 @@ struct LibraryGridView: View {
                     }
                 }
             }
+            .task {
+                // Fetch total count for title
+                let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+                totalCardCount = (try? modelContext.fetchCount(descriptor)) ?? 0
+            }
         }
     }
+    
     private func startCropImport(urls: [URL]) {
         let cropUpdateService = CropUpdateService(modelContext: modelContext)
-
+        
         Task {
             do {
                 try await cropUpdateService.updateCropsInBatch(from: urls)
             } catch {
-                // Handle import error, potentially show an alert
                 print("Crop import failed: \(error)")
             }
         }

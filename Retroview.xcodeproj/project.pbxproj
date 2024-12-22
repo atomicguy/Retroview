@@ -37,6 +37,7 @@
 		5C6676CC2BC210F9002DD52E /* RetroviewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CB2BC210F9002DD52E /* RetroviewUITests.swift */; };
 		5C6676CE2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */; };
 		5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* StereoCard.swift */; };
+		5C73DB4B2D18D834004BEEC5 /* PaginatedGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */; };
 		5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639822D06B0B80043EEFC /* MODSParsingService.swift */; };
 		5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7EA0F12CC5C631002FC3D2 /* StereoViewer */; };
 		5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */; };
@@ -155,6 +156,7 @@
 		5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5C6676DA2BC215C7002DD52E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5C6676DB2BC21881002DD52E /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
+		5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedGridView.swift; sourceTree = "<group>"; };
 		5C7639822D06B0B80043EEFC /* MODSParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSParsingService.swift; sourceTree = "<group>"; };
 		5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageManager.swift; sourceTree = "<group>"; };
 		5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreloadService.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */,
 				5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */,
 				5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */,
 				5C80F6AB2D169BB600C58E7D /* CardGridView.swift */,
@@ -634,6 +637,7 @@
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
 				5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */,
+				5C73DB4B2D18D834004BEEC5 /* PaginatedGridView.swift in Sources */,
 				5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */,
 				5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */,
 				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,

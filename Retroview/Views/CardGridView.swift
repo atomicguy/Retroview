@@ -9,17 +9,17 @@ import SwiftData
 import SwiftUI
 
 struct CardGridView: View {
-    @Query private var cards: [CardSchemaV1.StereoCard]
+    let cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard?
     let onCardSelected: (CardSchemaV1.StereoCard) -> Void
     
     init(
-        sortBy: SortDescriptor<CardSchemaV1.StereoCard> = SortDescriptor(\.uuid),
+        cards: [CardSchemaV1.StereoCard],
         selectedCard: Binding<CardSchemaV1.StereoCard?>,
         onCardSelected: @escaping (CardSchemaV1.StereoCard) -> Void
     ) {
-        _cards = Query(sort: [sortBy])
-        _selectedCard = selectedCard
+        self.cards = cards
+        self._selectedCard = selectedCard
         self.onCardSelected = onCardSelected
     }
     

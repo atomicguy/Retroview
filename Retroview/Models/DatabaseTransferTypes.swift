@@ -60,14 +60,14 @@ struct CollectionTransfer: Codable {
     let name: String
     let createdAt: Date
     let updatedAt: Date
-    let cardOrder: [String]
+//    let cardOrder: [UUID]
 
     init(from collection: CollectionSchemaV1.Collection) {
         id = collection.id
         name = collection.name
         createdAt = collection.createdAt
         updatedAt = collection.updatedAt
-        cardOrder = collection.orderedCardIds.map { $0.uuidString }
+//        cardOrder = collection.orderedCards
     }
 }
 

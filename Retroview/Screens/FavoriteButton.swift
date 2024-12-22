@@ -18,21 +18,28 @@ struct FavoriteButton: View {
         filter: ModelPredicates.Collection.favorites,
         sort: \.name
     ) private var favoritesCollection: [CollectionSchemaV1.Collection]
-
+    
     let card: CardSchemaV1.StereoCard
     @State private var isProcessing = false
-
+    
     var body: some View {
         Button {
             guard !isProcessing, let favorites = favoritesCollection.first else { return }
             
-            isProcessing = true
-            if favorites.hasCard(card) {
-                favorites.removeCard(card, context: modelContext)
-            } else {
-                favorites.addCard(card, context: modelContext)
+            Task {
+                isProcessing = true
+                
+                // Add artificial delay to prevent rapid tapping
+                try? await Task.sleep(for: .milliseconds(50))
+                
+                if favorites.hasCard(card) {
+                    favorites.removeCard(card, context: modelContext)
+                } else {
+                    favorites.addCard(card, context: modelContext)
+                }
+                
+                isProcessing = false
             }
-            isProcessing = false
         } label: {
             Image(systemName: isFavorite ? "heart.fill" : "heart")
                 .font(.title2)
@@ -43,7 +50,7 @@ struct FavoriteButton: View {
         .buttonStyle(.plain)
         .disabled(isProcessing)
     }
-
+    
     private var isFavorite: Bool {
         favoritesCollection.first?.hasCard(card) ?? false
     }

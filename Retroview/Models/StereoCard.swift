@@ -53,7 +53,6 @@ enum CardSchemaV1: VersionedSchema {
         @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
         
-        @Relationship(inverse: \CollectionSchemaV1.Collection.cards)
         var collections: [CollectionSchemaV1.Collection] = []
 
         @Relationship(deleteRule: .cascade)

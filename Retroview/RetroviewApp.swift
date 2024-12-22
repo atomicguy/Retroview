@@ -54,7 +54,7 @@ struct RetroviewApp: App {
             print(
                 "Failed to create ModelContainer: \(error.localizedDescription)"
             )
-            StoreUtility.resetStore()
+//            StoreUtility.resetStore()
 
             do {
                 let container = try ModelContainer(
