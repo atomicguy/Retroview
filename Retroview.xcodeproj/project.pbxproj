@@ -55,6 +55,8 @@
 		5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */; };
 		5C80F6BE2D17AD5000C58E7D /* BackgroundImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BD2D17AD4B00C58E7D /* BackgroundImportManager.swift */; };
 		5C80F6C02D17AD6800C58E7D /* ImportProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BF2D17AD6400C58E7D /* ImportProgressIndicator.swift */; };
+		5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */; };
+		5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6C32D17D30800C58E7D /* BackgroundProgressIndicator.swift */; };
 		5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */; };
 		5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
@@ -168,6 +170,8 @@
 		5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCreationView.swift; sourceTree = "<group>"; };
 		5C80F6BD2D17AD4B00C58E7D /* BackgroundImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImportManager.swift; sourceTree = "<group>"; };
 		5C80F6BF2D17AD6400C58E7D /* ImportProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProgressIndicator.swift; sourceTree = "<group>"; };
+		5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
+		5C80F6C32D17D30800C58E7D /* BackgroundProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundProgressIndicator.swift; sourceTree = "<group>"; };
 		5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoSpatialViewer.swift; sourceTree = "<group>"; };
 		5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredThumbnailStrip.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
@@ -254,6 +258,7 @@
 		5C4A271E2D04E954009ECECE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */,
 				5C80F6BD2D17AD4B00C58E7D /* BackgroundImportManager.swift */,
 				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 				5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */,
@@ -403,6 +408,7 @@
 		5CD0759B2BDF29AB002B463C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5C80F6C32D17D30800C58E7D /* BackgroundProgressIndicator.swift */,
 				5C80F6BF2D17AD6400C58E7D /* ImportProgressIndicator.swift */,
 				5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */,
 				5C4A271A2D04DC01009ECECE /* AppDestination.swift */,
@@ -623,6 +629,7 @@
 				5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */,
 				5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */,
 				5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */,
+				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,
 				5C80F6AC2D169BBB00C58E7D /* CardGridView.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */,
@@ -633,6 +640,7 @@
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
+				5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */,
 				5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5C1454442CF816F700D5C232 /* ImportService.swift in Sources */,

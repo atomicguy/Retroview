@@ -54,7 +54,7 @@ final class BatchImportService {
     private let imagePreloader: ImagePreloadService
     private let batchSize: Int
 
-    init(modelContext: ModelContext, batchSize: Int = 100) {
+    init(modelContext: ModelContext, batchSize: Int = 500) {
         self.progress = Progress(totalUnitCount: 0)
         self.importService = ImportService(modelContext: modelContext)
         self.imagePreloader = ImagePreloadService()

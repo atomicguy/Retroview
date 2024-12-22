@@ -119,10 +119,7 @@ class ImportService {
         
         // Set the first title as the picked title
         card.titlePick = titles.first
-        
-        // Preload thumbnail before inserting
-        await imagePreloader.preloadImages(for: card)
-        
+       
         modelContext.insert(card)
     }
     

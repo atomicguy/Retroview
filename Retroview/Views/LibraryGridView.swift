@@ -10,16 +10,17 @@ import SwiftUI
 
 struct LibraryGridView: View {
     @Query(sort: \CardSchemaV1.StereoCard.uuid) private var cards:
-    [CardSchemaV1.StereoCard]
-    
+        [CardSchemaV1.StereoCard]
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.importManager) private var importManager
-    
+    @Environment(\.imageDownloadManager) private var imageDownloadManager
+
     @State private var showingImport = false
     @State private var showingTransfer = false
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var navigationPath = NavigationPath()
-    
+
     var body: some View {
         NavigationStack(path: $navigationPath) {
             CardGridView(
@@ -37,7 +38,26 @@ struct LibraryGridView: View {
                         if let manager = importManager, manager.isImporting {
                             ImportProgressIndicator(importManager: manager)
                         }
-                        
+
+                        if let manager = imageDownloadManager,
+                            manager.isDownloading
+                        {
+                            BackgroundProgressIndicator(
+                                isProcessing: manager.isDownloading,
+                                processedCount: manager.processedCardCount,
+                                totalCount: manager.missingImageCount,
+                                onCancel: { manager.cancelDownload() }
+                            )
+                        } else {
+                            Button {
+                                imageDownloadManager?.startImageDownload()
+                            } label: {
+                                Label(
+                                    "Download Missing Images",
+                                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle")
+                            }
+                        }
+
                         ImportTypeMenu { urls, type in
                             if let manager = importManager {
                                 switch type {
@@ -48,17 +68,17 @@ struct LibraryGridView: View {
                                 }
                             }
                         }
-                        
+
                         Button {
                             showingTransfer = true
                         } label: {
                             Label(
                                 "Transfer", systemImage: "arrow.up.arrow.down")
                         }
-                        
-#if DEBUG
-                        StoreDebugMenu()
-#endif
+
+                        #if DEBUG
+                            StoreDebugMenu()
+                        #endif
                     }
                 }
             }
@@ -66,7 +86,7 @@ struct LibraryGridView: View {
     }
     private func startCropImport(urls: [URL]) {
         let cropUpdateService = CropUpdateService(modelContext: modelContext)
-        
+
         Task {
             do {
                 try await cropUpdateService.updateCropsInBatch(from: urls)
@@ -80,7 +100,7 @@ struct LibraryGridView: View {
 
 struct ImportTypeMenu: View {
     let onImport: ([URL], ImportType) -> Void
-    
+
     var body: some View {
         Menu {
             ForEach(ImportType.allCases) { type in
@@ -97,7 +117,7 @@ struct ImportTypeMenu: View {
 struct ImportButton: View {
     let type: ImportType
     let onImport: ([URL]) -> Void
-    
+
     var body: some View {
         Button {
             selectImportFolder(type: type)
@@ -105,7 +125,7 @@ struct ImportButton: View {
             Label(type.rawValue, systemImage: type.icon)
         }
     }
-    
+
     private func selectImportFolder(type: ImportType) {
         #if os(macOS)
             let panel = NSOpenPanel()
@@ -114,7 +134,7 @@ struct ImportButton: View {
             panel.canChooseFiles = false
             panel.message = "Choose folders containing \(type.rawValue)"
             panel.prompt = "Import"
-            
+
             if panel.runModal() == .OK {
                 onImport(panel.urls)
             }
@@ -125,12 +145,13 @@ struct ImportButton: View {
                 asCopy: false
             )
             picker.allowsMultipleSelection = true
-            
-            let viewController = UIApplication.shared.windows.first?.rootViewController
+
+            let viewController = UIApplication.shared.windows.first?
+                .rootViewController
             viewController?.present(picker, animated: true)
-            
-            // Assuming you're using a coordinator pattern or closure-based approach
-            // to handle document picker selection
+
+        // Assuming you're using a coordinator pattern or closure-based approach
+        // to handle document picker selection
         #endif
     }
 }

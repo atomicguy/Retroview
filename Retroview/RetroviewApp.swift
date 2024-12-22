@@ -12,6 +12,7 @@ import SwiftUI
 struct RetroviewApp: App {
     let sharedModelContainer: ModelContainer
     let importManager: BackgroundImportManager
+    let imageDownloadManager: ImageDownloadManager
     
     init() {
         #if DEBUG
@@ -44,6 +45,7 @@ struct RetroviewApp: App {
             )
             self.sharedModelContainer = container
             self.importManager = BackgroundImportManager(modelContext: container.mainContext)
+            self.imageDownloadManager = ImageDownloadManager(modelContext: container.mainContext)
 
         } catch {
             print("Failed to create ModelContainer: \(error.localizedDescription)")
@@ -56,6 +58,7 @@ struct RetroviewApp: App {
                 )
                 self.sharedModelContainer = container
                 self.importManager = BackgroundImportManager(modelContext: container.mainContext)
+                self.imageDownloadManager = ImageDownloadManager(modelContext: container.mainContext)
             } catch {
                 fatalError(
                     "Could not create ModelContainer even after store reset: \(error)"
@@ -70,6 +73,7 @@ struct RetroviewApp: App {
                 MainView()
             }
             .environment(\.font, .system(.body, design: .serif))
+            .environment(\.imageDownloadManager, imageDownloadManager)
             .environment(\.importManager, importManager)
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
@@ -84,9 +88,18 @@ private struct ImportManagerKey: EnvironmentKey {
     static let defaultValue: BackgroundImportManager? = nil
 }
 
+private struct ImageDownloadManagerKey: EnvironmentKey {
+    static let defaultValue: ImageDownloadManager? = nil
+}
+
 extension EnvironmentValues {
     var importManager: BackgroundImportManager? {
         get { self[ImportManagerKey.self] }
         set { self[ImportManagerKey.self] = newValue }
     }
+    
+    var imageDownloadManager: ImageDownloadManager? {
+            get { self[ImageDownloadManagerKey.self] }
+            set { self[ImageDownloadManagerKey.self] = newValue }
+        }
 }
