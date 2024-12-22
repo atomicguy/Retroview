@@ -14,17 +14,18 @@ private let logger = Logger(
 
 struct CollectionView: View {
     @Bindable var collection: CollectionSchemaV1.Collection
-    @Environment(\.modelContext) private var modelContext
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var navigationPath = NavigationPath()
     @State private var isProcessing = false
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            CardGridView(
+            SharedCardGridView(
                 cards: collection.orderedCards,
                 selectedCard: $selectedCard,
-                onCardSelected: { card in navigationPath.append(card) }
+                onCardSelected: { card in navigationPath.append(card) },
+                emptyContentTitle: "No Cards",
+                emptyContentDescription: "This collection is empty"
             )
             .navigationTitle(collection.name)
             .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
@@ -41,11 +42,11 @@ struct CollectionView: View {
 
                                 logger.debug(
                                     "Clearing collection \(collection.name)")
-                                let cardsToRemove = collection.cards
-                                for card in cardsToRemove {
-                                    collection.removeCard(
-                                        card, context: modelContext)
-                                }
+//                                let cardsToRemove = collection.cards
+//                                for card in cardsToRemove {
+//                                    collection.removeCard(
+//                                        card, context: modelContext)
+//                                }
                             }
                         } label: {
                             Label("Clear Collection", systemImage: "trash")

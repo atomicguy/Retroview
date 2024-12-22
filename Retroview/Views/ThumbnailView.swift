@@ -9,21 +9,15 @@ import SwiftData
 import SwiftUI
 
 struct ThumbnailView: View {
+    @Environment(\.imageLoader) private var imageLoader
     let card: CardSchemaV1.StereoCard
-    @State private var imageManager: CardImageManager?
-    @State private var loadingError = false
+    @State private var image: CGImage?
     @State private var isLoading = false
+    @State private var loadError = false
 
     var body: some View {
-        thumbnailContent
-            .task {
-                await loadImage()
-            }
-    }
-
-    private var thumbnailContent: some View {
         ZStack {
-            if let image = imageManager?.storedImage {
+            if let image {
                 Image(decorative: image, scale: 1.0)
                     .resizable()
                     .scaledToFill()
@@ -39,13 +33,16 @@ struct ThumbnailView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .aspectRatio(2, contentMode: .fit)
+        .task {
+            await loadImage()
+        }
     }
 
     private var placeholderView: some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(.gray.opacity(0.2))
             .overlay {
-                if loadingError {
+                if loadError {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.title2)
                         .foregroundStyle(.secondary)
@@ -61,24 +58,18 @@ struct ThumbnailView: View {
 
     @MainActor
     private func loadImage() async {
-        guard !isLoading else { return }
+        guard !isLoading, let imageLoader else { return }
         isLoading = true
         defer { isLoading = false }
 
-        // Initialize image manager if needed
-        if imageManager == nil {
-            imageManager = CardImageManager(
-                card: card, side: .front, quality: .thumbnail)
-        }
-
-        // Try loading from URL if not in storage
-        if imageManager?.storedImage == nil, let url = imageManager?.imageURL {
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                imageManager?.storeImageData(data)
-            } catch {
-                loadingError = true
-            }
+        do {
+            image = try await imageLoader.loadImage(
+                for: card,
+                side: .front,
+                quality: .thumbnail
+            )
+        } catch {
+            loadError = true
         }
     }
 }

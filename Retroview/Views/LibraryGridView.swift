@@ -24,7 +24,6 @@ struct LibraryGridView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             CardGridView(
-                cards: cards,
                 selectedCard: $selectedCard,
                 onCardSelected: { card in navigationPath.append(card) }
             )
@@ -54,7 +53,9 @@ struct LibraryGridView: View {
                             } label: {
                                 Label(
                                     "Download Missing Images",
-                                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle")
+                                    systemImage:
+                                        "arrow.trianglehead.2.clockwise.rotate.90.circle"
+                                )
                             }
                         }
 

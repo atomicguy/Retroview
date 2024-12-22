@@ -13,7 +13,8 @@ struct RetroviewApp: App {
     let sharedModelContainer: ModelContainer
     let importManager: BackgroundImportManager
     let imageDownloadManager: ImageDownloadManager
-    
+    let imageLoader = CardImageLoader()
+
     init() {
         #if DEBUG
             ImportLogger.configure(logLevel: .debug)
@@ -44,11 +45,15 @@ struct RetroviewApp: App {
                 configurations: [modelConfiguration]
             )
             self.sharedModelContainer = container
-            self.importManager = BackgroundImportManager(modelContext: container.mainContext)
-            self.imageDownloadManager = ImageDownloadManager(modelContext: container.mainContext)
+            self.importManager = BackgroundImportManager(
+                modelContext: container.mainContext)
+            self.imageDownloadManager = ImageDownloadManager(
+                modelContext: container.mainContext)
 
         } catch {
-            print("Failed to create ModelContainer: \(error.localizedDescription)")
+            print(
+                "Failed to create ModelContainer: \(error.localizedDescription)"
+            )
             StoreUtility.resetStore()
 
             do {
@@ -57,8 +62,10 @@ struct RetroviewApp: App {
                     configurations: [modelConfiguration]
                 )
                 self.sharedModelContainer = container
-                self.importManager = BackgroundImportManager(modelContext: container.mainContext)
-                self.imageDownloadManager = ImageDownloadManager(modelContext: container.mainContext)
+                self.importManager = BackgroundImportManager(
+                    modelContext: container.mainContext)
+                self.imageDownloadManager = ImageDownloadManager(
+                    modelContext: container.mainContext)
             } catch {
                 fatalError(
                     "Could not create ModelContainer even after store reset: \(error)"
@@ -75,6 +82,7 @@ struct RetroviewApp: App {
             .environment(\.font, .system(.body, design: .serif))
             .environment(\.imageDownloadManager, imageDownloadManager)
             .environment(\.importManager, importManager)
+            .environment(\.imageLoader, imageLoader)
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
                     context: sharedModelContainer.mainContext)
@@ -92,14 +100,23 @@ private struct ImageDownloadManagerKey: EnvironmentKey {
     static let defaultValue: ImageDownloadManager? = nil
 }
 
+private struct ImageLoaderKey: EnvironmentKey {
+    static let defaultValue: CardImageLoader? = nil
+}
+
 extension EnvironmentValues {
     var importManager: BackgroundImportManager? {
         get { self[ImportManagerKey.self] }
         set { self[ImportManagerKey.self] = newValue }
     }
-    
+
     var imageDownloadManager: ImageDownloadManager? {
-            get { self[ImageDownloadManagerKey.self] }
-            set { self[ImageDownloadManagerKey.self] = newValue }
-        }
+        get { self[ImageDownloadManagerKey.self] }
+        set { self[ImageDownloadManagerKey.self] = newValue }
+    }
+
+    var imageLoader: CardImageLoader? {
+        get { self[ImageLoaderKey.self] }
+        set { self[ImageLoaderKey.self] = newValue }
+    }
 }

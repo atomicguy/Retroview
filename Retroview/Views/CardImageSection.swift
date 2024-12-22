@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct CardImageSection: View {
+    @Environment(\.imageLoader) private var imageLoader
     let card: CardSchemaV1.StereoCard
     let side: CardSide
     let title: String
 
-    @State private var imageManager: CardImageManager?
-    @State private var thumbnailManager: CardImageManager?
+    @State private var image: CGImage?
+    @State private var thumbnailImage: CGImage?
+    @State private var isLoading = false
+    @State private var loadError = false
     @State private var isFullImageLoaded = false
 
     var body: some View {
@@ -22,12 +25,12 @@ struct CardImageSection: View {
                 .font(.system(.headline, design: .serif))
                 .foregroundStyle(.secondary)
 
-            if let imageId = side == .front
-                ? card.imageFrontId : card.imageBackId
+            if (side == .front
+                ? card.imageFrontId : card.imageBackId) != nil
             {
                 ZStack {
                     // Show stored thumbnail until full image loads
-                    if let thumbnailImage = thumbnailManager?.storedImage {
+                    if let thumbnailImage {
                         Image(decorative: thumbnailImage, scale: 1.0)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -35,44 +38,24 @@ struct CardImageSection: View {
                             .opacity(isFullImageLoaded ? 0 : 1)
                     }
 
-                    // Load high quality image
-                    AsyncImage(
-                        url: URL(
-                            string:
-                                "https://iiif-prod.nypl.org/index.php?id=\(imageId)&t=\(ImageQuality.high.rawValue)"
-                        )
-                    ) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .clipShape(RoundedRectangle(cornerRadius: 16))
-                                .onAppear {
-                                    withAnimation(.easeIn(duration: 0.3)) {
-                                        isFullImageLoaded = true
-                                    }
+                    if let image {
+                        Image(decorative: image, scale: 1.0)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .onAppear {
+                                withAnimation(.easeIn(duration: 0.3)) {
+                                    isFullImageLoaded = true
                                 }
-                        case .failure:
-                            errorPlaceholder
-                        case .empty:
-                            if thumbnailManager?.storedImage == nil {
-                                loadingPlaceholder
                             }
-                        @unknown default:
-                            EmptyView()
-                        }
+                    } else if loadError {
+                        errorPlaceholder
+                    } else if isLoading && thumbnailImage == nil {
+                        loadingPlaceholder
                     }
                 }
                 .task {
-                    if imageManager == nil {
-                        imageManager = CardImageManager(
-                            card: card, side: side, quality: .high)
-                    }
-                    if thumbnailManager == nil {
-                        thumbnailManager = CardImageManager(
-                            card: card, side: side, quality: .thumbnail)
-                    }
+                    await loadImages()
                 }
             }
         }
@@ -97,5 +80,37 @@ struct CardImageSection: View {
                     .foregroundStyle(.secondary)
             }
             .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    @MainActor
+    private func loadImages() async {
+        guard !isLoading, let imageLoader else { return }
+        isLoading = true
+        loadError = false
+
+        // First load thumbnail
+        do {
+            thumbnailImage = try await imageLoader.loadImage(
+                for: card,
+                side: side,
+                quality: .thumbnail
+            )
+        } catch {
+            print("Failed to load thumbnail: \(error)")
+        }
+
+        // Then load high quality image
+        do {
+            image = try await imageLoader.loadImage(
+                for: card,
+                side: side,
+                quality: .high
+            )
+        } catch {
+            loadError = true
+            print("Failed to load high quality image: \(error)")
+        }
+
+        isLoading = false
     }
 }
