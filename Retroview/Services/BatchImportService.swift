@@ -136,6 +136,7 @@ enum ImportError: LocalizedError {
     case securityScopedResourceAccessDenied
     case invalidFileFormat(String)
     case processingError(String)
+    case noJsonFiles(directory: String)
     case cancelled
 
     var errorDescription: String? {
@@ -146,6 +147,8 @@ enum ImportError: LocalizedError {
             "Invalid file format: \(details)"
         case let .processingError(details):
             "Error processing import: \(details)"
+        case .noJsonFiles(let directory):
+            "No JSON files found in directory: \(directory)"
         case .cancelled:
             "Import cancelled"
         }

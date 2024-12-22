@@ -11,7 +11,8 @@ import SwiftUI
 @main
 struct RetroviewApp: App {
     let sharedModelContainer: ModelContainer
-
+    let importManager: BackgroundImportManager
+    
     init() {
         #if DEBUG
             ImportLogger.configure(logLevel: .debug)
@@ -41,21 +42,20 @@ struct RetroviewApp: App {
                 for: schema,
                 configurations: [modelConfiguration]
             )
-
-
             self.sharedModelContainer = container
+            self.importManager = BackgroundImportManager(modelContext: container.mainContext)
+
         } catch {
-            // If initial creation fails, try cleaning up and creating again
-            print(
-                "Failed to create ModelContainer: \(error.localizedDescription)"
-            )
+            print("Failed to create ModelContainer: \(error.localizedDescription)")
             StoreUtility.resetStore()
 
             do {
-                self.sharedModelContainer = try ModelContainer(
+                let container = try ModelContainer(
                     for: schema,
                     configurations: [modelConfiguration]
                 )
+                self.sharedModelContainer = container
+                self.importManager = BackgroundImportManager(modelContext: container.mainContext)
             } catch {
                 fatalError(
                     "Could not create ModelContainer even after store reset: \(error)"
@@ -70,11 +70,23 @@ struct RetroviewApp: App {
                 MainView()
             }
             .environment(\.font, .system(.body, design: .serif))
+            .environment(\.importManager, importManager)
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
                     context: sharedModelContainer.mainContext)
             }
         }
         .modelContainer(sharedModelContainer)
+    }
+}
+
+private struct ImportManagerKey: EnvironmentKey {
+    static let defaultValue: BackgroundImportManager? = nil
+}
+
+extension EnvironmentValues {
+    var importManager: BackgroundImportManager? {
+        get { self[ImportManagerKey.self] }
+        set { self[ImportManagerKey.self] = newValue }
     }
 }
