@@ -51,6 +51,8 @@
 		5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */; };
 		5C80F6B62D16A6AE00C58E7D /* DatabaseImportProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */; };
 		5C80F6B82D176FF100C58E7D /* ModelPredicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */; };
+		5C80F6BA2D179D3900C58E7D /* DiagnosticCollectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */; };
+		5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */; };
 		5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */; };
 		5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
@@ -160,6 +162,8 @@
 		5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableThumbnailView.swift; sourceTree = "<group>"; };
 		5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseImportProgress.swift; sourceTree = "<group>"; };
 		5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPredicates.swift; sourceTree = "<group>"; };
+		5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticCollectionButton.swift; sourceTree = "<group>"; };
+		5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCreationView.swift; sourceTree = "<group>"; };
 		5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoSpatialViewer.swift; sourceTree = "<group>"; };
 		5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredThumbnailStrip.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
@@ -345,6 +349,7 @@
 				5C80F6AB2D169BB600C58E7D /* CardGridView.swift */,
 				5C5913BC2D126F1F0011C90D /* CardImageSection.swift */,
 				5C80F6AD2D169C5F00C58E7D /* CollectionView.swift */,
+				5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */,
 				5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */,
 				5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */,
 				5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */,
@@ -393,6 +398,7 @@
 		5CD0759B2BDF29AB002B463C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */,
 				5C4A271A2D04DC01009ECECE /* AppDestination.swift */,
 				5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */,
 				5C80F6A72D150AA200C58E7D /* CollectionMenuButton.swift */,
@@ -558,6 +564,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C1DBDA42D1000F10050B4DF /* CardSide.swift in Sources */,
+				5C80F6BA2D179D3900C58E7D /* DiagnosticCollectionButton.swift in Sources */,
 				5C80F6B82D176FF100C58E7D /* ModelPredicates.swift in Sources */,
 				5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */,
 				5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */,
@@ -587,6 +594,7 @@
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
 				5C80F6B62D16A6AE00C58E7D /* DatabaseImportProgress.swift in Sources */,
+				5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,

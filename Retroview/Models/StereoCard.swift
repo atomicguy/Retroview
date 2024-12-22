@@ -58,7 +58,6 @@ enum CardSchemaV1: VersionedSchema {
 
         @Relationship(deleteRule: .cascade)
         var crops: [CropSchemaV1.Crop] = []
-        
 
         // MARK: - Computed Properties
         var leftCrop: CropSchemaV1.Crop? {

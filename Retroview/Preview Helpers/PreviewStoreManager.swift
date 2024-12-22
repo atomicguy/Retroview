@@ -141,8 +141,8 @@ final class PreviewStoreManager {
 
         // Create a test collection
         let collection = CollectionSchemaV1.Collection(name: "Test Collection")
-        let cards = try context.fetch(FetchDescriptor<CardSchemaV1.StereoCard>())
-        cards.forEach { collection.addCard($0) }
+//        let cards = try context.fetch(FetchDescriptor<CardSchemaV1.StereoCard>())
+//        cards.forEach { collection.addCard($0, context: context) }
         context.insert(collection)
 
         try context.save()

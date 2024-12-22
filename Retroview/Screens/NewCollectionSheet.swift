@@ -22,7 +22,6 @@ struct NewCollectionSheet: View {
                 TextField("Collection Name", text: $collectionName)
             }
             .navigationTitle("New Collection")
-//            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -42,10 +41,12 @@ struct NewCollectionSheet: View {
     }
     
     private func createCollection() {
-        let collection = CollectionSchemaV1.Collection(name: collectionName)
-        collection.addCard(card)
+        let collection = CollectionSchemaV1.Collection(name: collectionName.trimmingCharacters(in: .whitespaces))
         modelContext.insert(collection)
-        try? modelContext.save()
+        
+        // Add the card to the new collection
+        collection.addCard(card, context: modelContext)
+        
         dismiss()
     }
 }

@@ -5,87 +5,46 @@
 //  Created by Adam Schuster on 11/28/24.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 
-struct HoverEffectModifier: ViewModifier {
-    @State private var isHovered = false
-    let content: (Bool) -> AnyView
-
-    func body(content: Content) -> some View {
-        content
-            .overlay {
-                GeometryReader { _ in
-                    self.content(isHovered)
-                        .allowsHitTesting(true)
-                }
-            }
-            .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isHovered = hovering
-                }
-            }
-    }
-}
+private let logger = Logger(
+    subsystem: "com.example.retroview", category: "FavoritesUI")
 
 struct FavoriteButton: View {
     @Environment(\.modelContext) private var modelContext
+    @Query(
+        filter: ModelPredicates.Collection.favorites,
+        sort: \.name
+    ) private var favoritesCollection: [CollectionSchemaV1.Collection]
+
     let card: CardSchemaV1.StereoCard
-    @State private var isFavorite = false
+    @State private var isProcessing = false
 
     var body: some View {
         Button {
-            Task {
-                await toggleFavorite()
+            guard !isProcessing, let favorites = favoritesCollection.first else { return }
+            
+            isProcessing = true
+            if favorites.hasCard(card) {
+                favorites.removeCard(card, context: modelContext)
+            } else {
+                favorites.addCard(card, context: modelContext)
             }
+            isProcessing = false
         } label: {
             Image(systemName: isFavorite ? "heart.fill" : "heart")
                 .font(.title2)
                 .foregroundStyle(.white)
                 .shadow(radius: 2)
-                .contentTransition(.symbolEffect(.replace))
+                .opacity(isProcessing ? 0.5 : 1.0)
         }
         .buttonStyle(.plain)
-        .task {
-            // Check initial favorite status
-            await checkFavoriteStatus()
-        }
+        .disabled(isProcessing)
     }
 
-    private func checkFavoriteStatus() async {
-        let descriptor = FetchDescriptor(
-            predicate: ModelPredicates.Collection.favorites)
-        guard let favorites = try? modelContext.fetch(descriptor).first else {
-            return
-        }
-        isFavorite = favorites.hasCard(card)
-    }
-
-    private func toggleFavorite() async {
-        let descriptor = FetchDescriptor(
-            predicate: ModelPredicates.Collection.favorites)
-        guard let favorites = try? modelContext.fetch(descriptor).first else {
-            return
-        }
-
-        if isFavorite {
-            favorites.removeCard(card)
-        } else {
-            favorites.addCard(card)
-        }
-
-        isFavorite.toggle()
-        try? modelContext.save()
-    }
-}
-
-extension View {
-    func withHoverEffect(
-        @ViewBuilder content: @escaping (Bool) -> some View
-    ) -> some View {
-        modifier(
-            HoverEffectModifier(content: { isHovered in
-                AnyView(content(isHovered))
-            }))
+    private var isFavorite: Bool {
+        favoritesCollection.first?.hasCard(card) ?? false
     }
 }

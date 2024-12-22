@@ -52,9 +52,9 @@ struct LibraryGridView: View {
         .sheet(isPresented: $showingImport) {
             ImportView(modelContext: modelContext)
         }
-        .sheet(isPresented: $showingTransfer) {
-            DatabaseTransferView()
-        }
+//        .sheet(isPresented: $showingTransfer) {
+//            DatabaseTransferView()
+//        }
     }
 }
 

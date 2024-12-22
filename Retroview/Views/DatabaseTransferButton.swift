@@ -22,9 +22,9 @@ struct DatabaseTransferButton: View {
         } label: {
             Label("Database Transfer", systemImage: "arrow.triangle.2.circlepath.doc")
         }
-        .sheet(isPresented: $showingTransfer) {
-            DatabaseTransferView()
-        }
+//        .sheet(isPresented: $showingTransfer) {
+//            DatabaseTransferView()
+//        }
     }
 }
 
