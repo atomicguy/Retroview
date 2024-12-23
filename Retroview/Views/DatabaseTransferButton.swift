@@ -20,14 +20,10 @@ struct DatabaseTransferButton: View {
             showingTransfer = true
             action()
         } label: {
-            Label("Database Transfer", systemImage: "arrow.triangle.2.circlepath.doc")
+            Label("Library Transfer", systemImage: "arrow.up.arrow.down")
         }
-//        .sheet(isPresented: $showingTransfer) {
-//            DatabaseTransferView()
-//        }
+        .sheet(isPresented: $showingTransfer) {
+            StoreTransferView()
+        }
     }
-}
-
-#Preview {
-    DatabaseTransferButton()
 }

@@ -14,8 +14,11 @@ struct RetroviewApp: App {
     let importManager: BackgroundImportManager
     let imageDownloadManager: ImageDownloadManager
     let imageLoader = CardImageLoader()
-
+    
     init() {
+        // Handle any pending imports before initializing SwiftData
+        StoreImportHandler.handlePendingImport()
+        
         #if DEBUG
             ImportLogger.configure(logLevel: .debug)
         #else
@@ -49,13 +52,11 @@ struct RetroviewApp: App {
                 modelContext: container.mainContext)
             self.imageDownloadManager = ImageDownloadManager(
                 modelContext: container.mainContext)
-
         } catch {
             print(
                 "Failed to create ModelContainer: \(error.localizedDescription)"
             )
-//            StoreUtility.resetStore()
-
+            
             do {
                 let container = try ModelContainer(
                     for: schema,
@@ -78,11 +79,13 @@ struct RetroviewApp: App {
         WindowGroup {
             Group {
                 MainView()
+                    .modifier(SerifFontModifier())
+                    .accentColor(RetroviewColorScheme.tintColor)
             }
-            .environment(\.font, .system(.body, design: .serif))
             .environment(\.imageDownloadManager, imageDownloadManager)
             .environment(\.importManager, importManager)
             .environment(\.imageLoader, imageLoader)
+            .environment(\.platformFilePicker, PlatformFilePickerKey.defaultValue)
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
                     context: sharedModelContainer.mainContext)

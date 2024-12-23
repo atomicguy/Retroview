@@ -40,6 +40,7 @@ struct NavigableCardGrid<Header: View>: View {
                 CardDetailView(card: card)
                     .platformNavigationTitle(card.titlePick?.text ?? "Card Details", displayMode: .inline)
             }
+            .navigationTitle("\(cards.count) \(cards.count == 1 ? "card" : "cards")")
             header()
         }
     }

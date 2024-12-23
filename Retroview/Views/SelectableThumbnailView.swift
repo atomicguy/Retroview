@@ -19,7 +19,7 @@ struct SelectableThumbnailView: View {
             .overlay {
                 if isSelected {
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(.brown, lineWidth: 3)
+                        .stroke(.teal, lineWidth: 3)
                 }
             }
             .gesture(

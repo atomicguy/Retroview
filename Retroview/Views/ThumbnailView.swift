@@ -14,6 +14,7 @@ struct ThumbnailView: View {
     @State private var image: CGImage?
     @State private var isLoading = false
     @State private var loadError = false
+    @State private var isHovering = false
 
     var body: some View {
         ZStack {
@@ -24,8 +25,11 @@ struct ThumbnailView: View {
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay {
-                        ThumbnailOverlay(card: card)
+                        ThumbnailOverlay(card: card, isHovering: isHovering)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    .onHover { hovering in
+                        isHovering = hovering
                     }
             } else {
                 placeholderView

@@ -39,23 +39,19 @@ struct CollectionCreationView: View {
                     }
                 }
             }
-            .navigationTitle("New Collection")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                    .disabled(isProcessing)
+            .platformNavigationTitle("New Collection", displayMode: .inline)
+            .platformToolbar {
+                Button("Cancel") {
+                    dismiss()
                 }
-
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Create") {
-                        Task {
-                            await createCollection()
-                        }
+                .disabled(isProcessing)
+            } trailing: {
+                Button("Create") {
+                    Task {
+                        await createCollection()
                     }
-                    .disabled(collectionName.isEmpty || isProcessing)
                 }
+                .disabled(collectionName.isEmpty || isProcessing)
             }
             .onAppear {
                 isNameFieldFocused = true
@@ -68,39 +64,29 @@ struct CollectionCreationView: View {
         guard !isProcessing else { return }
         isProcessing = true
         defer { isProcessing = false }
-        
+
         let trimmedName = collectionName.trimmingCharacters(in: .whitespaces)
         guard !trimmedName.isEmpty else { return }
-        
-        logger.debug("Creating new collection: \(trimmedName)")
-        
+
         do {
             let descriptor = FetchDescriptor<CollectionSchemaV1.Collection>(
                 predicate: #Predicate<CollectionSchemaV1.Collection> {
                     $0.name == trimmedName
                 }
             )
-            
+
             if let existing = try modelContext.fetch(descriptor).first {
-                logger.debug("Collection with name already exists, adding card to existing collection")
                 existing.addCard(card, context: modelContext)
             } else {
-                logger.debug("Creating new collection and adding card")
-                let collection = CollectionSchemaV1.Collection(name: trimmedName)
+                let collection = CollectionSchemaV1.Collection(
+                    name: trimmedName)
                 modelContext.insert(collection)
                 collection.addCard(card, context: modelContext)
             }
-            
+
             dismiss()
         } catch {
-            logger.error("Failed to create collection: \(error.localizedDescription)")
             self.error = error
         }
     }
 }
-
-//#Preview {
-//    CardPreviewContainer { card in
-//        CollectionCreationView(card: card)
-//    }
-//}

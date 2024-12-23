@@ -8,8 +8,7 @@
 import UniformTypeIdentifiers
 
 extension UTType {
-    static var retroviewDatabase: UTType {
-        UTType(exportedAs: "net.atompowered.retroview.database",
-               conformingTo: .data)
+    static var retroviewStore: UTType {
+        UTType(exportedAs: "net.atompowered.retroview.store")
     }
 }

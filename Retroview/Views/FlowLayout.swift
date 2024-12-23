@@ -7,8 +7,13 @@
 
 import SwiftUI
 
+// The Layout implementation
 struct FlowLayout: Layout {
-    var spacing: CGFloat = 8
+    var spacing: CGFloat
+    
+    init(spacing: CGFloat? = nil) {
+        self.spacing = spacing ?? PlatformEnvironment.Metrics.flowLayoutSpacing
+    }
     
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let sizes = subviews.map { $0.sizeThatFits(.unspecified) }
@@ -58,5 +63,40 @@ struct FlowLayout: Layout {
             x += size.width + spacing
             lineHeight = max(lineHeight, size.height)
         }
+    }
+}
+
+// A view that uses FlowLayout
+struct FlowLayoutView: View {
+    let spacing: CGFloat?
+    let content: () -> any View
+    
+    init(spacing: CGFloat? = nil, @ViewBuilder content: @escaping () -> any View) {
+        self.spacing = spacing
+        self.content = content
+    }
+    
+    var body: some View {
+        FlowLayout(spacing: spacing) {
+            AnyView(content())
+        }
+    }
+}
+
+// View modifier to make it easy to use FlowLayout
+struct FlowLayoutModifier: ViewModifier {
+    let spacing: CGFloat?
+    
+    func body(content: Content) -> some View {
+        FlowLayoutView(spacing: spacing) {
+            content
+        }
+    }
+}
+
+// Extension to make it easy to use as a view modifier
+extension View {
+    func flowLayout(spacing: CGFloat? = nil) -> some View {
+        modifier(FlowLayoutModifier(spacing: spacing))
     }
 }

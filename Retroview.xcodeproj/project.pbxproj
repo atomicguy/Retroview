@@ -41,6 +41,22 @@
 		5C73DB4D2D18DD1E004BEEC5 /* CatalogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */; };
 		5C73DB4F2D18E1B8004BEEC5 /* NavigableCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */; };
 		5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */; };
+		5C73DB542D18EFB8004BEEC5 /* CatalogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB532D18EFB3004BEEC5 /* CatalogDetailView.swift */; };
+		5C73DB572D18F004004BEEC5 /* CatalogContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */; };
+		5C73DB592D18F034004BEEC5 /* CatalogItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */; };
+		5C73DB5C2D18F0C3004BEEC5 /* SubjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */; };
+		5C73DB5E2D18F0DB004BEEC5 /* AuthorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */; };
+		5C73DB612D18FD65004BEEC5 /* MetadataSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */; };
+		5C73DB632D18FD83004BEEC5 /* CardTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB622D18FD7F004BEEC5 /* CardTitleSection.swift */; };
+		5C73DB652D18FDE9004BEEC5 /* CardSubjectSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB642D18FDE5004BEEC5 /* CardSubjectSection.swift */; };
+		5C73DB672D18FE14004BEEC5 /* SubjectBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB662D18FE0F004BEEC5 /* SubjectBadgeView.swift */; };
+		5C73DB692D18FF3C004BEEC5 /* CardHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB682D18FF36004BEEC5 /* CardHeaderView.swift */; };
+		5C73DB6B2D19045D004BEEC5 /* SerifFontModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB6A2D190458004BEEC5 /* SerifFontModifier.swift */; };
+		5C73DB6D2D190817004BEEC5 /* RetroviewColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB6C2D190810004BEEC5 /* RetroviewColorScheme.swift */; };
+		5C73DB6F2D191122004BEEC5 /* PlatformFilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB6E2D19111C004BEEC5 /* PlatformFilePicker.swift */; };
+		5C73DB712D19113E004BEEC5 /* ImportButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB702D19113A004BEEC5 /* ImportButtons.swift */; };
+		5C73DB732D191499004BEEC5 /* StoreTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB722D191495004BEEC5 /* StoreTransferView.swift */; };
+		5C73DB772D192102004BEEC5 /* ImportTypeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB762D1920FF004BEEC5 /* ImportTypeMenu.swift */; };
 		5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7639822D06B0B80043EEFC /* MODSParsingService.swift */; };
 		5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7EA0F12CC5C631002FC3D2 /* StereoViewer */; };
 		5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */; };
@@ -65,6 +81,10 @@
 		5C80F6CC2D18908100C58E7D /* SharedCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */; };
 		5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */; };
 		5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */; };
+		5CAFA7612D19D8FF00112A93 /* StoreTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7602D19D8FB00112A93 /* StoreTransferManager.swift */; };
+		5CAFA7632D19DD0900112A93 /* StoreDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7622D19DD0500112A93 /* StoreDocument.swift */; };
+		5CAFA7652D19DF9100112A93 /* StoreImportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */; };
+		5CAFA7692D1A09BB00112A93 /* StoreArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
@@ -77,10 +97,6 @@
 		5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */; };
 		5CD577132D0E39AE002FA8DB /* Array+StringNormalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577122D0E39A1002FA8DB /* Array+StringNormalizationTests.swift */; };
 		5CD577152D0E5BE6002FA8DB /* ImportLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577142D0E5BDF002FA8DB /* ImportLogger.swift */; };
-		5CD577192D0E7528002FA8DB /* DatabaseExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577182D0E7522002FA8DB /* DatabaseExportService.swift */; };
-		5CD5771B2D0E7544002FA8DB /* DatabaseTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */; };
-		5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */; };
-		5CD577212D0E79AB002FA8DB /* DatabaseTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */; };
 		5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */; };
 		5CD577252D0E891B002FA8DB /* UniformTypeIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577242D0E8913002FA8DB /* UniformTypeIdentifiers.swift */; };
 		5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577262D0E90E4002FA8DB /* PlatformFileHandler.swift */; };
@@ -163,6 +179,22 @@
 		5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogListView.swift; sourceTree = "<group>"; };
 		5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigableCardGridView.swift; sourceTree = "<group>"; };
 		5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedNavigableGridView.swift; sourceTree = "<group>"; };
+		5C73DB532D18EFB3004BEEC5 /* CatalogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogDetailView.swift; sourceTree = "<group>"; };
+		5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogContainerView.swift; sourceTree = "<group>"; };
+		5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItems.swift; sourceTree = "<group>"; };
+		5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectsView.swift; sourceTree = "<group>"; };
+		5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorsView.swift; sourceTree = "<group>"; };
+		5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataSection.swift; sourceTree = "<group>"; };
+		5C73DB622D18FD7F004BEEC5 /* CardTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTitleSection.swift; sourceTree = "<group>"; };
+		5C73DB642D18FDE5004BEEC5 /* CardSubjectSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSubjectSection.swift; sourceTree = "<group>"; };
+		5C73DB662D18FE0F004BEEC5 /* SubjectBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectBadgeView.swift; sourceTree = "<group>"; };
+		5C73DB682D18FF36004BEEC5 /* CardHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderView.swift; sourceTree = "<group>"; };
+		5C73DB6A2D190458004BEEC5 /* SerifFontModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerifFontModifier.swift; sourceTree = "<group>"; };
+		5C73DB6C2D190810004BEEC5 /* RetroviewColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewColorScheme.swift; sourceTree = "<group>"; };
+		5C73DB6E2D19111C004BEEC5 /* PlatformFilePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformFilePicker.swift; sourceTree = "<group>"; };
+		5C73DB702D19113A004BEEC5 /* ImportButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportButtons.swift; sourceTree = "<group>"; };
+		5C73DB722D191495004BEEC5 /* StoreTransferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTransferView.swift; sourceTree = "<group>"; };
+		5C73DB762D1920FF004BEEC5 /* ImportTypeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTypeMenu.swift; sourceTree = "<group>"; };
 		5C7639822D06B0B80043EEFC /* MODSParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MODSParsingService.swift; sourceTree = "<group>"; };
 		5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageManager.swift; sourceTree = "<group>"; };
 		5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreloadService.swift; sourceTree = "<group>"; };
@@ -186,6 +218,10 @@
 		5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedCardGridView.swift; sourceTree = "<group>"; };
 		5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoSpatialViewer.swift; sourceTree = "<group>"; };
 		5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredThumbnailStrip.swift; sourceTree = "<group>"; };
+		5CAFA7602D19D8FB00112A93 /* StoreTransferManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTransferManager.swift; sourceTree = "<group>"; };
+		5CAFA7622D19DD0500112A93 /* StoreDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDocument.swift; sourceTree = "<group>"; };
+		5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreImportHandler.swift; sourceTree = "<group>"; };
+		5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreArchiveManager.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -198,10 +234,6 @@
 		5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+StringNormalization.swift"; sourceTree = "<group>"; };
 		5CD577122D0E39A1002FA8DB /* Array+StringNormalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+StringNormalizationTests.swift"; sourceTree = "<group>"; };
 		5CD577142D0E5BDF002FA8DB /* ImportLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportLogger.swift; sourceTree = "<group>"; };
-		5CD577182D0E7522002FA8DB /* DatabaseExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseExportService.swift; sourceTree = "<group>"; };
-		5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferView.swift; sourceTree = "<group>"; };
-		5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferTypes.swift; sourceTree = "<group>"; };
-		5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferManager.swift; sourceTree = "<group>"; };
 		5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTransferButton.swift; sourceTree = "<group>"; };
 		5CD577242D0E8913002FA8DB /* UniformTypeIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniformTypeIdentifiers.swift; sourceTree = "<group>"; };
 		5CD577262D0E90E4002FA8DB /* PlatformFileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformFileHandler.swift; sourceTree = "<group>"; };
@@ -251,6 +283,12 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */,
+				5CAFA7622D19DD0500112A93 /* StoreDocument.swift */,
+				5CAFA7602D19D8FB00112A93 /* StoreTransferManager.swift */,
+				5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */,
+				5C73DB6C2D190810004BEEC5 /* RetroviewColorScheme.swift */,
+				5C73DB6A2D190458004BEEC5 /* SerifFontModifier.swift */,
 				5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */,
 				5CD5770E2D0D2D83002FA8DB /* Array+Unique.swift */,
 				5C1454332CF7A63600D5C232 /* CardColorAnalyzer.swift */,
@@ -276,8 +314,6 @@
 				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 				5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */,
 				5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */,
-				5CD577182D0E7522002FA8DB /* DatabaseExportService.swift */,
-				5CD577202D0E79A5002FA8DB /* DatabaseTransferManager.swift */,
 				5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */,
 				5C1454432CF816EF00D5C232 /* ImportService.swift */,
 				5C7639822D06B0B80043EEFC /* MODSParsingService.swift */,
@@ -365,22 +401,48 @@
 			path = VisionViews;
 			sourceTree = "<group>";
 		};
+		5C73DB522D18EF95004BEEC5 /* CatalogViews */ = {
+			isa = PBXGroup;
+			children = (
+				5C73DB722D191495004BEEC5 /* StoreTransferView.swift */,
+				5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */,
+				5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */,
+				5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */,
+				5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */,
+				5C73DB532D18EFB3004BEEC5 /* CatalogDetailView.swift */,
+				5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */,
+			);
+			path = CatalogViews;
+			sourceTree = "<group>";
+		};
+		5C73DB5F2D18FD4B004BEEC5 /* CardDetailViews */ = {
+			isa = PBXGroup;
+			children = (
+				5C73DB682D18FF36004BEEC5 /* CardHeaderView.swift */,
+				5C73DB662D18FE0F004BEEC5 /* SubjectBadgeView.swift */,
+				5C73DB642D18FDE5004BEEC5 /* CardSubjectSection.swift */,
+				5C73DB622D18FD7F004BEEC5 /* CardTitleSection.swift */,
+				5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */,
+				5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */,
+			);
+			path = CardDetailViews;
+			sourceTree = "<group>";
+		};
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C73DB5F2D18FD4B004BEEC5 /* CardDetailViews */,
+				5C73DB522D18EF95004BEEC5 /* CatalogViews */,
 				5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */,
 				5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */,
-				5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */,
 				5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */,
 				5C80F6AB2D169BB600C58E7D /* CardGridLayout.swift */,
 				5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */,
-				5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */,
 				5C5913BC2D126F1F0011C90D /* CardImageSection.swift */,
 				5C80F6AD2D169C5F00C58E7D /* CollectionView.swift */,
 				5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */,
 				5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */,
 				5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */,
-				5CD5771A2D0E753E002FA8DB /* DatabaseTransferView.swift */,
 				5C5913BA2D126EEA0011C90D /* FlowLayout.swift */,
 				5CCB4C122D10F8AC00FD4005 /* ImageQuality.swift */,
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
@@ -398,14 +460,13 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5CD577322D0EAED7002FA8DB /* ImportType.swift */,
 				5CC5A5C42BD47622005811DA /* Author.swift */,
 				5C1DBDA32D1000EF0050B4DF /* CardSide.swift */,
 				5C14544E2CF849D700D5C232 /* Collection.swift */,
 				5CD075952BD60B3E002B463C /* Crop.swift */,
 				5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */,
-				5CD5771E2D0E76E7002FA8DB /* DatabaseTransferTypes.swift */,
 				5CC5A5C82BD47ABA005811DA /* Date.swift */,
-				5CD577322D0EAED7002FA8DB /* ImportType.swift */,
 				5C1454412CF816D100D5C232 /* JSONStructures.swift */,
 				5C6676DB2BC21881002DD52E /* StereoCard.swift */,
 				5CC5A5C62BD478CE005811DA /* Subject.swift */,
@@ -426,6 +487,9 @@
 		5CD0759B2BDF29AB002B463C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				5C73DB762D1920FF004BEEC5 /* ImportTypeMenu.swift */,
+				5C73DB702D19113A004BEEC5 /* ImportButtons.swift */,
+				5C73DB6E2D19111C004BEEC5 /* PlatformFilePicker.swift */,
 				5C80F6C32D17D30800C58E7D /* BackgroundProgressIndicator.swift */,
 				5C80F6BF2D17AD6400C58E7D /* ImportProgressIndicator.swift */,
 				5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */,
@@ -593,6 +657,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C73DB5E2D18F0DB004BEEC5 /* AuthorsView.swift in Sources */,
 				5C1DBDA42D1000F10050B4DF /* CardSide.swift in Sources */,
 				5C80F6BA2D179D3900C58E7D /* DiagnosticCollectionButton.swift in Sources */,
 				5C80F6B82D176FF100C58E7D /* ModelPredicates.swift in Sources */,
@@ -600,10 +665,14 @@
 				5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */,
 				5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */,
 				5CCB4C132D10F8B400FD4005 /* ImageQuality.swift in Sources */,
+				5C73DB712D19113E004BEEC5 /* ImportButtons.swift in Sources */,
+				5C73DB672D18FE14004BEEC5 /* SubjectBadgeView.swift in Sources */,
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
 				5C80F6AE2D169C6200C58E7D /* CollectionView.swift in Sources */,
 				5C1DBD9E2D0FF6C20050B4DF /* ThumbnailView.swift in Sources */,
 				5CD577152D0E5BE6002FA8DB /* ImportLogger.swift in Sources */,
+				5C73DB5C2D18F0C3004BEEC5 /* SubjectsView.swift in Sources */,
+				5C73DB6F2D191122004BEEC5 /* PlatformFilePicker.swift in Sources */,
 				5C80F6B22D169CA100C58E7D /* SidebarView.swift in Sources */,
 				5C14543C2CF7FF8B00D5C232 /* ColorUtility.swift in Sources */,
 				5CE7849A2CEC46F5000F3D71 /* StereoCardImageView.swift in Sources */,
@@ -611,14 +680,19 @@
 				5C1DBD932D0FB7550050B4DF /* PreviewStoreManager.swift in Sources */,
 				5CD577252D0E891B002FA8DB /* UniformTypeIdentifiers.swift in Sources */,
 				5CCDA5772CE196BA00CA97AE /* StereoMaterialLoader.swift in Sources */,
+				5C73DB612D18FD65004BEEC5 /* MetadataSection.swift in Sources */,
 				5C80F6A42D13F02E00C58E7D /* ImagePreloadService.swift in Sources */,
 				5C80F6A62D150A8500C58E7D /* ThumbnailOverlay.swift in Sources */,
 				5C1DBD892D0FAD290050B4DF /* LibraryGridView.swift in Sources */,
+				5CAFA7612D19D8FF00112A93 /* StoreTransferManager.swift in Sources */,
 				5C1DBD912D0FB0B20050B4DF /* StoreUtility.swift in Sources */,
 				5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */,
+				5C73DB652D18FDE9004BEEC5 /* CardSubjectSection.swift in Sources */,
 				5C1454172CF5760300D5C232 /* StereoViewCoordinator.swift in Sources */,
-				5CD577192D0E7528002FA8DB /* DatabaseExportService.swift in Sources */,
 				5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */,
+				5C73DB572D18F004004BEEC5 /* CatalogContainerView.swift in Sources */,
+				5C73DB6D2D190817004BEEC5 /* RetroviewColorScheme.swift in Sources */,
+				5C73DB632D18FD83004BEEC5 /* CardTitleSection.swift in Sources */,
 				5C80F6CA2D188A9100C58E7D /* CardImageLoader.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
@@ -626,21 +700,23 @@
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
 				5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */,
+				5C73DB542D18EFB8004BEEC5 /* CatalogDetailView.swift in Sources */,
 				5C80F6B62D16A6AE00C58E7D /* DatabaseImportProgress.swift in Sources */,
 				5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */,
+				5CAFA7692D1A09BB00112A93 /* StoreArchiveManager.swift in Sources */,
 				5CD577272D0E90E9002FA8DB /* PlatformFileHandler.swift in Sources */,
-				5CD5771B2D0E7544002FA8DB /* DatabaseTransferView.swift in Sources */,
 				5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */,
 				5C80F6B02D169C8A00C58E7D /* MainView.swift in Sources */,
 				5C1454342CF7A63D00D5C232 /* CardColorAnalyzer.swift in Sources */,
+				5C73DB592D18F034004BEEC5 /* CatalogItems.swift in Sources */,
 				5C80F6BE2D17AD5000C58E7D /* BackgroundImportManager.swift in Sources */,
 				5C5913BD2D126F220011C90D /* CardImageSection.swift in Sources */,
 				5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */,
-				5CD577212D0E79AB002FA8DB /* DatabaseTransferManager.swift in Sources */,
+				5C73DB692D18FF3C004BEEC5 /* CardHeaderView.swift in Sources */,
 				5C5913BB2D126EED0011C90D /* FlowLayout.swift in Sources */,
 				5C80F6A82D150AA700C58E7D /* CollectionMenuButton.swift in Sources */,
 				5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */,
@@ -650,9 +726,11 @@
 				5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */,
 				5C73DB4B2D18D834004BEEC5 /* PaginatedGridView.swift in Sources */,
 				5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */,
-				5CD5771F2D0E76F0002FA8DB /* DatabaseTransferTypes.swift in Sources */,
 				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,
+				5C73DB772D192102004BEEC5 /* ImportTypeMenu.swift in Sources */,
+				5C73DB732D191499004BEEC5 /* StoreTransferView.swift in Sources */,
 				5C80F6AC2D169BBB00C58E7D /* CardGridLayout.swift in Sources */,
+				5CAFA7652D19DF9100112A93 /* StoreImportHandler.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */,
 				5C80F6C02D17AD6800C58E7D /* ImportProgressIndicator.swift in Sources */,
@@ -661,10 +739,12 @@
 				5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */,
 				5C120FA82CFD60BA000B7184 /* StereoBrowser.swift in Sources */,
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
+				5C73DB6B2D19045D004BEEC5 /* SerifFontModifier.swift in Sources */,
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
 				5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */,
 				5C80F6CC2D18908100C58E7D /* SharedCardGridView.swift in Sources */,
+				5CAFA7632D19DD0900112A93 /* StoreDocument.swift in Sources */,
 				5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5C1454442CF816F700D5C232 /* ImportService.swift in Sources */,

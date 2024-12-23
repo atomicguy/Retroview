@@ -15,16 +15,16 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Retroview Database</string>
+			<string>Retroview Library</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
-			<string>net.atompowered.retroview.database</string>
+			<string>net.atompowered.retroview.store</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>rvdb</string>
+					<string>rvstore</string>
 				</array>
 			</dict>
 		</dict>
@@ -37,16 +37,16 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Retroview Database</string>
+			<string>Retroview Library</string>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
-			<string>net.atompowered.retroview.database</string>
+			<string>net.atompowered.retroview.store</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>rvdb</string>
+					<string>rvstore</string>
 				</array>
 			</dict>
 		</dict>

@@ -25,6 +25,7 @@ struct CollectionView: View {
         ) {
             toolbar
         }
+        .navigationTitle("\(collection.name) (\(collection.orderedCards.count) cards)")
     }
 
     private var toolbar: some View {

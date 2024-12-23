@@ -14,7 +14,6 @@ struct PlatformFileHandler {
         // Run the panel on the main thread using MainActor
         let url = await MainActor.run { () -> URL? in
             let panel = NSSavePanel()
-            panel.allowedContentTypes = [.retroviewDatabase]
             panel.nameFieldStringValue = defaultName
             
             guard panel.runModal() == .OK else {
@@ -35,7 +34,6 @@ struct PlatformFileHandler {
         // Run the panel on the main thread using MainActor
         await MainActor.run { () -> URL? in
             let panel = NSOpenPanel()
-            panel.allowedContentTypes = [.retroviewDatabase]
             panel.allowsMultipleSelection = false
             
             guard panel.runModal() == .OK else {

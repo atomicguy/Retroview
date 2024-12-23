@@ -27,14 +27,17 @@ struct Sidebar: View {
             Section {
                 NavigationLink(value: AppDestination.library) {
                     Label("Library", systemImage: "photo.on.rectangle.angled")
+                        .modifier(SerifFontModifier())
                 }
 
                 NavigationLink(value: AppDestination.subjects) {
                     Label("Subjects", systemImage: "tag")
+                        .modifier(SerifFontModifier())
                 }
 
                 NavigationLink(value: AppDestination.authors) {
                     Label("Authors", systemImage: "person")
+                        .modifier(SerifFontModifier())
                 }
             }
 
@@ -46,6 +49,7 @@ struct Sidebar: View {
                             favorite.id, favorite.name)
                     ) {
                         Label(favorite.name, systemImage: "heart.fill")
+                            .modifier(SerifFontModifier())
                     }
                 }
 
@@ -56,6 +60,7 @@ struct Sidebar: View {
                             collection.id, collection.name)
                     ) {
                         Label(collection.name, systemImage: "folder")
+                            .modifier(SerifFontModifier())
                     }
                 }
             }
