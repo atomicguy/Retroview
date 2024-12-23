@@ -19,14 +19,6 @@ struct PaginatedGrid<Content: View>: View {
     @State private var isLoadingPage = false
     @State private var cards: [CardSchemaV1.StereoCard] = []
     
-    init(
-        pageSize: Int = 100,
-        @ViewBuilder content: @escaping ([CardSchemaV1.StereoCard]) -> Content
-    ) {
-        self.pageSize = pageSize
-        self.content = content
-    }
-    
     var body: some View {
         ScrollView {
             LazyVStack {

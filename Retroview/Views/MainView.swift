@@ -29,9 +29,9 @@ struct MainView: View {
         case .none, .library:
             LibraryGridView()
         case .subjects:
-            Text("Subjects View")  // TODO: Create SubjectsView
+            SubjectsView()
         case .authors:
-            Text("Authors View")   // TODO: Create AuthorsView
+            AuthorsView()
         case let .collection(id, _):
             if let collection = collections.first(where: { $0.id == id }) {
                 CollectionView(collection: collection)

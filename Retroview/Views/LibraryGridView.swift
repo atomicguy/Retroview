@@ -12,83 +12,66 @@ struct LibraryGridView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.importManager) private var importManager
     @Environment(\.imageDownloadManager) private var imageDownloadManager
-
+    
     @State private var showingImport = false
     @State private var showingTransfer = false
-    @State private var selectedCard: CardSchemaV1.StereoCard?
-    @State private var navigationPath = NavigationPath()
     @State private var totalCardCount: Int = 0
     
     var body: some View {
-        NavigationStack {
-            PaginatedGrid { cards in
-                CardGridView(
-                    cards: cards,
-                    selectedCard: $selectedCard,
-                    onCardSelected: { card in
-                        navigationPath.append(card)
-                    }
-                )
-            }
-            .navigationTitle("Library (\(totalCardCount) cards)")
-            .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
-                CardDetailView(card: card)
-            }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    HStack(spacing: 12) {
-                        if let manager = importManager, manager.isImporting {
-                            ImportProgressIndicator(importManager: manager)
-                        }
+        PaginatedNavigableGrid(
+            emptyTitle: "No Cards",
+            emptyDescription: "Your library is empty",
+            header: { EmptyView() } // Use an empty header if not needed here
+        )
+        .toolbar {
+            ToolbarItemGroup {
+                if let manager = importManager, manager.isImporting {
+                    ImportProgressIndicator(importManager: manager)
+                }
 
-                        if let manager = imageDownloadManager,
-                            manager.isDownloading
-                        {
-                            BackgroundProgressIndicator(
-                                isProcessing: manager.isDownloading,
-                                processedCount: manager.processedCardCount,
-                                totalCount: manager.missingImageCount,
-                                onCancel: { manager.cancelDownload() }
-                            )
-                        } else {
-                            Button {
-                                imageDownloadManager?.startImageDownload()
-                            } label: {
-                                Label(
-                                    "Download Missing Images",
-                                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle"
-                                )
-                            }
-                        }
-
-                        ImportTypeMenu { urls, type in
-                            if let manager = importManager {
-                                switch type {
-                                case .mods:
-                                    manager.startImport(from: urls)
-                                case .crops:
-                                    startCropImport(urls: urls)
-                                }
-                            }
-                        }
-
-                        Button {
-                            showingTransfer = true
-                        } label: {
-                            Label("Transfer", systemImage: "arrow.up.arrow.down")
-                        }
-
-                        #if DEBUG
-                            StoreDebugMenu()
-                        #endif
+                if let manager = imageDownloadManager, manager.isDownloading {
+                    BackgroundProgressIndicator(
+                        isProcessing: manager.isDownloading,
+                        processedCount: manager.processedCardCount,
+                        totalCount: manager.missingImageCount,
+                        onCancel: { manager.cancelDownload() }
+                    )
+                } else {
+                    Button {
+                        imageDownloadManager?.startImageDownload()
+                    } label: {
+                        Label(
+                            "Download Missing Images",
+                            systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle"
+                        )
                     }
                 }
+
+                ImportTypeMenu { urls, type in
+                    if let manager = importManager {
+                        switch type {
+                        case .mods:
+                            manager.startImport(from: urls)
+                        case .crops:
+                            startCropImport(urls: urls)
+                        }
+                    }
+                }
+
+                Button {
+                    showingTransfer = true
+                } label: {
+                    Label("Transfer", systemImage: "arrow.up.arrow.down")
+                }
+
+                #if DEBUG
+                StoreDebugMenu()
+                #endif
             }
-            .task {
-                // Fetch total count for title
-                let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-                totalCardCount = (try? modelContext.fetchCount(descriptor)) ?? 0
-            }
+        }
+        .task {
+            let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+            totalCardCount = (try? modelContext.fetchCount(descriptor)) ?? 0
         }
     }
     
@@ -239,8 +222,8 @@ struct ImportDirectoryPicker: View {
     }
 #endif
 
-#Preview {
-    LibraryGridView()
-        .withPreviewStore()
-        .frame(width: 800, height: 600)
-}
+//#Preview {
+//    LibraryGridView()
+//        .withPreviewStore()
+//        .frame(width: 800, height: 600)
+//}
