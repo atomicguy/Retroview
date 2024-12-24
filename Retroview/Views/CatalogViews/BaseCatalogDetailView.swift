@@ -11,39 +11,31 @@ import SwiftUI
 struct BaseCatalogDetailView<Item: CatalogItem>: View {
     let item: Item
     @State private var selectedCard: CardSchemaV1.StereoCard?
-    @State private var navigationPath = NavigationPath()
-
+    
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            CardGridLayout(
-                cards: item.cards,
-                selectedCard: $selectedCard,
-                onCardSelected: { card in
-                    navigationPath.append(card)
-                }
-            )
-            .navigationTitle(item.name)
-            .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
-                CardDetailView(card: card)
-                    .platformNavigationTitle(
-                        card.titlePick?.text ?? "Card Details",
-                        displayMode: .inline)
-                    .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
-                        BaseCatalogDetailView<SubjectSchemaV1.Subject>(item: subject)
-                    }
-                    .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
-                        CollectionView(collection: collection)
-                    }
+        CardGridLayout(
+            cards: item.cards,
+            selectedCard: $selectedCard,
+            onCardSelected: { card in
+                selectedCard = card
             }
-            .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
-                BaseCatalogDetailView<SubjectSchemaV1.Subject>(item: subject)
-            }
-            .navigationDestination(for: AuthorSchemaV1.Author.self) { author in
-                BaseCatalogDetailView<AuthorSchemaV1.Author>(item: author)
-            }
-            .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
-                CollectionView(collection: collection)
-            }
+        )
+        .navigationTitle(item.name)
+        .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
+            CardDetailView(card: card)
+                .platformNavigationTitle(
+                    card.titlePick?.text ?? "Card Details",
+                    displayMode: .inline
+                )
+        }
+        .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
+            BaseCatalogDetailView<SubjectSchemaV1.Subject>(item: subject)
+        }
+        .navigationDestination(for: AuthorSchemaV1.Author.self) { author in
+            BaseCatalogDetailView<AuthorSchemaV1.Author>(item: author)
+        }
+        .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
+            CollectionView(collection: collection)
         }
     }
 }

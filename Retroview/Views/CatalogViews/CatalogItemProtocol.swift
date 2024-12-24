@@ -1,12 +1,11 @@
 //
-//  CatalogEntries.swift
+//  CatalogItemProtocol.swift
 //  Retroview
 //
-//  Created by Adam Schuster on 12/22/24.
+//  Created by Adam Schuster on 12/23/24.
 //
 
 import SwiftData
-import SwiftUI
 
 protocol CatalogItem: PersistentModel, Identifiable {
     var name: String { get }

@@ -16,40 +16,45 @@ private let logger = Logger(
 struct CollectionView: View {
     @Bindable var collection: CollectionSchemaV1.Collection
     @State private var isProcessing = false
+    @State private var selectedCard: CardSchemaV1.StereoCard?
+    @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigableCardGrid(
-            cards: collection.orderedCards,
-            emptyTitle: "No Cards",
-            emptyDescription: "This collection is empty"
-        ) {
-            toolbar
-        }
-        .navigationTitle("\(collection.name) (\(collection.orderedCards.count) cards)")
-    }
-
-    private var toolbar: some View {
-        Menu {
-            Button(role: .destructive) {
-                Task { @MainActor in
-                    guard !isProcessing else { return }
-                    isProcessing = true
-                    defer { isProcessing = false }
-
-                    logger.debug("Clearing collection \(collection.name)")
-                    // Uncomment and implement the logic for removing cards if needed
-                    // let cardsToRemove = collection.cards
-                    // for card in cardsToRemove {
-                    // collection.removeCard(card, context: modelContext)
-                    // }
+        NavigationStack(path: $navigationPath) {
+            VStack {
+                CardGridLayout(
+                    cards: collection.orderedCards,
+                    selectedCard: $selectedCard,
+                    onCardSelected: { card in
+                        navigationPath.append(card)
+                    }
+                )
+                .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
+                    CardDetailView(card: card)
+                        .platformNavigationTitle(
+                            card.titlePick?.text ?? "Card Details",
+                            displayMode: .inline
+                        )
                 }
-            } label: {
-                Label("Clear Collection", systemImage: "trash")
             }
-            .disabled(isProcessing)
-        } label: {
-            Label("More", systemImage: "ellipsis.circle")
-                .opacity(isProcessing ? 0.5 : 1.0)
+            .navigationTitle("\(collection.name) (\(collection.orderedCards.count) cards)")
+            .toolbar {
+                Menu {
+                    Button(role: .destructive) {
+                        Task { @MainActor in
+                            guard !isProcessing else { return }
+                            isProcessing = true
+                            do { isProcessing = false }
+                        }
+                    } label: {
+                        Label("Clear Collection", systemImage: "trash")
+                    }
+                    .disabled(isProcessing)
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
+                        .opacity(isProcessing ? 0.5 : 1.0)
+                }
+            }
         }
     }
 }

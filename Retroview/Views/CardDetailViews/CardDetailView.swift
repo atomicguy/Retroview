@@ -9,9 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct CardDetailView: View {
+    @Bindable var card: CardSchemaV1.StereoCard
     @Environment(\.modelContext) private var modelContext
-    let card: CardSchemaV1.StereoCard
-
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -22,7 +22,15 @@ struct CardDetailView: View {
                 }
 
                 if !card.subjects.isEmpty {
-                    CardSubjectSection(subjects: card.subjects)
+                    MetadataSection(title: "Subjects") {
+                        FlowLayoutView {
+                            ForEach(card.subjects) { subject in
+                                NavigationLink(value: subject) {
+                                    SubjectBadge(name: subject.name)
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if card.imageBackId != nil {
@@ -31,16 +39,12 @@ struct CardDetailView: View {
 
                 CardTitleSection(card: card) { title in
                     guard title != card.titlePick else { return }
-                    do {
-                        card.titlePick = title
-                        try modelContext.save()
-                    } catch {
-                        print("Failed to update title pick: \(error)")
-                    }
+                    card.titlePick = title
+                    try? modelContext.save()
                 }
 
                 if !card.collections.isEmpty {
-                    metadataSection("Collections") {
+                    MetadataSection(title: "Collections") {
                         ForEach(card.collections) { collection in
                             NavigationLink(value: collection) {
                                 CollectionRow(collection: collection)
@@ -53,6 +57,9 @@ struct CardDetailView: View {
         }
         .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
             BaseCatalogDetailView<SubjectSchemaV1.Subject>(item: subject)
+        }
+        .navigationDestination(for: AuthorSchemaV1.Author.self) { author in
+            BaseCatalogDetailView<AuthorSchemaV1.Author>(item: author)
         }
         .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
             CollectionView(collection: collection)
@@ -67,17 +74,6 @@ struct CardDetailView: View {
             CollectionMenuButton(card: card)
         }
     }
-
-    private func metadataSection<Content: View>(
-        _ title: String,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.system(.headline, design: .serif))
-            content()
-        }
-    }
 }
 
 private struct CollectionRow: View {
@@ -87,9 +83,8 @@ private struct CollectionRow: View {
         HStack {
             Text(collection.name)
             Spacer()
-            Image(
-                systemName: CollectionDefaults.isFavorites(collection)
-                    ? "heart.fill" : "folder")
+            Image(systemName: CollectionDefaults.isFavorites(collection)
+                ? "heart.fill" : "folder")
         }
         .padding(8)
         .background(.secondary.opacity(0.1))

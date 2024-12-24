@@ -39,11 +39,9 @@
 		5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* StereoCard.swift */; };
 		5C73DB4B2D18D834004BEEC5 /* PaginatedGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */; };
 		5C73DB4D2D18DD1E004BEEC5 /* CatalogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */; };
-		5C73DB4F2D18E1B8004BEEC5 /* NavigableCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */; };
 		5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */; };
 		5C73DB542D18EFB8004BEEC5 /* BaseCatalogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */; };
 		5C73DB572D18F004004BEEC5 /* CatalogContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */; };
-		5C73DB592D18F034004BEEC5 /* CatalogItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */; };
 		5C73DB5C2D18F0C3004BEEC5 /* SubjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */; };
 		5C73DB5E2D18F0DB004BEEC5 /* AuthorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */; };
 		5C73DB612D18FD65004BEEC5 /* MetadataSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */; };
@@ -78,13 +76,13 @@
 		5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */; };
 		5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6C32D17D30800C58E7D /* BackgroundProgressIndicator.swift */; };
 		5C80F6CA2D188A9100C58E7D /* CardImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6C92D188A8A00C58E7D /* CardImageLoader.swift */; };
-		5C80F6CC2D18908100C58E7D /* SharedCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */; };
 		5C8F16462CFD44D500CB77F0 /* StereoSpatialViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */; };
 		5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */; };
 		5CAFA7612D19D8FF00112A93 /* StoreTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7602D19D8FB00112A93 /* StoreTransferManager.swift */; };
 		5CAFA7632D19DD0900112A93 /* StoreDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7622D19DD0500112A93 /* StoreDocument.swift */; };
 		5CAFA7652D19DF9100112A93 /* StoreImportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */; };
 		5CAFA7692D1A09BB00112A93 /* StoreArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */; };
+		5CAFA76D2D1A747E00112A93 /* CatalogItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA76C2D1A747700112A93 /* CatalogItemProtocol.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
@@ -177,11 +175,9 @@
 		5C6676DB2BC21881002DD52E /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
 		5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedGridView.swift; sourceTree = "<group>"; };
 		5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogListView.swift; sourceTree = "<group>"; };
-		5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigableCardGridView.swift; sourceTree = "<group>"; };
 		5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedNavigableGridView.swift; sourceTree = "<group>"; };
 		5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCatalogDetailView.swift; sourceTree = "<group>"; };
 		5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogContainerView.swift; sourceTree = "<group>"; };
-		5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItems.swift; sourceTree = "<group>"; };
 		5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectsView.swift; sourceTree = "<group>"; };
 		5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorsView.swift; sourceTree = "<group>"; };
 		5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataSection.swift; sourceTree = "<group>"; };
@@ -215,13 +211,13 @@
 		5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
 		5C80F6C32D17D30800C58E7D /* BackgroundProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundProgressIndicator.swift; sourceTree = "<group>"; };
 		5C80F6C92D188A8A00C58E7D /* CardImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageLoader.swift; sourceTree = "<group>"; };
-		5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedCardGridView.swift; sourceTree = "<group>"; };
 		5C8F16452CFD44CA00CB77F0 /* StereoSpatialViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoSpatialViewer.swift; sourceTree = "<group>"; };
 		5C8F16472CFD464D00CB77F0 /* CenteredThumbnailStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredThumbnailStrip.swift; sourceTree = "<group>"; };
 		5CAFA7602D19D8FB00112A93 /* StoreTransferManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTransferManager.swift; sourceTree = "<group>"; };
 		5CAFA7622D19DD0500112A93 /* StoreDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDocument.swift; sourceTree = "<group>"; };
 		5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreImportHandler.swift; sourceTree = "<group>"; };
 		5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreArchiveManager.swift; sourceTree = "<group>"; };
+		5CAFA76C2D1A747700112A93 /* CatalogItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItemProtocol.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -404,10 +400,10 @@
 		5C73DB522D18EF95004BEEC5 /* CatalogViews */ = {
 			isa = PBXGroup;
 			children = (
+				5CAFA76C2D1A747700112A93 /* CatalogItemProtocol.swift */,
 				5C73DB722D191495004BEEC5 /* StoreTransferView.swift */,
 				5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */,
 				5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */,
-				5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */,
 				5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */,
 				5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */,
 				5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */,
@@ -444,11 +440,9 @@
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */,
 				5C80F6AF2D169C8700C58E7D /* MainView.swift */,
-				5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */,
 				5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */,
 				5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */,
 				5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */,
-				5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */,
 				5C80F6B12D169C9B00C58E7D /* SidebarView.swift */,
 				5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */,
 				5C1DBD9D2D0FF6BD0050B4DF /* ThumbnailView.swift */,
@@ -689,6 +683,7 @@
 				5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */,
 				5C73DB652D18FDE9004BEEC5 /* CardSubjectSection.swift in Sources */,
 				5C1454172CF5760300D5C232 /* StereoViewCoordinator.swift in Sources */,
+				5CAFA76D2D1A747E00112A93 /* CatalogItemProtocol.swift in Sources */,
 				5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */,
 				5C73DB572D18F004004BEEC5 /* CatalogContainerView.swift in Sources */,
 				5C73DB6D2D190817004BEEC5 /* RetroviewColorScheme.swift in Sources */,
@@ -696,7 +691,6 @@
 				5C80F6CA2D188A9100C58E7D /* CardImageLoader.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
-				5C73DB4F2D18E1B8004BEEC5 /* NavigableCardGridView.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
 				5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */,
@@ -712,7 +706,6 @@
 				5CD577112D0E36B4002FA8DB /* Array+StringNormalization.swift in Sources */,
 				5C80F6B02D169C8A00C58E7D /* MainView.swift in Sources */,
 				5C1454342CF7A63D00D5C232 /* CardColorAnalyzer.swift in Sources */,
-				5C73DB592D18F034004BEEC5 /* CatalogItems.swift in Sources */,
 				5C80F6BE2D17AD5000C58E7D /* BackgroundImportManager.swift in Sources */,
 				5C5913BD2D126F220011C90D /* CardImageSection.swift in Sources */,
 				5C8F16482CFD465300CB77F0 /* CenteredThumbnailStrip.swift in Sources */,
@@ -743,7 +736,6 @@
 				5C6676B02BC210F7002DD52E /* RetroviewApp.swift in Sources */,
 				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
 				5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */,
-				5C80F6CC2D18908100C58E7D /* SharedCardGridView.swift in Sources */,
 				5CAFA7632D19DD0900112A93 /* StoreDocument.swift in Sources */,
 				5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,

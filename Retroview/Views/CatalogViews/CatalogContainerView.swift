@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CatalogContainerView<Item: CatalogItem>: View {
     @State private var selectedItem: Item?
@@ -28,21 +29,8 @@ struct CatalogContainerView<Item: CatalogItem>: View {
         } detail: {
             if let item = selectedItem {
                 NavigationStack(path: $navigationPath) {
-                    CardGridLayout(
-                        cards: item.cards,
-                        selectedCard: $selectedCard,
-                        onCardSelected: { card in
-                            navigationPath.append(card)
-                        }
-                    )
-                    .navigationTitle(item.name)
-                    .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
-                        CardDetailView(card: card)
-                            .platformNavigationTitle(
-                                card.titlePick?.text ?? "Card Details",
-                                displayMode: .inline
-                            )
-                    }
+                    BaseCatalogDetailView(item: item)
+                        .navigationTitle(item.name)
                 }
             } else {
                 ContentUnavailableView {
