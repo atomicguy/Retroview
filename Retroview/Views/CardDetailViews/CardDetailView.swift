@@ -51,8 +51,15 @@ struct CardDetailView: View {
             }
             .padding()
         }
+        .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
+            BaseCatalogDetailView<SubjectSchemaV1.Subject>(item: subject)
+        }
+        .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
+            CollectionView(collection: collection)
+        }
         .platformNavigationTitle(
-            card.titlePick?.text ?? "Untitled Card", displayMode: .inline
+            card.titlePick?.text ?? "Untitled Card",
+            displayMode: .inline
         )
         .platformToolbar {
             FavoriteButton(card: card)

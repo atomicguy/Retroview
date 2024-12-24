@@ -61,7 +61,7 @@ struct PlatformFileHandler {
     static func importFile() async throws -> URL? {
         return try await withCheckedThrowingContinuation { continuation in
             Task { @MainActor in
-                let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.retroviewDatabase])
+                let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.retroviewStore])
                 let delegate = FilePickerDelegate(continuation: continuation)
                 picker.delegate = delegate
                 

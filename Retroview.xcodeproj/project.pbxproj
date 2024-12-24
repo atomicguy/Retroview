@@ -41,7 +41,7 @@
 		5C73DB4D2D18DD1E004BEEC5 /* CatalogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */; };
 		5C73DB4F2D18E1B8004BEEC5 /* NavigableCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */; };
 		5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */; };
-		5C73DB542D18EFB8004BEEC5 /* CatalogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB532D18EFB3004BEEC5 /* CatalogDetailView.swift */; };
+		5C73DB542D18EFB8004BEEC5 /* BaseCatalogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */; };
 		5C73DB572D18F004004BEEC5 /* CatalogContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */; };
 		5C73DB592D18F034004BEEC5 /* CatalogItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */; };
 		5C73DB5C2D18F0C3004BEEC5 /* SubjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */; };
@@ -179,7 +179,7 @@
 		5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogListView.swift; sourceTree = "<group>"; };
 		5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigableCardGridView.swift; sourceTree = "<group>"; };
 		5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedNavigableGridView.swift; sourceTree = "<group>"; };
-		5C73DB532D18EFB3004BEEC5 /* CatalogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogDetailView.swift; sourceTree = "<group>"; };
+		5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCatalogDetailView.swift; sourceTree = "<group>"; };
 		5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogContainerView.swift; sourceTree = "<group>"; };
 		5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItems.swift; sourceTree = "<group>"; };
 		5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectsView.swift; sourceTree = "<group>"; };
@@ -409,7 +409,7 @@
 				5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */,
 				5C73DB582D18F02D004BEEC5 /* CatalogItems.swift */,
 				5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */,
-				5C73DB532D18EFB3004BEEC5 /* CatalogDetailView.swift */,
+				5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */,
 				5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */,
 			);
 			path = CatalogViews;
@@ -432,15 +432,11 @@
 			isa = PBXGroup;
 			children = (
 				5C73DB5F2D18FD4B004BEEC5 /* CardDetailViews */,
-				5C73DB522D18EF95004BEEC5 /* CatalogViews */,
-				5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */,
-				5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */,
-				5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */,
 				5C80F6AB2D169BB600C58E7D /* CardGridLayout.swift */,
-				5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */,
 				5C5913BC2D126F1F0011C90D /* CardImageSection.swift */,
-				5C80F6AD2D169C5F00C58E7D /* CollectionView.swift */,
+				5C73DB522D18EF95004BEEC5 /* CatalogViews */,
 				5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */,
+				5C80F6AD2D169C5F00C58E7D /* CollectionView.swift */,
 				5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */,
 				5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */,
 				5C5913BA2D126EEA0011C90D /* FlowLayout.swift */,
@@ -448,7 +444,11 @@
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */,
 				5C80F6AF2D169C8700C58E7D /* MainView.swift */,
+				5C73DB4E2D18E1B1004BEEC5 /* NavigableCardGridView.swift */,
+				5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */,
+				5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */,
 				5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */,
+				5C80F6CB2D18907D00C58E7D /* SharedCardGridView.swift */,
 				5C80F6B12D169C9B00C58E7D /* SidebarView.swift */,
 				5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */,
 				5C1DBD9D2D0FF6BD0050B4DF /* ThumbnailView.swift */,
@@ -700,7 +700,7 @@
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
 				5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */,
-				5C73DB542D18EFB8004BEEC5 /* CatalogDetailView.swift in Sources */,
+				5C73DB542D18EFB8004BEEC5 /* BaseCatalogDetailView.swift in Sources */,
 				5C80F6B62D16A6AE00C58E7D /* DatabaseImportProgress.swift in Sources */,
 				5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,

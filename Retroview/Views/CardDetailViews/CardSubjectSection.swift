@@ -13,7 +13,7 @@ struct CardSubjectSection: View {
     var body: some View {
         MetadataSection(title: "Subjects") {
             FlowLayout {
-                ForEach(subjects, id: \.name) { subject in
+                ForEach(subjects) { subject in
                     NavigationLink(value: subject) {
                         SubjectBadge(name: subject.name)
                     }
