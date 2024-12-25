@@ -11,10 +11,9 @@ import SwiftUI
 struct AuthorsView: View {
     @Binding var navigationPath: NavigationPath
     @Query(sort: \AuthorSchemaV1.Author.name) private var authors: [AuthorSchemaV1.Author]
-    @State private var selection: AuthorSchemaV1.Author?
     
     var body: some View {
-        List(authors, selection: $selection) { author in
+        List(authors) { author in
             NavigationLink(value: author) {
                 VStack(alignment: .leading) {
                     Text(author.name)

@@ -21,21 +21,5 @@ struct BaseCatalogDetailView<Item: CatalogItem>: View {
             }
         )
         .navigationTitle(item.name)
-        .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
-            CardDetailView(card: card)
-                .platformNavigationTitle(
-                    card.titlePick?.text ?? "Card Details",
-                    displayMode: .inline
-                )
-        }
-        .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
-            BaseCatalogDetailView<SubjectSchemaV1.Subject>(item: subject)
-        }
-        .navigationDestination(for: AuthorSchemaV1.Author.self) { author in
-            BaseCatalogDetailView<AuthorSchemaV1.Author>(item: author)
-        }
-        .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
-            CollectionView(collection: collection)
-        }
     }
 }

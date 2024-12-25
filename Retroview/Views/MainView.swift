@@ -13,19 +13,16 @@ struct MainView: View {
     @Query(sort: \CollectionSchemaV1.Collection.name) private var collections: [CollectionSchemaV1.Collection]
     @State private var selectedDestination: AppDestination?
     @State private var navigationPath = NavigationPath()
-    @State private var libraryCardCount: Int = 0
     
     var body: some View {
         NavigationSplitView {
             Sidebar(selectedDestination: $selectedDestination)
-                .platformNavigationTitle("Retroview", displayMode: .inline)
         } detail: {
             NavigationStack(path: $navigationPath) {
                 contentView
-                    // Common navigation destinations for the entire app
                     .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
                         CardDetailView(card: card)
-                            .platformNavigationTitle(card.titlePick?.text ?? "Card Details", displayMode: .inline)
+                            .navigationTitle(card.titlePick?.text ?? "Card Details")
                     }
                     .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
                         CardGridLayout(
@@ -52,9 +49,6 @@ struct MainView: View {
                     }
             }
         }
-        .task {
-            await updateLibraryCardCount()
-        }
     }
     
     @ViewBuilder
@@ -72,16 +66,6 @@ struct MainView: View {
             } else {
                 ContentUnavailableView("Collection Not Found", systemImage: "exclamationmark.triangle")
             }
-        }
-    }
-    
-    private func updateLibraryCardCount() async {
-        do {
-            let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-            libraryCardCount = try modelContext.fetchCount(descriptor)
-        } catch {
-            libraryCardCount = 0
-            print("Failed to fetch library card count: \(error)")
         }
     }
 }

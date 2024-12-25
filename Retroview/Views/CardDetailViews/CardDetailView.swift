@@ -55,15 +55,6 @@ struct CardDetailView: View {
             }
             .padding()
         }
-        .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
-            BaseCatalogDetailView<SubjectSchemaV1.Subject>(item: subject)
-        }
-        .navigationDestination(for: AuthorSchemaV1.Author.self) { author in
-            BaseCatalogDetailView<AuthorSchemaV1.Author>(item: author)
-        }
-        .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
-            CollectionView(collection: collection)
-        }
         .platformNavigationTitle(
             card.titlePick?.text ?? "Untitled Card",
             displayMode: .inline

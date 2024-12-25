@@ -11,10 +11,9 @@ import SwiftUI
 struct SubjectsView: View {
     @Binding var navigationPath: NavigationPath
     @Query(sort: \SubjectSchemaV1.Subject.name) private var subjects: [SubjectSchemaV1.Subject]
-    @State private var selection: SubjectSchemaV1.Subject?
     
     var body: some View {
-        List(subjects, selection: $selection) { subject in
+        List(subjects) { subject in
             NavigationLink(value: subject) {
                 VStack(alignment: .leading) {
                     Text(subject.name)

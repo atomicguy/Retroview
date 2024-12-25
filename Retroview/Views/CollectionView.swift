@@ -29,13 +29,6 @@ struct CollectionView: View {
                         navigationPath.append(card)
                     }
                 )
-                .navigationDestination(for: CardSchemaV1.StereoCard.self) { card in
-                    CardDetailView(card: card)
-                        .platformNavigationTitle(
-                            card.titlePick?.text ?? "Card Details",
-                            displayMode: .inline
-                        )
-                }
             }
             .navigationTitle("\(collection.name) (\(collection.orderedCards.count) cards)")
             .toolbar {
