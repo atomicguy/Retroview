@@ -37,11 +37,6 @@
 		5C6676CC2BC210F9002DD52E /* RetroviewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CB2BC210F9002DD52E /* RetroviewUITests.swift */; };
 		5C6676CE2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */; };
 		5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* StereoCard.swift */; };
-		5C73DB4B2D18D834004BEEC5 /* PaginatedGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */; };
-		5C73DB4D2D18DD1E004BEEC5 /* CatalogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */; };
-		5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */; };
-		5C73DB542D18EFB8004BEEC5 /* BaseCatalogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */; };
-		5C73DB572D18F004004BEEC5 /* CatalogContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */; };
 		5C73DB5C2D18F0C3004BEEC5 /* SubjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */; };
 		5C73DB5E2D18F0DB004BEEC5 /* AuthorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */; };
 		5C73DB612D18FD65004BEEC5 /* MetadataSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */; };
@@ -50,7 +45,6 @@
 		5C73DB672D18FE14004BEEC5 /* SubjectBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB662D18FE0F004BEEC5 /* SubjectBadgeView.swift */; };
 		5C73DB692D18FF3C004BEEC5 /* CardHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB682D18FF36004BEEC5 /* CardHeaderView.swift */; };
 		5C73DB6B2D19045D004BEEC5 /* SerifFontModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB6A2D190458004BEEC5 /* SerifFontModifier.swift */; };
-		5C73DB6D2D190817004BEEC5 /* RetroviewColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB6C2D190810004BEEC5 /* RetroviewColorScheme.swift */; };
 		5C73DB6F2D191122004BEEC5 /* PlatformFilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB6E2D19111C004BEEC5 /* PlatformFilePicker.swift */; };
 		5C73DB712D19113E004BEEC5 /* ImportButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB702D19113A004BEEC5 /* ImportButtons.swift */; };
 		5C73DB732D191499004BEEC5 /* StoreTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB722D191495004BEEC5 /* StoreTransferView.swift */; };
@@ -67,7 +61,6 @@
 		5C80F6B02D169C8A00C58E7D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6AF2D169C8700C58E7D /* MainView.swift */; };
 		5C80F6B22D169CA100C58E7D /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B12D169C9B00C58E7D /* SidebarView.swift */; };
 		5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */; };
-		5C80F6B62D16A6AE00C58E7D /* DatabaseImportProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */; };
 		5C80F6B82D176FF100C58E7D /* ModelPredicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */; };
 		5C80F6BA2D179D3900C58E7D /* DiagnosticCollectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */; };
 		5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */; };
@@ -173,11 +166,6 @@
 		5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5C6676DA2BC215C7002DD52E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5C6676DB2BC21881002DD52E /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
-		5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedGridView.swift; sourceTree = "<group>"; };
-		5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogListView.swift; sourceTree = "<group>"; };
-		5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedNavigableGridView.swift; sourceTree = "<group>"; };
-		5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCatalogDetailView.swift; sourceTree = "<group>"; };
-		5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogContainerView.swift; sourceTree = "<group>"; };
 		5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectsView.swift; sourceTree = "<group>"; };
 		5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorsView.swift; sourceTree = "<group>"; };
 		5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataSection.swift; sourceTree = "<group>"; };
@@ -186,7 +174,6 @@
 		5C73DB662D18FE0F004BEEC5 /* SubjectBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectBadgeView.swift; sourceTree = "<group>"; };
 		5C73DB682D18FF36004BEEC5 /* CardHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeaderView.swift; sourceTree = "<group>"; };
 		5C73DB6A2D190458004BEEC5 /* SerifFontModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerifFontModifier.swift; sourceTree = "<group>"; };
-		5C73DB6C2D190810004BEEC5 /* RetroviewColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewColorScheme.swift; sourceTree = "<group>"; };
 		5C73DB6E2D19111C004BEEC5 /* PlatformFilePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformFilePicker.swift; sourceTree = "<group>"; };
 		5C73DB702D19113A004BEEC5 /* ImportButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportButtons.swift; sourceTree = "<group>"; };
 		5C73DB722D191495004BEEC5 /* StoreTransferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTransferView.swift; sourceTree = "<group>"; };
@@ -202,7 +189,6 @@
 		5C80F6AF2D169C8700C58E7D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5C80F6B12D169C9B00C58E7D /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableThumbnailView.swift; sourceTree = "<group>"; };
-		5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseImportProgress.swift; sourceTree = "<group>"; };
 		5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPredicates.swift; sourceTree = "<group>"; };
 		5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticCollectionButton.swift; sourceTree = "<group>"; };
 		5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCreationView.swift; sourceTree = "<group>"; };
@@ -283,7 +269,6 @@
 				5CAFA7622D19DD0500112A93 /* StoreDocument.swift */,
 				5CAFA7602D19D8FB00112A93 /* StoreTransferManager.swift */,
 				5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */,
-				5C73DB6C2D190810004BEEC5 /* RetroviewColorScheme.swift */,
 				5C73DB6A2D190458004BEEC5 /* SerifFontModifier.swift */,
 				5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */,
 				5CD5770E2D0D2D83002FA8DB /* Array+Unique.swift */,
@@ -404,9 +389,6 @@
 				5C73DB722D191495004BEEC5 /* StoreTransferView.swift */,
 				5C73DB5B2D18F0C0004BEEC5 /* SubjectsView.swift */,
 				5C73DB5D2D18F0D9004BEEC5 /* AuthorsView.swift */,
-				5C73DB562D18EFFD004BEEC5 /* CatalogContainerView.swift */,
-				5C73DB532D18EFB3004BEEC5 /* BaseCatalogDetailView.swift */,
-				5C73DB4C2D18DD1B004BEEC5 /* CatalogListView.swift */,
 			);
 			path = CatalogViews;
 			sourceTree = "<group>";
@@ -433,15 +415,12 @@
 				5C73DB522D18EF95004BEEC5 /* CatalogViews */,
 				5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */,
 				5C80F6AD2D169C5F00C58E7D /* CollectionView.swift */,
-				5C80F6B52D16A6A800C58E7D /* DatabaseImportProgress.swift */,
 				5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */,
 				5C5913BA2D126EEA0011C90D /* FlowLayout.swift */,
 				5CCB4C122D10F8AC00FD4005 /* ImageQuality.swift */,
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
 				5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */,
 				5C80F6AF2D169C8700C58E7D /* MainView.swift */,
-				5C73DB4A2D18D82D004BEEC5 /* PaginatedGridView.swift */,
-				5C73DB502D18E230004BEEC5 /* PaginatedNavigableGridView.swift */,
 				5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */,
 				5C80F6B12D169C9B00C58E7D /* SidebarView.swift */,
 				5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */,
@@ -685,17 +664,12 @@
 				5C1454172CF5760300D5C232 /* StereoViewCoordinator.swift in Sources */,
 				5CAFA76D2D1A747E00112A93 /* CatalogItemProtocol.swift in Sources */,
 				5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */,
-				5C73DB572D18F004004BEEC5 /* CatalogContainerView.swift in Sources */,
-				5C73DB6D2D190817004BEEC5 /* RetroviewColorScheme.swift in Sources */,
 				5C73DB632D18FD83004BEEC5 /* CardTitleSection.swift in Sources */,
 				5C80F6CA2D188A9100C58E7D /* CardImageLoader.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
-				5C73DB512D18E238004BEEC5 /* PaginatedNavigableGridView.swift in Sources */,
-				5C73DB542D18EFB8004BEEC5 /* BaseCatalogDetailView.swift in Sources */,
-				5C80F6B62D16A6AE00C58E7D /* DatabaseImportProgress.swift in Sources */,
 				5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */,
 				5C19F16B2CC5B98E00BD7A2A /* StereoView.swift in Sources */,
 				5CCFB16E2CFD5AFC00E5633E /* StyleStereoView.swift in Sources */,
@@ -717,7 +691,6 @@
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
 				5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */,
-				5C73DB4B2D18D834004BEEC5 /* PaginatedGridView.swift in Sources */,
 				5C02AF342D02BC1F00D629A2 /* SpatialBrowserContainer.swift in Sources */,
 				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,
 				5C73DB772D192102004BEEC5 /* ImportTypeMenu.swift in Sources */,
@@ -728,7 +701,6 @@
 				5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */,
 				5C80F6C02D17AD6800C58E7D /* ImportProgressIndicator.swift in Sources */,
 				5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */,
-				5C73DB4D2D18DD1E004BEEC5 /* CatalogListView.swift in Sources */,
 				5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */,
 				5C120FA82CFD60BA000B7184 /* StereoBrowser.swift in Sources */,
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,

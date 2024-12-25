@@ -9,24 +9,53 @@ import SwiftData
 import SwiftUI
 
 struct LibraryGridView: View {
-    @Binding var navigationPath: NavigationPath
     @Environment(\.modelContext) private var modelContext
     @Environment(\.importManager) private var importManager
     @Environment(\.imageDownloadManager) private var imageDownloadManager
-    @Query private var cards: [CardSchemaV1.StereoCard]
     
+    @Binding var navigationPath: NavigationPath
     @State private var selectedCard: CardSchemaV1.StereoCard?
+    @State private var loadedCards: [CardSchemaV1.StereoCard] = []
+    @State private var currentPage = 0
+    @State private var isLoadingMore = false
+    @State private var hasMoreContent = true
     @State private var showingStoreTransfer = false
     @State private var isImporting = false
     
+    private let pageSize = 100
+    
     var body: some View {
-        CardGridLayout(
-            cards: cards,
-            selectedCard: $selectedCard,
-            onCardSelected: { card in
-                navigationPath.append(card)
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: PlatformEnvironment.Metrics.gridSpacing) {
+                ForEach(loadedCards) { card in
+                    SelectableThumbnailView(
+                        card: card,
+                        isSelected: card.id == selectedCard?.id,
+                        onSelect: { selectedCard = card },
+                        onDoubleClick: {
+                            navigationPath.append(card)
+                        }
+                    )
+                    .id(card.id)
+                }
+                
+                if hasMoreContent {
+                    ProgressView()
+                        .onAppear {
+                            if !isLoadingMore {
+                                Task {
+                                    await loadMoreCards()
+                                }
+                            }
+                        }
+                }
             }
-        )
+            .padding(PlatformEnvironment.Metrics.defaultPadding)
+        }
+        .task {
+            await loadInitialCards()
+        }
+        // Keep existing toolbar items and navigation title
         .platformNavigationTitle("Library", displayMode: .large)
         .platformToolbar {
             // Leading toolbar items
@@ -56,9 +85,13 @@ struct LibraryGridView: View {
                 #endif
             }
         }
-        .sheet(isPresented: $showingStoreTransfer) {
-            StoreTransferView(isImporting: isImporting)
-        }
+    }
+    
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(
+            minimum: PlatformEnvironment.Metrics.gridMinWidth,
+            maximum: PlatformEnvironment.Metrics.gridMaxWidth
+        ), spacing: 20)]
     }
     
     private var downloadImagesButton: some View {
@@ -94,6 +127,41 @@ struct LibraryGridView: View {
             } catch {
                 print("Crop import failed: \(error)")
             }
+        }
+    }
+    
+    private func loadInitialCards() async {
+        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+            sortBy: [SortDescriptor(\.uuid)]
+        )
+        descriptor.fetchLimit = pageSize
+        
+        do {
+            loadedCards = try modelContext.fetch(descriptor)
+            hasMoreContent = loadedCards.count == pageSize
+        } catch {
+            print("Failed to load cards: \(error)")
+        }
+    }
+    
+    private func loadMoreCards() async {
+        guard hasMoreContent, !isLoadingMore else { return }
+        
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+        
+        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+            sortBy: [SortDescriptor(\.uuid)]
+        )
+        descriptor.fetchOffset = loadedCards.count
+        descriptor.fetchLimit = pageSize
+        
+        do {
+            let newCards = try modelContext.fetch(descriptor)
+            hasMoreContent = newCards.count == pageSize
+            loadedCards.append(contentsOf: newCards)
+        } catch {
+            print("Failed to load more cards: \(error)")
         }
     }
 }

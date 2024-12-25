@@ -9,9 +9,7 @@ import Foundation
 import SwiftData
 
 enum CollectionDefaults {
-    // CollectionDefaults.swift
     static let favoritesName = "Favorites"
-    static let favorites = CollectionSchemaV1.Collection(name: favoritesName)
 
     static func setupDefaultCollections(context: ModelContext) {
         let descriptor = FetchDescriptor<CollectionSchemaV1.Collection>()
@@ -20,6 +18,7 @@ enum CollectionDefaults {
 
         // Create Favorites if needed
         if !existingNames.contains(favoritesName) {
+            let favorites = CollectionSchemaV1.Collection(name: favoritesName)
             context.insert(favorites)
             try? context.save()
         }

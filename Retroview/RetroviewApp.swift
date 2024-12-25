@@ -80,7 +80,6 @@ struct RetroviewApp: App {
             Group {
                 MainView()
                     .modifier(SerifFontModifier())
-                    .accentColor(RetroviewColorScheme.tintColor)
             }
             .environment(\.imageDownloadManager, imageDownloadManager)
             .environment(\.importManager, importManager)

@@ -10,7 +10,7 @@ import OSLog
 
 struct StoreImportHandler {
     private static let logger = Logger(
-        subsystem: "com.example.retroview",
+        subsystem: "net.atompowered.retroview",
         category: "StoreImport"
     )
     
