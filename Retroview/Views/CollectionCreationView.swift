@@ -90,3 +90,15 @@ struct CollectionCreationView: View {
         }
     }
 }
+
+#Preview("Collection Creation View") {
+    // Create a mock card for preview
+    let mockCard = CardSchemaV1.StereoCard(
+        uuid: UUID(),
+        titles: [TitleSchemaV1.Title(text: "Sample Title")],
+        authors: [AuthorSchemaV1.Author(name: "John Doe")]
+    )
+    
+    return CollectionCreationView(card: mockCard)
+        .frame(minWidth: 300, minHeight: 150)
+}

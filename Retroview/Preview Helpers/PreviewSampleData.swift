@@ -105,6 +105,9 @@ final class PreviewDataManager {
                     try? handle.close()
                 }
                 
+                print("Performing WAL checkpoint on store at: \(tempStoreURL.path)")
+                
+                #if os(macOS)
                 if #available(macOS 14.0, *) {
                     let process = Process()
                     process.executableURL = URL(fileURLWithPath: "/usr/bin/sqlite3")
@@ -112,6 +115,7 @@ final class PreviewDataManager {
                     try process.run()
                     process.waitUntilExit()
                 }
+                #endif
                 
 //                #if DEBUG
 //                if #available(macOS 14.0, *) {

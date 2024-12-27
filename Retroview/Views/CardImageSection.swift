@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import SwiftData
+#endif
 
 struct CardImageSection: View {
     @Environment(\.imageLoader) private var imageLoader
@@ -113,4 +116,14 @@ struct CardImageSection: View {
 
         isLoading = false
     }
+}
+
+#Preview("Card Image Section") {
+    let previewContainer = try! PreviewDataManager.shared.container()
+    let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
+    
+    return CardImageSection(card: card, side: .front, title: "Front Image")
+        .withPreviewStore()
+        .environment(\.imageLoader, CardImageLoader())
+        .padding()
 }

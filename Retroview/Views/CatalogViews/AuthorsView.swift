@@ -27,3 +27,10 @@ struct AuthorsView: View {
         .navigationTitle("Authors")
     }
 }
+
+#Preview("Authors View") {
+    NavigationStack {
+        AuthorsView(navigationPath: .constant(NavigationPath()))
+            .withPreviewStore()
+    }
+}

@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import SwiftData
+#endif
 
 struct CardSubjectSection: View {
     let subjects: [SubjectSchemaV1.Subject]
@@ -21,4 +24,13 @@ struct CardSubjectSection: View {
             }
         }
     }
+}
+
+#Preview("Card Subject Section") {
+    let previewContainer = try! PreviewDataManager.shared.container()
+    let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
+    
+    return CardSubjectSection(subjects: card.subjects)
+        .withPreviewStore()
+        .padding()
 }

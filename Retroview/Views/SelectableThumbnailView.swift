@@ -32,16 +32,31 @@ struct SelectableThumbnailView: View {
     }
 }
 
-// Preview provider
-//#Preview {
-//    CardPreviewContainer { card in
-//        SelectableThumbnailView(
-//            card: card,
-//            isSelected: true,
-//            onSelect: {},
-//            onDoubleClick: {}
-//        )
-//        .frame(width: 300)
-//        .padding()
-//    }
-//}
+#Preview("Selectable Thumbnail View") {
+    // Create a mock card for preview
+    let mockCard = CardSchemaV1.StereoCard(
+        uuid: UUID(),
+        imageFrontId: "sample-image-id",
+        titles: [TitleSchemaV1.Title(text: "Sample Title")],
+        authors: [AuthorSchemaV1.Author(name: "John Doe")]
+    )
+    
+    return VStack {
+        SelectableThumbnailView(
+            card: mockCard,
+            isSelected: false,
+            onSelect: { },
+            onDoubleClick: { }
+        )
+        .frame(width: 300, height: 200)
+        
+        SelectableThumbnailView(
+            card: mockCard,
+            isSelected: true,
+            onSelect: { },
+            onDoubleClick: { }
+        )
+        .frame(width: 300, height: 200)
+    }
+    .environment(\.imageLoader, CardImageLoader())
+}

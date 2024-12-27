@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import SwiftData
+#endif
 
 struct ThumbnailOverlay: View {
     let card: CardSchemaV1.StereoCard
@@ -42,4 +45,13 @@ struct ThumbnailOverlay: View {
             $0.name == CollectionDefaults.favoritesName
         })
     }
+}
+
+#Preview("Thumbnail Overlay") {
+    let previewContainer = try! PreviewDataManager.shared.container()
+    let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
+    
+    return ThumbnailOverlay(card: card, isHovering: true)
+        .withPreviewStore()
+        .frame(width: 300, height: 200)
 }

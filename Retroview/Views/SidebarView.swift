@@ -68,3 +68,8 @@ struct Sidebar: View {
         .navigationTitle("Retroview")
     }
 }
+
+#Preview("Sidebar View") {
+    Sidebar(selectedDestination: .constant(.library))
+        .withPreviewStore()
+}

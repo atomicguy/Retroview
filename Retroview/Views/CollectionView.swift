@@ -51,3 +51,15 @@ struct CollectionView: View {
         }
     }
 }
+
+#Preview("Collection View") {
+    let previewContainer = try! PreviewDataManager.shared.container()
+    let collections = try! previewContainer.mainContext.fetch(FetchDescriptor<CollectionSchemaV1.Collection>())
+    
+    return collections.first.map { collection in
+        CollectionView(collection: collection)
+            .withPreviewStore()
+            .frame(width: 800, height: 600)
+    } ?? ContentUnavailableView("No Collections", systemImage: "folder")
+        .withPreviewStore()
+}

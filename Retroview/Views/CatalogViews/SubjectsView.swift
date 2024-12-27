@@ -27,3 +27,10 @@ struct SubjectsView: View {
         .navigationTitle("Subjects")
     }
 }
+
+#Preview("Subjects View") {
+    NavigationStack {
+        SubjectsView(navigationPath: .constant(NavigationPath()))
+            .withPreviewStore()
+    }
+}

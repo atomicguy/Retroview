@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if DEBUG
+import SwiftData
+#endif
 
 struct CardHeaderView: View {
     let card: CardSchemaV1.StereoCard
@@ -29,4 +32,13 @@ struct CardHeaderView: View {
                 .font(.title2)
         }
     }
+}
+
+#Preview("Card Header View") {
+    let previewContainer = try! PreviewDataManager.shared.container()
+    let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
+    
+    return CardHeaderView(card: card)
+        .withPreviewStore()
+        .padding()
 }

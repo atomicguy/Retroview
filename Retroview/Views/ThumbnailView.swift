@@ -77,3 +77,15 @@ struct ThumbnailView: View {
         }
     }
 }
+
+#Preview("Thumbnail View") {
+    if let card = try? PreviewDataManager.shared.container().mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first {
+        ThumbnailView(card: card)
+            .withPreviewStore()
+            .environment(\.imageLoader, CardImageLoader())
+            .frame(width: 300, height: 200)
+    } else {
+        ContentUnavailableView("No Preview Card", systemImage: "photo")
+            .withPreviewStore()
+    }
+}

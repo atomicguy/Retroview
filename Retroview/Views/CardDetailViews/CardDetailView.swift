@@ -82,3 +82,17 @@ private struct CollectionRow: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
+
+#Preview("Card Detail View") {
+    NavigationStack {
+        Group {
+            if let card = try? PreviewDataManager.shared.container().mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first {
+                CardDetailView(card: card)
+            } else {
+                ContentUnavailableView("No Preview Card", systemImage: "photo")
+            }
+        }
+        .withPreviewStore()
+        .environment(\.imageLoader, CardImageLoader())
+    }
+}

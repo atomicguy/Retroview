@@ -260,3 +260,10 @@ private struct ImportConfirmationDialog: View {
         .frame(minWidth: 300)
     }
 }
+
+#Preview("Import View") {
+    let previewContainer = try! PreviewDataManager.shared.container()
+    
+    return ImportView(modelContext: previewContainer.mainContext)
+        .withPreviewStore()
+}

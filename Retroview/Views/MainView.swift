@@ -71,10 +71,6 @@ struct MainView: View {
 }
 
 #Preview("Main View") {
-    NavigationStack {
-        MainView()
-            .withPreviewContainer()
-            .environment(\.imageLoader, CardImageLoader())
-            .frame(width: 1024, height: 768)
-    }
+    MainView()
+        .withPreviewStore()
 }

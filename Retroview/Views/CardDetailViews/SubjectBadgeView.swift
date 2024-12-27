@@ -18,3 +18,13 @@ struct SubjectBadge: View {
             .clipShape(Capsule())
     }
 }
+
+#Preview("Subject Badge") {
+    VStack(spacing: 10) {
+        SubjectBadge(name: "History")
+        SubjectBadge(name: "Geography")
+        SubjectBadge(name: "Long Subject Name")
+    }
+    .withPreviewStore()
+    .padding()
+}

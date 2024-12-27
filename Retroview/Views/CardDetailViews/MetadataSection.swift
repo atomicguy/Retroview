@@ -19,3 +19,12 @@ struct MetadataSection<Content: View>: View {
         }
     }
 }
+
+#Preview("Metadata Section") {
+    MetadataSection(title: "Preview Section") {
+        Text("Some content")
+        Text("More content")
+    }
+    .withPreviewStore()
+    .padding()
+}
