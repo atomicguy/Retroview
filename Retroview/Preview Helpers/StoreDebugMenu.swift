@@ -72,13 +72,11 @@ struct StoreDebugMenu: View {
     }
     
     private func savePreviewStore() async throws -> String {
-        print("\n📦 Starting preview store save...")
+        // Use the new PreviewDataManager
+        try await PreviewDataManager.shared.exportPreviewStore(from: modelContext)
         
-        // Save preview store
-        try await PreviewStoreManager.shared.saveAsPreviewStore(from: modelContext)
-        
-        // Load the preview container to verify data
-        let previewContainer = try PreviewStoreManager.shared.previewContainer()
+        // Load and verify the preview container
+        let previewContainer = try PreviewDataManager.shared.container()
         let context = previewContainer.mainContext
         
         // Count all entity types
@@ -89,14 +87,14 @@ struct StoreDebugMenu: View {
         let dateCount = try context.fetch(FetchDescriptor<DateSchemaV1.Date>()).count
         let collectionCount = try context.fetch(FetchDescriptor<CollectionSchemaV1.Collection>()).count
         
-        let fileSize = try FileManager.default.attributesOfItem(
-            atPath: PreviewStoreManager.shared.previewStoreURL.path
-        )[.size] as? Int64 ?? 0
+        // Get file size from the correct location
+        let previewStoreURL = PreviewDataManager.shared.previewStoreURL
+        let fileSize = try FileManager.default.attributesOfItem(atPath: previewStoreURL.path)[.size] as? Int64 ?? 0
         
         let details = """
             Preview store saved successfully!
             
-            Location: \(PreviewStoreManager.shared.previewStoreURL.path)
+            Location: \(previewStoreURL.path)
             Size: \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))
             
             Contains:
@@ -108,15 +106,7 @@ struct StoreDebugMenu: View {
             - \(collectionCount) collections
             """
         
-        print("✅ " + details.replacingOccurrences(of: "\n", with: "\n   "))
         return details
     }
 }
-
-//extension PreviewStoreManager {
-//    var previewStoreURL: URL {
-//        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-//        return appSupport.appendingPathComponent("PreviewData/preview.store")
-//    }
-//}
 #endif

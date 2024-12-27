@@ -5,6 +5,13 @@
 //  Created by Adam Schuster on 12/15/24.
 //
 
+//
+//  LibraryGridView.swift
+//  Retroview
+//
+//  Created by Adam Schuster on 12/15/24.
+//
+
 import SwiftData
 import SwiftUI
 
@@ -163,5 +170,14 @@ struct LibraryGridView: View {
         } catch {
             print("Failed to load more cards: \(error)")
         }
+    }
+}
+
+#Preview("Library Grid") {
+    NavigationStack {
+        LibraryGridView(navigationPath: .constant(NavigationPath()))
+            .withPreviewStore()
+            .environment(\.imageLoader, CardImageLoader())
+            .frame(width: 1024, height: 400)
     }
 }
