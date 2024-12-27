@@ -72,41 +72,9 @@ struct StoreDebugMenu: View {
     }
     
     private func savePreviewStore() async throws -> String {
-        // Use the new PreviewDataManager
-        try await PreviewDataManager.shared.exportPreviewStore(from: modelContext)
-        
-        // Load and verify the preview container
-        let previewContainer = try PreviewDataManager.shared.container()
-        let context = previewContainer.mainContext
-        
-        // Count all entity types
-        let cardCount = try context.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).count
-        let titleCount = try context.fetch(FetchDescriptor<TitleSchemaV1.Title>()).count
-        let authorCount = try context.fetch(FetchDescriptor<AuthorSchemaV1.Author>()).count
-        let subjectCount = try context.fetch(FetchDescriptor<SubjectSchemaV1.Subject>()).count
-        let dateCount = try context.fetch(FetchDescriptor<DateSchemaV1.Date>()).count
-        let collectionCount = try context.fetch(FetchDescriptor<CollectionSchemaV1.Collection>()).count
-        
-        // Get file size from the correct location
-        let previewStoreURL = PreviewDataManager.shared.previewStoreURL
-        let fileSize = try FileManager.default.attributesOfItem(atPath: previewStoreURL.path)[.size] as? Int64 ?? 0
-        
-        let details = """
-            Preview store saved successfully!
-            
-            Location: \(previewStoreURL.path)
-            Size: \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))
-            
-            Contains:
-            - \(cardCount) cards
-            - \(titleCount) titles
-            - \(authorCount) authors
-            - \(subjectCount) subjects
-            - \(dateCount) dates
-            - \(collectionCount) collections
-            """
-        
-        return details
+        // Use the returned details directly
+        return try await PreviewDataManager.shared.exportPreviewStore(from: modelContext)
     }
+
 }
 #endif
