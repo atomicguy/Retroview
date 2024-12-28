@@ -49,20 +49,14 @@ import SwiftUI
             leftCrop: CropSchemaV1.Crop,
             rightCrop: CropSchemaV1.Crop
         ) async throws -> (left: TextureResource, right: TextureResource) {
-            // Process left crop
-            let leftImage = try cropImage(sourceImage, with: leftCrop)
-
-            // Process right crop
-            let rightImage = try cropImage(sourceImage, with: rightCrop)
-
+            // Process crops
+            let leftImage = try CropUtility.cropImage(sourceImage, with: leftCrop)
+            let rightImage = try CropUtility.cropImage(sourceImage, with: rightCrop)
+            
             // Create textures concurrently
-            async let leftTexture = TextureResource(
-                image: leftImage, options: .init(semantic: .color)
-            )
-            async let rightTexture = TextureResource(
-                image: rightImage, options: .init(semantic: .color)
-            )
-
+            async let leftTexture = TextureResource(image: leftImage, options: .init(semantic: .color))
+            async let rightTexture = TextureResource(image: rightImage, options: .init(semantic: .color))
+            
             return try await (left: leftTexture, right: rightTexture)
         }
 
@@ -70,9 +64,9 @@ import SwiftUI
             _ sourceImage: CGImage, with crop: CropSchemaV1.Crop
         ) throws -> CGImage {
             let cropWidth = Int(
-                CGFloat(crop.y1 - crop.y0) * CGFloat(sourceImage.width))
+                CGFloat(crop.x1 - crop.x0) * CGFloat(sourceImage.width))
             let cropHeight = Int(
-                CGFloat(crop.x1 - crop.x0) * CGFloat(sourceImage.height))
+                CGFloat(crop.y1 - crop.y0) * CGFloat(sourceImage.height))
 
             guard
                 let croppedContext = CGContext(
@@ -90,8 +84,8 @@ import SwiftUI
             }
 
             // Transform to adjust for the crop
-            let xOffset = -CGFloat(crop.y0) * CGFloat(sourceImage.width)
-            let yOffset = -CGFloat(crop.x0) * CGFloat(sourceImage.height)
+            let xOffset = -CGFloat(crop.x0) * CGFloat(sourceImage.width)
+            let yOffset = -CGFloat(crop.y0) * CGFloat(sourceImage.height)
             croppedContext.translateBy(x: xOffset, y: yOffset)
 
             // Set the clip region to our desired crop size
@@ -187,7 +181,7 @@ import SwiftUI
     }
 #endif
 
-enum StereoError: Error {
-    case missingRequiredData
-    case imageProcessingFailed
-}
+//enum StereoError: Error {
+//    case missingRequiredData
+//    case imageProcessingFailed
+//}

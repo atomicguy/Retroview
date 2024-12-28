@@ -27,20 +27,6 @@ struct CardCropOverlayView: View {
                 Rectangle()
                     .fill(Color.gray.opacity(0.1))
                 
-                // Debug information
-                VStack {
-                    Text("Card UUID: \(card.uuid.uuidString)")
-                    Text("Front Image ID: \(card.imageFrontId ?? "None")")
-                    if let leftCrop = card.leftCrop, let rightCrop = card.rightCrop {
-                        VStack {
-                            Text("Left Crop: x0:\(leftCrop.x0, specifier: "%.2f"), y0:\(leftCrop.y0, specifier: "%.2f"), x1:\(leftCrop.x1, specifier: "%.2f"), y1:\(leftCrop.y1, specifier: "%.2f")")
-                            Text("Right Crop: x0:\(rightCrop.x0, specifier: "%.2f"), y0:\(rightCrop.y0, specifier: "%.2f"), x1:\(rightCrop.x1, specifier: "%.2f"), y1:\(rightCrop.y1, specifier: "%.2f")")
-                        }
-                    }
-                }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                
                 // Image loading states
                 if isLoading {
                     ProgressView()
@@ -92,32 +78,33 @@ struct CardCropOverlayView: View {
     private func cropOverlayLayer(geometry: GeometryProxy) -> some View {
         GeometryReader { imageGeometry in
             ZStack(alignment: .center) {
-                // Ensure crops are constrained to image bounds
                 // Left crop overlay
                 if let leftCrop = card.leftCrop {
+                    let cropRect = CropUtility.normalizedRect(for: leftCrop)
                     Rectangle()
                         .strokeBorder(Color.red, lineWidth: 4)
                         .frame(
-                            width: imageGeometry.size.width * CGFloat(min(leftCrop.x1, 1.0) - max(leftCrop.x0, 0.0)),
-                            height: imageGeometry.size.height * CGFloat(min(leftCrop.y1, 1.0) - max(leftCrop.y0, 0.0))
+                            width: imageGeometry.size.width * cropRect.width,
+                            height: imageGeometry.size.height * cropRect.height
                         )
                         .position(
-                            x: imageGeometry.size.width * CGFloat((max(leftCrop.x0, 0.0) + min(leftCrop.x1, 1.0)) / 2),
-                            y: imageGeometry.size.height * CGFloat((max(leftCrop.y0, 0.0) + min(leftCrop.y1, 1.0)) / 2)
+                            x: imageGeometry.size.width * (cropRect.minX + cropRect.width/2),
+                            y: imageGeometry.size.height * (cropRect.minY + cropRect.height/2)
                         )
                 }
                 
                 // Right crop overlay
                 if let rightCrop = card.rightCrop {
+                    let cropRect = CropUtility.normalizedRect(for: rightCrop)
                     Rectangle()
                         .strokeBorder(Color.blue, lineWidth: 4)
                         .frame(
-                            width: imageGeometry.size.width * CGFloat(min(rightCrop.x1, 1.0) - max(rightCrop.x0, 0.0)),
-                            height: imageGeometry.size.height * CGFloat(min(rightCrop.y1, 1.0) - max(rightCrop.y0, 0.0))
+                            width: imageGeometry.size.width * cropRect.width,
+                            height: imageGeometry.size.height * cropRect.height
                         )
                         .position(
-                            x: imageGeometry.size.width * CGFloat((max(rightCrop.x0, 0.0) + min(rightCrop.x1, 1.0)) / 2),
-                            y: imageGeometry.size.height * CGFloat((max(rightCrop.y0, 0.0) + min(rightCrop.y1, 1.0)) / 2)
+                            x: imageGeometry.size.width * (cropRect.minX + cropRect.width/2),
+                            y: imageGeometry.size.height * (cropRect.minY + cropRect.height/2)
                         )
                 }
             }

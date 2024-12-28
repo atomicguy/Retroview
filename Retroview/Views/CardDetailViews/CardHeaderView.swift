@@ -27,7 +27,7 @@ struct CardHeaderView: View {
             
             Spacer()
             
-            FavoriteButton(card: card)
+            CropButton(card: card)
                 .labelStyle(.iconOnly)
                 .font(.title2)
         }

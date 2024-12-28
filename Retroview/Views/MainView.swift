@@ -45,7 +45,14 @@ struct MainView: View {
                         .navigationTitle(author.name)
                     }
                     .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
-                        CollectionView(collection: collection)
+                        CardGridLayout(
+                            cards: collection.orderedCards,
+                            selectedCard: .constant(nil),
+                            onCardSelected: { card in
+                                navigationPath.append(card)
+                            }
+                        )
+                        .navigationTitle("\(collection.name) (\(collection.orderedCards.count) cards)")
                     }
             }
         }
@@ -62,7 +69,14 @@ struct MainView: View {
             AuthorsView(navigationPath: $navigationPath)
         case let .collection(id, _):
             if let collection = collections.first(where: { $0.id == id }) {
-                CollectionView(collection: collection)
+                CardGridLayout(
+                    cards: collection.orderedCards,
+                    selectedCard: .constant(nil),
+                    onCardSelected: { card in
+                        navigationPath.append(card)
+                    }
+                )
+                .navigationTitle(collection.name)
             } else {
                 ContentUnavailableView("Collection Not Found", systemImage: "exclamationmark.triangle")
             }
