@@ -91,6 +91,9 @@ struct RetroviewApp: App {
             }
         }
         .modelContainer(sharedModelContainer)
+        #if os(visionOS)
+        .windowStyle(.plain)
+        #endif
     }
 }
 

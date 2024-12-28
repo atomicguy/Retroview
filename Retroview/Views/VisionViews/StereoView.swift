@@ -40,16 +40,9 @@ import OSLog
                             .transition(.opacity)
                     }
                 }
-                .animation(.easeInOut, value: isReady)
+                .animation(.smooth, value: isReady)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
             .task {
                 await loadContent()
             }
@@ -60,6 +53,7 @@ import OSLog
                 logger.debug("Has left crop: \(card.leftCrop != nil)")
                 logger.debug("Has right crop: \(card.rightCrop != nil)")
             }
+            .background(.clear)
         }
 
         private func loadContent() async {

@@ -34,5 +34,47 @@ struct CardGridLayout: View {
             }
             .padding(PlatformEnvironment.Metrics.defaultPadding)
         }
+        .platformToolbar {
+            EmptyView()
+        } trailing: {
+            #if os(visionOS)
+            StereoGalleryButton(
+                cards: cards,
+                selectedCard: selectedCard
+            )
+            #endif
+        }
+    }
+}
+
+#Preview("Card Grid Layout") {
+    let container = try! PreviewDataManager.shared.container()
+    let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+    let cards = try! container.mainContext.fetch(descriptor)
+    
+    return NavigationStack {
+        CardGridLayout(
+            cards: cards,
+            selectedCard: .constant(cards.first),
+            onCardSelected: { _ in }
+        )
+        .withPreviewStore()
+        .environment(\.imageLoader, CardImageLoader())
+        .frame(width: 1024, height: 600)
+        .navigationTitle("Preview Grid")
+    }
+}
+
+#Preview("Empty Grid") {
+    NavigationStack {
+        CardGridLayout(
+            cards: [],
+            selectedCard: .constant(nil),
+            onCardSelected: { _ in }
+        )
+        .withPreviewStore()
+        .environment(\.imageLoader, CardImageLoader())
+        .frame(width: 1024, height: 600)
+        .navigationTitle("Empty Grid")
     }
 }
