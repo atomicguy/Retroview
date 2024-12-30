@@ -35,11 +35,11 @@ struct StereoGalleryView: View {
             StereoGalleryStrip(cards: cards, selectedIndex: $selectedIndex)
                 .padding(.bottom)
         }
-        .onChange(of: selectedIndex) { _, newIndex in
-            if let card = cards[safe: newIndex] {
-                previewSession = PreviewApplication.openCard(card)
-            }
-        }
+//        .onChange(of: selectedIndex) { _, newIndex in
+//            if let card = cards[safe: newIndex] {
+//                previewSession = PreviewApplication.openCard(card)
+//            }
+//        }
         .onAppear {
             // Open initial set of photos
             previewSession = PreviewApplication.openCards(
