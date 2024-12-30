@@ -50,6 +50,7 @@ struct CollectionMenuButton: View {
                 .shadow(radius: 2)
         }
         .buttonStyle(.plain)
+        .platformInteraction()
         .sheet(isPresented: $showingCollectionSheet) {
             CollectionCreationView(card: card)
         }

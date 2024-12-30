@@ -27,12 +27,19 @@ struct ThumbnailView: View {
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay {
-                        ThumbnailOverlay(card: card, isHovering: isHovering)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        ThumbnailOverlay(
+                            card: card,
+                            isHovering: true  // Always show overlay on visionOS
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
-                    .onHover { hovering in
-                        isHovering = hovering
-                    }
+                    #if os(visionOS)
+                        .hoverEffect()
+                    #else
+                        .onHover { hovering in
+                            isHovering = hovering
+                        }
+                    #endif
             } else {
                 placeholderView
             }

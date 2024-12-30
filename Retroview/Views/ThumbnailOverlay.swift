@@ -37,6 +37,7 @@ struct ThumbnailOverlay: View {
             }
             .padding(.bottom, 4)
         }
+        .platformInteraction()
     }
     
     private var isFavoriteVisible: Bool {

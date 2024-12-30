@@ -16,19 +16,24 @@ struct SelectableThumbnailView: View {
     
     var body: some View {
         ThumbnailView(card: card)
-            .overlay {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(.teal, lineWidth: 3)
-                }
-            }
+//            .overlay {
+//                if isSelected {
+//                    RoundedRectangle(cornerRadius: 12)
+//                        .stroke(.teal, lineWidth: 3)
+//                }
+//            }
+            .platformInteraction()
+            .platformTapAction(singleTapAction: onDoubleClick)
+            #if !os(visionOS)
             .gesture(
                 TapGesture(count: 2).onEnded(onDoubleClick)
             )
             .simultaneousGesture(
                 TapGesture(count: 1).onEnded(onSelect)
             )
+            #endif
             .contentShape(Rectangle())
+
     }
 }
 

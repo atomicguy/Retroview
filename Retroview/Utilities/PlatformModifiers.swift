@@ -149,3 +149,73 @@ extension View {
         ))
     }
 }
+
+// MARK: - Vision OS Interaction Modifiers
+extension View {
+    func platformInteraction() -> some View {
+        #if os(visionOS)
+        return self
+            .hoverEffect()
+        #else
+        return self
+        #endif
+    }
+    
+    func platformSelectionEffect(isSelected: Bool = false) -> some View {
+        #if os(visionOS)
+        return self
+            .overlay {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(.white.opacity(0.8), lineWidth: 2)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.white.opacity(0.2))
+                        )
+                }
+            }
+        #else
+        return self
+        #endif
+    }
+    
+    func platformTapAction(singleTapAction: (() -> Void)? = nil) -> some View {
+        #if os(visionOS)
+        return self
+            .onTapGesture {
+                singleTapAction?()
+            }
+        #else
+        return self
+        #endif
+    }
+}
+
+extension View {
+    func platformHoverState(action: @escaping (Bool) -> Void) -> some View {
+        #if os(visionOS)
+        return self
+            .onHover { isHovering in
+                action(isHovering)
+            }
+        #elseif os(macOS)
+        return self
+            .onHover { hovering in
+                action(hovering)
+            }
+        #else
+        return self
+            .onHover { hovering in
+                action(hovering)
+            }
+        #endif
+    }
+    
+    func platformHoverBinding() -> Binding<Bool> {
+        @State var isHovering = false
+        return Binding(
+            get: { isHovering },
+            set: { isHovering = $0 }
+        )
+    }
+}
