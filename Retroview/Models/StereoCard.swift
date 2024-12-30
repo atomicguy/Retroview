@@ -36,6 +36,7 @@ enum CardSchemaV1: VersionedSchema {
         @Attribute(.externalStorage) var frontStandardData: Data?
         @Attribute(.externalStorage) var backThumbnailData: Data?
         @Attribute(.externalStorage) var backStandardData: Data?
+        @Attribute(.externalStorage) var spatialPhotoData: Data?
 
         // MARK: - Relationships
         @Relationship(deleteRule: .cascade, inverse: \TitleSchemaV1.Title.cards)
@@ -52,7 +53,7 @@ enum CardSchemaV1: VersionedSchema {
 
         @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
-        
+
         var collections: [CollectionSchemaV1.Collection] = []
 
         @Relationship(deleteRule: .cascade)
@@ -100,6 +101,19 @@ enum CardSchemaV1: VersionedSchema {
             }
         }
 
+        // Computed property for temporary URL access when needed
+        var temporarySpatialPhotoURL: URL? {
+            guard let data = spatialPhotoData else { return nil }
+
+            // Create URL in temporary directory
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent(uuid.uuidString)
+                .appendingPathExtension("heic")
+
+            try? data.write(to: url)
+            return url
+        }
+
         // MARK: - Initialization
         init(
             uuid: UUID,
@@ -135,7 +149,8 @@ enum CardSchemaV1: VersionedSchema {
 // MARK: - Transferable Conformance
 extension CardSchemaV1.StereoCard: Transferable {
     static var transferRepresentation: some TransferRepresentation {
-        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: { card in
+        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: {
+            card in
             card.uuid.uuidString
         })
     }

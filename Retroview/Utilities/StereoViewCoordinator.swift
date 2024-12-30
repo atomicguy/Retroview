@@ -80,7 +80,7 @@ import SwiftUI
                     bitmapInfo: sourceImage.bitmapInfo.rawValue
                 )
             else {
-                throw StereoError.imageProcessingFailed
+                throw StereoError.imageProcessingFailed("Failed to create CGContext")
             }
 
             // Transform to adjust for the crop
@@ -105,7 +105,7 @@ import SwiftUI
             )
 
             guard let croppedImage = croppedContext.makeImage() else {
-                throw StereoError.imageProcessingFailed
+                throw StereoError.imageProcessingFailed("Cropping Failed")
             }
 
             return croppedImage

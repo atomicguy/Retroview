@@ -162,28 +162,6 @@ import OSLog
         }
     }
 
-    // MARK: - Error Types
-    enum StereoError: LocalizedError {
-        case missingImageLoader
-        case imageLoadFailed
-        case missingRequiredData
-        case imageProcessingFailed
-        
-        var errorDescription: String? {
-            switch self {
-            case .missingImageLoader:
-                return "Image loader not available"
-            case .imageLoadFailed:
-                return "Failed to load stereo image"
-            case .missingRequiredData:
-                return "Missing required data"
-            case .imageProcessingFailed:
-                return "Failed to process stereo image"
-            }
-        }
-    }
-
-
 // MARK: - Preview Support
 #Preview("Stereo View") {
     let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
