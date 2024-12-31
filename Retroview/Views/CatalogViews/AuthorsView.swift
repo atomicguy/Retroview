@@ -10,10 +10,32 @@ import SwiftUI
 
 struct AuthorsView: View {
     @Binding var navigationPath: NavigationPath
-    @Query(sort: \AuthorSchemaV1.Author.name) private var authors: [AuthorSchemaV1.Author]
-    
+    @State private var sortState = CatalogSortState<AuthorSchemaV1.Author>()
+
+    @Query(sort: [SortDescriptor(\AuthorSchemaV1.Author.name)])
+    private var authors: [AuthorSchemaV1.Author]
+
+    var sortedAuthors: [AuthorSchemaV1.Author] {
+        authors.sorted { first, second in
+            switch sortState.option {
+            case .alphabetical:
+                if sortState.ascending {
+                    return first.name < second.name
+                } else {
+                    return first.name > second.name
+                }
+            case .cardCount:
+                if sortState.ascending {
+                    return first.cards.count < second.cards.count
+                } else {
+                    return first.cards.count > second.cards.count
+                }
+            }
+        }
+    }
+
     var body: some View {
-        List(authors) { author in
+        List(sortedAuthors) { author in
             NavigationLink(value: author) {
                 VStack(alignment: .leading) {
                     Text(author.name)
@@ -25,6 +47,11 @@ struct AuthorsView: View {
             }
         }
         .navigationTitle("Authors")
+        .toolbar {
+            ToolbarItem {
+                CatalogSortButton(sortState: sortState)
+            }
+        }
     }
 }
 
