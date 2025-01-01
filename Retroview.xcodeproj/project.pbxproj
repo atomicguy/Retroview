@@ -115,6 +115,7 @@
 		5CFE2B852D24D5D40023EBF8 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B842D24D5D10023EBF8 /* SearchManager.swift */; };
 		5CFE2B872D24D60D0023EBF8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */; };
 		5CFE2B8B2D24E2040023EBF8 /* NYPLCollectionLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */; };
+		5CFE2B8D2D24EB940023EBF8 /* BulkCollectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B8C2D24EB8C0023EBF8 /* BulkCollectionButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -260,6 +261,7 @@
 		5CFE2B842D24D5D10023EBF8 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYPLCollectionLink.swift; sourceTree = "<group>"; };
+		5CFE2B8C2D24EB8C0023EBF8 /* BulkCollectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkCollectionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -531,6 +533,7 @@
 		5CFE2B7B2D248BC00023EBF8 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				5CFE2B8C2D24EB8C0023EBF8 /* BulkCollectionButton.swift */,
 				5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */,
 				5C80F6A72D150AA200C58E7D /* CollectionMenuButton.swift */,
 				5C7955AD2D1F71B50037E204 /* CropButton.swift */,
@@ -743,6 +746,7 @@
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
 				5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */,
+				5CFE2B8D2D24EB940023EBF8 /* BulkCollectionButton.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5C7955B02D1F7EF90037E204 /* CropUtility.swift in Sources */,
 				5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */,

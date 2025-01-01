@@ -9,59 +9,31 @@ import SwiftData
 import SwiftUI
 
 struct LibraryGridView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.importManager) private var importManager
     @Environment(\.imageDownloadManager) private var imageDownloadManager
-    
+
+    let modelContext: ModelContext  // Add explicit modelContext property
     @Binding var navigationPath: NavigationPath
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var loadedCards: [CardSchemaV1.StereoCard] = []
+    @State private var searchManager: SearchManager
     @State private var currentPage = 0
     @State private var isLoadingMore = false
     @State private var hasMoreContent = true
-    
-    @State private var searchManager = SearchManager()
-    
+
     private let pageSize = 100
-    
+
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+        self.modelContext = modelContext
+        self._navigationPath = navigationPath
+        self._searchManager = State(
+            initialValue: SearchManager(modelContext: modelContext))
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             searchBar
-            
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: PlatformEnvironment.Metrics.gridSpacing) {
-                    ForEach(loadedCards) { card in
-                        SelectableThumbnailView(
-                            card: card,
-                            isSelected: card.id == selectedCard?.id,
-                            onSelect: { selectedCard = card },
-                            onDoubleClick: {
-                                navigationPath.append(
-                                    CardStackDestination.stack(
-                                        cards: loadedCards,
-                                        initialCard: card
-                                    ))
-                            }
-                        )
-                        .id(card.id)
-                    }
-                    
-                    if hasMoreContent {
-                        ProgressView()
-                            .onAppear {
-                                if !isLoadingMore {
-                                    Task {
-                                        await loadMoreCards()
-                                    }
-                                }
-                            }
-                    }
-                }
-                .padding(PlatformEnvironment.Metrics.defaultPadding)
-            }
-        }
-        .task {
-            await loadInitialCards()
+            cardGrid
         }
         .navigationTitle("Library (\(searchManager.totalCount) cards)")
         .onChange(of: searchManager.searchText) {
@@ -70,33 +42,8 @@ struct LibraryGridView: View {
                 await loadInitialCards()
             }
         }
-        .platformToolbar {
-            // Leading toolbar items
-            HStack {
-                if let manager = importManager, manager.isImporting {
-                    ImportProgressIndicator(importManager: manager)
-                }
-
-                if let manager = imageDownloadManager, manager.isDownloading {
-                    BackgroundProgressIndicator(
-                        isProcessing: manager.isDownloading,
-                        processedCount: manager.processedCardCount,
-                        totalCount: manager.missingImageCount,
-                        onCancel: { manager.cancelDownload() }
-                    )
-                }
-            }
-        } trailing: {
-            // Trailing toolbar items
-            HStack {
-                downloadImagesButton
-                importMenu
-                DatabaseTransferButton()
-
-                #if DEBUG
-                    StoreDebugMenu()
-                #endif
-            }
+        .toolbar {
+            toolbarContent
         }
     }
 
@@ -106,6 +53,98 @@ struct LibraryGridView: View {
             .padding(.vertical, 8)
     }
 
+    private var cardGrid: some View {
+        ScrollView {
+            LazyVGrid(
+                columns: columns,
+                spacing: PlatformEnvironment.Metrics.gridSpacing
+            ) {
+                cardItems
+                loadingIndicator
+            }
+            .padding(PlatformEnvironment.Metrics.defaultPadding)
+        }
+    }
+
+    private var cardItems: some View {
+        ForEach(loadedCards) { card in
+            SelectableThumbnailView(
+                card: card,
+                isSelected: card.id == selectedCard?.id,
+                onSelect: { selectedCard = card },
+                onDoubleClick: {
+                    navigationPath.append(
+                        CardStackDestination.stack(
+                            cards: loadedCards,
+                            initialCard: card
+                        ))
+                }
+            )
+            .id(card.id)
+        }
+    }
+
+    private var loadingIndicator: some View {
+        Group {
+            if hasMoreContent {
+                ProgressView()
+                    .onAppear {
+                        if !isLoadingMore {
+                            Task {
+                                await loadMoreCards()
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    private var toolbarContent: some ToolbarContent {
+        Group {
+            ToolbarItem(placement: .primaryAction) {
+                leadingToolbarItems
+            }
+
+            ToolbarItem(placement: .primaryAction) {
+                trailingToolbarItems
+            }
+        }
+    }
+
+    private var leadingToolbarItems: some View {
+        HStack {
+            if let manager = importManager, manager.isImporting {
+                ImportProgressIndicator(importManager: manager)
+            }
+
+            if let manager = imageDownloadManager, manager.isDownloading {
+                BackgroundProgressIndicator(
+                    isProcessing: manager.isDownloading,
+                    processedCount: manager.processedCardCount,
+                    totalCount: manager.missingImageCount,
+                    onCancel: { manager.cancelDownload() }
+                )
+            }
+        }
+    }
+
+    private var trailingToolbarItems: some View {
+        HStack {
+            downloadImagesButton
+            importMenu
+
+            if !loadedCards.isEmpty {
+                BulkCollectionButton(fetchCards: { searchManager.filteredCards }
+                )
+            }
+
+            DatabaseTransferButton()
+
+            #if DEBUG
+                StoreDebugMenu()
+            #endif
+        }
+    }
     private var columns: [GridItem] {
         [
             GridItem(
@@ -201,9 +240,13 @@ struct LibraryGridView: View {
 
 #Preview("Library Grid") {
     NavigationStack {
-        LibraryGridView(navigationPath: .constant(NavigationPath()))
-            .withPreviewStore()
-            .environment(\.imageLoader, CardImageLoader())
-            .frame(width: 1024, height: 400)
+        let container = try! PreviewDataManager.shared.container()
+        LibraryGridView(
+            modelContext: container.mainContext,
+            navigationPath: .constant(NavigationPath())
+        )
+        .withPreviewStore()
+        .environment(\.imageLoader, CardImageLoader())
+        .frame(width: 1024, height: 400)
     }
 }

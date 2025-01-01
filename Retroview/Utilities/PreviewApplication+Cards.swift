@@ -18,14 +18,14 @@
         ) async throws -> PreviewSession? {
             guard let firstCard = cards.first else { return nil }
 
-            let spatialManager = SpatialPhotoManager(
+            _ = SpatialPhotoManager(
                 modelContext: firstCard.modelContext!)
             var previewItems: [PreviewItem] = []
             var selectedIndex = 0
 
             for (index, card) in cards.enumerated() {
                 if let sourceImage = try await imageLoader.loadImage(
-                    for: card, side: .front, quality: .high)
+                    for: card, side: .front, quality: .ultra)
                 {
                     let previewItem = try await card.getOrCreatePreviewItem(
                         sourceImage: sourceImage)

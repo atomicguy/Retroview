@@ -10,38 +10,39 @@ import SwiftData
 import SwiftUI
 
 @Observable
-final class SearchManager {
+class SearchManager {
+    let modelContext: ModelContext
     var searchText = ""
-    private(set) var totalCount: Int = 0
+    private(set) var totalCount = 0
+
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
 
     var predicate: Predicate<CardSchemaV1.StereoCard>? {
         guard !searchText.isEmpty else { return nil }
 
         return #Predicate<CardSchemaV1.StereoCard> { card in
-            // Search in titles
-            card.titles.contains { title in
-                title.text.localizedStandardContains(searchText)
-            }
-                // Search in subjects
-                || card.subjects.contains { subject in
-                    subject.name.localizedStandardContains(searchText)
-                }
-                // Search in authors
-                || card.authors.contains { author in
-                    author.name.localizedStandardContains(searchText)
-                }
-                // Search in dates
-                || card.dates.contains { date in
-                    date.text.localizedStandardContains(searchText)
-                }
+            card.titles.contains(where: {
+                $0.text.localizedStandardContains(searchText)
+            })
         }
     }
 
-    @MainActor
+    var filteredCards: [CardSchemaV1.StereoCard] {
+        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
+        if let predicate = predicate {
+            descriptor.predicate = predicate
+        }
+        descriptor.sortBy = [SortDescriptor(\.uuid)]
+
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
+
     func updateTotalCount(context: ModelContext) {
         var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-        if let searchPredicate = predicate {
-            descriptor.predicate = searchPredicate
+        if let predicate = predicate {
+            descriptor.predicate = predicate
         }
         totalCount = (try? context.fetchCount(descriptor)) ?? 0
     }

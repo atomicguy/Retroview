@@ -88,7 +88,7 @@ struct MainView: View {
     private var contentView: some View {
         switch selectedDestination {
         case .none, .library:
-            LibraryGridView(navigationPath: $navigationPath)
+            LibraryGridView(modelContext: modelContext, navigationPath: $navigationPath)
 
         case .subjects:
             CatalogListView<SubjectSchemaV1.Subject>(
