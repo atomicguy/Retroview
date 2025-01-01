@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+
 #if DEBUG
-import SwiftData
+    import SwiftData
 #endif
 
 struct CardImageSection: View {
@@ -16,11 +17,10 @@ struct CardImageSection: View {
     let side: CardSide
     let title: String
 
-    @State private var image: CGImage?
     @State private var thumbnailImage: CGImage?
-    @State private var isLoading = false
+    @State private var fullImage: CGImage?
+    @State private var isLoadingFullImage = false
     @State private var loadError = false
-    @State private var isFullImageLoaded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -31,55 +31,52 @@ struct CardImageSection: View {
             if (side == .front
                 ? card.imageFrontId : card.imageBackId) != nil
             {
-                ZStack {
-                    // Show stored thumbnail until full image loads
+                ZStack(alignment: .bottom) {
+                    // Thumbnail layer (always show if available)
                     if let thumbnailImage {
                         Image(decorative: thumbnailImage, scale: 1.0)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .opacity(isFullImageLoaded ? 0 : 1)
+                            .overlay(
+                                // Loading indicator over thumbnail
+                                isLoadingFullImage
+                                    ? ProgressView()
+                                        .scaleEffect(0.7)
+                                        .padding(8)
+                                    : nil
+                            )
                     }
 
-                    if let image {
-                        Image(decorative: image, scale: 1.0)
+                    // Full image layer
+                    if let fullImage {
+                        Image(decorative: fullImage, scale: 1.0)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .onAppear {
-                                withAnimation(.easeIn(duration: 0.3)) {
-                                    isFullImageLoaded = true
-                                }
-                            }
-                    } else if loadError {
-                        errorPlaceholder
-                    } else if isLoading && thumbnailImage == nil {
-                        loadingPlaceholder
+                            .transition(.opacity)
+                    }
+
+                    // Fallback placeholders
+                    if thumbnailImage == nil {
+                        placeholderWithIcon
                     }
                 }
-                .task {
+                .animation(.default, value: fullImage)
+                .task(id: card.uuid) {
                     await loadImages()
                 }
             }
         }
     }
 
-    private var loadingPlaceholder: some View {
+    private var placeholderWithIcon: some View {
         Rectangle()
             .fill(.gray.opacity(0.1))
             .aspectRatio(2 / 1, contentMode: .fit)
             .overlay {
-                ProgressView()
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-    }
-
-    private var errorPlaceholder: some View {
-        Rectangle()
-            .fill(.gray.opacity(0.1))
-            .aspectRatio(2 / 1, contentMode: .fit)
-            .overlay {
-                Label("Failed to load", systemImage: "exclamationmark.triangle")
+                Image(systemName: "photo")
+                    .font(.title2)
                     .foregroundStyle(.secondary)
             }
             .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -87,11 +84,9 @@ struct CardImageSection: View {
 
     @MainActor
     private func loadImages() async {
-        guard !isLoading, let imageLoader else { return }
-        isLoading = true
-        loadError = false
+        guard let imageLoader else { return }
 
-        // First load thumbnail
+        // Always try to load thumbnail first
         do {
             thumbnailImage = try await imageLoader.loadImage(
                 for: card,
@@ -102,9 +97,10 @@ struct CardImageSection: View {
             print("Failed to load thumbnail: \(error)")
         }
 
-        // Then load high quality image
+        // Then start loading full image
         do {
-            image = try await imageLoader.loadImage(
+            isLoadingFullImage = true
+            fullImage = try await imageLoader.loadImage(
                 for: card,
                 side: side,
                 quality: .high
@@ -114,14 +110,16 @@ struct CardImageSection: View {
             print("Failed to load high quality image: \(error)")
         }
 
-        isLoading = false
+        isLoadingFullImage = false
     }
 }
 
 #Preview("Card Image Section") {
     let previewContainer = try! PreviewDataManager.shared.container()
-    let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
-    
+    let card = try! previewContainer.mainContext.fetch(
+        FetchDescriptor<CardSchemaV1.StereoCard>()
+    ).first!
+
     return CardImageSection(card: card, side: .front, title: "Front Image")
         .withPreviewStore()
         .environment(\.imageLoader, CardImageLoader())

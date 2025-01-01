@@ -8,6 +8,7 @@
 #if os(visionOS)
     import QuickLook
     import SwiftUI
+    import SwiftData
 
     struct StereoGalleryView: View {
         let cards: [CardSchemaV1.StereoCard]
@@ -16,10 +17,10 @@
         @Environment(\.dismiss) private var dismiss
         @Environment(\.imageLoader) private var imageLoader
 
-        // Track processing state
         @State private var processedCards = 0
         @State private var isProcessing = false
         @State private var previewSession: PreviewSession?
+        private let spatialManager: SpatialPhotoManager
 
         init(
             cards: [CardSchemaV1.StereoCard],
@@ -27,6 +28,15 @@
         ) {
             self.cards = cards
             self.initialCard = initialCard
+            // Initialize manager with the first card's context
+            if let context = cards.first?.modelContext {
+                self.spatialManager = SpatialPhotoManager(modelContext: context)
+            } else {
+                // Fallback to a new context if needed
+                self.spatialManager = SpatialPhotoManager(
+                    modelContext: ModelContext(
+                        try! ModelContainer(for: CardSchemaV1.StereoCard.self)))
+            }
         }
 
         var body: some View {
@@ -48,15 +58,9 @@
             }
             .frame(width: 200, height: 100)
             .task {
-                // Create spatial photos for any cards that need them
-                await processAllCards()
-
-                // Open all cards in QuickLook
-                previewSession = PreviewApplication.openCards(
-                    cards, selectedCard: initialCard)
+                await processCards()
             }
             .onDisappear {
-                // Use Task to handle async cleanup
                 Task {
                     if let session = previewSession {
                         try? await session.close()
@@ -66,34 +70,46 @@
             }
         }
 
-        private func processAllCards() async {
+        private func processCards() async {
             guard let imageLoader = imageLoader else { return }
 
             isProcessing = true
             defer { isProcessing = false }
 
-            for (index, card) in cards.enumerated() {
-                // Skip if card already has spatial photo
-                guard card.spatialPhotoData == nil else { continue }
+            var previewItems: [PreviewItem] = []
+            var initialIndex = 0
 
+            for (index, card) in cards.enumerated() {
                 do {
-                    // Load high quality image for spatial processing
+                    // Load high quality image for processing
                     if let sourceImage = try await imageLoader.loadImage(
                         for: card,
                         side: .front,
                         quality: .high
                     ) {
-                        // Create spatial photo
-                        let manager = SpatialPhotoManager(
-                            modelContext: card.modelContext!)
-                        try await manager.createSpatialPhoto(
-                            from: card, sourceImage: sourceImage)
+                        // Get preview item
+                        let previewItem = try await card.getOrCreatePreviewItem(
+                            sourceImage: sourceImage)
+                        previewItems.append(previewItem)
+
+                        // Track initial card index
+                        if card.id == initialCard?.id {
+                            initialIndex = index
+                        }
                     }
                 } catch {
                     print("Failed to process card \(card.uuid): \(error)")
                 }
 
                 processedCards = index + 1
+            }
+
+            // Open all cards in QuickLook
+            if !previewItems.isEmpty {
+                previewSession = PreviewApplication.open(
+                    items: previewItems,
+                    selectedItem: previewItems[initialIndex]
+                )
             }
         }
     }

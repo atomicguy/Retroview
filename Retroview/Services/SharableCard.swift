@@ -19,20 +19,31 @@ struct ShareableCard: ViewModifier {
                         item: data,
                         preview: SharePreview(
                             card.titlePick?.text ?? "Stereo Card",
-                            image: card.frontThumbnailData
-                                ?? sfSymbolAsImageData
+                            image: sfSymbolAsImageData
                         )
                     )
                 }
             }
     }
 
-    private var sfSymbolAsImageData: Data {
-        let config = UIImage.SymbolConfiguration(
-            pointSize: 100, weight: .regular)
-        let symbolImage = UIImage(
-            systemName: "photo.stack", withConfiguration: config)
-        return symbolImage?.jpegData(compressionQuality: 0.8) ?? Data()
+    private var sfSymbolAsImageData: Image {
+        #if os(macOS)
+            if let nsImage = NSImage(
+                systemSymbolName: "photo.stack",
+                accessibilityDescription: "Photo Stack"
+            ) {
+                return Image(nsImage: nsImage)
+            }
+        #else
+            if let uiImage = UIImage(
+                systemName: "photo.stack",
+                withConfiguration: UIImage.SymbolConfiguration(
+                    pointSize: 100, weight: .regular)
+            ) {
+                return Image(uiImage: uiImage)
+            }
+        #endif
+        return Image(systemName: "photo.stack")  // Fallback
     }
 }
 

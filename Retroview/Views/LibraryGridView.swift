@@ -5,13 +5,6 @@
 //  Created by Adam Schuster on 12/15/24.
 //
 
-//
-//  LibraryGridView.swift
-//  Retroview
-//
-//  Created by Adam Schuster on 12/15/24.
-//
-
 import SwiftData
 import SwiftUI
 
@@ -26,44 +19,57 @@ struct LibraryGridView: View {
     @State private var currentPage = 0
     @State private var isLoadingMore = false
     @State private var hasMoreContent = true
-    @State private var showingStoreTransfer = false
-    @State private var isImporting = false
+    
+    @State private var searchManager = SearchManager()
     
     private let pageSize = 100
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: PlatformEnvironment.Metrics.gridSpacing) {
-                ForEach(loadedCards) { card in
-                    SelectableThumbnailView(
-                        card: card,
-                        isSelected: card.id == selectedCard?.id,
-                        onSelect: { selectedCard = card },
-                        onDoubleClick: {
-                            navigationPath.append(card)
-                        }
-                    )
-                    .id(card.id)
-                }
-                
-                if hasMoreContent {
-                    ProgressView()
-                        .onAppear {
-                            if !isLoadingMore {
-                                Task {
-                                    await loadMoreCards()
+        VStack(spacing: 0) {
+            searchBar
+            
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: PlatformEnvironment.Metrics.gridSpacing) {
+                    ForEach(loadedCards) { card in
+                        SelectableThumbnailView(
+                            card: card,
+                            isSelected: card.id == selectedCard?.id,
+                            onSelect: { selectedCard = card },
+                            onDoubleClick: {
+                                navigationPath.append(
+                                    CardStackDestination.stack(
+                                        cards: loadedCards,
+                                        initialCard: card
+                                    ))
+                            }
+                        )
+                        .id(card.id)
+                    }
+                    
+                    if hasMoreContent {
+                        ProgressView()
+                            .onAppear {
+                                if !isLoadingMore {
+                                    Task {
+                                        await loadMoreCards()
+                                    }
                                 }
                             }
-                        }
+                    }
                 }
+                .padding(PlatformEnvironment.Metrics.defaultPadding)
             }
-            .padding(PlatformEnvironment.Metrics.defaultPadding)
         }
         .task {
             await loadInitialCards()
         }
-        // Keep existing toolbar items and navigation title
-        .platformNavigationTitle("Library", displayMode: .large)
+        .navigationTitle("Library (\(searchManager.totalCount) cards)")
+        .onChange(of: searchManager.searchText) {
+            Task {
+                searchManager.updateTotalCount(context: modelContext)
+                await loadInitialCards()
+            }
+        }
         .platformToolbar {
             // Leading toolbar items
             HStack {
@@ -93,14 +99,23 @@ struct LibraryGridView: View {
             }
         }
     }
-    
-    private var columns: [GridItem] {
-        [GridItem(.adaptive(
-            minimum: PlatformEnvironment.Metrics.gridMinWidth,
-            maximum: PlatformEnvironment.Metrics.gridMaxWidth
-        ), spacing: 20)]
+
+    private var searchBar: some View {
+        SearchBar(text: $searchManager.searchText)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
     }
-    
+
+    private var columns: [GridItem] {
+        [
+            GridItem(
+                .adaptive(
+                    minimum: PlatformEnvironment.Metrics.gridMinWidth,
+                    maximum: PlatformEnvironment.Metrics.gridMaxWidth
+                ), spacing: 20)
+        ]
+    }
+
     private var downloadImagesButton: some View {
         Button {
             imageDownloadManager?.startImageDownload()
@@ -115,7 +130,7 @@ struct LibraryGridView: View {
         ImportTypeMenu(
             onImport: { urls, type in
                 guard let manager = importManager else { return }
-                
+
                 switch type {
                 case .mods:
                     manager.startImport(from: urls)
@@ -125,7 +140,7 @@ struct LibraryGridView: View {
             }
         )
     }
-    
+
     private func startCropImport(urls: [URL]) {
         let cropUpdateService = CropUpdateService(modelContext: modelContext)
         Task {
@@ -136,13 +151,19 @@ struct LibraryGridView: View {
             }
         }
     }
-    
+
     private func loadInitialCards() async {
+        searchManager.updateTotalCount(context: modelContext)
+
         var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
             sortBy: [SortDescriptor(\.uuid)]
         )
         descriptor.fetchLimit = pageSize
-        
+
+        if let searchPredicate = searchManager.predicate {
+            descriptor.predicate = searchPredicate
+        }
+
         do {
             loadedCards = try modelContext.fetch(descriptor)
             hasMoreContent = loadedCards.count == pageSize
@@ -150,19 +171,24 @@ struct LibraryGridView: View {
             print("Failed to load cards: \(error)")
         }
     }
-    
+
     private func loadMoreCards() async {
         guard hasMoreContent, !isLoadingMore else { return }
-        
+
         isLoadingMore = true
         defer { isLoadingMore = false }
-        
+
         var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
             sortBy: [SortDescriptor(\.uuid)]
         )
         descriptor.fetchOffset = loadedCards.count
         descriptor.fetchLimit = pageSize
-        
+
+        // Apply search predicate if exists
+        if let searchPredicate = searchManager.predicate {
+            descriptor.predicate = searchPredicate
+        }
+
         do {
             let newCards = try modelContext.fetch(descriptor)
             hasMoreContent = newCards.count == pageSize

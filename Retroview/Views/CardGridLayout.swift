@@ -11,24 +11,37 @@ import SwiftUI
 struct CardGridLayout: View {
     let cards: [CardSchemaV1.StereoCard]
     @Binding var selectedCard: CardSchemaV1.StereoCard?
+    @Binding var navigationPath: NavigationPath
     let onCardSelected: (CardSchemaV1.StereoCard) -> Void
-    
+
     private var columns: [GridItem] {
-        [GridItem(.adaptive(
-            minimum: PlatformEnvironment.Metrics.gridMinWidth,
-            maximum: PlatformEnvironment.Metrics.gridMaxWidth
-        ), spacing: 20)]
+        [
+            GridItem(
+                .adaptive(
+                    minimum: PlatformEnvironment.Metrics.gridMinWidth,
+                    maximum: PlatformEnvironment.Metrics.gridMaxWidth
+                ), spacing: 20)
+        ]
     }
-    
+
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: PlatformEnvironment.Metrics.gridSpacing) {
+            LazyVGrid(
+                columns: columns,
+                spacing: PlatformEnvironment.Metrics.gridSpacing
+            ) {
                 ForEach(cards) { card in
                     SelectableThumbnailView(
                         card: card,
                         isSelected: card.id == selectedCard?.id,
                         onSelect: { selectedCard = card },
-                        onDoubleClick: { onCardSelected(card) }
+                        onDoubleClick: {
+                            navigationPath.append(
+                                CardStackDestination.stack(
+                                    cards: cards,
+                                    initialCard: card
+                                ))
+                        }
                     )
                 }
             }
@@ -38,10 +51,10 @@ struct CardGridLayout: View {
             EmptyView()
         } trailing: {
             #if os(visionOS)
-            StereoGalleryButton(
-                cards: cards,
-                selectedCard: selectedCard
-            )
+                StereoGalleryButton(
+                    cards: cards,
+                    selectedCard: selectedCard
+                )
             #endif
         }
     }
@@ -51,11 +64,12 @@ struct CardGridLayout: View {
     let container = try! PreviewDataManager.shared.container()
     let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
     let cards = try! container.mainContext.fetch(descriptor)
-    
+
     return NavigationStack {
         CardGridLayout(
             cards: cards,
             selectedCard: .constant(cards.first),
+            navigationPath: .constant(NavigationPath()),
             onCardSelected: { _ in }
         )
         .withPreviewStore()
@@ -70,6 +84,7 @@ struct CardGridLayout: View {
         CardGridLayout(
             cards: [],
             selectedCard: .constant(nil),
+            navigationPath: .constant(NavigationPath()),
             onCardSelected: { _ in }
         )
         .withPreviewStore()

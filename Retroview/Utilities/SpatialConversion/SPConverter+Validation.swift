@@ -6,124 +6,102 @@
 //
 
 import CoreImage
+import SwiftUI
 
 // Extension for Crop Normalization
-extension StereoPhotoConverter {
+extension SpatialPhotoConverter {
     func validateImageDimensions(_ width: Int, _ height: Int) throws {
-        // Check for minimum dimensions
         guard width >= 512 && height >= 512 else {
             throw StereoError.invalidDimensions(
                 "Images must be at least 512x512")
         }
 
-        // Check for maximum dimensions
         guard width <= 4096 && height <= 4096 else {
             throw StereoError.invalidDimensions(
                 "Images must not exceed 4096x4096")
         }
-
-        // Check for odd dimensions
-        if width % 2 != 0 || height % 2 != 0 {
-            print("⚠️ Warning: Image dimensions should be even numbers")
-        }
     }
 
-    func validateAndNormalizeCrops(
-        _ leftImage: CGImage,
-        _ rightImage: CGImage
-    ) throws -> (left: CGImage, right: CGImage) {
-        logger.debug("Validating and normalizing crop dimensions")
-
-        // Ensure both images have valid dimensions
+    func validateAndNormalizeCrops(_ leftImage: CGImage, _ rightImage: CGImage)
+        throws -> (left: CGImage, right: CGImage)
+    {
         guard leftImage.width > 0, leftImage.height > 0,
             rightImage.width > 0, rightImage.height > 0
         else {
-            logger.error("Invalid image dimensions detected")
-            throw StereoError.imageProcessingFailed("Invalid image dimensions detected")
+            throw StereoError.imageProcessingFailed("Invalid image dimensions")
         }
 
-        // Determine the minimum common dimensions
-        var targetWidth = min(leftImage.width, rightImage.width)
-        var targetHeight = min(leftImage.height, rightImage.height)
+        // Ensure dimensions are multiples of 16 for optimal processing
+        let targetWidth = (min(leftImage.width, rightImage.width) / 16) * 16
+        let targetHeight = (min(leftImage.height, rightImage.height) / 16) * 16
 
-        logger.debug(
-            "Normalizing crops to dimensions: \(targetWidth)x\(targetHeight)")
-        
-        targetWidth = (min(leftImage.width, rightImage.width) / 16) * 16
-        targetHeight = (min(leftImage.height, rightImage.height) / 16) * 16
-        
-        logger.debug("Adjusted dimensions to: \(targetWidth)x\(targetHeight)")
-
-        // If dimensions are already identical, return original images
+        // If dimensions are already identical and valid, return originals
         if leftImage.width == rightImage.width,
-            leftImage.height == rightImage.height
+            leftImage.height == rightImage.height,
+            leftImage.width == targetWidth,
+            leftImage.height == targetHeight
         {
             return (left: leftImage, right: rightImage)
         }
 
-        // Create context for resizing crops while maintaining aspect ratio
+        // Otherwise normalize both images
+        return try (
+            left: normalizeImage(
+                leftImage, to: CGSize(width: targetWidth, height: targetHeight)),
+            right: normalizeImage(
+                rightImage, to: CGSize(width: targetWidth, height: targetHeight)
+            )
+        )
+    }
+
+    private func normalizeImage(_ image: CGImage, to size: CGSize) throws
+        -> CGImage
+    {
         guard
-            let colorSpaceLeft = leftImage.colorSpace,
-            let colorSpaceRight = rightImage.colorSpace,
-            let contextLeft = CGContext(
+            let context = CGContext(
                 data: nil,
-                width: targetWidth,
-                height: targetHeight,
-                bitsPerComponent: leftImage.bitsPerComponent,
+                width: Int(size.width),
+                height: Int(size.height),
+                bitsPerComponent: image.bitsPerComponent,
                 bytesPerRow: 0,
-                space: colorSpaceLeft,
-                bitmapInfo: leftImage.bitmapInfo.rawValue
-            ),
-            let contextRight = CGContext(
-                data: nil,
-                width: targetWidth,
-                height: targetHeight,
-                bitsPerComponent: rightImage.bitsPerComponent,
-                bytesPerRow: 0,
-                space: colorSpaceRight,
-                bitmapInfo: rightImage.bitmapInfo.rawValue
+                space: image.colorSpace ?? CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: image.bitmapInfo.rawValue
             )
         else {
-            logger.error("Failed to create normalization contexts")
-            throw StereoError.imageProcessingFailed("Failed to create normalization contexts")
+            throw StereoError.imageProcessingFailed(
+                "Failed to create context for normalization")
         }
 
-        // Draw scaled images to match target dimensions
-        contextLeft.interpolationQuality = .high
-        contextLeft.scaleBy(
-            x: CGFloat(targetWidth) / CGFloat(leftImage.width),
-            y: CGFloat(targetHeight) / CGFloat(leftImage.height))
-        contextLeft.draw(
-            leftImage,
-            in: CGRect(
-                x: 0, y: 0,
-                width: leftImage.width,
-                height: leftImage.height))
-
-        contextRight.interpolationQuality = .high
-        contextRight.scaleBy(
-            x: CGFloat(targetWidth) / CGFloat(rightImage.width),
-            y: CGFloat(targetHeight) / CGFloat(rightImage.height))
-        contextRight.draw(
-            rightImage,
-            in: CGRect(
-                x: 0, y: 0,
-                width: rightImage.width,
-                height: rightImage.height))
-
-        // Extract normalized images
-        guard let normalizedLeft = contextLeft.makeImage(),
-            let normalizedRight = contextRight.makeImage()
-        else {
-            logger.error("Failed to create normalized images")
-            throw StereoError.imageProcessingFailed("Failed to create normalized images")
-        }
-
-        // Use string interpolation with logger's interpolation
-        logger.debug(
-            "Normalized crop dimensions: Left \(normalizedLeft.width)x\(normalizedLeft.height), Right \(normalizedRight.width)x\(normalizedRight.height)"
+        context.interpolationQuality = .high
+        context.draw(
+            image,
+            in: CGRect(origin: .zero, size: size)
         )
 
-        return (left: normalizedLeft, right: normalizedRight)
+        guard let normalizedImage = context.makeImage() else {
+            throw StereoError.imageProcessingFailed(
+                "Failed to create normalized image")
+        }
+
+        return normalizedImage
+    }
+
+    func pngData(from cgImage: CGImage) throws -> Data {
+        #if os(macOS)
+            let bitmapRep = NSBitmapImageRep(cgImage: cgImage)
+            guard
+                let pngData = bitmapRep.representation(
+                    using: .png, properties: [:])
+            else {
+                throw StereoError.imageProcessingFailed("PNG conversion failed")
+            }
+            return pngData
+        #else
+            let uiImage = UIImage(cgImage: cgImage)
+            guard let pngData = uiImage.pngData() else {
+                throw StereoError.imageProcessingFailed("PNG conversion failed")
+            }
+            return pngData
+        #endif
     }
 }

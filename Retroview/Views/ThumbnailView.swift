@@ -16,7 +16,7 @@ struct ThumbnailView: View {
     @State private var isLoading = false
     @State private var loadError = false
     @State private var isHovering = false
-    @State private var previewSession: PreviewSession?
+//    @State private var previewSession: PreviewSession?
 
     var body: some View {
         ZStack {
@@ -50,17 +50,6 @@ struct ThumbnailView: View {
             await loadImage()
         }
         .shareable(card: card)
-        .contextMenu {
-            if let data = card.spatialPhotoData,
-                let url = card.writeToTemporary(data: data)
-            {
-                Button {
-                    previewSession = PreviewApplication.open(urls: [url])
-                } label: {
-                    Label("View in Stereo", systemImage: "view.3d")
-                }
-            }
-        }
     }
 
     private var placeholderView: some View {
