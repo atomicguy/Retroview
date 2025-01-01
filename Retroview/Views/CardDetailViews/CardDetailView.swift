@@ -11,7 +11,7 @@ import SwiftUI
 struct CardDetailView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     @Environment(\.modelContext) private var modelContext
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -52,6 +52,11 @@ struct CardDetailView: View {
                         }
                     }
                 }
+
+                Divider()
+
+                NYPLCollectionLink(cardUUID: card.uuid)
+                    .padding(.bottom)
             }
             .padding()
         }
@@ -74,8 +79,9 @@ private struct CollectionRow: View {
         HStack {
             Text(collection.name)
             Spacer()
-            Image(systemName: CollectionDefaults.isFavorites(collection)
-                ? "heart.fill" : "folder")
+            Image(
+                systemName: CollectionDefaults.isFavorites(collection)
+                    ? "heart.fill" : "folder")
         }
         .padding(8)
         .background(.secondary.opacity(0.1))
@@ -86,7 +92,9 @@ private struct CollectionRow: View {
 #Preview("Card Detail View") {
     NavigationStack {
         Group {
-            if let card = try? PreviewDataManager.shared.container().mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first {
+            if let card = try? PreviewDataManager.shared.container().mainContext
+                .fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first
+            {
                 CardDetailView(card: card)
             } else {
                 ContentUnavailableView("No Preview Card", systemImage: "photo")

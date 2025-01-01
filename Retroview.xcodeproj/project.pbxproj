@@ -114,6 +114,7 @@
 		5CFE2B832D24CE3C0023EBF8 /* CatalogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B822D24CE380023EBF8 /* CatalogListView.swift */; };
 		5CFE2B852D24D5D40023EBF8 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B842D24D5D10023EBF8 /* SearchManager.swift */; };
 		5CFE2B872D24D60D0023EBF8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */; };
+		5CFE2B8B2D24E2040023EBF8 /* NYPLCollectionLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -258,6 +259,7 @@
 		5CFE2B822D24CE380023EBF8 /* CatalogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogListView.swift; sourceTree = "<group>"; };
 		5CFE2B842D24D5D10023EBF8 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYPLCollectionLink.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -529,6 +531,7 @@
 		5CFE2B7B2D248BC00023EBF8 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */,
 				5C80F6A72D150AA200C58E7D /* CollectionMenuButton.swift */,
 				5C7955AD2D1F71B50037E204 /* CropButton.swift */,
 				5CD577222D0E8442002FA8DB /* DatabaseTransferButton.swift */,
@@ -732,6 +735,7 @@
 				5CFE2B832D24CE3C0023EBF8 /* CatalogListView.swift in Sources */,
 				5C73DB632D18FD83004BEEC5 /* CardTitleSection.swift in Sources */,
 				5C58D81F2D226AC900D421D0 /* GalleryLayoutConstants.swift in Sources */,
+				5CFE2B8B2D24E2040023EBF8 /* NYPLCollectionLink.swift in Sources */,
 				5C80F6CA2D188A9100C58E7D /* CardImageLoader.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5CFE2B852D24D5D40023EBF8 /* SearchManager.swift in Sources */,
