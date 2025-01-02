@@ -14,11 +14,12 @@ struct RetroviewApp: App {
     let importManager: BackgroundImportManager
     let imageDownloadManager: ImageDownloadManager
     let imageLoader = CardImageLoader()
-    
+    let spatialPhotoManager: SpatialPhotoManager
+
     init() {
         // Handle any pending imports before initializing SwiftData
         StoreImportHandler.handlePendingImport()
-        
+
         #if DEBUG
             ImportLogger.configure(logLevel: .debug)
         #else
@@ -52,11 +53,13 @@ struct RetroviewApp: App {
                 modelContext: container.mainContext)
             self.imageDownloadManager = ImageDownloadManager(
                 modelContext: container.mainContext)
+            self.spatialPhotoManager = SpatialPhotoManager(
+                modelContext: container.mainContext)
         } catch {
             print(
                 "Failed to create ModelContainer: \(error.localizedDescription)"
             )
-            
+
             do {
                 let container = try ModelContainer(
                     for: schema,
@@ -66,6 +69,8 @@ struct RetroviewApp: App {
                 self.importManager = BackgroundImportManager(
                     modelContext: container.mainContext)
                 self.imageDownloadManager = ImageDownloadManager(
+                    modelContext: container.mainContext)
+                self.spatialPhotoManager = SpatialPhotoManager(
                     modelContext: container.mainContext)
             } catch {
                 fatalError(
@@ -81,10 +86,13 @@ struct RetroviewApp: App {
                 MainView()
                     .modifier(SerifFontModifier())
             }
+            .environment(\.spatialPhotoManager, spatialPhotoManager)
             .environment(\.imageDownloadManager, imageDownloadManager)
             .environment(\.importManager, importManager)
             .environment(\.imageLoader, imageLoader)
-            .environment(\.platformFilePicker, PlatformFilePickerKey.defaultValue)
+            .environment(
+                \.platformFilePicker, PlatformFilePickerKey.defaultValue
+            )
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
                     context: sharedModelContainer.mainContext)
@@ -92,7 +100,7 @@ struct RetroviewApp: App {
         }
         .modelContainer(sharedModelContainer)
         #if os(visionOS)
-        .windowStyle(.plain)
+            .windowStyle(.plain)
         #endif
     }
 }

@@ -16,7 +16,6 @@ struct ThumbnailView: View {
     @State private var isLoading = false
     @State private var loadError = false
     @State private var isHovering = false
-//    @State private var previewSession: PreviewSession?
 
     var body: some View {
         ZStack {

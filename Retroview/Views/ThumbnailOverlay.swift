@@ -26,13 +26,13 @@ struct ThumbnailOverlay: View {
             // Button Layout
             HStack {
                 FavoriteButton(card: card)
-                    .opacity(isFavoriteVisible ? 1 : (isHovering ? 1 : 0))
+                    .opacity(isFavoriteVisible ? 0.6 : (isHovering ? 0.6 : 0))
                     .padding(8)
                 
                 Spacer()
                 
-                CollectionMenuButton(card: card)
-                    .opacity(isHovering ? 1 : 0)
+                CardActionMenu(card: card)
+                    .opacity(isHovering ? 0.6 : 0)
                     .padding(8)
             }
             .padding(.bottom, 4)

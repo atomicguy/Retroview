@@ -67,7 +67,7 @@ struct CardDetailView: View {
         .platformToolbar {
             FavoriteButton(card: card)
         } trailing: {
-            CollectionMenuButton(card: card)
+            CardActionMenu(card: card)
         }
     }
 }

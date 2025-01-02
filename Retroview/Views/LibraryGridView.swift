@@ -36,6 +36,11 @@ struct LibraryGridView: View {
             cardGrid
         }
         .navigationTitle("Library (\(searchManager.totalCount) cards)")
+        .task {
+            // Initial count update
+            searchManager.updateTotalCount(context: modelContext)
+        }
+
         .onChange(of: searchManager.searchText) {
             Task {
                 searchManager.updateTotalCount(context: modelContext)

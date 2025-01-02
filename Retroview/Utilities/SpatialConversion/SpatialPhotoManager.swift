@@ -42,3 +42,16 @@ final class SpatialPhotoManager {
         return photoData
     }
 }
+
+// Define the environment key
+struct SpatialPhotoManagerKey: EnvironmentKey {
+    static let defaultValue = SpatialPhotoManager(modelContext: ModelContext(try! ModelContainer(for: CardSchemaV1.StereoCard.self)))
+}
+
+// Add the environment value extension
+extension EnvironmentValues {
+    var spatialPhotoManager: SpatialPhotoManager {
+        get { self[SpatialPhotoManagerKey.self] }
+        set { self[SpatialPhotoManagerKey.self] = newValue }
+    }
+}
