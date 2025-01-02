@@ -31,7 +31,7 @@ struct CardGridLayout: View {
                 spacing: PlatformEnvironment.Metrics.gridSpacing
             ) {
                 ForEach(cards) { card in
-                    SelectableThumbnailView(
+                    ThumbnailSelectableView(
                         card: card,
                         isSelected: card.id == selectedCard?.id,
                         onSelect: { selectedCard = card },

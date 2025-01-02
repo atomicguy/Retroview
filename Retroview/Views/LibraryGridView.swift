@@ -73,7 +73,7 @@ struct LibraryGridView: View {
 
     private var cardItems: some View {
         ForEach(loadedCards) { card in
-            SelectableThumbnailView(
+            ThumbnailSelectableView(
                 card: card,
                 isSelected: card.id == selectedCard?.id,
                 onSelect: { selectedCard = card },

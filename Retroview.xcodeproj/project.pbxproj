@@ -68,7 +68,7 @@
 		5C80F6AC2D169BBB00C58E7D /* CardGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6AB2D169BB600C58E7D /* CardGridLayout.swift */; };
 		5C80F6B02D169C8A00C58E7D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6AF2D169C8700C58E7D /* MainView.swift */; };
 		5C80F6B22D169CA100C58E7D /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B12D169C9B00C58E7D /* SidebarView.swift */; };
-		5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */; };
+		5C80F6B42D169D4800C58E7D /* ThumbnailSelectableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B32D169D4000C58E7D /* ThumbnailSelectableView.swift */; };
 		5C80F6B82D176FF100C58E7D /* ModelPredicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */; };
 		5C80F6BA2D179D3900C58E7D /* DiagnosticCollectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */; };
 		5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */; };
@@ -215,7 +215,7 @@
 		5C80F6AB2D169BB600C58E7D /* CardGridLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGridLayout.swift; sourceTree = "<group>"; };
 		5C80F6AF2D169C8700C58E7D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5C80F6B12D169C9B00C58E7D /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
-		5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableThumbnailView.swift; sourceTree = "<group>"; };
+		5C80F6B32D169D4000C58E7D /* ThumbnailSelectableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailSelectableView.swift; sourceTree = "<group>"; };
 		5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPredicates.swift; sourceTree = "<group>"; };
 		5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticCollectionButton.swift; sourceTree = "<group>"; };
 		5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCreationView.swift; sourceTree = "<group>"; };
@@ -478,8 +478,8 @@
 				5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */,
 				5C80F6AF2D169C8700C58E7D /* MainView.swift */,
 				5C73DB722D191495004BEEC5 /* StoreTransferView.swift */,
-				5C80F6B32D169D4000C58E7D /* SelectableThumbnailView.swift */,
 				5C80F6B12D169C9B00C58E7D /* SidebarView.swift */,
+				5C80F6B32D169D4000C58E7D /* ThumbnailSelectableView.swift */,
 				5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */,
 				5C1DBD9D2D0FF6BD0050B4DF /* ThumbnailView.swift */,
 				5C66C10A2CFD807800BA5AC1 /* VisionViews */,
@@ -781,7 +781,7 @@
 				5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
-				5C80F6B42D169D4800C58E7D /* SelectableThumbnailView.swift in Sources */,
+				5C80F6B42D169D4800C58E7D /* ThumbnailSelectableView.swift in Sources */,
 				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,
 				5C73DB772D192102004BEEC5 /* ImportTypeMenu.swift in Sources */,
 				5C73DB732D191499004BEEC5 /* StoreTransferView.swift in Sources */,

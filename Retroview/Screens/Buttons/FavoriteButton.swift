@@ -14,10 +14,8 @@ private let logger = Logger(
 
 struct FavoriteButton: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(
-        filter: ModelPredicates.Collection.favorites,
-        sort: \.name
-    ) private var favoritesCollection: [CollectionSchemaV1.Collection]
+    @Query(filter: ModelPredicates.Collection.favorites)
+    private var favoritesCollection: [CollectionSchemaV1.Collection]
 
     let card: CardSchemaV1.StereoCard
     @State private var isProcessing = false
@@ -29,8 +27,6 @@ struct FavoriteButton: View {
 
             Task {
                 isProcessing = true
-
-                // Add artificial delay to prevent rapid tapping
                 try? await Task.sleep(for: .milliseconds(50))
 
                 if favorites.hasCard(card) {

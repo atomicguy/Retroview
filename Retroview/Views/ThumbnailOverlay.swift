@@ -6,53 +6,89 @@
 //
 
 import SwiftUI
+
 #if DEBUG
-import SwiftData
+    import SwiftData
 #endif
 
 struct ThumbnailOverlay: View {
     let card: CardSchemaV1.StereoCard
-    let isHovering: Bool
-    
+    let isVisible: Bool
+
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Semi-transparent gradient for better button visibility
+            // Background gradient
             LinearGradient(
                 colors: [.clear, .black.opacity(0.4)],
                 startPoint: .center,
                 endPoint: .bottom
             )
-            
-            // Button Layout
+            .opacity(shouldShowGradient ? 1 : 0)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+
+            // Controls
             HStack {
+                // Favorite button
                 FavoriteButton(card: card)
-                    .opacity(isFavoriteVisible ? 0.6 : (isHovering ? 0.6 : 0))
+                    .opacity(shouldShowFavoriteButton ? 1 : 0)
                     .padding(8)
-                
+
                 Spacer()
-                
-                CardActionMenu(card: card)
-                    .opacity(isHovering ? 0.6 : 0)
-                    .padding(8)
+
+                // Menu button
+                if shouldShowMenu {
+                    CardActionMenu(card: card)
+                        .padding(8)
+                        .contentShape(Rectangle())
+                        .allowsHitTesting(true)
+                }
             }
             .padding(.bottom, 4)
         }
-        .platformInteraction()
     }
-    
-    private var isFavoriteVisible: Bool {
-        // Always show filled heart if card is in Favorites
-        return card.collections.contains(where: {
+
+    private var shouldShowGradient: Bool {
+        #if os(visionOS)
+            return isVisible
+        #elseif os(macOS)
+            return isVisible
+        #else
+            return false
+        #endif
+    }
+
+    private var shouldShowFavoriteButton: Bool {
+        isFavorite || shouldShowOverlayButtons
+    }
+
+    private var shouldShowMenu: Bool {
+        shouldShowOverlayButtons
+    }
+
+    private var shouldShowOverlayButtons: Bool {
+        #if os(visionOS)
+            return isVisible
+        #elseif os(macOS)
+            return isVisible
+        #else
+            return true
+        #endif
+    }
+
+    private var isFavorite: Bool {
+        card.collections.contains {
             $0.name == CollectionDefaults.favoritesName
-        })
+        }
     }
 }
 
 #Preview("Thumbnail Overlay") {
     let previewContainer = try! PreviewDataManager.shared.container()
-    let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
-    
-    return ThumbnailOverlay(card: card, isHovering: true)
+    let card = try! previewContainer.mainContext.fetch(
+        FetchDescriptor<CardSchemaV1.StereoCard>()
+    ).first!
+
+    ThumbnailOverlay(card: card, isVisible: true)
         .withPreviewStore()
         .frame(width: 300, height: 200)
 }

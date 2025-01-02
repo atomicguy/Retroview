@@ -17,7 +17,7 @@ enum PlatformEnvironment {
             return false
         #endif
     }
-    
+
     static var isMacOS: Bool {
         #if os(macOS)
             return true
@@ -25,7 +25,7 @@ enum PlatformEnvironment {
             return false
         #endif
     }
-    
+
     static var isiPadOS: Bool {
         #if os(iOS)
             return true
@@ -33,32 +33,32 @@ enum PlatformEnvironment {
             return false
         #endif
     }
-    
+
     // UI Metrics
     struct Metrics {
         // Grid Layout
         static var gridMinWidth: CGFloat {
             isMacOS ? 300 : 250
         }
-        
+
         static var gridMaxWidth: CGFloat {
             isMacOS ? 400 : 350
         }
-        
+
         static var gridSpacing: CGFloat {
             isMacOS ? 16 : 12
         }
-        
+
         // Flow Layout
         static var flowLayoutSpacing: CGFloat {
             isMacOS ? 8 : 6
         }
-        
+
         // General Spacing
         static var defaultPadding: CGFloat {
             isMacOS ? 16 : 12
         }
-        
+
         static var compactPadding: CGFloat {
             isMacOS ? 12 : 8
         }
@@ -70,15 +70,15 @@ enum NavigationTitleDisplayMode {
     case automatic
     case inline
     case large
-    
+
     #if !os(macOS)
-    var navigationBarDisplayMode: NavigationBarItem.TitleDisplayMode {
-        switch self {
-        case .automatic: return .automatic
-        case .inline: return .inline
-        case .large: return .large
+        var navigationBarDisplayMode: NavigationBarItem.TitleDisplayMode {
+            switch self {
+            case .automatic: return .automatic
+            case .inline: return .inline
+            case .large: return .large
+            }
         }
-    }
     #endif
 }
 
@@ -86,14 +86,15 @@ enum NavigationTitleDisplayMode {
 struct PlatformNavigationTitleModifier: ViewModifier {
     let title: String
     let displayMode: NavigationTitleDisplayMode
-    
+
     func body(content: Content) -> some View {
         #if os(macOS)
             content.navigationTitle(title)
         #else
             content
                 .navigationTitle(title)
-                .navigationBarTitleDisplayMode(displayMode.navigationBarDisplayMode)
+                .navigationBarTitleDisplayMode(
+                    displayMode.navigationBarDisplayMode)
         #endif
     }
 }
@@ -101,7 +102,7 @@ struct PlatformNavigationTitleModifier: ViewModifier {
 struct PlatformToolbarModifier: ViewModifier {
     let leadingContent: AnyView
     let trailingContent: AnyView
-    
+
     func body(content: Content) -> some View {
         content.toolbar {
             #if os(visionOS)
@@ -136,17 +137,20 @@ extension View {
         _ title: String,
         displayMode: NavigationTitleDisplayMode = .automatic
     ) -> some View {
-        modifier(PlatformNavigationTitleModifier(title: title, displayMode: displayMode))
+        modifier(
+            PlatformNavigationTitleModifier(
+                title: title, displayMode: displayMode))
     }
-    
+
     func platformToolbar(
         @ViewBuilder leading: () -> some View = { EmptyView() },
         @ViewBuilder trailing: () -> some View = { EmptyView() }
     ) -> some View {
-        modifier(PlatformToolbarModifier(
-            leadingContent: AnyView(leading()),
-            trailingContent: AnyView(trailing())
-        ))
+        modifier(
+            PlatformToolbarModifier(
+                leadingContent: AnyView(leading()),
+                trailingContent: AnyView(trailing())
+            ))
     }
 }
 
@@ -154,39 +158,41 @@ extension View {
 extension View {
     func platformInteraction() -> some View {
         #if os(visionOS)
-        return self
-            .hoverEffect()
+            self.contentShape(RoundedRectangle(cornerRadius: 12))
+                .hoverEffect(.highlight)
+        #elseif os(macOS)
+            self
         #else
-        return self
+            self
         #endif
     }
-    
+
     func platformSelectionEffect(isSelected: Bool = false) -> some View {
         #if os(visionOS)
-        return self
-            .overlay {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(.white.opacity(0.8), lineWidth: 2)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.white.opacity(0.2))
-                        )
+            return
+                self
+                .overlay {
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(.white.opacity(0.8), lineWidth: 2)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.white.opacity(0.2))
+                            )
+                    }
                 }
-            }
         #else
-        return self
+            return self
         #endif
     }
-    
-    func platformTapAction(singleTapAction: (() -> Void)? = nil) -> some View {
+
+    func platformTapAction(singleTapAction: @escaping () -> Void) -> some View {
         #if os(visionOS)
-        return self
-            .onTapGesture {
-                singleTapAction?()
+            self.onTapGesture {
+                singleTapAction()
             }
         #else
-        return self
+            self
         #endif
     }
 }
@@ -194,28 +200,58 @@ extension View {
 extension View {
     func platformHoverState(action: @escaping (Bool) -> Void) -> some View {
         #if os(visionOS)
-        return self
-            .onHover { isHovering in
-                action(isHovering)
-            }
+            self.hoverEffect(.highlight)
         #elseif os(macOS)
-        return self
-            .onHover { hovering in
+            self.onHover { hovering in
                 action(hovering)
             }
         #else
-        return self
-            .onHover { hovering in
-                action(hovering)
-            }
+            self
         #endif
     }
-    
+
+    func platformTapAction(
+        singleTapAction: @escaping () -> Void,
+        doubleTapAction: @escaping () -> Void
+    ) -> some View {
+        self.modifier(
+            PlatformTapModifier(
+                singleTapAction: singleTapAction,
+                doubleTapAction: doubleTapAction
+            ))
+    }
+
     func platformHoverBinding() -> Binding<Bool> {
         @State var isHovering = false
         return Binding(
             get: { isHovering },
             set: { isHovering = $0 }
         )
+    }
+}
+
+private struct PlatformTapModifier: ViewModifier {
+    let singleTapAction: () -> Void
+    let doubleTapAction: () -> Void
+    
+    func body(content: Content) -> some View {
+        #if os(visionOS)
+            content
+                .onTapGesture(perform: doubleTapAction)
+        #elseif os(macOS)
+            content
+                .simultaneousGesture(
+                    TapGesture(count: 1)
+                        .onEnded(singleTapAction)
+                )
+                .simultaneousGesture(
+                    TapGesture(count: 2)
+                        .onEnded(doubleTapAction)
+                )
+        #else
+            // On iPadOS, single tap navigates directly
+            content
+                .onTapGesture(perform: doubleTapAction)
+        #endif
     }
 }

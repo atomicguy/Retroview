@@ -15,58 +15,37 @@ struct ThumbnailView: View {
     @State private var image: CGImage?
     @State private var isLoading = false
     @State private var loadError = false
-    @State private var isHovering = false
+    @State private var aspectRatio: CGFloat = 2.0
 
     var body: some View {
-        ZStack {
+        Group {
             if let image {
                 Image(decorative: image, scale: 1.0)
                     .resizable()
-                    .scaledToFill()
-                    .clipped()
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay {
-                        ThumbnailOverlay(
-                            card: card,
-                            isHovering: true  // Always show overlay on visionOS
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                    #if os(visionOS)
-                        .hoverEffect()
-                    #else
-                        .onHover { hovering in
-                            isHovering = hovering
-                        }
-                    #endif
+                    .aspectRatio(contentMode: .fill)
             } else {
-                placeholderView
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(.gray.opacity(0.1))
+                    .overlay {
+                        if isLoading {
+                            ProgressView()
+                        } else if loadError {
+                            Image(systemName: "exclamationmark.triangle")
+                                .font(.title2)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Image(systemName: "photo")
+                                .font(.title2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .aspectRatio(2, contentMode: .fit)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .aspectRatio(aspectRatio, contentMode: .fit)
         .task {
             await loadImage()
         }
-        .shareable(card: card)
-    }
-
-    private var placeholderView: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(.gray.opacity(0.2))
-            .overlay {
-                if loadError {
-                    Image(systemName: "exclamationmark.triangle")
-                        .font(.title2)
-                        .foregroundStyle(.secondary)
-                } else if isLoading {
-                    ProgressView()
-                } else {
-                    Image(systemName: "photo")
-                        .font(.title2)
-                        .foregroundStyle(.secondary)
-                }
-            }
     }
 
     @MainActor
@@ -76,11 +55,17 @@ struct ThumbnailView: View {
         defer { isLoading = false }
 
         do {
-            image = try await imageLoader.loadImage(
+            if let loadedImage = try await imageLoader.loadImage(
                 for: card,
                 side: .front,
                 quality: .thumbnail
-            )
+            ) {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    aspectRatio =
+                        CGFloat(loadedImage.width) / CGFloat(loadedImage.height)
+                    image = loadedImage
+                }
+            }
         } catch {
             loadError = true
         }
