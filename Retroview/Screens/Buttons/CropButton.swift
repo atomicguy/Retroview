@@ -21,14 +21,6 @@ struct CropButton: View {
         .sheet(isPresented: $showingCropOverlay) {
             NavigationStack {
                 CardCropOverlayView(card: card)
-                    .frame(
-                        minWidth: 800,
-                        idealWidth: 1000,
-                        maxWidth: .infinity,
-                        minHeight: 400,
-                        idealHeight: 500,
-                        maxHeight: .infinity
-                    )
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Done") {

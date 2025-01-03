@@ -8,6 +8,19 @@
 import SwiftData
 import SwiftUI
 
+#if os(visionOS)
+    struct ThumbnailHoverEffect: CustomHoverEffect {
+        func body(content: Content) -> some CustomHoverEffect {
+            content.hoverEffect { effect, isActive, proxy in
+                effect.animation(.easeInOut(duration: 0.2)) {
+                    // Modify the overlay's opacity based on hover state
+                    $0.opacity(isActive ? 1 : 0)
+                }
+            }
+        }
+    }
+#endif
+
 struct ThumbnailSelectableView: View {
     let card: CardSchemaV1.StereoCard
     let isSelected: Bool
@@ -32,16 +45,15 @@ struct ThumbnailSelectableView: View {
                         card: card,
                         isVisible: shouldShowOverlay
                     )
+                    #if os(visionOS)
+                        .hoverEffect(ThumbnailHoverEffect())
+                    #endif
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                .contentShape(Rectangle())
+                .contentShape(RoundedRectangle(cornerRadius: 12))
                 .onHover { hovering in
                     withAnimation(.easeInOut(duration: 0.2)) {
-                        #if os(visionOS)
-                            isGlancing = hovering
-                        #else
-                            isHovering = hovering
-                        #endif
+                        isHovering = hovering
                     }
                 }
                 #if os(visionOS)
@@ -51,27 +63,11 @@ struct ThumbnailSelectableView: View {
                     singleTapAction: onSelect,
                     doubleTapAction: onDoubleClick
                 )
-
-            // Tap exclusion zone for menu
-            if shouldShowOverlay {
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Rectangle()
-                            .fill(.clear)
-                            .frame(width: 60, height: 60)
-                            .allowsHitTesting(true)
-                    }
-                }
-            }
         }
     }
 
     private var shouldShowOverlay: Bool {
-        #if os(visionOS)
-            return isGlancing
-        #elseif os(macOS)
+        #if os(macOS)
             return isHovering
         #else
             return true
