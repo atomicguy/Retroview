@@ -27,6 +27,11 @@ struct NYPLCollectionLink: View {
             .foregroundStyle(.secondary)
         }
         .buttonStyle(.plain)
+        .platformInteraction(
+            InteractionConfig(
+                showHoverEffects: true
+            )
+        )
         #if os(macOS)
             .onHover { hovering in
                 if hovering {

@@ -74,6 +74,11 @@ struct CardActionMenu: View {
                     .shadow(radius: 2)
             }
             .buttonStyle(.plain)
+            .platformInteraction(
+                InteractionConfig(
+                    showHoverEffects: true
+                )
+            )
         }
     }
 

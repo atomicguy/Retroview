@@ -14,7 +14,6 @@ struct SubjectBadge: View {
         Text(name)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(.secondary.opacity(0.1))
             .clipShape(Capsule())
     }
 }

@@ -1,5 +1,5 @@
 //
-//  CardTitleSection.swift
+//  CardTitlesSection.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 12/22/24.
@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 #endif
 
-struct CardTitleSection: View {
+struct CardTitlesSection: View {
     let card: CardSchemaV1.StereoCard
     let updateTitlePick: (TitleSchemaV1.Title) -> Void
     
@@ -42,7 +42,7 @@ struct CardTitleSection: View {
                 // Checkmark or empty circle before the title
                 if title == card.titlePick {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(.primary)
                 } else {
                     Image(systemName: "circle")
                         .foregroundStyle(.secondary)
@@ -56,7 +56,7 @@ struct CardTitleSection: View {
             }
             .padding(8)
             .background(title == card.titlePick
-                ? Color.green.opacity(0.1)
+                ? Color.primary.opacity(0.1)
                 : Color.secondary.opacity(0.05))
             .clipShape(RoundedRectangle(cornerRadius: 8))
         }
@@ -68,7 +68,7 @@ struct CardTitleSection: View {
     let previewContainer = try! PreviewDataManager.shared.container()
     let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
     
-    return CardTitleSection(card: card) { _ in }
+    return CardTitlesSection(card: card) { _ in }
         .withPreviewStore()
         .padding()
 }

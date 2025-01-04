@@ -64,7 +64,11 @@ struct BulkCollectionButton: View {
                 .font(.title2)
         }
         .buttonStyle(.plain)
-        .platformInteraction()
+        .platformInteraction(
+            InteractionConfig(
+                showHoverEffects: true
+            )
+        )
         .disabled(isProcessing)
         .sheet(isPresented: $showingCollectionSheet) {
             if let firstCard = fetchCards().first {

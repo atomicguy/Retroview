@@ -45,7 +45,11 @@ struct FavoriteButton: View {
                 .opacity(isProcessing ? 0.5 : 1.0)
         }
         .buttonStyle(.plain)
-        .platformInteraction()
+        .platformInteraction(
+            InteractionConfig(
+                showHoverEffects: true
+            )
+        )
         .disabled(isProcessing)
     }
 

@@ -65,6 +65,54 @@ enum PlatformEnvironment {
     }
 }
 
+// MARK: - Interaction Configuration
+struct InteractionConfig {
+    var onTap: (() -> Void)?
+    var onDoubleTap: (() -> Void)?
+    var onSecondaryAction: (() -> AnyView)?
+    var isSelected: Bool
+    var showHoverEffects: Bool
+    
+    init(
+        onTap: (() -> Void)? = nil,
+        onDoubleTap: (() -> Void)? = nil,
+        onSecondaryAction: (() -> AnyView)? = nil,
+        isSelected: Bool = false,
+        showHoverEffects: Bool = true
+    ) {
+        self.onTap = onTap
+        self.onDoubleTap = onDoubleTap
+        self.onSecondaryAction = onSecondaryAction
+        self.isSelected = isSelected
+        self.showHoverEffects = showHoverEffects
+    }
+}
+
+// MARK: - Platform Interaction Modifier
+struct PlatformInteractionModifier: ViewModifier {
+    let config: InteractionConfig
+    @State private var isHovering = false
+    @State private var showSecondaryMenu = false
+    
+    func body(content: Content) -> some View {
+        content
+            .contentShape(RoundedRectangle(cornerRadius: 12))
+            .modifier(HoverEffectModifier(
+                isHovering: $isHovering,
+                showEffects: config.showHoverEffects
+            ))
+            .modifier(SelectionEffectModifier(isSelected: config.isSelected))
+            .modifier(TapHandlingModifier(
+                onTap: config.onTap,
+                onDoubleTap: config.onDoubleTap
+            ))
+            .modifier(SecondaryActionModifier(
+                isPresented: $showSecondaryMenu,
+                content: config.onSecondaryAction
+            ))
+    }
+}
+
 // MARK: - Navigation Title Display Mode
 enum NavigationTitleDisplayMode {
     case automatic
@@ -82,7 +130,103 @@ enum NavigationTitleDisplayMode {
     #endif
 }
 
-// MARK: - View Modifiers
+// MARK: - Platform-Specific Modifiers
+private struct HoverEffectModifier: ViewModifier {
+    @Binding var isHovering: Bool
+    let showEffects: Bool
+    
+    func body(content: Content) -> some View {
+        content
+        #if os(visionOS)
+            .hoverEffect()
+        #elseif os(macOS)
+            .onHover { hovering in
+                guard showEffects else { return }
+                isHovering = hovering
+            }
+            .opacity(isHovering && showEffects ? 0.8 : 1.0)
+        #endif
+    }
+}
+
+private struct SelectionEffectModifier: ViewModifier {
+    let isSelected: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if isSelected {
+                    #if os(visionOS)
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(.white.opacity(0.8), lineWidth: 2)
+                    #else
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.accentColor, lineWidth: 2)
+                    #endif
+                }
+            }
+    }
+}
+
+private struct TapHandlingModifier: ViewModifier {
+    let onTap: (() -> Void)?
+    let onDoubleTap: (() -> Void)?
+    
+    func body(content: Content) -> some View {
+        content
+        #if os(visionOS)
+            .onTapGesture {
+                onDoubleTap?()  // visionOS uses single tap for navigation
+            }
+        #elseif os(macOS)
+            .simultaneousGesture(
+                TapGesture(count: 1)
+                    .onEnded {
+                        onTap?()
+                    }
+            )
+            .simultaneousGesture(
+                TapGesture(count: 2)
+                    .onEnded {
+                        onDoubleTap?()
+                    }
+            )
+        #else
+            // iPadOS uses single tap for navigation
+            .onTapGesture {
+                onDoubleTap?()
+            }
+        #endif
+    }
+}
+
+private struct SecondaryActionModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let content: (() -> AnyView)?
+    
+    func body(content: Content) -> some View {
+        content
+        #if os(macOS)
+            .contextMenu {
+                if let menuContent = self.content {
+                    menuContent()
+                }
+            }
+        #else
+            .onLongPressGesture {
+                isPresented = true
+            }
+            .popover(isPresented: $isPresented) {
+                if let menuContent = self.content {
+                    menuContent()
+                        .presentationCompactAdaptation(.popover)
+                }
+            }
+        #endif
+    }
+}
+
+// MARK: - Navigation Title Modifier
 struct PlatformNavigationTitleModifier: ViewModifier {
     let title: String
     let displayMode: NavigationTitleDisplayMode
@@ -93,12 +237,12 @@ struct PlatformNavigationTitleModifier: ViewModifier {
         #else
             content
                 .navigationTitle(title)
-                .navigationBarTitleDisplayMode(
-                    displayMode.navigationBarDisplayMode)
+                .navigationBarTitleDisplayMode(displayMode.navigationBarDisplayMode)
         #endif
     }
 }
 
+// MARK: - Toolbar Modifier
 struct PlatformToolbarModifier: ViewModifier {
     let leadingContent: AnyView
     let trailingContent: AnyView
@@ -133,13 +277,15 @@ struct PlatformToolbarModifier: ViewModifier {
 
 // MARK: - View Extensions
 extension View {
+    func platformInteraction(_ config: InteractionConfig) -> some View {
+        modifier(PlatformInteractionModifier(config: config))
+    }
+    
     func platformNavigationTitle(
         _ title: String,
         displayMode: NavigationTitleDisplayMode = .automatic
     ) -> some View {
-        modifier(
-            PlatformNavigationTitleModifier(
-                title: title, displayMode: displayMode))
+        modifier(PlatformNavigationTitleModifier(title: title, displayMode: displayMode))
     }
 
     func platformToolbar(
@@ -150,108 +296,7 @@ extension View {
             PlatformToolbarModifier(
                 leadingContent: AnyView(leading()),
                 trailingContent: AnyView(trailing())
-            ))
-    }
-}
-
-// MARK: - Vision OS Interaction Modifiers
-extension View {
-    func platformInteraction() -> some View {
-        #if os(visionOS)
-            self.contentShape(RoundedRectangle(cornerRadius: 12))
-                .hoverEffect(.highlight)
-        #elseif os(macOS)
-            self
-        #else
-            self
-        #endif
-    }
-
-    func platformSelectionEffect(isSelected: Bool = false) -> some View {
-        #if os(visionOS)
-            return
-                self
-                .overlay {
-                    if isSelected {
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(.white.opacity(0.8), lineWidth: 2)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(.white.opacity(0.2))
-                            )
-                    }
-                }
-        #else
-            return self
-        #endif
-    }
-
-    func platformTapAction(singleTapAction: @escaping () -> Void) -> some View {
-        #if os(visionOS)
-            self.onTapGesture {
-                singleTapAction()
-            }
-        #else
-            self
-        #endif
-    }
-}
-
-extension View {
-    func platformHoverState(action: @escaping (Bool) -> Void) -> some View {
-        #if os(visionOS)
-            self.hoverEffect(.highlight)
-        #elseif os(macOS)
-            self.onHover { hovering in
-                action(hovering)
-            }
-        #else
-            self
-        #endif
-    }
-
-    func platformTapAction(
-        singleTapAction: @escaping () -> Void,
-        doubleTapAction: @escaping () -> Void
-    ) -> some View {
-        self.modifier(
-            PlatformTapModifier(
-                singleTapAction: singleTapAction,
-                doubleTapAction: doubleTapAction
-            ))
-    }
-
-    func platformHoverBinding() -> Binding<Bool> {
-        @State var isHovering = false
-        return Binding(
-            get: { isHovering },
-            set: { isHovering = $0 }
+            )
         )
-    }
-}
-
-private struct PlatformTapModifier: ViewModifier {
-    let singleTapAction: () -> Void
-    let doubleTapAction: () -> Void
-    
-    func body(content: Content) -> some View {
-        #if os(visionOS)
-            content
-                .onTapGesture(perform: doubleTapAction)
-        #elseif os(macOS)
-            content
-                .simultaneousGesture(
-                    TapGesture(count: 1)
-                        .onEnded(singleTapAction)
-                )
-                .simultaneousGesture(
-                    TapGesture(count: 2)
-                        .onEnded(doubleTapAction)
-                )
-        #else
-            // On iPadOS, single tap navigates directly
-            content
-                .onTapGesture(perform: doubleTapAction)
-        #endif
     }
 }
