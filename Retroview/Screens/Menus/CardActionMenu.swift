@@ -16,175 +16,137 @@ struct CardActionMenu: View {
     @Environment(\.spatialPhotoManager) private var spatialPhotoManager
 
     let card: CardSchemaV1.StereoCard
+    @Binding var showDirectMenu: Bool
 
     @State private var showingCollectionSheet = false
     @State private var showingShareSheet = false
     @State private var isReloadingImages = false
-    #if os(macOS)
-    @State private var shareSheetAnchor: NSView?
-    #endif
+    @State private var isGeneratingShareData = false
 
     var body: some View {
-        Menu {
-            Button {
-                Task {
-                    // Ensure spatial photo exists before sharing
-                    if card.spatialPhotoData == nil,
-                        let imageLoader = imageLoader,
-                        let sourceImage = try await imageLoader.loadImage(
-                            for: card,
-                            side: .front,
-                            quality: .ultra)
-                    {
-                        do {
-                            _ =
-                                try await spatialPhotoManager
-                                .getSpatialPhotoData(
-                                    for: card,
-                                    sourceImage: sourceImage
-                                )
-                        } catch {
-                            print("Failed to create spatial photo: \(error)")
-                            return
-                        }
-                    }
-                    showingShareSheet = true
-                }
-            } label: {
-                HStack {
-                    Image(systemName: "square.and.arrow.up")
-                    Text("Share Spatial Card...")
-                }
+        if showDirectMenu {
+            CardActionMenuContent(
+                card: card,
+                onShare: handleShare,
+                onViewInSpace: handleViewInSpace,
+                onAddToCollection: { showingCollectionSheet = true },
+                onReloadImages: handleReloadImages
+            )
+            .sheet(isPresented: $showingCollectionSheet) {
+                CollectionCreationView(card: card)
             }
-
-            // Rest of menu items...
             #if os(visionOS)
-                Button {
-                    Task {
-                        guard let imageLoader = imageLoader,
-                            let _ = try await imageLoader.loadImage(
-                                for: card,
-                                side: .front,
-                                quality: .ultra)
-                        else { return }
-
-                        let _ = try await PreviewApplication.openCards(
-                            [card],
-                            selectedCard: card,
-                            imageLoader: imageLoader
-                        )
-                    }
-                } label: {
-                    HStack {
-                        Image(systemName: "view.3d")
-                        Text("View in Space")
-                    }
+                .sheet(isPresented: $showingShareSheet) {
+                    let shareURL = card.createSharingURL()
+                    SystemShareSheet(items: [shareURL].compactMap { $0 })
                 }
             #endif
-
+        } else {
             Menu {
-                CardCollectionSubmenu(
-                    card: card,
-                    showingCollectionSheet: $showingCollectionSheet
-                )
+                Button(action: handleShare) {
+                    menuLabel(
+                        icon: "square.and.arrow.up",
+                        text: "Share Spatial Card...")
+                }
+                #if os(visionOS)
+                    Button(action: handleViewInSpace) {
+                        menuLabel(icon: "view.3d", text: "View in Space")
+                    }
+                #endif
+                Menu {
+                    CardCollectionSubmenu(
+                        card: card,
+                        showingCollectionSheet: $showingCollectionSheet
+                    )
+                } label: {
+                    menuLabel(
+                        icon: "folder.badge.plus", text: "Add to Collection")
+                }
+                Divider()
+                Button(action: handleReloadImages) {
+                    menuLabel(icon: "arrow.clockwise", text: "Reload Images")
+                }
+                .disabled(isReloadingImages)
             } label: {
-                HStack {
-                    Image(systemName: "folder.badge.plus")
-                    Text("Add to Collection")
+                Image(systemName: "ellipsis.circle")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .shadow(radius: 2)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    // MARK: - Action Handlers
+
+    private func handleShare() {
+        Task {
+            isGeneratingShareData = true
+            defer { isGeneratingShareData = false }
+
+            if card.spatialPhotoData == nil,
+                let imageLoader = imageLoader,
+                let sourceImage = try await imageLoader.loadImage(
+                    for: card, side: .front, quality: .ultra)
+            {
+                do {
+                    _ = try await spatialPhotoManager.getSpatialPhotoData(
+                        for: card, sourceImage: sourceImage)
+                } catch {
+                    print("Failed to create spatial photo: \(error)")
+                    return
                 }
             }
-
-            Divider()
-
-            Button {
-                Task {
-                    isReloadingImages = true
-                    defer { isReloadingImages = false }
-
-                    let managers = [
-                        CardImageManager(
-                            card: card, side: .front, quality: .thumbnail),
-                        CardImageManager(
-                            card: card, side: .front, quality: .standard),
-                        CardImageManager(
-                            card: card, side: .back, quality: .thumbnail),
-                        CardImageManager(
-                            card: card, side: .back, quality: .standard),
-                    ]
-
-                    for manager in managers {
-                        guard let url = manager.imageURL else { continue }
-                        do {
-                            let (data, _) = try await URLSession.shared.data(
-                                from: url)
-                            await MainActor.run {
-                                manager.storeImageData(data)
-                            }
-                        } catch {
-                            print("Failed to reload image: \(error)")
-                        }
-                    }
-
-                    try? modelContext.save()
-                }
-            } label: {
-                HStack {
-                    Image(systemName: "arrow.clockwise")
-                    Text("Reload Images")
-                }
-            }
-            .disabled(isReloadingImages)
-        } label: {
-            Image(systemName: "ellipsis.circle")
-                .font(.title2)
-                .foregroundStyle(.white)
-                .shadow(radius: 2)
+            showingShareSheet = true
         }
-        .buttonStyle(.plain)
-        .sheet(isPresented: $showingCollectionSheet) {
-            CollectionCreationView(card: card)
-        }
-        .sheet(isPresented: $showingShareSheet) {
-            let items: [Any] = [
-                card.temporarySpatialPhotoURL as Any,
-                card.titlePick?.text ?? "Untitled Card",
-            ].compactMap { $0 }
+    }
 
-            #if os(macOS)
-                MacShareSheet(items: items, sourceView: shareSheetAnchor)
-            #else
-                SystemShareSheet(items: items)
-            #endif
-        }
-        #if os(macOS)
-            .background {
-                // Invisible anchor view for share sheet positioning
-                Color.clear
-                .frame(width: 1, height: 1)
-                .allowsHitTesting(false)
-                .background {
-                    GeometryReader { proxy in
-                        Color.clear
-                        .onAppear {
-                            if let window = NSApp.keyWindow,
-                                let contentView = window.contentView
-                            {
-                                let frame = proxy.frame(in: .global)
-                                let anchor = NSView(
-                                    frame: NSRect(
-                                        x: frame.minX,
-                                        y: frame.minY,
-                                        width: 1,
-                                        height: 1
-                                    ))
-                                contentView.addSubview(anchor)
-                                shareSheetAnchor = anchor
-                            }
-                        }
-                    }
-                }
+    private func handleViewInSpace() {
+        #if os(visionOS)
+            Task {
+                guard let imageLoader = imageLoader,
+                    (try await imageLoader.loadImage(
+                        for: card, side: .front, quality: .ultra)) != nil
+                else { return }
+                let _ = try await PreviewApplication.openCards(
+                    [card], selectedCard: card, imageLoader: imageLoader)
             }
         #endif
+    }
+
+    private func handleReloadImages() {
+        Task {
+            isReloadingImages = true
+            defer { isReloadingImages = false }
+
+            let managers = [
+                CardImageManager(card: card, side: .front, quality: .thumbnail),
+                CardImageManager(card: card, side: .front, quality: .standard),
+                CardImageManager(card: card, side: .back, quality: .thumbnail),
+                CardImageManager(card: card, side: .back, quality: .standard),
+            ]
+
+            for manager in managers {
+                guard let url = manager.imageURL else { continue }
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: url)
+                    await MainActor.run { manager.storeImageData(data) }
+                } catch {
+                    print("Failed to reload image: \(error)")
+                }
+            }
+
+            try? modelContext.save()
+        }
+    }
+
+    // MARK: - Helper View for Menu Labels
+
+    private func menuLabel(icon: String, text: String) -> some View {
+        HStack {
+            Image(systemName: icon)
+            Text(text)
+        }
     }
 }
 
@@ -235,8 +197,47 @@ struct CardActionMenu: View {
     }
 #endif
 
-#Preview {
+extension CardSchemaV1.StereoCard {
+    func createSharingURL() -> URL? {
+        guard let spatialData = spatialPhotoData else { return nil }
+
+        let title = titlePick?.text ?? "Untitled Card"
+        // Sanitize filename by removing invalid characters
+        let sanitizedTitle = title.replacingOccurrences(
+            of: "[/\\?%*|\"<>]", with: "-", options: .regularExpression)
+
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(sanitizedTitle)
+            .appendingPathExtension("heic")
+
+        do {
+            try spatialData.write(to: tempURL)
+            // Set UTType for HEIC image
+            try (tempURL as NSURL).setResourceValue(
+                UTType.heic.identifier,
+                forKey: .typeIdentifierKey
+            )
+            // Mark as readable to other apps
+            try (tempURL as NSURL).setResourceValue(
+                true,
+                forKey: .isReadableKey
+            )
+            return tempURL
+        } catch {
+            print("Failed to create sharing URL: \(error)")
+            return nil
+        }
+    }
+}
+
+#Preview("Direct Menu") {
     CardPreviewContainer { card in
-        CardActionMenu(card: card)
+        CardActionMenu(card: card, showDirectMenu: .constant(true))
+    }
+}
+
+#Preview("Button Menu") {
+    CardPreviewContainer { card in
+        CardActionMenu(card: card, showDirectMenu: .constant(false))
     }
 }

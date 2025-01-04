@@ -79,9 +79,6 @@ actor MODSParsingService {
                 right: CropData(x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "right")
             )
             
-            // Log successful parsing
-//            logImportedCard(card)
-            
             return card
         } catch {
             ImportLogger.log(.error, "Failed to import: \(error.localizedDescription)", file: fileName)

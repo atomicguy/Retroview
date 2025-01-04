@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// CropUtility.swift
 enum CropUtility {
     /// Calculates the normalized rectangle for a crop region
     static func normalizedRect(for crop: CropSchemaV1.Crop) -> CGRect {

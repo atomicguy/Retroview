@@ -29,6 +29,8 @@ struct ThumbnailSelectableView: View {
 
     @State private var isHovering = false
     @State private var isGlancing = false
+    @State private var tapping = false
+    @State private var showActionMenu = false
 
     var body: some View {
         ZStack {
@@ -37,7 +39,7 @@ struct ThumbnailSelectableView: View {
                 .overlay {
                     if isSelected {
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(.teal, lineWidth: 3)
+                            .stroke(.brown, lineWidth: 3)
                     }
                 }
                 .overlay(alignment: .bottom) {
@@ -58,11 +60,36 @@ struct ThumbnailSelectableView: View {
                 }
                 #if os(visionOS)
                     .hoverEffect(.highlight)
+                    .scaleEffect(tapping ? 0.95 : 1)
+                    .gesture(
+                        LongPressGesture(minimumDuration: 0.5)
+                            .onEnded { _ in
+                                showActionMenu = true
+                                withAnimation(.bouncy(duration: 0.5)) {
+                                    tapping = false
+                                }
+                            }
+                            .simultaneously(
+                                with: DragGesture(minimumDistance: 0)
+                                    .onChanged({ value in
+                                        withAnimation(.smooth(duration: 0.2)) {
+                                            tapping = true
+                                        }
+                                    })
+                                    .onEnded({ value in
+                                        withAnimation(.bouncy(duration: 0.5)) {
+                                            tapping = false
+                                        }
+                                    }))
+                    )
                 #endif
                 .platformTapAction(
                     singleTapAction: onSelect,
                     doubleTapAction: onDoubleClick
                 )
+        }
+        .popover(isPresented: $showActionMenu) {
+            CardActionMenu(card: card, showDirectMenu: .constant(true))
         }
     }
 

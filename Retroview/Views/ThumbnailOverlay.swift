@@ -37,7 +37,7 @@ struct ThumbnailOverlay: View {
 
                 // Menu button
                 if shouldShowMenu {
-                    CardActionMenu(card: card)
+                    CardActionMenu(card: card, showDirectMenu: .constant(false))
                         .padding(8)
                         .contentShape(Rectangle())
                         .allowsHitTesting(true)
@@ -62,7 +62,11 @@ struct ThumbnailOverlay: View {
     }
 
     private var shouldShowMenu: Bool {
-        shouldShowOverlayButtons
+        #if os(visionOS)
+            return false
+        #else
+            return shouldShowOverlayButtons
+        #endif
     }
 
     private var shouldShowOverlayButtons: Bool {
