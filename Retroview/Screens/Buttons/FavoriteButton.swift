@@ -39,10 +39,7 @@ struct FavoriteButton: View {
             }
         } label: {
             Image(systemName: isFavorite ? "heart.fill" : "heart")
-                .font(.title2)
-                .foregroundStyle(.white)
-                .shadow(radius: 2)
-                .opacity(isProcessing ? 0.5 : 1.0)
+                .overlayButtonStyle(opacity: isProcessing ? 0.5 : 1.0)
         }
         .buttonStyle(.plain)
         .platformInteraction(
@@ -51,6 +48,7 @@ struct FavoriteButton: View {
             )
         )
         .disabled(isProcessing)
+        .help(isFavorite ? "Favorite" : "Not Favorite")
     }
 
     private var isFavorite: Bool {

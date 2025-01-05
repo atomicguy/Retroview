@@ -326,7 +326,6 @@ struct PlatformNavigationTitleModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             #if os(macOS)
-                .navigationTitle("")  // Clear system title
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         Text(title)
@@ -399,6 +398,25 @@ struct PlatformToolbarModifier: ViewModifier {
     }
 }
 
+// MARK - Overlay Buttons
+struct OverlayButtonStyle: ViewModifier {
+    let opacity: Double
+
+    init(opacity: Double = 1.0) {
+        self.opacity = opacity
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .font(.title2)
+            .foregroundStyle(.white)
+            .shadow(radius: 2)
+            .opacity(opacity)
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
+    }
+}
+
 // MARK: - View Extensions
 extension View {
     func platformInteraction(_ config: InteractionConfig) -> some View {
@@ -427,5 +445,9 @@ extension View {
                 trailingContent: [AnyView(trailing())]
             )
         )
+    }
+
+    func overlayButtonStyle(opacity: Double = 1.0) -> some View {
+        modifier(OverlayButtonStyle(opacity: opacity))
     }
 }

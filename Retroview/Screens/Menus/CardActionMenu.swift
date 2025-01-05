@@ -111,7 +111,7 @@ struct CardActionMenu: View {
             Task {
                 guard let imageLoader = imageLoader,
                     (try await imageLoader.loadImage(
-                        for: card, side: .front, quality: .ultra)) != nil
+                        for: card, side: .front, quality: .high)) != nil
                 else { return }
                 let _ = try await PreviewApplication.openCards(
                     [card], selectedCard: card, imageLoader: imageLoader)

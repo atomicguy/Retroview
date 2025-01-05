@@ -48,9 +48,7 @@ struct ThumbnailOverlay: View {
     }
 
     private var shouldShowGradient: Bool {
-        #if os(visionOS)
-            return isVisible
-        #elseif os(macOS)
+        #if os(visionOS) || os(macOS)
             return isVisible
         #else
             return false
@@ -58,24 +56,24 @@ struct ThumbnailOverlay: View {
     }
 
     private var shouldShowFavoriteButton: Bool {
-        isFavorite || shouldShowOverlayButtons
-    }
+        // Always show if card is favorited
+        if isFavorite {
+            return true
+        }
 
-    private var shouldShowMenu: Bool {
-        #if os(visionOS)
-            return false
+        // Otherwise, show based on hover/visibility state
+        #if os(macOS) || os(visionOS)
+            return isVisible
         #else
-            return shouldShowOverlayButtons
+            return true  // Always visible on iOS/iPadOS
         #endif
     }
 
-    private var shouldShowOverlayButtons: Bool {
-        #if os(visionOS)
-            return isVisible
-        #elseif os(macOS)
+    private var shouldShowMenu: Bool {
+        #if os(visionOS) || os(macOS)
             return isVisible
         #else
-            return true
+            return false
         #endif
     }
 
@@ -86,13 +84,77 @@ struct ThumbnailOverlay: View {
     }
 }
 
-#Preview("Thumbnail Overlay") {
+#Preview("Thumbnail Overlay States") {
     let previewContainer = try! PreviewDataManager.shared.container()
-    let card = try! previewContainer.mainContext.fetch(
-        FetchDescriptor<CardSchemaV1.StereoCard>()
-    ).first!
+    let context = previewContainer.mainContext
 
-    ThumbnailOverlay(card: card, isVisible: true)
-        .withPreviewStore()
-        .frame(width: 300, height: 200)
+    // Ensure we have a card
+    let card = try! context.fetch(FetchDescriptor<CardSchemaV1.StereoCard>())
+        .first!
+    let card2 = try! context.fetch(FetchDescriptor<CardSchemaV1.StereoCard>())
+        .last!
+
+    // Create a non-favorited view
+    let normalCard = HStack(spacing: 20) {
+        // Not hovered
+        RoundedRectangle(cornerRadius: 16)
+            .fill(Color.gray.opacity(0.2))
+            .frame(width: 400, height: 200)
+            .overlay(
+                ThumbnailOverlay(card: card2, isVisible: false)
+                    .withPreviewStore()
+            )
+
+        // Hovered
+        RoundedRectangle(cornerRadius: 16)
+            .fill(Color.gray.opacity(0.2))
+            .frame(width: 400, height: 200)
+            .overlay(
+                ThumbnailOverlay(card: card2, isVisible: true)
+                    .withPreviewStore()
+            )
+    }
+    .padding()
+    .withPreviewStore()
+
+    // Create favorites collection if needed
+    let favorites = CollectionSchemaV1.Collection(
+        name: CollectionDefaults.favoritesName)
+    context.insert(favorites)
+    favorites.addCard(card, context: context)
+    try! context.save()
+
+    // Create a favorited view
+    let favoritedCard = HStack(spacing: 20) {
+        // Not hovered
+        RoundedRectangle(cornerRadius: 16)
+            .fill(Color.gray.opacity(0.2))
+            .frame(width: 400, height: 200)
+            .overlay(
+                ThumbnailOverlay(card: card, isVisible: false)
+                    .withPreviewStore()
+            )
+
+        // Hovered
+        RoundedRectangle(cornerRadius: 16)
+            .fill(Color.gray.opacity(0.2))
+            .frame(width: 400, height: 200)
+            .overlay(
+                ThumbnailOverlay(card: card, isVisible: true)
+                    .withPreviewStore()
+            )
+    }
+    .padding()
+    .withPreviewStore()
+
+    return VStack(spacing: 32) {
+        VStack(alignment: .leading) {
+            Text("Regular Card").font(.headline)
+            normalCard
+        }
+        VStack(alignment: .leading) {
+            Text("Favorited Card").font(.headline)
+            favoritedCard
+        }
+    }
 }

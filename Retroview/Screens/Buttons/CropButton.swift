@@ -15,9 +15,7 @@ struct CropButton: View {
             showCrops.toggle()
         } label: {
             Image(systemName: showCrops ? "rectangle" : "rectangle.split.2x1")
-                .font(.title2)
-                .foregroundStyle(.white)  // Add this line
-                                .shadow(radius: 2)  // Add this line
+                .overlayButtonStyle(opacity: 1.0)
         }
         .buttonStyle(.plain)
         .platformInteraction(
@@ -25,7 +23,6 @@ struct CropButton: View {
                 showHoverEffects: true
             )
         )
-        .help(showCrops ? "Hide Crops" : "Show Crops")
-        .imageScale(.large) 
+        .help(showCrops ? "Crops Visible" : "Crops Hidden")
     }
 }

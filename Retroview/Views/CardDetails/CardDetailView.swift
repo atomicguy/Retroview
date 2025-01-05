@@ -8,9 +8,14 @@
 import SwiftData
 import SwiftUI
 
+#if os(visionOS)
+    import QuickLook
+#endif
+
 struct CardDetailView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.imageLoader) private var imageLoader
     @State private var showCrops = false
 
     var body: some View {
@@ -19,11 +24,45 @@ struct CardDetailView: View {
                 CardHeaderView(card: card)
 
                 if card.imageFrontId != nil {
-                    CardImageSection(
-                        card: card,
-                        side: .front,
-                        title: "Front",
-                        showCrops: showCrops)
+                    ZStack {
+                        // Card image section
+                        CardImageSection(
+                            card: card,
+                            side: .front,
+                            title: "Front",
+                            showCrops: showCrops
+                        )
+
+                        // Overlay for buttons
+                        GeometryReader { geometry in
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    #if os(visionOS)
+                                        Button(action: handleViewInSpace) {
+                                            Image(systemName: "view.3d")
+                                                .overlayButtonStyle(opacity: 1.0)
+                                        }
+                                        .padding(.trailing, 8)
+                                        .padding(.top, 34)
+                                        .buttonStyle(.plain)
+                                    #endif
+                                }
+                                Spacer()
+                                HStack {
+                                    FavoriteButton(card: card)
+                                        .padding(8)
+                                    Spacer()
+                                    CropButton(showCrops: $showCrops)
+                                        .padding(8)
+                                }
+                            }
+                            .frame(
+                                width: geometry.size.width,
+                                height: geometry.size.height)
+                        }
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
 
                 if !card.subjects.isEmpty {
@@ -56,11 +95,23 @@ struct CardDetailView: View {
         )
         .platformToolbar {
         } trailing: {
-            CropButton(showCrops: $showCrops)
             CardActionMenu(card: card, showDirectMenu: .constant(false))
-            FavoriteButton(card: card)
         }
     }
+    private func handleViewInSpace() {
+        #if os(visionOS)
+            Task {
+                guard let imageLoader = imageLoader,
+                    (try await imageLoader.loadImage(
+                        for: card, side: .front, quality: .high)) != nil
+                else { return }
+                let _ = try await PreviewApplication.openCards(
+                    [card], selectedCard: card, imageLoader: imageLoader
+                )
+            }
+        #endif
+    }
+
 }
 
 #Preview("Card Detail View") {

@@ -27,14 +27,17 @@ struct Sidebar: View {
             Section {
                 NavigationLink(value: AppDestination.library) {
                     Label("Library", systemImage: "photo.on.rectangle.angled")
+                        .modifier(SerifFontModifier())
                 }
 
                 NavigationLink(value: AppDestination.subjects) {
                     Label("Subjects", systemImage: "tag")
+                        .modifier(SerifFontModifier())
                 }
 
                 NavigationLink(value: AppDestination.authors) {
                     Label("Authors", systemImage: "person")
+                        .modifier(SerifFontModifier())
                 }
             }
             .modifier(SerifFontModifier())
@@ -64,7 +67,7 @@ struct Sidebar: View {
             }
             .modifier(SerifFontModifier())
         }
-        .platformNavigationTitle("Retroview")
+        .modifier(SerifFontModifier())
     }
 }
 
