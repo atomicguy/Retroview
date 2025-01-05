@@ -81,7 +81,7 @@ struct StoreTransferView: View {
                 Spacer()
             }
             .padding(.top)
-            .navigationTitle("Library Transfer")
+            .serifNavigationTitle("Library Transfer")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

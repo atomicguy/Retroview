@@ -125,7 +125,7 @@
             ) { cards in
                 StereoGalleryView(cards: cards)
                     .frame(minWidth: 800, minHeight: 600)
-                    .navigationTitle("Gallery")
+                    .serifNavigationTitle("Gallery")
             }
         }
     }
@@ -135,7 +135,7 @@
             CardPreviewContainer { card in
                 StereoGalleryView(cards: [card], initialCard: card)
                     .frame(minWidth: 800, minHeight: 600)
-                    .navigationTitle("Single Card Gallery")
+                    .serifNavigationTitle("Single Card Gallery")
             }
         }
     }

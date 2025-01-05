@@ -21,7 +21,7 @@ struct NewCollectionSheet: View {
             Form {
                 TextField("Collection Name", text: $collectionName)
             }
-            .navigationTitle("New Collection")
+            .serifNavigationTitle("New Collection")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -59,7 +59,6 @@
 		5C7955B02D1F7EF90037E204 /* CropUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7955AF2D1F7EF60037E204 /* CropUtility.swift */; };
 		5C7955B42D1F86E00037E204 /* StereoGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7955B32D1F86D90037E204 /* StereoGalleryView.swift */; };
 		5C7955B62D1F87050037E204 /* StereoGalleryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7955B52D1F86FF0037E204 /* StereoGalleryButton.swift */; };
-		5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5C7EA0F12CC5C631002FC3D2 /* StereoViewer */; };
 		5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */; };
 		5C80F6A42D13F02E00C58E7D /* ImagePreloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */; };
 		5C80F6A62D150A8500C58E7D /* ThumbnailOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */; };
@@ -100,7 +99,6 @@
 		5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */; };
 		5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577322D0EAED7002FA8DB /* ImportType.swift */; };
 		5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */; };
-		5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 5CDEFC242CE04E4C0046FD60 /* StereoViewer */; };
 		5CE9CF702D1E425900A49761 /* PreviewUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE9CF6F2D1E425300A49761 /* PreviewUtilities.swift */; };
 		5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */; };
 		5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */; };
@@ -269,8 +267,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */,
-				5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,7 +659,6 @@
 			);
 			mainGroup = 5C6676A32BC210F7002DD52E;
 			packageReferences = (
-				5CDEFC232CE04E4C0046FD60 /* XCLocalSwiftPackageReference "../StereoViewer" */,
 			);
 			productRefGroup = 5C6676AD2BC210F7002DD52E /* Products */;
 			projectDirPath = "";
@@ -1220,24 +1215,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		5CDEFC232CE04E4C0046FD60 /* XCLocalSwiftPackageReference "../StereoViewer" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../StereoViewer;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		5C7EA0F12CC5C631002FC3D2 /* StereoViewer */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = StereoViewer;
-		};
-		5CDEFC242CE04E4C0046FD60 /* StereoViewer */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = StereoViewer;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5C6676A42BC210F7002DD52E /* Project object */;
 }

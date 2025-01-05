@@ -43,7 +43,7 @@ struct MainView: View {
                                     ))
                             }
                         )
-                        .navigationTitle(subject.name)
+                        .serifNavigationTitle(subject.name)
                     }
                     .navigationDestination(for: AuthorSchemaV1.Author.self) {
                         author in
@@ -59,7 +59,7 @@ struct MainView: View {
                                     ))
                             }
                         )
-                        .navigationTitle(author.name)
+                        .serifNavigationTitle(author.name)
                     }
                     .navigationDestination(
                         for: CollectionSchemaV1.Collection.self
@@ -76,11 +76,12 @@ struct MainView: View {
                                     ))
                             }
                         )
-                        .navigationTitle(
+                        .serifNavigationTitle(
                             "\(collection.name) (\(collection.orderedCards.count) cards)"
                         )
                     }
             }
+            .modifier(SerifFontModifier())
         }
     }
 
@@ -118,7 +119,7 @@ struct MainView: View {
                             ))
                     }
                 )
-                .navigationTitle(collection.name)
+                .serifNavigationTitle(collection.name)
             } else {
                 ContentUnavailableView(
                     "Collection Not Found",

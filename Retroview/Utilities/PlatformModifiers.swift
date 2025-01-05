@@ -325,10 +325,10 @@ struct PlatformNavigationTitleModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         #if os(macOS)
-            content.navigationTitle(title)
+            content.serifNavigationTitle(title)
         #else
             content
-                .navigationTitle(title)
+                .serifNavigationTitle(title)
                 .navigationBarTitleDisplayMode(
                     displayMode.navigationBarDisplayMode)
         #endif

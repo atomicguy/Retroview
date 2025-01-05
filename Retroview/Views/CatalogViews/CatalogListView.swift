@@ -63,7 +63,7 @@ struct CatalogListView<T: CatalogItem>: View {
                 }
             }
         }
-        .navigationTitle("\(title) (\(filteredAndSortedItems.count))")
+        .serifNavigationTitle("\(title) (\(filteredAndSortedItems.count))")
         .searchable(text: $searchText, prompt: "Search \(title)")
         #if os(macOS)
             .textFieldStyle(.roundedBorder)
