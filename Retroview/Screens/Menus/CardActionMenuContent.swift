@@ -55,7 +55,7 @@ struct CardActionMenuContent: View {
 
             .padding()
             .frame(maxWidth: .infinity)  // Ensures equal width
-            .cornerRadius(8)
+            .cornerRadius(5)
         }
         .buttonStyle(.plain)
     }

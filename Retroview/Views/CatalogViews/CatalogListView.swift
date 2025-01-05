@@ -62,11 +62,6 @@ struct CatalogListView<T: CatalogItem>: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .platformInteraction(
-                InteractionConfig(
-                    showHoverEffects: true
-                )
-            )
         }
         .navigationTitle("\(title) (\(filteredAndSortedItems.count))")
         .searchable(text: $searchText, prompt: "Search \(title)")

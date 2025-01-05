@@ -58,31 +58,6 @@ struct ThumbnailSelectableView: View {
                         isHovering = hovering
                     }
                 }
-//                #if os(visionOS)
-//                    .hoverEffect(.highlight)
-//                    .scaleEffect(tapping ? 0.95 : 1)
-//                    .gesture(
-//                        LongPressGesture(minimumDuration: 0.5)
-//                            .onEnded { _ in
-//                                showActionMenu = true
-//                                withAnimation(.bouncy(duration: 0.5)) {
-//                                    tapping = false
-//                                }
-//                            }
-//                            .simultaneously(
-//                                with: DragGesture(minimumDistance: 0)
-//                                    .onChanged({ value in
-//                                        withAnimation(.smooth(duration: 0.2)) {
-//                                            tapping = true
-//                                        }
-//                                    })
-//                                    .onEnded({ value in
-//                                        withAnimation(.bouncy(duration: 0.5)) {
-//                                            tapping = false
-//                                        }
-//                                    }))
-//                    )
-//                #endif
                 .platformInteraction(
                     InteractionConfig(
                         onTap: onSelect,
