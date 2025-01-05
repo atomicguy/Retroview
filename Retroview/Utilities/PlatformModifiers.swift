@@ -324,44 +324,75 @@ struct PlatformNavigationTitleModifier: ViewModifier {
     let displayMode: NavigationTitleDisplayMode
 
     func body(content: Content) -> some View {
-        #if os(macOS)
-            content.serifNavigationTitle(title)
-        #else
-            content
-                .serifNavigationTitle(title)
+        content
+            #if os(macOS)
+                .navigationTitle("")  // Clear system title
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text(title)
+                        .font(.system(.title, design: .serif))
+                    }
+                }
+            #else
+                .navigationTitle(title)
                 .navigationBarTitleDisplayMode(
-                    displayMode.navigationBarDisplayMode)
-        #endif
+                    displayMode.navigationBarDisplayMode
+                )
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text(title)
+                        .font(.system(.title, design: .serif))
+                    }
+                }
+            #endif
     }
 }
 
 // MARK: - Toolbar Modifier
 struct PlatformToolbarModifier: ViewModifier {
-    let leadingContent: AnyView
-    let trailingContent: AnyView
+    let leadingContent: [AnyView]
+    let trailingContent: [AnyView]
 
     func body(content: Content) -> some View {
         content.toolbar {
             #if os(visionOS)
-                ToolbarItem(placement: .topBarLeading) {
-                    leadingContent
+                ToolbarItemGroup(placement: .topBarLeading) {
+                    ForEach(Array(leadingContent.enumerated()), id: \.offset) {
+                        _, content in
+                        content
+                    }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    trailingContent
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    ForEach(Array(trailingContent.enumerated()), id: \.offset) {
+                        _, content in
+                        content
+                    }
                 }
             #elseif os(iOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    leadingContent
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    ForEach(Array(leadingContent.enumerated()), id: \.offset) {
+                        _, content in
+                        content
+                    }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    trailingContent
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    ForEach(Array(trailingContent.enumerated()), id: \.offset) {
+                        _, content in
+                        content
+                    }
                 }
             #else
-                ToolbarItem(placement: .cancellationAction) {
-                    leadingContent
+                ToolbarItemGroup(placement: .cancellationAction) {
+                    ForEach(Array(leadingContent.enumerated()), id: \.offset) {
+                        _, content in
+                        content
+                    }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    trailingContent
+                ToolbarItemGroup(placement: .confirmationAction) {
+                    ForEach(Array(trailingContent.enumerated()), id: \.offset) {
+                        _, content in
+                        content
+                    }
                 }
             #endif
         }
@@ -380,7 +411,10 @@ extension View {
     ) -> some View {
         modifier(
             PlatformNavigationTitleModifier(
-                title: title, displayMode: displayMode))
+                title: title,
+                displayMode: displayMode
+            )
+        )
     }
 
     func platformToolbar(
@@ -389,8 +423,8 @@ extension View {
     ) -> some View {
         modifier(
             PlatformToolbarModifier(
-                leadingContent: AnyView(leading()),
-                trailingContent: AnyView(trailing())
+                leadingContent: [AnyView(leading())],
+                trailingContent: [AnyView(trailing())]
             )
         )
     }

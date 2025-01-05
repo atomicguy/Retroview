@@ -43,7 +43,7 @@ struct MainView: View {
                                     ))
                             }
                         )
-                        .serifNavigationTitle(subject.name)
+                        .platformNavigationTitle(subject.name)
                     }
                     .navigationDestination(for: AuthorSchemaV1.Author.self) {
                         author in
@@ -59,7 +59,7 @@ struct MainView: View {
                                     ))
                             }
                         )
-                        .serifNavigationTitle(author.name)
+                        .platformNavigationTitle(author.name)
                     }
                     .navigationDestination(
                         for: CollectionSchemaV1.Collection.self
@@ -76,7 +76,7 @@ struct MainView: View {
                                     ))
                             }
                         )
-                        .serifNavigationTitle(
+                        .platformNavigationTitle(
                             "\(collection.name) (\(collection.orderedCards.count) cards)"
                         )
                     }
@@ -89,7 +89,8 @@ struct MainView: View {
     private var contentView: some View {
         switch selectedDestination {
         case .none, .library:
-            LibraryGridView(modelContext: modelContext, navigationPath: $navigationPath)
+            LibraryGridView(
+                modelContext: modelContext, navigationPath: $navigationPath)
 
         case .subjects:
             CatalogListView<SubjectSchemaV1.Subject>(
@@ -119,7 +120,7 @@ struct MainView: View {
                             ))
                     }
                 )
-                .serifNavigationTitle(collection.name)
+                .platformNavigationTitle(collection.name)
             } else {
                 ContentUnavailableView(
                     "Collection Not Found",

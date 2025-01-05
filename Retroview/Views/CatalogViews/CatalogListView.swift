@@ -63,15 +63,13 @@ struct CatalogListView<T: CatalogItem>: View {
                 }
             }
         }
-        .serifNavigationTitle("\(title) (\(filteredAndSortedItems.count))")
+        .platformNavigationTitle("\(title) (\(filteredAndSortedItems.count))")
         .searchable(text: $searchText, prompt: "Search \(title)")
         #if os(macOS)
             .textFieldStyle(.roundedBorder)
         #endif
-        .toolbar {
-            ToolbarItem {
-                CatalogSortButton(sortState: sortState)
-            }
+            .platformToolbar {
+            } trailing: {CatalogSortButton(sortState: sortState)
         }
     }
 }

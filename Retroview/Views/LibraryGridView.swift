@@ -12,7 +12,7 @@ struct LibraryGridView: View {
     @Environment(\.importManager) private var importManager
     @Environment(\.imageDownloadManager) private var imageDownloadManager
 
-    let modelContext: ModelContext  // Add explicit modelContext property
+    let modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var loadedCards: [CardSchemaV1.StereoCard] = []
@@ -32,92 +32,56 @@ struct LibraryGridView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            searchBar
-            cardGrid
+            SearchBar(text: $searchManager.searchText)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+
+            ScrollView {
+                LazyVGrid(
+                    columns: columns,
+                    spacing: PlatformEnvironment.Metrics.gridSpacing
+                ) {
+                    ForEach(loadedCards) { card in
+                        ThumbnailSelectableView(
+                            card: card,
+                            isSelected: card.id == selectedCard?.id,
+                            onSelect: { selectedCard = card },
+                            onDoubleClick: {
+                                navigationPath.append(
+                                    CardStackDestination.stack(
+                                        cards: loadedCards,
+                                        initialCard: card
+                                    ))
+                            }
+                        )
+                        .id(card.id)
+                    }
+
+                    if hasMoreContent {
+                        ProgressView()
+                            .onAppear {
+                                if !isLoadingMore {
+                                    Task {
+                                        await loadMoreCards()
+                                    }
+                                }
+                            }
+                    }
+                }
+                .padding(PlatformEnvironment.Metrics.defaultPadding)
+            }
         }
-        .serifNavigationTitle("Library (\(searchManager.totalCount) cards)")
+        .platformNavigationTitle("Library (\(searchManager.totalCount) cards)")
         .task {
-            // Initial count update
             searchManager.updateTotalCount(context: modelContext)
         }
-
         .onChange(of: searchManager.searchText) {
             Task {
                 searchManager.updateTotalCount(context: modelContext)
                 await loadInitialCards()
             }
         }
-        .toolbar {
-            toolbarContent
-        }
-    }
-
-    private var searchBar: some View {
-        SearchBar(text: $searchManager.searchText)
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-    }
-
-    private var cardGrid: some View {
-        ScrollView {
-            LazyVGrid(
-                columns: columns,
-                spacing: PlatformEnvironment.Metrics.gridSpacing
-            ) {
-                cardItems
-                loadingIndicator
-            }
-            .padding(PlatformEnvironment.Metrics.defaultPadding)
-        }
-    }
-
-    private var cardItems: some View {
-        ForEach(loadedCards) { card in
-            ThumbnailSelectableView(
-                card: card,
-                isSelected: card.id == selectedCard?.id,
-                onSelect: { selectedCard = card },
-                onDoubleClick: {
-                    navigationPath.append(
-                        CardStackDestination.stack(
-                            cards: loadedCards,
-                            initialCard: card
-                        ))
-                }
-            )
-            .id(card.id)
-        }
-    }
-
-    private var loadingIndicator: some View {
-        Group {
-            if hasMoreContent {
-                ProgressView()
-                    .onAppear {
-                        if !isLoadingMore {
-                            Task {
-                                await loadMoreCards()
-                            }
-                        }
-                    }
-            }
-        }
-    }
-
-    private var toolbarContent: some ToolbarContent {
-        Group {
-            ToolbarItem(placement: .primaryAction) {
-                leadingToolbarItems
-            }
-
-            ToolbarItem(placement: .primaryAction) {
-                trailingToolbarItems
-            }
-        }
-    }
-
-    private var leadingToolbarItems: some View {
-        HStack {
+        .platformToolbar {
             if let manager = importManager, manager.isImporting {
                 ImportProgressIndicator(importManager: manager)
             }
@@ -130,17 +94,30 @@ struct LibraryGridView: View {
                     onCancel: { manager.cancelDownload() }
                 )
             }
-        }
-    }
+        } trailing: {
+            Button {
+                imageDownloadManager?.startImageDownload()
+            } label: {
+                Label(
+                    "Download Missing Images",
+                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle")
+            }
 
-    private var trailingToolbarItems: some View {
-        HStack {
-            downloadImagesButton
-            importMenu
+            ImportTypeMenu(
+                onImport: { urls, type in
+                    guard let manager = importManager else { return }
+
+                    switch type {
+                    case .mods:
+                        manager.startImport(from: urls)
+                    case .crops:
+                        startCropImport(urls: urls)
+                    }
+                }
+            )
 
             if !loadedCards.isEmpty {
-                BulkCollectionButton(fetchCards: { searchManager.filteredCards }
-                )
+                BulkCollectionButton(fetchCards: { searchManager.filteredCards })
             }
 
             DatabaseTransferButton()
@@ -150,6 +127,7 @@ struct LibraryGridView: View {
             #endif
         }
     }
+
     private var columns: [GridItem] {
         [
             GridItem(
@@ -158,31 +136,6 @@ struct LibraryGridView: View {
                     maximum: PlatformEnvironment.Metrics.gridMaxWidth
                 ), spacing: 20)
         ]
-    }
-
-    private var downloadImagesButton: some View {
-        Button {
-            imageDownloadManager?.startImageDownload()
-        } label: {
-            Label(
-                "Download Missing Images",
-                systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle")
-        }
-    }
-
-    private var importMenu: some View {
-        ImportTypeMenu(
-            onImport: { urls, type in
-                guard let manager = importManager else { return }
-
-                switch type {
-                case .mods:
-                    manager.startImport(from: urls)
-                case .crops:
-                    startCropImport(urls: urls)
-                }
-            }
-        )
     }
 
     private func startCropImport(urls: [URL]) {

@@ -19,6 +19,7 @@
 		5C1454482CF8174C00D5C232 /* ImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1454472CF8174700D5C232 /* ImportView.swift */; };
 		5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14544E2CF849D700D5C232 /* Collection.swift */; };
 		5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */; };
+		5C19921E2D2A32920039D52C /* CropRectanglesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19921D2D2A328E0039D52C /* CropRectanglesView.swift */; };
 		5C1DBD892D0FAD290050B4DF /* LibraryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */; };
 		5C1DBD912D0FB0B20050B4DF /* StoreUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD902D0FB0AD0050B4DF /* StoreUtility.swift */; };
 		5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */; };
@@ -158,6 +159,7 @@
 		5C1454472CF8174700D5C232 /* ImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportView.swift; sourceTree = "<group>"; };
 		5C14544E2CF849D700D5C232 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDefaults.swift; sourceTree = "<group>"; };
+		5C19921D2D2A328E0039D52C /* CropRectanglesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropRectanglesView.swift; sourceTree = "<group>"; };
 		5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryGridView.swift; sourceTree = "<group>"; };
 		5C1DBD902D0FB0AD0050B4DF /* StoreUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreUtility.swift; sourceTree = "<group>"; };
 		5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDebugMenu.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C19921D2D2A328E0039D52C /* CropRectanglesView.swift */,
 				5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */,
 				5C79558F2D1E72FE0037E204 /* CardCropOverlayView.swift */,
 				5C73DB5F2D18FD4B004BEEC5 /* CardDetails */,
@@ -772,6 +775,7 @@
 				5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
+				5C19921E2D2A32920039D52C /* CropRectanglesView.swift in Sources */,
 				5C80F6B42D169D4800C58E7D /* ThumbnailSelectableView.swift in Sources */,
 				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,
 				5C73DB772D192102004BEEC5 /* ImportTypeMenu.swift in Sources */,

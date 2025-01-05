@@ -16,11 +16,24 @@ struct CardImageSection: View {
     let card: CardSchemaV1.StereoCard
     let side: CardSide
     let title: String
+    let showCrops: Bool
 
     @State private var thumbnailImage: CGImage?
     @State private var fullImage: CGImage?
     @State private var isLoadingFullImage = false
     @State private var loadError = false
+
+    init(
+        card: CardSchemaV1.StereoCard,
+        side: CardSide,
+        title: String,
+        showCrops: Bool = false
+    ) {
+        self.card = card
+        self.side = side
+        self.title = title
+        self.showCrops = showCrops
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -54,6 +67,14 @@ struct CardImageSection: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .overlay {
+                                if showCrops {
+                                    CropRectanglesView(
+                                        leftCrop: card.leftCrop,
+                                        rightCrop: card.rightCrop
+                                    )
+                                }
+                            }
                             .transition(.opacity)
                     }
 
@@ -121,6 +142,18 @@ struct CardImageSection: View {
     ).first!
 
     return CardImageSection(card: card, side: .front, title: "Front Image")
+        .withPreviewStore()
+        .environment(\.imageLoader, CardImageLoader())
+        .padding()
+}
+
+#Preview("Card Image Section - With Crops") {
+    let previewContainer = try! PreviewDataManager.shared.container()
+    let card = try! previewContainer.mainContext.fetch(
+        FetchDescriptor<CardSchemaV1.StereoCard>()
+    ).first!
+
+    return CardImageSection(card: card, side: .front, title: "Front Image", showCrops: true)
         .withPreviewStore()
         .environment(\.imageLoader, CardImageLoader())
         .padding()

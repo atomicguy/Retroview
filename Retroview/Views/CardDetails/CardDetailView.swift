@@ -11,6 +11,7 @@ import SwiftUI
 struct CardDetailView: View {
     @Bindable var card: CardSchemaV1.StereoCard
     @Environment(\.modelContext) private var modelContext
+    @State private var showCrops = false
 
     var body: some View {
         ScrollView {
@@ -18,15 +19,22 @@ struct CardDetailView: View {
                 CardHeaderView(card: card)
 
                 if card.imageFrontId != nil {
-                    CardImageSection(card: card, side: .front, title: "Front")
+                    CardImageSection(
+                        card: card,
+                        side: .front,
+                        title: "Front",
+                        showCrops: showCrops)
                 }
-                
+
                 if !card.subjects.isEmpty {
                     CardSubjectSection(subjects: card.subjects)
                 }
 
                 if card.imageBackId != nil {
-                    CardImageSection(card: card, side: .back, title: "Back")
+                    CardImageSection(
+                        card: card,
+                        side: .back,
+                        title: "Back")
                 }
 
                 CardTitlesSection(card: card) { title in
@@ -47,9 +55,10 @@ struct CardDetailView: View {
             displayMode: .inline
         )
         .platformToolbar {
-            FavoriteButton(card: card)
         } trailing: {
+            CropButton(showCrops: $showCrops)
             CardActionMenu(card: card, showDirectMenu: .constant(false))
+            FavoriteButton(card: card)
         }
     }
 }

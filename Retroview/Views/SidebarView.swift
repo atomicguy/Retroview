@@ -64,13 +64,7 @@ struct Sidebar: View {
             }
             .modifier(SerifFontModifier())
         }
-        .serifNavigationTitle("Retroview")
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("Retroview")
-                    .font(.system(.title, design: .serif))
-            }
-        }
+        .platformNavigationTitle("Retroview")
     }
 }
 

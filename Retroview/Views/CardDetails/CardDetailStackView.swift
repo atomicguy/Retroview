@@ -47,23 +47,21 @@ struct CardDetailStackView: View {
                 .offset(x: offset)
                 .gesture(dragGesture(geometry: geometry))
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .navigation) {
-                Button {
-                    navigatePrevious()
-                } label: {
-                    Label("Previous", systemImage: "chevron.left")
-                }
-                .disabled(currentIndex <= 0)
-
-                Button {
-                    navigateNext()
-                } label: {
-                    Label("Next", systemImage: "chevron.right")
-                }
-                .disabled(currentIndex >= cards.count - 1)
+        .platformToolbar(trailing:  {
+            Button {
+                navigatePrevious()
+            } label: {
+                Label("Previous", systemImage: "chevron.left")
             }
-        }
+            .disabled(currentIndex <= 0)
+
+            Button {
+                navigateNext()
+            } label: {
+                Label("Next", systemImage: "chevron.right")
+            }
+            .disabled(currentIndex >= cards.count - 1)
+        })
     }
 
     private func dragGesture(geometry: GeometryProxy) -> some Gesture {

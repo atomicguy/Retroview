@@ -75,7 +75,7 @@ struct CardGridLayout: View {
         .withPreviewStore()
         .environment(\.imageLoader, CardImageLoader())
         .frame(width: 1024, height: 600)
-        .serifNavigationTitle("Preview Grid")
+        .platformNavigationTitle("Preview Grid")
     }
 }
 
@@ -90,6 +90,6 @@ struct CardGridLayout: View {
         .withPreviewStore()
         .environment(\.imageLoader, CardImageLoader())
         .frame(width: 1024, height: 600)
-        .serifNavigationTitle("Empty Grid")
+        .platformNavigationTitle("Empty Grid")
     }
 }

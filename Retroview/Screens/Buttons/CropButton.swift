@@ -8,33 +8,24 @@
 import SwiftUI
 
 struct CropButton: View {
-    let card: CardSchemaV1.StereoCard
-    @State private var showingCropOverlay = false
-    
+    @Binding var showCrops: Bool
+
     var body: some View {
         Button {
-            showingCropOverlay = true
+            showCrops.toggle()
         } label: {
-            Image(systemName: "crop")
+            Image(systemName: showCrops ? "rectangle" : "rectangle.split.2x1")
                 .font(.title2)
+                .foregroundStyle(.white)  // Add this line
+                                .shadow(radius: 2)  // Add this line
         }
-        .sheet(isPresented: $showingCropOverlay) {
-            NavigationStack {
-                CardCropOverlayView(card: card)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Done") {
-                                showingCropOverlay = false
-                            }
-                        }
-                    }
-            }
-            #if os(macOS)
-            .frame(minWidth: 800, minHeight: 400)
-            #else
-            .presentationDetents([.large])
-            .presentationDragIndicator(.visible)
-            #endif
-        }
+        .buttonStyle(.plain)
+        .platformInteraction(
+            InteractionConfig(
+                showHoverEffects: true
+            )
+        )
+        .help(showCrops ? "Hide Crops" : "Show Crops")
+        .imageScale(.large) 
     }
 }

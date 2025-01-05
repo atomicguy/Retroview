@@ -25,11 +25,11 @@ struct CardHeaderView: View {
                 }
             }
             
-            Spacer()
-            
-            CropButton(card: card)
-                .labelStyle(.iconOnly)
-                .font(.title2)
+//            Spacer()
+//            
+//            CropButton(card: card)
+//                .labelStyle(.iconOnly)
+//                .font(.title2)
         }
     }
 }
