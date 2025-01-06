@@ -31,6 +31,8 @@ enum CollectionSchemaV1: VersionedSchema {
         @Relationship(
             deleteRule: .nullify, inverse: \CardSchemaV1.StereoCard.collections)
         var cards: [CardSchemaV1.StereoCard] = []
+        
+        @Attribute(.externalStorage) var collectionThumbnail: Data?
 
         // Computed property to get cards in order
         var orderedCards: [CardSchemaV1.StereoCard] {

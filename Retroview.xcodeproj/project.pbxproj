@@ -21,6 +21,7 @@
 		5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */; };
 		5C19921E2D2A32920039D52C /* CropRectanglesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19921D2D2A328E0039D52C /* CropRectanglesView.swift */; };
 		5C1992202D2B45A30039D52C /* StereoCard+ViewInSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C19921F2D2B45970039D52C /* StereoCard+ViewInSpace.swift */; };
+		5C1992222D2B98880039D52C /* CollectionThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1992212D2B98830039D52C /* CollectionThumbnailView.swift */; };
 		5C1DBD892D0FAD290050B4DF /* LibraryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */; };
 		5C1DBD912D0FB0B20050B4DF /* StoreUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD902D0FB0AD0050B4DF /* StoreUtility.swift */; };
 		5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */; };
@@ -101,6 +102,7 @@
 		5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5772A2D0EA8FF002FA8DB /* CropImportTypes.swift */; };
 		5CD577332D0EAEDB002FA8DB /* ImportType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577322D0EAED7002FA8DB /* ImportType.swift */; };
 		5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */; };
+		5CD85DCC2D2BB8BC00BC23A7 /* CollectionsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD85DCB2D2BB8B700BC23A7 /* CollectionsGridView.swift */; };
 		5CE9CF702D1E425900A49761 /* PreviewUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE9CF6F2D1E425300A49761 /* PreviewUtilities.swift */; };
 		5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */; };
 		5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */; };
@@ -162,6 +164,7 @@
 		5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDefaults.swift; sourceTree = "<group>"; };
 		5C19921D2D2A328E0039D52C /* CropRectanglesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropRectanglesView.swift; sourceTree = "<group>"; };
 		5C19921F2D2B45970039D52C /* StereoCard+ViewInSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StereoCard+ViewInSpace.swift"; sourceTree = "<group>"; };
+		5C1992212D2B98830039D52C /* CollectionThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionThumbnailView.swift; sourceTree = "<group>"; };
 		5C1DBD882D0FAD250050B4DF /* LibraryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryGridView.swift; sourceTree = "<group>"; };
 		5C1DBD902D0FB0AD0050B4DF /* StoreUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreUtility.swift; sourceTree = "<group>"; };
 		5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDebugMenu.swift; sourceTree = "<group>"; };
@@ -249,6 +252,7 @@
 		5CD577322D0EAED7002FA8DB /* ImportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportType.swift; sourceTree = "<group>"; };
 		5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropUpdateService.swift; sourceTree = "<group>"; };
 		5CD600182C054C18008732E8 /* CardLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CardLoader; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CD85DCB2D2BB8B700BC23A7 /* CollectionsGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsGridView.swift; sourceTree = "<group>"; };
 		5CE9CF6F2D1E425300A49761 /* PreviewUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewUtilities.swift; sourceTree = "<group>"; };
 		5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenu.swift; sourceTree = "<group>"; };
 		5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformModifiers.swift; sourceTree = "<group>"; };
@@ -462,6 +466,8 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5CD85DCB2D2BB8B700BC23A7 /* CollectionsGridView.swift */,
+				5C1992212D2B98830039D52C /* CollectionThumbnailView.swift */,
 				5C19921D2D2A328E0039D52C /* CropRectanglesView.swift */,
 				5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */,
 				5C79558F2D1E72FE0037E204 /* CardCropOverlayView.swift */,
@@ -782,6 +788,7 @@
 				5C19921E2D2A32920039D52C /* CropRectanglesView.swift in Sources */,
 				5C80F6B42D169D4800C58E7D /* ThumbnailSelectableView.swift in Sources */,
 				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,
+				5CD85DCC2D2BB8BC00BC23A7 /* CollectionsGridView.swift in Sources */,
 				5C73DB772D192102004BEEC5 /* ImportTypeMenu.swift in Sources */,
 				5C73DB732D191499004BEEC5 /* StoreTransferView.swift in Sources */,
 				5C0925AD2D2110B000CE06A9 /* SPConverter+Validation.swift in Sources */,
@@ -806,6 +813,7 @@
 				5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */,
 				5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */,
 				5CAFA7632D19DD0900112A93 /* StoreDocument.swift in Sources */,
+				5C1992222D2B98880039D52C /* CollectionThumbnailView.swift in Sources */,
 				5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */,
 				5C0925B42D211B1300CE06A9 /* SpatialPhotoManager.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,

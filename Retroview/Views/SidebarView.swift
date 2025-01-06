@@ -39,6 +39,10 @@ struct Sidebar: View {
                     Label("Authors", systemImage: "person")
                         .modifier(SerifFontModifier())
                 }
+                
+                NavigationLink(value: AppDestination.collections) {
+                                    Label("Collections", systemImage: "archivebox")
+                                }
             }
             .modifier(SerifFontModifier())
 

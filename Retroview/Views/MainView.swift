@@ -106,6 +106,9 @@ struct MainView: View {
                 sortDescriptor: SortDescriptor(\AuthorSchemaV1.Author.name)
             )
 
+        case .collections:
+            CollectionsGridView(navigationPath: $navigationPath)
+
         case let .collection(id, _):
             if let collection = collections.first(where: { $0.id == id }) {
                 CardGridLayout(
@@ -124,7 +127,8 @@ struct MainView: View {
             } else {
                 ContentUnavailableView(
                     "Collection Not Found",
-                    systemImage: "exclamationmark.triangle")
+                    systemImage: "exclamationmark.triangle"
+                )
             }
         }
     }
