@@ -70,7 +70,7 @@ struct ThumbnailOverlay: View {
     }
 
     private var shouldShowMenu: Bool {
-        #if os(visionOS) || os(macOS)
+        #if os(macOS)
             return isVisible
         #else
             return false
