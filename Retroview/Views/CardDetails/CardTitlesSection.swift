@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-#if DEBUG
-import SwiftData
-#endif
 
 struct CardTitlesSection: View {
     let card: CardSchemaV1.StereoCard
@@ -64,6 +61,9 @@ struct CardTitlesSection: View {
     }
 }
 
+#if DEBUG
+import SwiftData
+
 #Preview("Card Title Section") {
     let previewContainer = try! PreviewDataManager.shared.container()
     let card = try! previewContainer.mainContext.fetch(FetchDescriptor<CardSchemaV1.StereoCard>()).first!
@@ -72,3 +72,4 @@ struct CardTitlesSection: View {
         .withPreviewStore()
         .padding()
 }
+#endif

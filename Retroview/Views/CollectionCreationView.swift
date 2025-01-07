@@ -39,6 +39,7 @@ struct CollectionCreationView: View {
                     }
                 }
             }
+            .formStyle(.grouped) // Add this for better macOS presentation
             .platformNavigationTitle("New Collection", displayMode: .inline)
             .platformToolbar {
                 Button("Cancel") {
@@ -57,7 +58,12 @@ struct CollectionCreationView: View {
                 isNameFieldFocused = true
             }
         }
+        #if os(macOS)
+        .frame(minWidth: 400, minHeight: 200, maxHeight: 300)
+        #else
         .frame(minWidth: 300, minHeight: 150)
+        #endif
+        .interactiveDismissDisabled(isProcessing)
     }
 
     private func createCollection() async {

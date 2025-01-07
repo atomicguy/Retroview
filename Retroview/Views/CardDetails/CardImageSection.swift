@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-#if DEBUG
-    import SwiftData
-#endif
-
 struct CardImageSection: View {
     @Environment(\.imageLoader) private var imageLoader
     let card: CardSchemaV1.StereoCard
@@ -135,26 +131,32 @@ struct CardImageSection: View {
     }
 }
 
-#Preview("Card Image Section") {
-    let previewContainer = try! PreviewDataManager.shared.container()
-    let card = try! previewContainer.mainContext.fetch(
-        FetchDescriptor<CardSchemaV1.StereoCard>()
-    ).first!
+#if DEBUG
+    import SwiftData
 
-    return CardImageSection(card: card, side: .front, title: "Front Image")
+    #Preview("Card Image Section") {
+        let previewContainer = try! PreviewDataManager.shared.container()
+        let card = try! previewContainer.mainContext.fetch(
+            FetchDescriptor<CardSchemaV1.StereoCard>()
+        ).first!
+
+        return CardImageSection(card: card, side: .front, title: "Front Image")
+            .withPreviewStore()
+            .environment(\.imageLoader, CardImageLoader())
+            .padding()
+    }
+
+    #Preview("Card Image Section - With Crops") {
+        let previewContainer = try! PreviewDataManager.shared.container()
+        let card = try! previewContainer.mainContext.fetch(
+            FetchDescriptor<CardSchemaV1.StereoCard>()
+        ).first!
+
+        return CardImageSection(
+            card: card, side: .front, title: "Front Image", showCrops: true
+        )
         .withPreviewStore()
         .environment(\.imageLoader, CardImageLoader())
         .padding()
-}
-
-#Preview("Card Image Section - With Crops") {
-    let previewContainer = try! PreviewDataManager.shared.container()
-    let card = try! previewContainer.mainContext.fetch(
-        FetchDescriptor<CardSchemaV1.StereoCard>()
-    ).first!
-
-    return CardImageSection(card: card, side: .front, title: "Front Image", showCrops: true)
-        .withPreviewStore()
-        .environment(\.imageLoader, CardImageLoader())
-        .padding()
-}
+    }
+#endif
