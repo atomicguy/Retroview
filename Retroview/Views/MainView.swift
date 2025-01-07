@@ -16,73 +16,24 @@ struct MainView: View {
     @State private var navigationPath = NavigationPath()
 
     var body: some View {
-        NavigationSplitView {
-            Sidebar(selectedDestination: $selectedDestination)
-        } detail: {
-            NavigationStack(path: $navigationPath) {
-                contentView
-                    .navigationDestination(for: CardStackDestination.self) {
-                        destination in
-                        switch destination {
-                        case .stack(let cards, let initialCard):
-                            CardDetailStackView(
-                                cards: cards, initialCard: initialCard)
-                        }
+        Group {
+            #if os(visionOS)
+                VisionNavigationView(
+                    selectedDestination: $selectedDestination,
+                    navigationPath: $navigationPath
+                )
+            #else
+                NavigationSplitView {
+                    Sidebar(selectedDestination: $selectedDestination)
+                } detail: {
+                    NavigationStack(path: $navigationPath) {
+                        contentView
+                            .withNavigationDestinations(navigationPath: $navigationPath)
                     }
-                    .navigationDestination(for: SubjectSchemaV1.Subject.self) {
-                        subject in
-                        CardGridLayout(
-                            cards: subject.cards,
-                            selectedCard: .constant(nil),
-                            navigationPath: $navigationPath,
-                            onCardSelected: { card in
-                                navigationPath.append(
-                                    CardStackDestination.stack(
-                                        cards: subject.cards,
-                                        initialCard: card
-                                    ))
-                            }
-                        )
-                        .platformNavigationTitle(subject.name)
-                    }
-                    .navigationDestination(for: AuthorSchemaV1.Author.self) {
-                        author in
-                        CardGridLayout(
-                            cards: author.cards,
-                            selectedCard: .constant(nil),
-                            navigationPath: $navigationPath,
-                            onCardSelected: { card in
-                                navigationPath.append(
-                                    CardStackDestination.stack(
-                                        cards: author.cards,
-                                        initialCard: card
-                                    ))
-                            }
-                        )
-                        .platformNavigationTitle(author.name)
-                    }
-                    .navigationDestination(
-                        for: CollectionSchemaV1.Collection.self
-                    ) { collection in
-                        CardGridLayout(
-                            cards: collection.orderedCards,
-                            selectedCard: .constant(nil),
-                            navigationPath: $navigationPath,
-                            onCardSelected: { card in
-                                navigationPath.append(
-                                    CardStackDestination.stack(
-                                        cards: collection.orderedCards,
-                                        initialCard: card
-                                    ))
-                            }
-                        )
-                        .platformNavigationTitle(
-                            "\(collection.name) (\(collection.orderedCards.count) cards)"
-                        )
-                    }
-            }
-            .modifier(SerifFontModifier())
+                }
+            #endif
         }
+        .modifier(SerifFontModifier())
     }
 
     @ViewBuilder
@@ -91,24 +42,22 @@ struct MainView: View {
         case .none, .library:
             LibraryGridView(
                 modelContext: modelContext, navigationPath: $navigationPath)
-
         case .subjects:
             CatalogListView<SubjectSchemaV1.Subject>(
                 title: "Subjects",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\SubjectSchemaV1.Subject.name)
             )
-
         case .authors:
             CatalogListView<AuthorSchemaV1.Author>(
                 title: "Authors",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\AuthorSchemaV1.Author.name)
             )
-
+        case .favorites:
+            FavoritesView(navigationPath: $navigationPath)
         case .collections:
             CollectionsGridView(navigationPath: $navigationPath)
-
         case let .collection(id, _):
             if let collection = collections.first(where: { $0.id == id }) {
                 CardGridLayout(
@@ -127,8 +76,7 @@ struct MainView: View {
             } else {
                 ContentUnavailableView(
                     "Collection Not Found",
-                    systemImage: "exclamationmark.triangle"
-                )
+                    systemImage: "exclamationmark.triangle")
             }
         }
     }

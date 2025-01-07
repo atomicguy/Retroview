@@ -11,6 +11,7 @@ enum AppDestination: Hashable {
     case library
     case subjects
     case authors
+    case favorites
     case collections
     case collection(UUID, String)
     
@@ -19,6 +20,7 @@ enum AppDestination: Hashable {
         case .library: "Library"
         case .subjects: "Subjects"
         case .authors: "Authors"
+        case .favorites: "Favorites"
         case .collections: "Collections"
         case let .collection(_, name): name
         }
@@ -29,7 +31,8 @@ enum AppDestination: Hashable {
         case .library: "photo.on.rectangle.angled"
         case .subjects: "tag"
         case .authors: "person"
-        case .collections: "archivebox"
+        case .favorites: "heart.fill"
+        case .collections: "folder"
         case let .collection(_, name):
             name == CollectionDefaults.favoritesName ? "heart.fill" : "folder"
         }
@@ -40,6 +43,7 @@ enum AppDestination: Hashable {
         case .library: "library"
         case .subjects: "subjects"
         case .authors: "authors"
+        case .favorites: "favorites"
         case .collections: "collections"
         case let .collection(id, _): id.uuidString
         }

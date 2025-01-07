@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C0318702D2CFBB2009B0871 /* VisionNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C03186F2D2CFBAE009B0871 /* VisionNavigationView.swift */; };
+		5C0318722D2CFBC7009B0871 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0318712D2CFBC3009B0871 /* FavoritesView.swift */; };
+		5C0318742D2D00C3009B0871 /* NavigationDestinationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0318732D2D00BC009B0871 /* NavigationDestinationModifier.swift */; };
 		5C0925AD2D2110B000CE06A9 /* SPConverter+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0925AC2D2110A300CE06A9 /* SPConverter+Validation.swift */; };
 		5C0925AF2D2111F400CE06A9 /* SPConverter+Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0925AE2D2111EB00CE06A9 /* SPConverter+Metadata.swift */; };
 		5C0925B42D211B1300CE06A9 /* SpatialPhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0925B32D211B0D00CE06A9 /* SpatialPhotoManager.swift */; };
@@ -150,6 +153,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5C03186F2D2CFBAE009B0871 /* VisionNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionNavigationView.swift; sourceTree = "<group>"; };
+		5C0318712D2CFBC3009B0871 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		5C0318732D2D00BC009B0871 /* NavigationDestinationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestinationModifier.swift; sourceTree = "<group>"; };
 		5C0925AC2D2110A300CE06A9 /* SPConverter+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SPConverter+Validation.swift"; sourceTree = "<group>"; };
 		5C0925AE2D2111EB00CE06A9 /* SPConverter+Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SPConverter+Metadata.swift"; sourceTree = "<group>"; };
 		5C0925B32D211B0D00CE06A9 /* SpatialPhotoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialPhotoManager.swift; sourceTree = "<group>"; };
@@ -466,6 +472,9 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5C0318732D2D00BC009B0871 /* NavigationDestinationModifier.swift */,
+				5C0318712D2CFBC3009B0871 /* FavoritesView.swift */,
+				5C03186F2D2CFBAE009B0871 /* VisionNavigationView.swift */,
 				5CD85DCB2D2BB8B700BC23A7 /* CollectionsGridView.swift */,
 				5C1992212D2B98830039D52C /* CollectionThumbnailView.swift */,
 				5C19921D2D2A328E0039D52C /* CropRectanglesView.swift */,
@@ -746,10 +755,12 @@
 				5C73DB652D18FDE9004BEEC5 /* CardSubjectSection.swift in Sources */,
 				5CF629CB2D1DDEC000A55E89 /* PreviewDataManager.swift in Sources */,
 				5CAFA76D2D1A747E00112A93 /* CatalogItemProtocol.swift in Sources */,
+				5C0318722D2CFBC7009B0871 /* FavoritesView.swift in Sources */,
 				5CFE2B7A2D2489840023EBF8 /* StereoCard+SpatialPreview.swift in Sources */,
 				5CFE2B922D25E17C0023EBF8 /* CardCollectionSubmenu.swift in Sources */,
 				5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */,
 				5CFE2B832D24CE3C0023EBF8 /* CatalogListView.swift in Sources */,
+				5C0318702D2CFBB2009B0871 /* VisionNavigationView.swift in Sources */,
 				5C1992202D2B45A30039D52C /* StereoCard+ViewInSpace.swift in Sources */,
 				5CCDC9E82D29071700D80B12 /* CardActionMenuContent.swift in Sources */,
 				5C73DB632D18FD83004BEEC5 /* CardTitlesSection.swift in Sources */,
@@ -777,6 +788,7 @@
 				5CFE2B872D24D60D0023EBF8 /* SearchBar.swift in Sources */,
 				5C1454342CF7A63D00D5C232 /* CardColorAnalyzer.swift in Sources */,
 				5C80F6BE2D17AD5000C58E7D /* BackgroundImportManager.swift in Sources */,
+				5C0318742D2D00C3009B0871 /* NavigationDestinationModifier.swift in Sources */,
 				5C5913BD2D126F220011C90D /* CardImageSection.swift in Sources */,
 				5C73DB692D18FF3C004BEEC5 /* CardHeaderView.swift in Sources */,
 				5C5913BB2D126EED0011C90D /* FlowLayout.swift in Sources */,
