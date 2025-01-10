@@ -86,7 +86,7 @@ struct RetroviewApp: App {
                 MainView()
                     .modifier(SerifFontModifier())
             }
-            .environment(\.spatialPhotoManager, spatialPhotoManager)
+            .environment(\.spatialPhotoManager, SpatialPhotoManager(modelContext: sharedModelContainer.mainContext))
             .environment(\.imageDownloadManager, imageDownloadManager)
             .environment(\.importManager, importManager)
             .environment(\.imageLoader, imageLoader)

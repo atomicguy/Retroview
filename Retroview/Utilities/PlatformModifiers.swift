@@ -451,3 +451,142 @@ extension View {
         modifier(OverlayButtonStyle(opacity: opacity))
     }
 }
+
+// Test Views for Previews
+private struct PreviewCard: View {
+    let title: String
+    let isSelected: Bool
+    let showHover: Bool
+    let onTap: (() -> Void)?
+    let onDoubleTap: (() -> Void)?
+    
+    var body: some View {
+        RoundedRectangle(cornerRadius: 12)
+            .fill(.gray.opacity(0.1))
+            .frame(width: 200, height: 150)
+            .overlay {
+                Text(title)
+                    .foregroundStyle(.secondary)
+            }
+            .platformInteraction(
+                InteractionConfig(
+                    onTap: onTap,
+                    onDoubleTap: onDoubleTap,
+                    onSecondaryAction: {
+                        AnyView(
+                            Menu {
+                                Button("Action 1") {}
+                                Button("Action 2") {}
+                            } label: {
+                                Text("Context Menu")
+                            }
+                        )
+                    },
+                    isSelected: isSelected,
+                    showHoverEffects: showHover
+                )
+            )
+    }
+}
+
+// Platform Interaction Preview
+#Preview("Platform Interaction States") {
+    VStack(spacing: 20) {
+        HStack(spacing: 20) {
+            PreviewCard(
+                title: "Normal",
+                isSelected: false,
+                showHover: true,
+                onTap: {},
+                onDoubleTap: {}
+            )
+            
+            PreviewCard(
+                title: "Selected",
+                isSelected: true,
+                showHover: true,
+                onTap: {},
+                onDoubleTap: {}
+            )
+        }
+        
+        HStack(spacing: 20) {
+            PreviewCard(
+                title: "No Hover Effects",
+                isSelected: false,
+                showHover: false,
+                onTap: {},
+                onDoubleTap: {}
+            )
+            
+            PreviewCard(
+                title: "Right Click/Long Press for Menu",
+                isSelected: false,
+                showHover: true,
+                onTap: {},
+                onDoubleTap: {}
+            )
+        }
+    }
+    .padding()
+}
+
+// Navigation Title Preview
+#Preview("Navigation Title Styles") {
+    NavigationStack {
+        List {
+            Text("Content")
+        }
+        .platformNavigationTitle("Automatic Title")
+        
+        List {
+            Text("Content")
+        }
+        .platformNavigationTitle("Inline Title", displayMode: .inline)
+        
+        List {
+            Text("Content")
+        }
+        .platformNavigationTitle("Large Title", displayMode: .large)
+    }
+}
+
+// Toolbar Preview
+#Preview("Platform Toolbar") {
+    NavigationStack {
+        Text("Content")
+            .platformToolbar {
+                Button("Cancel") {
+                    print("Cancel tapped")
+                }
+            } trailing: {
+                Button("Done") {
+                    print("Done tapped")
+                }
+            }
+            .platformNavigationTitle("Toolbar Example")
+    }
+}
+
+// Overlay Button Preview
+#Preview("Overlay Button Styles") {
+    HStack(spacing: 20) {
+        // Normal overlay button
+        Button {} label: {
+            Image(systemName: "heart")
+                .overlayButtonStyle()
+        }
+        .buttonStyle(.plain)
+        
+        // Dimmed overlay button
+        Button {} label: {
+            Image(systemName: "square.and.arrow.up")
+                .overlayButtonStyle(opacity: 0.5)
+        }
+        .buttonStyle(.plain)
+    }
+    .padding(40)
+    .background {
+        Color.gray.opacity(0.3)
+    }
+}

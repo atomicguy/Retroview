@@ -65,17 +65,12 @@ struct ThumbnailSelectableView: View {
                         onSecondaryAction: {
                             AnyView(
                                 CardActionMenu(
-                                    card: card,
-                                    showDirectMenu: .constant(true)
-                                )
+                                    card: card).asContextMenu()
                             )
                         },
                         isSelected: isSelected
                     )
                 )
-        }
-        .popover(isPresented: $showActionMenu) {
-            CardActionMenu(card: card, showDirectMenu: .constant(true))
         }
     }
 

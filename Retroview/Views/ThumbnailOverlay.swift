@@ -27,17 +27,9 @@ struct ThumbnailOverlay: View {
                 // Favorite button
                 FavoriteButton(card: card)
                     .opacity(shouldShowFavoriteButton ? 1 : 0)
-                    .padding(8)
+                    .padding(.leading, 8)
 
                 Spacer()
-
-                // Menu button
-                if shouldShowMenu {
-                    CardActionMenu(card: card, showDirectMenu: .constant(false))
-                        .padding(8)
-                        .contentShape(Rectangle())
-                        .allowsHitTesting(true)
-                }
             }
             .padding(.bottom, 4)
         }
@@ -62,14 +54,6 @@ struct ThumbnailOverlay: View {
             return isVisible
         #else
             return true  // Always visible on iOS/iPadOS
-        #endif
-    }
-
-    private var shouldShowMenu: Bool {
-        #if os(macOS)
-            return isVisible
-        #else
-            return false
         #endif
     }
 
@@ -100,7 +84,7 @@ struct ThumbnailOverlay: View {
         // Create a non-favorited view
         let normalCard = HStack(spacing: 20) {
             // Not hovered
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.gray.opacity(0.2))
                 .frame(width: 400, height: 200)
                 .overlay(
@@ -109,7 +93,7 @@ struct ThumbnailOverlay: View {
                 )
 
             // Hovered
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.gray.opacity(0.2))
                 .frame(width: 400, height: 200)
                 .overlay(
@@ -130,7 +114,7 @@ struct ThumbnailOverlay: View {
         // Create a favorited view
         let favoritedCard = HStack(spacing: 20) {
             // Not hovered
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.gray.opacity(0.2))
                 .frame(width: 400, height: 200)
                 .overlay(
@@ -139,7 +123,7 @@ struct ThumbnailOverlay: View {
                 )
 
             // Hovered
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.gray.opacity(0.2))
                 .frame(width: 400, height: 200)
                 .overlay(

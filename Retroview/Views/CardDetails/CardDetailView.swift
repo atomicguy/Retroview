@@ -95,7 +95,7 @@ struct CardDetailView: View {
         )
         .platformToolbar {
         } trailing: {
-            CardActionMenu(card: card, showDirectMenu: .constant(false))
+            CardActionMenu(card: card)
         }
     }
     private func handleViewInSpace() {

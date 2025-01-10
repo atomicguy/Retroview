@@ -10,197 +10,171 @@ import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 
+import SwiftData
+import SwiftUI
+
 struct CardActionMenu: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.imageLoader) private var imageLoader
-    @Environment(\.spatialPhotoManager) private var spatialPhotoManager
-
+    @Environment(\.spatialPhotoManager) private var spatialManager: SpatialPhotoManager?
+    @Environment(\.imageLoader) private var imageLoader: CardImageLoader?
+    
     let card: CardSchemaV1.StereoCard
-    @Binding var showDirectMenu: Bool
-
-    @State private var showingCollectionSheet = false
-    @State private var showingShareSheet = false
-    @State private var isReloadingImages = false
-    @State private var isGeneratingShareData = false
-
+    @State private var showingNewCollectionSheet = false
+    @State private var isPreparingSpatialShare = false
+    @State private var sharingURL: URL?
+    @State private var error: Error?
+    
+    @Query(filter: #Predicate<CollectionSchemaV1.Collection> { collection in
+        collection.name != "Favorites"
+    }, sort: \CollectionSchemaV1.Collection.name)
+    private var collections: [CollectionSchemaV1.Collection]
+    
     var body: some View {
-        if showDirectMenu {
-            CardActionMenuContent(
-                card: card,
-                onShare: handleShare,
-                onViewInSpace: handleViewInSpace,
-                onAddToCollection: { showingCollectionSheet = true },
-                onReloadImages: handleReloadImages
-            )
-            .sheet(isPresented: $showingCollectionSheet) {
-                CollectionCreationView(card: card)
-            }
-            #if os(visionOS)
-                .sheet(isPresented: $showingShareSheet) {
-                    let shareURL = card.createSharingURL()
-                    SystemShareSheet(items: [shareURL].compactMap { $0 })
-                }
-            #endif
-        } else {
-            Menu {
-                Button(action: handleShare) {
-                    menuLabel(
-                        icon: "square.and.arrow.up",
-                        text: "Share Spatial Card...")
-                }
-                #if os(visionOS)
-                    Button(action: handleViewInSpace) {
-                        menuLabel(icon: "view.3d", text: "View in Space")
+        Menu {
+            // Share button - shows progress while preparing or share sheet when ready
+            Group {
+                if let url = card.createSharingURL() {
+                    ShareLink(item: url,
+                              preview: SharePreview(card.titlePick?.text ?? "Stereo Card"))
+                } else {
+                    Button("Create Spatial Photo") {
+                        Task {
+                            if let manager = spatialManager,
+                               let loader = imageLoader {
+                                do {
+                                    _ = try await manager.getOrCreateSharingURL(for: card, imageLoader: loader)
+                                } catch {
+                                    print("Failed to create spatial photo: \(error)")
+                                }
+                            }
+                        }
                     }
-                #endif
-                Menu {
-                    CardCollectionSubmenu(
-                        card: card,
-                        showingCollectionSheet: $showingCollectionSheet
-                    )
-                } label: {
-                    menuLabel(
-                        icon: "folder.badge.plus", text: "Add to Collection")
                 }
-                Divider()
-                Button(action: handleReloadImages) {
-                    menuLabel(icon: "arrow.clockwise", text: "Reload Images")
+            }
+            
+            #if os(visionOS)
+            Button {
+                Task {
+                    await card.viewInSpace()
                 }
-                .disabled(isReloadingImages)
             } label: {
-                Image(systemName: "ellipsis.circle")
-                    .font(.title2)
-                    .foregroundStyle(.white)
-                    .shadow(radius: 2)
+                Label("View in Space", systemImage: "view.3d")
             }
-            .buttonStyle(.plain)
-            .platformInteraction(
-                InteractionConfig(
-                    showHoverEffects: true
-                )
-            )
-        }
-    }
-
-    // MARK: - Action Handlers
-
-    private func handleShare() {
-        Task {
-            isGeneratingShareData = true
-            defer { isGeneratingShareData = false }
-
-            if card.spatialPhotoData == nil,
-                let imageLoader = imageLoader,
-                let sourceImage = try await imageLoader.loadImage(
-                    for: card, side: .front, quality: .ultra)
-            {
-                do {
-                    _ = try await spatialPhotoManager.getSpatialPhotoData(
-                        for: card, sourceImage: sourceImage)
-                } catch {
-                    print("Failed to create spatial photo: \(error)")
-                    return
+            #endif
+            
+            Menu {
+                ForEach(collections) { collection in
+                    Button {
+                        toggleCollection(collection)
+                    } label: {
+                        Label(collection.name,
+                              systemImage: collection.hasCard(card) ? "checkmark.circle.fill" : "circle")
+                    }
                 }
-            }
-            showingShareSheet = true
-        }
-    }
-
-    private func handleViewInSpace() {
-        #if os(visionOS)
-            Task {
-                guard let imageLoader = imageLoader,
-                    (try await imageLoader.loadImage(
-                        for: card, side: .front, quality: .high)) != nil
-                else { return }
-                let _ = try await PreviewApplication.openCards(
-                    [card], selectedCard: card, imageLoader: imageLoader)
-            }
-        #endif
-    }
-
-    private func handleReloadImages() {
-        Task {
-            isReloadingImages = true
-            defer { isReloadingImages = false }
-
-            let managers = [
-                CardImageManager(card: card, side: .front, quality: .thumbnail),
-                CardImageManager(card: card, side: .front, quality: .standard),
-                CardImageManager(card: card, side: .back, quality: .thumbnail),
-                CardImageManager(card: card, side: .back, quality: .standard),
-            ]
-
-            for manager in managers {
-                guard let url = manager.imageURL else { continue }
-                do {
-                    let (data, _) = try await URLSession.shared.data(from: url)
-                    await MainActor.run { manager.storeImageData(data) }
-                } catch {
-                    print("Failed to reload image: \(error)")
+                
+                Divider()
+                
+                Button {
+                    showingNewCollectionSheet = true
+                } label: {
+                    Label("New Collection...", systemImage: "folder.badge.plus")
                 }
+            } label: {
+                Label("Add to Collection", systemImage: "folder")
             }
-
-            try? modelContext.save()
+        } label: {
+            Image(systemName: "ellipsis.circle")
+                .font(.title2)
+        }
+        .sheet(isPresented: $showingNewCollectionSheet) {
+            CollectionCreationView(card: card)
+        }
+        .onChange(of: card.spatialPhotoData) {
+            if card.spatialPhotoData != nil {
+                sharingURL = card.createSharingURL()
+            }
         }
     }
+    
+    private func toggleCollection(_ collection: CollectionSchemaV1.Collection) {
+        if collection.hasCard(card) {
+            collection.removeCard(card, context: modelContext)
+        } else {
+            collection.addCard(card, context: modelContext)
+        }
+        try? modelContext.save()
+    }
+}
 
-    // MARK: - Helper View for Menu Labels
-
-    private func menuLabel(icon: String, text: String) -> some View {
-        HStack {
-            Image(systemName: icon)
-            Text(text)
+private enum ShareError: LocalizedError {
+    case missingServices
+    case imageLoadFailed
+    
+    var errorDescription: String? {
+        switch self {
+        case .missingServices:
+            "Required services are not available for sharing"
+        case .imageLoadFailed:
+            "Failed to load image for sharing"
         }
     }
 }
 
-#if os(macOS)
-    private struct MacShareSheet: View {
-        let items: [Any]
-        let sourceView: NSView?
-        @Environment(\.dismiss) private var dismiss
-
-        var body: some View {
-            EmptyView()
-                .onAppear {
-                    let picker = NSSharingServicePicker(items: items)
-                    if let sourceView = sourceView {
-                        picker.show(
-                            relativeTo: sourceView.bounds,
-                            of: sourceView,
-                            preferredEdge: .minY
-                        )
-                    } else {
-                        // Fallback to window center if no anchor
-                        picker.show(
-                            relativeTo: .zero,
-                            of: NSApp.keyWindow?.contentView ?? NSView(),
-                            preferredEdge: .minY
-                        )
+// Extension to support use in context menus
+extension CardActionMenu {
+    func asContextMenu() -> some View {
+        Group {
+            if let url = card.createSharingURL() {
+                ShareLink(item: url,
+                          preview: SharePreview(card.titlePick?.text ?? "Stereo Card"))
+            } else {
+                Button("Create Spatial Photo") {
+                    Task {
+                        if let manager = spatialManager,
+                           let loader = imageLoader {
+                            do {
+                                _ = try await manager.getOrCreateSharingURL(for: card, imageLoader: loader)
+                            } catch {
+                                print("Failed to create spatial photo: \(error)")
+                            }
+                        }
                     }
-                    dismiss()
                 }
+            }
+            
+            #if os(visionOS)
+            Button {
+                Task {
+                    await card.viewInSpace()
+                }
+            } label: {
+                Label("View in Space", systemImage: "view.3d")
+            }
+            #endif
+            
+            ForEach(collections) { collection in
+                Button {
+                    toggleCollection(collection)
+                } label: {
+                    Label(collection.name,
+                          systemImage: collection.hasCard(card) ? "checkmark.circle.fill" : "circle")
+                }
+            }
+            
+            Button {
+                showingNewCollectionSheet = true
+            } label: {
+                Label("New Collection...", systemImage: "folder.badge.plus")
+            }
+        }
+        .onChange(of: card.spatialPhotoData) {
+            // Update UI when spatial data changes
+            if card.spatialPhotoData != nil {
+                sharingURL = card.createSharingURL()
+            }
         }
     }
-#else
-    private struct SystemShareSheet: UIViewControllerRepresentable {
-        let items: [Any]
-
-        func makeUIViewController(context: Context) -> UIActivityViewController
-        {
-            UIActivityViewController(
-                activityItems: items,
-                applicationActivities: nil
-            )
-        }
-
-        func updateUIViewController(
-            _ uiViewController: UIActivityViewController,
-            context: Context
-        ) {}
-    }
-#endif
+}
 
 extension CardSchemaV1.StereoCard {
     func createSharingURL() -> URL? {
@@ -237,12 +211,12 @@ extension CardSchemaV1.StereoCard {
 
 #Preview("Direct Menu") {
     CardPreviewContainer { card in
-        CardActionMenu(card: card, showDirectMenu: .constant(true))
+        CardActionMenu(card: card)
     }
 }
 
 #Preview("Button Menu") {
     CardPreviewContainer { card in
-        CardActionMenu(card: card, showDirectMenu: .constant(false))
+        CardActionMenu(card: card).asContextMenu()
     }
 }

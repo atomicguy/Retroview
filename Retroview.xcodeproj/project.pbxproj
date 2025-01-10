@@ -45,6 +45,7 @@
 		5C6676CC2BC210F9002DD52E /* RetroviewUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CB2BC210F9002DD52E /* RetroviewUITests.swift */; };
 		5C6676CE2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */; };
 		5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6676DB2BC21881002DD52E /* StereoCard.swift */; };
+		5C698F302D30D1A1007E0111 /* SpatialPhotoManager+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C698F2F2D30D193007E0111 /* SpatialPhotoManager+URL.swift */; };
 		5C73DB612D18FD65004BEEC5 /* MetadataSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */; };
 		5C73DB632D18FD83004BEEC5 /* CardTitlesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB622D18FD7F004BEEC5 /* CardTitlesSection.swift */; };
 		5C73DB652D18FDE9004BEEC5 /* CardSubjectSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C73DB642D18FDE5004BEEC5 /* CardSubjectSection.swift */; };
@@ -197,6 +198,7 @@
 		5C6676CD2BC210F9002DD52E /* RetroviewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5C6676DA2BC215C7002DD52E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5C6676DB2BC21881002DD52E /* StereoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoCard.swift; sourceTree = "<group>"; };
+		5C698F2F2D30D193007E0111 /* SpatialPhotoManager+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpatialPhotoManager+URL.swift"; sourceTree = "<group>"; };
 		5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataSection.swift; sourceTree = "<group>"; };
 		5C73DB622D18FD7F004BEEC5 /* CardTitlesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTitlesSection.swift; sourceTree = "<group>"; };
 		5C73DB642D18FDE5004BEEC5 /* CardSubjectSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSubjectSection.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 				5CFE2B792D24897C0023EBF8 /* StereoCard+SpatialPreview.swift */,
 				5C0925B32D211B0D00CE06A9 /* SpatialPhotoManager.swift */,
 				5C4F76EC2D20F01900122570 /* SpatialPhotoConverter.swift */,
+				5C698F2F2D30D193007E0111 /* SpatialPhotoManager+URL.swift */,
 				5C0925AE2D2111EB00CE06A9 /* SPConverter+Metadata.swift */,
 				5C0925AC2D2110A300CE06A9 /* SPConverter+Validation.swift */,
 			);
@@ -794,6 +797,7 @@
 				5C5913BB2D126EED0011C90D /* FlowLayout.swift in Sources */,
 				5CE9CF702D1E425900A49761 /* PreviewUtilities.swift in Sources */,
 				5C1DBD972D0FB8E50050B4DF /* StoreDebugMenu.swift in Sources */,
+				5C698F302D30D1A1007E0111 /* SpatialPhotoManager+URL.swift in Sources */,
 				5C14544F2CF849DA00D5C232 /* Collection.swift in Sources */,
 				5CC5A5C52BD47622005811DA /* Author.swift in Sources */,
 				5CD075962BD60B3E002B463C /* Crop.swift in Sources */,
