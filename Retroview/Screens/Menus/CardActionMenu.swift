@@ -9,110 +9,96 @@ import SwiftData
 import SwiftUI
 
 struct CardActionMenu: View {
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.spatialPhotoManager) private var spatialManager: SpatialPhotoManager?
-    @Environment(\.imageLoader) private var imageLoader: CardImageLoader?
-    
     let card: CardSchemaV1.StereoCard
-    @State private var showingNewCollectionSheet = false
-    @State private var isPreparingSpatialShare = false
-    @State private var sharingURL: URL?
-    @State private var error: Error?
-    
+    let isContextMenu: Bool
+
+    init(card: CardSchemaV1.StereoCard, isContextMenu: Bool = false) {
+        self.card = card
+        self.isContextMenu = isContextMenu
+    }
+
     var body: some View {
-        Menu {
-            shareButton
-            
-            #if os(visionOS)
-            Button {
-                Task {
-                    await card.viewInSpace()
-                }
-            } label: {
-                Label("View in Space", systemImage: "view.3d")
-            }
-            #endif
-            
+        if isContextMenu {
+            MenuContent(card: card)
+        } else {
             Menu {
-                CardCollectionOptions(
-                    card: card,
-                    showNewCollectionSheet: $showingNewCollectionSheet
-                )
+                MenuContent(card: card, includeShare: false)
             } label: {
-                Label("Add to Collection", systemImage: "folder")
+                Image(systemName: "ellipsis.circle")
+                    .font(.title2)
             }
-        } label: {
-            Image(systemName: "ellipsis.circle")
-                .font(.title2)
         }
-        .sheet(isPresented: $showingNewCollectionSheet) {
+    }
+}
+
+// Usage methods that make it clear which version we're using
+extension CardActionMenu {
+    static func asButton(card: CardSchemaV1.StereoCard) -> CardActionMenu {
+        CardActionMenu(card: card, isContextMenu: false)
+    }
+
+    static func asContextMenu(card: CardSchemaV1.StereoCard) -> CardActionMenu {
+        CardActionMenu(card: card, isContextMenu: true)
+    }
+}
+
+// MARK: - Shared Menu Content
+private struct MenuContent: View {
+    let card: CardSchemaV1.StereoCard
+    let includeShare: Bool
+    @State private var showNewCollectionSheet = false
+    @Environment(\.imageLoader) private var imageLoader  // Add imageLoader environment
+
+    init(card: CardSchemaV1.StereoCard, includeShare: Bool = true) {
+        self.card = card
+        self.includeShare = includeShare
+    }
+
+    var body: some View {
+        Group {
+            if includeShare {
+                CardShareButton(card: card)
+            }
+
+            #if os(visionOS)
+                VisionSpaceButton(card: card)  // Now has access to imageLoader via environment
+            #endif
+
+            CollectionSubmenu(
+                card: card,
+                showNewCollectionSheet: $showNewCollectionSheet
+            )
+        }
+        .sheet(isPresented: $showNewCollectionSheet) {
             CollectionCreationView(card: card)
         }
-        .onChange(of: card.spatialPhotoData) {
-            if card.spatialPhotoData != nil {
-                sharingURL = card.createSharingURL()
-            }
-        }
     }
-    
-    // Extract share button to avoid duplication
-    @ViewBuilder
-    private var shareButton: some View {
-        if let url = card.createSharingURL() {
-            ShareLink(
-                item: url,
-                preview: SharePreview(card.titlePick?.text ?? "Stereo Card")
+}
+
+private struct CollectionSubmenu: View {
+    let card: CardSchemaV1.StereoCard
+    @Binding var showNewCollectionSheet: Bool
+
+    var body: some View {
+        Menu {
+            CardCollectionOptions(
+                card: card,
+                showNewCollectionSheet: $showNewCollectionSheet
             )
-        } else {
-            Button("Create Spatial Photo") {
-                Task {
-                    if let manager = spatialManager,
-                       let loader = imageLoader {
-                        do {
-                            _ = try await manager.getOrCreateSharingURL(for: card, imageLoader: loader)
-                        } catch {
-                            print("Failed to create spatial photo: \(error)")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func asContextMenu() -> some View {
-        Group {
-            shareButton
-            
-            #if os(visionOS)
-            Button {
-                Task {
-                    await card.viewInSpace()
-                }
-            } label: {
-                Label("View in Space", systemImage: "view.3d")
-            }
-            #endif
-            
-            Menu {
-                CardCollectionOptions(
-                    card: card,
-                    showNewCollectionSheet: $showingNewCollectionSheet
-                )
-            } label: {
-                Label("Add to Collection", systemImage: "folder")
-            }
+        } label: {
+            Label("Add to Collection", systemImage: "folder")
         }
     }
 }
 
 #Preview("Direct Menu") {
     CardPreviewContainer { card in
-        CardActionMenu(card: card)
+        CardActionMenu.asButton(card: card)
     }
 }
 
 #Preview("Button Menu") {
     CardPreviewContainer { card in
-        CardActionMenu(card: card).asContextMenu()
+        CardActionMenu.asContextMenu(card: card)
     }
 }

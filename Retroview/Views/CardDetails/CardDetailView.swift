@@ -41,7 +41,8 @@ struct CardDetailView: View {
                                     #if os(visionOS)
                                         Button(action: handleViewInSpace) {
                                             Image(systemName: "view.3d")
-                                                .overlayButtonStyle(opacity: 1.0)
+                                                .overlayButtonStyle(
+                                                    opacity: 1.0)
                                         }
                                         .padding(.trailing, 8)
                                         .padding(.top, 34)
@@ -95,24 +96,18 @@ struct CardDetailView: View {
         )
         .platformToolbar {
         } trailing: {
-            CardActionMenu(card: card)
+            CardActionMenu.asButton(card: card)
             CardShareButton(card: card)
         }
     }
     private func handleViewInSpace() {
         #if os(visionOS)
             Task {
-                guard let imageLoader = imageLoader,
-                    (try await imageLoader.loadImage(
-                        for: card, side: .front, quality: .high)) != nil
-                else { return }
-                let _ = try await PreviewApplication.openCards(
-                    [card], selectedCard: card, imageLoader: imageLoader
-                )
+                guard let imageLoader = imageLoader else { return }
+                await card.viewInSpace(imageLoader: imageLoader)
             }
         #endif
     }
-
 }
 
 #Preview("Card Detail View") {

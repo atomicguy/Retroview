@@ -64,9 +64,8 @@ struct ThumbnailSelectableView: View {
                         onDoubleTap: onDoubleClick,
                         onSecondaryAction: {
                             AnyView(
-                                CardActionMenu(
-                                    card: card).asContextMenu()
-                            )
+                                CardActionMenu.asContextMenu(
+                                    card: card))
                         },
                         isSelected: isSelected
                     )

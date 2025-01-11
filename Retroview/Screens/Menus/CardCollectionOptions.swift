@@ -5,8 +5,8 @@
 //  Created by Adam Schuster on 1/9/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct CardCollectionOptions: View {
     @Environment(\.modelContext) private var modelContext
@@ -16,27 +16,28 @@ struct CardCollectionOptions: View {
         },
         sort: \.name
     ) private var collections: [CollectionSchemaV1.Collection]
-    
+
     let card: CardSchemaV1.StereoCard
     @Binding var showNewCollectionSheet: Bool
-    
+
     var body: some View {
         Group {
             ForEach(collections) { collection in
                 Button {
                     toggleCollection(collection)
                 } label: {
-                    Label(collection.name,
-                          systemImage: collection.hasCard(card)
+                    Label(
+                        collection.name,
+                        systemImage: collection.hasCard(card)
                             ? "checkmark.circle.fill"
                             : "circle")
                 }
             }
-            
+
             if !collections.isEmpty {
                 Divider()
             }
-            
+
             Button {
                 showNewCollectionSheet = true
             } label: {
@@ -44,7 +45,7 @@ struct CardCollectionOptions: View {
             }
         }
     }
-    
+
     private func toggleCollection(_ collection: CollectionSchemaV1.Collection) {
         if collection.hasCard(card) {
             collection.removeCard(card, context: modelContext)

@@ -5,36 +5,39 @@
 //  Created by Adam Schuster on 1/5/25.
 //
 
-import SwiftUI
 import QuickLook
+import SwiftUI
 
 #if os(visionOS)
-extension CardSchemaV1.StereoCard {
-    func viewInSpace(
-        onStateChange: ((Bool) -> Void)? = nil
-    ) async {
-        @Environment(\.imageLoader) var imageLoader
+    import SwiftUI
+    import QuickLook
 
-        guard let loader = imageLoader else { return }
+    extension CardSchemaV1.StereoCard {
+        func viewInSpace(
+            imageLoader: CardImageLoader,
+            onStateChange: ((Bool) -> Void)? = nil
+        ) async {
+            onStateChange?(true)
+            defer { onStateChange?(false) }
 
-        onStateChange?(true)
-        defer { onStateChange?(false) }
+            do {
+                // Just check if we can load the image successfully
+                guard
+                    try await imageLoader.loadImage(
+                        for: self,
+                        side: .front,
+                        quality: .ultra
+                    ) != nil
+                else { return }
 
-        do {
-            guard let _ = try await loader.loadImage(
-                for: self,
-                side: .front,
-                quality: .ultra
-            ) else { return }
-
-            let _ = try await PreviewApplication.openCards(
-                [self],
-                selectedCard: self,
-                imageLoader: loader
-            )
-        } catch {
-            print("Failed to open card in space: \(error)")
+                let _ = try await PreviewApplication.openCards(
+                    [self],
+                    selectedCard: self,
+                    imageLoader: imageLoader
+                )
+            } catch {
+                print("Failed to open card in space: \(error)")
+            }
         }
     }
-}
 #endif

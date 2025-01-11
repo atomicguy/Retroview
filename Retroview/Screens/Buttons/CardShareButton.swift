@@ -31,7 +31,6 @@ struct CardShareButton: View {
                         card: card,
                         imageLoader: loader
                     )
-                    // Show appropriate sharing UI for platform
                     if let url = sharingURL {
                         #if os(macOS)
                             NSSharingService.share(items: [url])
@@ -69,18 +68,41 @@ struct CardShareButton: View {
         static func share(items: [Any]) {
             let picker = NSSharingServicePicker(items: items)
             picker.show(
-                relativeTo: .zero, of: NSApp.keyWindow?.contentView ?? NSView(),
-                preferredEdge: .minY)
+                relativeTo: .zero,
+                of: NSApp.keyWindow?.contentView ?? NSView(),
+                preferredEdge: .minY
+            )
         }
     }
 #else
+    import UIKit
+
     struct ShareSheet: UIViewControllerRepresentable {
         let items: [Any]
 
         func makeUIViewController(context: Context) -> UIActivityViewController
         {
-            UIActivityViewController(
+            let controller = UIActivityViewController(
                 activityItems: items, applicationActivities: nil)
+
+            // Configure popover presentation for iPadOS and visionOS
+            if let popoverController = controller.popoverPresentationController
+            {
+                // Use the current view's bounds as the source rect
+                if let rootViewController = UIApplication.shared.connectedScenes
+                    .compactMap({
+                        ($0 as? UIWindowScene)?.keyWindow?.rootViewController
+                    })
+                    .first
+                {
+                    popoverController.sourceView = rootViewController.view
+                    popoverController.sourceRect =
+                        rootViewController.view.bounds
+                    popoverController.permittedArrowDirections = []
+                }
+            }
+
+            return controller
         }
 
         func updateUIViewController(
