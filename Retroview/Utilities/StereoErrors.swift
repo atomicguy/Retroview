@@ -15,6 +15,7 @@ enum StereoError: LocalizedError {
     case imageSourceCreationFailed
     case destinationCreationFailed
     case finalizationFailed
+    case missingDependencies
     case invalidDimensions(String)
     case imageProcessingFailed(String)
 
@@ -34,6 +35,8 @@ enum StereoError: LocalizedError {
             return "Failed to create HEIC destination"
         case .finalizationFailed:
             return "Failed to finalize spatial photo"
+        case .missingDependencies:
+            return "Required services are not available for sharing"
         case .invalidDimensions(let reason):
             return "Invalid image dimensions: \(reason)"
         case .imageProcessingFailed(let reason):

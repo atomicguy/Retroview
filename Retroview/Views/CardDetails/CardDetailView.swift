@@ -96,6 +96,7 @@ struct CardDetailView: View {
         .platformToolbar {
         } trailing: {
             CardActionMenu(card: card)
+            CardShareButton(card: card)
         }
     }
     private func handleViewInSpace() {
