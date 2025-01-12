@@ -1011,11 +1011,7 @@
 		5C6676D22BC210F9002DD52E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-<<<<<<< HEAD
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-=======
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon iOS";
->>>>>>> eefb43f (update icons)
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = "AppIcon iOS";
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = "AppIcon macOS";
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]" = "AppIcon visionOS";
@@ -1062,11 +1058,7 @@
 		5C6676D32BC210F9002DD52E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-<<<<<<< HEAD
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-=======
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon iOS";
->>>>>>> eefb43f (update icons)
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=iphoneos*]" = "AppIcon iOS";
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = "AppIcon macOS";
 				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]" = "AppIcon visionOS";
