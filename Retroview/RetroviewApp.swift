@@ -117,6 +117,10 @@ private struct ImageLoaderKey: EnvironmentKey {
     static let defaultValue: CardImageLoader? = nil
 }
 
+private struct CreateCollectionKey: EnvironmentKey {
+    static let defaultValue: ((CardSchemaV1.StereoCard) -> Void)? = nil
+}
+
 extension EnvironmentValues {
     var importManager: BackgroundImportManager? {
         get { self[ImportManagerKey.self] }
@@ -132,4 +136,9 @@ extension EnvironmentValues {
         get { self[ImageLoaderKey.self] }
         set { self[ImageLoaderKey.self] = newValue }
     }
+    
+    var createCollection: ((CardSchemaV1.StereoCard) -> Void)? {
+            get { self[CreateCollectionKey.self] }
+            set { self[CreateCollectionKey.self] = newValue }
+        }
 }

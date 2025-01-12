@@ -28,12 +28,26 @@ struct MainView: View {
                 } detail: {
                     NavigationStack(path: $navigationPath) {
                         contentView
-                            .withNavigationDestinations(navigationPath: $navigationPath)
+                            .withNavigationDestinations(
+                                navigationPath: $navigationPath)
                     }
                 }
             #endif
         }
         .modifier(SerifFontModifier())
+        .environment(\.createCollection) { card in
+            let newCollection = CollectionSchemaV1.Collection(name: "Untitled")
+            modelContext.insert(newCollection)
+            newCollection.addCard(card, context: modelContext)
+
+            // Platform-specific navigation
+            #if os(macOS) || os(iOS)
+                selectedDestination = .collection(
+                    newCollection.id, newCollection.name)
+            #elseif os(visionOS)
+                navigationPath.append(newCollection)
+            #endif
+        }
     }
 
     @ViewBuilder
@@ -41,7 +55,8 @@ struct MainView: View {
         switch selectedDestination {
         case .none, .library:
             LibraryGridView(
-                modelContext: modelContext, navigationPath: $navigationPath)
+                modelContext: modelContext,
+                navigationPath: $navigationPath)
         case .subjects:
             CatalogListView<SubjectSchemaV1.Subject>(
                 title: "Subjects",
@@ -61,6 +76,7 @@ struct MainView: View {
         case let .collection(id, _):
             if let collection = collections.first(where: { $0.id == id }) {
                 CardGridLayout(
+                    collection: collection,
                     cards: collection.orderedCards,
                     selectedCard: .constant(nil),
                     navigationPath: $navigationPath,
@@ -72,7 +88,6 @@ struct MainView: View {
                             ))
                     }
                 )
-                .platformNavigationTitle(collection.name)
             } else {
                 ContentUnavailableView(
                     "Collection Not Found",

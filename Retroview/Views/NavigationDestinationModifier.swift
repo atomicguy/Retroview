@@ -9,18 +9,22 @@ import SwiftUI
 
 struct NavigationDestinationModifier: ViewModifier {
     @Binding var navigationPath: NavigationPath
-    
+
     func body(content: Content) -> some View {
         content
-            .navigationDestination(for: CardStackDestination.self) { destination in
+            .navigationDestination(for: CardStackDestination.self) {
+                destination in
                 switch destination {
                 case .stack(let cards, let initialCard):
                     CardDetailStackView(cards: cards, initialCard: initialCard)
                 }
             }
-            .navigationDestination(for: SubjectSchemaV1.Subject.self) { subject in
+            .navigationDestination(for: SubjectSchemaV1.Subject.self) {
+                subject in
                 CardGridLayout(
-                    cards: subject.cards,
+                    collection:
+                        CollectionSchemaV1
+                        .Collection(name: subject.name), cards: subject.cards,
                     selectedCard: .constant(nil),
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
@@ -31,10 +35,11 @@ struct NavigationDestinationModifier: ViewModifier {
                             ))
                     }
                 )
-                .platformNavigationTitle(subject.name)
             }
             .navigationDestination(for: AuthorSchemaV1.Author.self) { author in
                 CardGridLayout(
+                    collection: CollectionSchemaV1.Collection(
+                        name: author.name),
                     cards: author.cards,
                     selectedCard: .constant(nil),
                     navigationPath: $navigationPath,
@@ -46,10 +51,11 @@ struct NavigationDestinationModifier: ViewModifier {
                             ))
                     }
                 )
-                .platformNavigationTitle(author.name)
             }
-            .navigationDestination(for: CollectionSchemaV1.Collection.self) { collection in
+            .navigationDestination(for: CollectionSchemaV1.Collection.self) {
+                collection in
                 CardGridLayout(
+                    collection: collection,
                     cards: collection.orderedCards,
                     selectedCard: .constant(nil),
                     navigationPath: $navigationPath,
@@ -61,13 +67,14 @@ struct NavigationDestinationModifier: ViewModifier {
                             ))
                     }
                 )
-                .platformNavigationTitle("\(collection.name) (\(collection.orderedCards.count) cards)")
             }
     }
 }
 
 extension View {
-    func withNavigationDestinations(navigationPath: Binding<NavigationPath>) -> some View {
+    func withNavigationDestinations(navigationPath: Binding<NavigationPath>)
+        -> some View
+    {
         modifier(NavigationDestinationModifier(navigationPath: navigationPath))
     }
 }

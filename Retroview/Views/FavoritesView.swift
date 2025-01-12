@@ -17,7 +17,7 @@ struct FavoritesView: View {
         Group {
             if let favorite = favorites.first {
                 CardGridLayout(
-                    cards: favorite.orderedCards,
+                    collection: favorite, cards: favorite.orderedCards,
                     selectedCard: .constant(nil),
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
@@ -29,7 +29,6 @@ struct FavoritesView: View {
                         )
                     }
                 )
-                .platformNavigationTitle("\(favorite.name) (\(favorite.orderedCards.count) cards)")
             } else {
                 ContentUnavailableView(
                     "No Favorites",

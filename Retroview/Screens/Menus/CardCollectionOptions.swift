@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CardCollectionOptions: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.createCollection) private var createCollection
     @Query(
         filter: #Predicate<CollectionSchemaV1.Collection> {
             $0.name != "Favorites"
@@ -39,11 +40,15 @@ struct CardCollectionOptions: View {
             }
 
             Button {
-                showNewCollectionSheet = true
+                createNewCollection()
             } label: {
                 Label("New Collection...", systemImage: "folder.badge.plus")
             }
         }
+    }
+
+    private func createNewCollection() {
+        createCollection?(card)
     }
 
     private func toggleCollection(_ collection: CollectionSchemaV1.Collection) {
