@@ -67,6 +67,7 @@ struct Sidebar: View {
                         Label(collection.name, systemImage: "folder")
                             .modifier(SerifFontModifier())
                     }
+                    .withCollectionContextMenu(collection)
                 }
             }
             .modifier(SerifFontModifier())

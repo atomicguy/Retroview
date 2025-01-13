@@ -34,6 +34,8 @@ struct CollectionsGridView: View {
                                 }
                             )
                         )
+                        .withCollectionContextMenu(collection)
+
 //                        .task {
 //                            if collection.collectionThumbnail == nil {
 //                                await cacheCollectionThumbnail(collection)
