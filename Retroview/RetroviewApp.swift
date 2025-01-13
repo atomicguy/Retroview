@@ -86,7 +86,11 @@ struct RetroviewApp: App {
                 MainView()
                     .modifier(SerifFontModifier())
             }
-            .environment(\.spatialPhotoManager, SpatialPhotoManager(modelContext: sharedModelContainer.mainContext))
+            .environment(
+                \.spatialPhotoManager,
+                SpatialPhotoManager(
+                    modelContext: sharedModelContainer.mainContext)
+            )
             .environment(\.imageDownloadManager, imageDownloadManager)
             .environment(\.importManager, importManager)
             .environment(\.imageLoader, imageLoader)
@@ -119,6 +123,11 @@ private struct ImageLoaderKey: EnvironmentKey {
 
 private struct CreateCollectionKey: EnvironmentKey {
     static let defaultValue: ((CardSchemaV1.StereoCard) -> Void)? = nil
+
+}
+
+private struct CreateCollectionMultipleKey: EnvironmentKey {
+    static let defaultValue: (([CardSchemaV1.StereoCard]) -> Void)? = nil
 }
 
 extension EnvironmentValues {
@@ -136,9 +145,14 @@ extension EnvironmentValues {
         get { self[ImageLoaderKey.self] }
         set { self[ImageLoaderKey.self] = newValue }
     }
-    
+
     var createCollection: ((CardSchemaV1.StereoCard) -> Void)? {
-            get { self[CreateCollectionKey.self] }
-            set { self[CreateCollectionKey.self] = newValue }
-        }
+        get { self[CreateCollectionKey.self] }
+        set { self[CreateCollectionKey.self] = newValue }
+    }
+
+    var createCollectionForMultiple: (([CardSchemaV1.StereoCard]) -> Void)? {
+        get { self[CreateCollectionMultipleKey.self] }
+        set { self[CreateCollectionMultipleKey.self] = newValue }
+    }
 }

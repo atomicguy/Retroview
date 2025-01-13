@@ -47,7 +47,7 @@ private struct MenuContent: View {
     let card: CardSchemaV1.StereoCard
     let includeShare: Bool
     @State private var showNewCollectionSheet = false
-    @Environment(\.imageLoader) private var imageLoader  // Add imageLoader environment
+    @Environment(\.imageLoader) private var imageLoader
 
     init(card: CardSchemaV1.StereoCard, includeShare: Bool = true) {
         self.card = card
@@ -61,30 +61,20 @@ private struct MenuContent: View {
             }
 
             #if os(visionOS)
-                VisionSpaceButton(card: card)  // Now has access to imageLoader via environment
+                VisionSpaceButton(card: card)
             #endif
 
-            CollectionSubmenu(
-                card: card,
-                showNewCollectionSheet: $showNewCollectionSheet
-            )
-        }
-        .sheet(isPresented: $showNewCollectionSheet) {
-            CollectionCreationView(card: card)
+            CollectionSubmenu(card: card)
         }
     }
 }
 
 private struct CollectionSubmenu: View {
     let card: CardSchemaV1.StereoCard
-    @Binding var showNewCollectionSheet: Bool
 
     var body: some View {
         Menu {
-            CardCollectionOptions(
-                card: card,
-                showNewCollectionSheet: $showNewCollectionSheet
-            )
+            CardCollectionOptions(card: card)
         } label: {
             Label("Add to Collection", systemImage: "folder")
         }

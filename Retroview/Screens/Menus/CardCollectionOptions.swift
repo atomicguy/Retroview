@@ -19,7 +19,6 @@ struct CardCollectionOptions: View {
     ) private var collections: [CollectionSchemaV1.Collection]
 
     let card: CardSchemaV1.StereoCard
-    @Binding var showNewCollectionSheet: Bool
 
     var body: some View {
         Group {

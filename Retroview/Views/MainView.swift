@@ -39,14 +39,17 @@ struct MainView: View {
             let newCollection = CollectionSchemaV1.Collection(name: "Untitled")
             modelContext.insert(newCollection)
             newCollection.addCard(card, context: modelContext)
-
-            // Platform-specific navigation
-            #if os(macOS) || os(iOS)
-                selectedDestination = .collection(
-                    newCollection.id, newCollection.name)
-            #elseif os(visionOS)
-                navigationPath.append(newCollection)
-            #endif
+            selectedDestination = .collection(newCollection.id, newCollection.name)
+            navigationPath.append(newCollection)
+        }
+        .environment(\.createCollectionForMultiple) { cards in
+            let newCollection = CollectionSchemaV1.Collection(name: "Untitled")
+            modelContext.insert(newCollection)
+            for card in cards {
+                newCollection.addCard(card, context: modelContext)
+            }
+            selectedDestination = .collection(newCollection.id, newCollection.name)
+            navigationPath.append(newCollection)
         }
     }
 

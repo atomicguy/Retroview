@@ -91,7 +91,7 @@ struct ThumbnailSelectableView: View {
         authors: [AuthorSchemaV1.Author(name: "John Doe")]
     )
 
-    return VStack {
+    VStack {
         ThumbnailSelectableView(
             card: mockCard,
             isSelected: false,

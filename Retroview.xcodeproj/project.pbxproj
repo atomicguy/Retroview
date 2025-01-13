@@ -71,14 +71,12 @@
 		5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */; };
 		5C80F6A42D13F02E00C58E7D /* ImagePreloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */; };
 		5C80F6A62D150A8500C58E7D /* ThumbnailOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */; };
-		5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6A92D150ABB00C58E7D /* NewCollectionSheet.swift */; };
 		5C80F6AC2D169BBB00C58E7D /* CardGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6AB2D169BB600C58E7D /* CardGridLayout.swift */; };
 		5C80F6B02D169C8A00C58E7D /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6AF2D169C8700C58E7D /* MainView.swift */; };
 		5C80F6B22D169CA100C58E7D /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B12D169C9B00C58E7D /* SidebarView.swift */; };
 		5C80F6B42D169D4800C58E7D /* ThumbnailSelectableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B32D169D4000C58E7D /* ThumbnailSelectableView.swift */; };
 		5C80F6B82D176FF100C58E7D /* ModelPredicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */; };
 		5C80F6BA2D179D3900C58E7D /* DiagnosticCollectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */; };
-		5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */; };
 		5C80F6BE2D17AD5000C58E7D /* BackgroundImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BD2D17AD4B00C58E7D /* BackgroundImportManager.swift */; };
 		5C80F6C02D17AD6800C58E7D /* ImportProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6BF2D17AD6400C58E7D /* ImportProgressIndicator.swift */; };
 		5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */; };
@@ -227,14 +225,12 @@
 		5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageManager.swift; sourceTree = "<group>"; };
 		5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreloadService.swift; sourceTree = "<group>"; };
 		5C80F6A52D150A8000C58E7D /* ThumbnailOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailOverlay.swift; sourceTree = "<group>"; };
-		5C80F6A92D150ABB00C58E7D /* NewCollectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCollectionSheet.swift; sourceTree = "<group>"; };
 		5C80F6AB2D169BB600C58E7D /* CardGridLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGridLayout.swift; sourceTree = "<group>"; };
 		5C80F6AF2D169C8700C58E7D /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5C80F6B12D169C9B00C58E7D /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		5C80F6B32D169D4000C58E7D /* ThumbnailSelectableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailSelectableView.swift; sourceTree = "<group>"; };
 		5C80F6B72D176FE900C58E7D /* ModelPredicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPredicates.swift; sourceTree = "<group>"; };
 		5C80F6B92D179D3400C58E7D /* DiagnosticCollectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticCollectionButton.swift; sourceTree = "<group>"; };
-		5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCreationView.swift; sourceTree = "<group>"; };
 		5C80F6BD2D17AD4B00C58E7D /* BackgroundImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImportManager.swift; sourceTree = "<group>"; };
 		5C80F6BF2D17AD6400C58E7D /* ImportProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProgressIndicator.swift; sourceTree = "<group>"; };
 		5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadManager.swift; sourceTree = "<group>"; };
@@ -492,7 +488,6 @@
 				5C73DB5F2D18FD4B004BEEC5 /* CardDetails */,
 				5C80F6AB2D169BB600C58E7D /* CardGridLayout.swift */,
 				5C73DB522D18EF95004BEEC5 /* CatalogViews */,
-				5C80F6BB2D17A01700C58E7D /* CollectionCreationView.swift */,
 				5C5913BA2D126EEA0011C90D /* FlowLayout.swift */,
 				5CCB4C122D10F8AC00FD4005 /* ImageQuality.swift */,
 				5C1454472CF8174700D5C232 /* ImportView.swift */,
@@ -552,7 +547,6 @@
 				5C80F6BF2D17AD6400C58E7D /* ImportProgressIndicator.swift */,
 				5C4A271A2D04DC01009ECECE /* AppDestination.swift */,
 				5C14545A2CF93F2A00D5C232 /* CollectionDefaults.swift */,
-				5C80F6A92D150ABB00C58E7D /* NewCollectionSheet.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -784,7 +778,6 @@
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
-				5C80F6BC2D17A01B00C58E7D /* CollectionCreationView.swift in Sources */,
 				5CFE2B8D2D24EB940023EBF8 /* BulkCollectionButton.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5C7955B02D1F7EF90037E204 /* CropUtility.swift in Sources */,
@@ -842,7 +835,6 @@
 				5C80F6C22D17D12300C58E7D /* ImageDownloadManager.swift in Sources */,
 				5CAFA7632D19DD0900112A93 /* StoreDocument.swift in Sources */,
 				5C1992222D2B98880039D52C /* CollectionThumbnailView.swift in Sources */,
-				5C80F6AA2D150ABF00C58E7D /* NewCollectionSheet.swift in Sources */,
 				5C0925B42D211B1300CE06A9 /* SpatialPhotoManager.swift in Sources */,
 				5CC5A5C92BD47ABA005811DA /* Date.swift in Sources */,
 				5CFE2B782D2486DF0023EBF8 /* CatalogSortOptions.swift in Sources */,

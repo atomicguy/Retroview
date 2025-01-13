@@ -14,6 +14,7 @@ private let logger = Logger(
 
 struct BulkCollectionButton: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.createCollectionForMultiple) private var createCollectionForMultiple
     @Query(
         filter: #Predicate<CollectionSchemaV1.Collection> { collection in
             collection.name != "Favorites"
@@ -55,7 +56,7 @@ struct BulkCollectionButton: View {
             }
 
             Button {
-                showingCollectionSheet = true
+                createCollectionForMultiple?(fetchCards())
             } label: {
                 Label("New Collection...", systemImage: "folder.badge.plus")
             }
@@ -70,13 +71,9 @@ struct BulkCollectionButton: View {
             )
         )
         .disabled(isProcessing)
-        .sheet(isPresented: $showingCollectionSheet) {
-            if let firstCard = fetchCards().first {
-                CollectionCreationView(card: firstCard)
-            }
-        }
     }
 }
+
 //#Preview("Bulk Collection Button") {
 //    CardsPreviewContainer(count: 5) { cards in
 //        BulkCollectionButton(cards: cards)
