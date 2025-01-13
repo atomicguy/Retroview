@@ -8,117 +8,151 @@
 import SwiftData
 import SwiftUI
 
+#if os(macOS)
+    import AppKit
+    typealias PlatformImage = NSImage
+#else
+    import UIKit
+    typealias PlatformImage = UIImage
+#endif
+
 struct CollectionThumbnailView: View {
     let collection: CollectionSchemaV1.Collection
-    private let maxStackedCards = 5
+    let maxStackedCards = 5
     private let textOverlayHeight = CGFloat(44)
-
-    @State private var lastCardHeight: CGFloat? = nil
+    private let cardPadding: CGFloat = 8  // Padding around the cards
 
     var body: some View {
-        ZStack {
-            // Material overlay for depth
+        ZStack(alignment: .bottom) {
+            // Background with ultra-thin material and accent tint
             RoundedRectangle(cornerRadius: 16)
                 .fill(.ultraThinMaterial)
+                .background(
+                    Color.accentColor.opacity(0.2)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                )
 
-            // Stacked cards with geometry scaling
-            GeometryReader { geometry in
-                if !collection.orderedCards.isEmpty {
-                    let visibleCards = Array(
-                        collection.orderedCards.prefix(maxStackedCards))
-                    let availableSpace = geometry.size.height
+            // Card thumbnails
+            thumbnailContent
+                .clipped()
 
-                    ZStack {
-                        ForEach(
-                            Array(visibleCards.enumerated()), id: \.element.id
-                        ) { index, card in
-                            ThumbnailView(card: card)
-                                .frame(width: geometry.size.width)
-                                .background(
-                                    GeometryReader { cardGeometry in
-                                        Color.clear
-                                            .preference(
-                                                key: CardHeightPreferenceKey
-                                                    .self,
-                                                value: cardGeometry.size.height
-                                            )
-                                    }
-                                )
-                                .offset(
-                                    y: calculateOffset(
-                                        index: index,
-                                        totalCards: visibleCards.count,
-                                        availableSpace: availableSpace,
-                                        lastCardHeight: lastCardHeight ?? 0
-                                    ))
-                        }
-                    }
-                    .onPreferenceChange(CardHeightPreferenceKey.self) {
-                        height in
-                        lastCardHeight = height
-                    }
-                } else {
-                    Image(systemName: "photo.stack")
-                        .font(.largeTitle)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-            }
-            .padding(.horizontal, 8)
-            .padding(.bottom, 8)
-
-            // Text overlay with gradient background
-            VStack {
-                Spacer()
-                ZStack {
-                    // Ultra thin material overlay
-                    Rectangle()
-                        .fill(.ultraThinMaterial)
-
-                    // Gradient behind material for better contrast
-                    LinearGradient(
-                        colors: [.clear, .black.opacity(0.5)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-
-                    // Text content
-                    Text(collection.name)
-                        .serifFont()
-                        .lineLimit(1)
-                        .foregroundStyle(.primary)
-                        .padding(.vertical, 8)
-                }
-                .frame(height: textOverlayHeight)
-            }
+            // Title overlay at the bottom
+            textOverlay
         }
+        .aspectRatio(1, contentMode: .fit)  // Ensure the entire thumbnail remains a square
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .platformInteraction(
+            InteractionConfig(
+                showHoverEffects: true
+            )
+        )
+    }
+
+    private var thumbnailContent: some View {
+        GeometryReader { geometry in
+            let size = geometry.size.width  // Use width to define the square size
+
+            dynamicCardStack(in: geometry)
+                .frame(width: size, height: size)  // Force a square frame
+                .clipped()  // Ensure no overflow outside the bounds
+        }
         .aspectRatio(1, contentMode: .fit)
     }
 
-    private func calculateOffset(
+    private var dynamicThumbnailView: some View {
+        GeometryReader { geometry in
+            dynamicCardStack(in: geometry)
+        }
+    }
+
+    private func cachedThumbnailView(image: PlatformImage) -> some View {
+        #if os(macOS)
+            return Image(nsImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        #else
+            return Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        #endif
+    }
+
+    private func dynamicCardStack(in geometry: GeometryProxy) -> some View {
+        let size = geometry.size.width  // Use width for both width and height
+        let visibleCards = Array(
+            collection.orderedCards.prefix(maxStackedCards))
+        let totalCards = visibleCards.count
+
+        return ZStack(alignment: .top) {
+            Color.clear
+            ForEach(Array(visibleCards.enumerated()), id: \.element.id) {
+                index, card in
+                ThumbnailView(card: card)
+                    .frame(width: size - (2 * cardPadding))
+                    .aspectRatio(contentMode: .fit)
+                    #if !os(visionOS)
+                        .shadow(
+                            color: Color.black.opacity(0.2), radius: 4, x: 0,
+                            y: 2)
+                    #endif
+                    .offset(
+                        y: calculateCardOffset(
+                            index: index,
+                            totalCards: totalCards,
+                            availableHeight: size
+                        )
+                    )
+            }
+        }
+    }
+
+    private func calculateCardOffset(
         index: Int,
         totalCards: Int,
-        availableSpace: CGFloat,
-        lastCardHeight: CGFloat
+        availableHeight: CGFloat
     ) -> CGFloat {
+        // Infer card height by dividing the effective height by the number of cards
+        let cardHeight =
+            (availableHeight - (2 * cardPadding) - textOverlayHeight)
+            / CGFloat(totalCards)
+
         guard totalCards > 1 else {
-            // Vertically center a single card
-            let topSpace = availableSpace - textOverlayHeight
-            return (topSpace / 2) - (lastCardHeight / 2)
+            // Center a single card vertically, adding cardPadding to the top
+            return ((availableHeight - textOverlayHeight) / 2) + cardPadding
+                - cardHeight / 3
         }
 
-        if index == 0 {
-            // Ensure the first card's top edge is at the top of the available space
-            return 0
+        // The spacing between consecutive cards is equal to the inferred card height
+        let cardSpacing = cardHeight
+
+        // Calculate the offset for the given card index, adding cardPadding to shift the stack down
+        return (cardSpacing * CGFloat(index)) + cardPadding
+    }
+
+    private func platformImage(from data: Data) -> PlatformImage? {
+        PlatformImage(data: data)
+    }
+
+    private var textOverlay: some View {
+        ZStack {
+            Rectangle()
+                .fill(.ultraThinMaterial)
+
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.5)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+
+            Text(collection.name)
+                .serifFont()
+                .lineLimit(1)
+                .foregroundStyle(.primary)
+                .padding(.vertical, 8)
         }
-
-        // Calculate the remaining space above the last card
-        let remainingSpace = availableSpace - lastCardHeight
-        let step = remainingSpace / CGFloat(totalCards - 1)
-
-        // Offset cards evenly above the last card
-        return step * CGFloat(index)
+        .frame(height: textOverlayHeight)
     }
 }
 
