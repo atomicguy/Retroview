@@ -179,6 +179,13 @@ struct PlatformInteractionModifier: ViewModifier {
                             }
                         }
                 )
+                .onChange(of: showSecondaryMenu) {
+                    if !showSecondaryMenu {
+                        withAnimation(.spring(response: 0.3)) {
+                            longPressScale = 1.0
+                        }
+                    }
+                }
             #else
                 // macOS keeps existing behavior
                 .modifier(
@@ -253,12 +260,15 @@ private struct SelectionEffectModifier: ViewModifier {
 private struct TapHandlingModifier: ViewModifier {
     let onTap: (() -> Void)?
     let onDoubleTap: (() -> Void)?
+    @State private var navigationInProgress = false
 
     func body(content: Content) -> some View {
         content
             #if os(visionOS)
                 .onTapGesture {
-                    onDoubleTap?()  // visionOS uses single tap for navigation
+                    guard !navigationInProgress else { return }
+                    navigationInProgress = true
+                    onDoubleTap?()
                 }
             #elseif os(macOS)
                 .simultaneousGesture(
@@ -274,8 +284,9 @@ private struct TapHandlingModifier: ViewModifier {
                         }
                 )
             #else
-                // iPadOS uses single tap for navigation
                 .onTapGesture {
+                    guard !navigationInProgress else { return }
+                    navigationInProgress = true
                     onDoubleTap?()
                 }
             #endif
@@ -459,7 +470,7 @@ private struct PreviewCard: View {
     let showHover: Bool
     let onTap: (() -> Void)?
     let onDoubleTap: (() -> Void)?
-    
+
     var body: some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(.gray.opacity(0.1))
@@ -500,7 +511,7 @@ private struct PreviewCard: View {
                 onTap: {},
                 onDoubleTap: {}
             )
-            
+
             PreviewCard(
                 title: "Selected",
                 isSelected: true,
@@ -509,7 +520,7 @@ private struct PreviewCard: View {
                 onDoubleTap: {}
             )
         }
-        
+
         HStack(spacing: 20) {
             PreviewCard(
                 title: "No Hover Effects",
@@ -518,7 +529,7 @@ private struct PreviewCard: View {
                 onTap: {},
                 onDoubleTap: {}
             )
-            
+
             PreviewCard(
                 title: "Right Click/Long Press for Menu",
                 isSelected: false,
@@ -538,12 +549,12 @@ private struct PreviewCard: View {
             Text("Content")
         }
         .platformNavigationTitle("Automatic Title")
-        
+
         List {
             Text("Content")
         }
         .platformNavigationTitle("Inline Title", displayMode: .inline)
-        
+
         List {
             Text("Content")
         }
@@ -572,14 +583,16 @@ private struct PreviewCard: View {
 #Preview("Overlay Button Styles") {
     HStack(spacing: 20) {
         // Normal overlay button
-        Button {} label: {
+        Button {
+        } label: {
             Image(systemName: "heart")
                 .overlayButtonStyle()
         }
         .buttonStyle(.plain)
-        
+
         // Dimmed overlay button
-        Button {} label: {
+        Button {
+        } label: {
             Image(systemName: "square.and.arrow.up")
                 .overlayButtonStyle(opacity: 0.5)
         }
