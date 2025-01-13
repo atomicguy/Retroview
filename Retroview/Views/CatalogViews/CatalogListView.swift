@@ -17,7 +17,8 @@ struct CatalogListView<T: CatalogItem>: View {
     private let title: String
 
     init(
-        title: String, navigationPath: Binding<NavigationPath>,
+        title: String,
+        navigationPath: Binding<NavigationPath>,
         sortDescriptor: SortDescriptor<T>
     ) {
         self.title = title
@@ -30,16 +31,16 @@ struct CatalogListView<T: CatalogItem>: View {
             searchText.isEmpty
             ? items
             : items.filter { item in
-                item.name.localizedCaseInsensitiveContains(searchText)
+                item.displayName.localizedCaseInsensitiveContains(searchText)
             }
 
         return filtered.sorted { first, second in
             switch sortState.option {
             case .alphabetical:
                 if sortState.ascending {
-                    return first.name < second.name
+                    return first.displayName < second.displayName
                 } else {
-                    return first.name > second.name
+                    return first.displayName > second.displayName
                 }
             case .cardCount:
                 if sortState.ascending {
@@ -55,7 +56,7 @@ struct CatalogListView<T: CatalogItem>: View {
         List(filteredAndSortedItems) { item in
             NavigationLink(value: item) {
                 VStack(alignment: .leading) {
-                    Text(item.name)
+                    Text(item.displayName)
                         .font(.headline)
                     Text("\(item.cards.count) cards")
                         .font(.caption)
@@ -68,8 +69,9 @@ struct CatalogListView<T: CatalogItem>: View {
         #if os(macOS)
             .textFieldStyle(.roundedBorder)
         #endif
-            .platformToolbar {
-            } trailing: {CatalogSortButton(sortState: sortState)
+        .platformToolbar {
+        } trailing: {
+            CatalogSortButton(sortState: sortState)
         }
     }
 }

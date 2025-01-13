@@ -39,7 +39,8 @@ struct MainView: View {
             let newCollection = CollectionSchemaV1.Collection(name: "Untitled")
             modelContext.insert(newCollection)
             newCollection.addCard(card, context: modelContext)
-            selectedDestination = .collection(newCollection.id, newCollection.name)
+            selectedDestination = .collection(
+                newCollection.id, newCollection.name)
             navigationPath.append(newCollection)
         }
         .environment(\.createCollectionForMultiple) { cards in
@@ -48,7 +49,8 @@ struct MainView: View {
             for card in cards {
                 newCollection.addCard(card, context: modelContext)
             }
-            selectedDestination = .collection(newCollection.id, newCollection.name)
+            selectedDestination = .collection(
+                newCollection.id, newCollection.name)
             navigationPath.append(newCollection)
         }
     }
@@ -71,6 +73,12 @@ struct MainView: View {
                 title: "Authors",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\AuthorSchemaV1.Author.name)
+            )
+        case .dates:
+            CatalogListView<DateSchemaV1.Date>(
+                title: "Dates",
+                navigationPath: $navigationPath,
+                sortDescriptor: SortDescriptor(\DateSchemaV1.Date.text)
             )
         case .favorites:
             FavoritesView(navigationPath: $navigationPath)

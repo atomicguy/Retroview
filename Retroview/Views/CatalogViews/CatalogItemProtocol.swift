@@ -8,10 +8,19 @@
 import SwiftData
 
 protocol CatalogItem: PersistentModel, Identifiable {
-    var name: String { get }
+    var displayName: String { get }
     var cards: [CardSchemaV1.StereoCard] { get }
 }
 
 // Conform existing types to CatalogItem
-extension AuthorSchemaV1.Author: CatalogItem {}
-extension SubjectSchemaV1.Subject: CatalogItem {}
+extension AuthorSchemaV1.Author: CatalogItem {
+    var displayName: String { name }
+}
+
+extension SubjectSchemaV1.Subject: CatalogItem {
+    var displayName: String { name }
+}
+
+extension DateSchemaV1.Date: CatalogItem {
+    var displayName: String { text }
+}

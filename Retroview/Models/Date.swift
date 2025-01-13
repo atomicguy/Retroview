@@ -18,7 +18,7 @@ enum DateSchemaV1: VersionedSchema {
     @Model
     class Date {
         var text: String
-        var cards: [CardSchemaV1.StereoCard]?
+        var cards: [CardSchemaV1.StereoCard] = []
 
         init(text: String) {
             self.text = text

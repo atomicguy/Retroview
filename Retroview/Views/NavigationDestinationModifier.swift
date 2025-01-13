@@ -52,6 +52,21 @@ struct NavigationDestinationModifier: ViewModifier {
                     }
                 )
             }
+            .navigationDestination(for: DateSchemaV1.Date.self) { date in
+                CardGridLayout(
+                    collection: CollectionSchemaV1.Collection(name: date.text),
+                    cards: date.cards,
+                    selectedCard: .constant(nil),
+                    navigationPath: $navigationPath,
+                    onCardSelected: { card in
+                        navigationPath.append(
+                            CardStackDestination.stack(
+                                cards: date.cards,
+                                initialCard: card
+                            ))
+                    }
+                )
+            }
             .navigationDestination(for: CollectionSchemaV1.Collection.self) {
                 collection in
                 CardGridLayout(
