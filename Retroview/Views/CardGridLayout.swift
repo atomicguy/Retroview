@@ -68,6 +68,7 @@ struct CardGridLayout: View {
                 }
                 .padding(PlatformEnvironment.Metrics.defaultPadding)
             }
+            .environment(\.currentCollection, collection)
         }
         .platformToolbar {
             EmptyView()

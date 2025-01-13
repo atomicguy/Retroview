@@ -47,6 +47,8 @@ private struct MenuContent: View {
     let card: CardSchemaV1.StereoCard
     let includeShare: Bool
     @State private var showNewCollectionSheet = false
+    @Environment(\.currentCollection) private var currentCollection
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.imageLoader) private var imageLoader
 
     init(card: CardSchemaV1.StereoCard, includeShare: Bool = true) {
@@ -65,6 +67,18 @@ private struct MenuContent: View {
             #endif
 
             CollectionSubmenu(card: card)
+
+            if let collection = currentCollection,
+                !CollectionDefaults.isFavorites(collection)
+            {
+                Divider()
+                
+                Button(role: .destructive) {
+                    collection.removeCard(card, context: modelContext)
+                } label: {
+                    Label("Remove from Collection", systemImage: "minus.circle")
+                }
+            }
         }
     }
 }

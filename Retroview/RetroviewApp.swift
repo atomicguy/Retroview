@@ -130,6 +130,10 @@ private struct CreateCollectionMultipleKey: EnvironmentKey {
     static let defaultValue: (([CardSchemaV1.StereoCard]) -> Void)? = nil
 }
 
+private struct CurrentCollectionKey: EnvironmentKey {
+    static let defaultValue: CollectionSchemaV1.Collection? = nil
+}
+
 extension EnvironmentValues {
     var importManager: BackgroundImportManager? {
         get { self[ImportManagerKey.self] }
@@ -154,5 +158,10 @@ extension EnvironmentValues {
     var createCollectionForMultiple: (([CardSchemaV1.StereoCard]) -> Void)? {
         get { self[CreateCollectionMultipleKey.self] }
         set { self[CreateCollectionMultipleKey.self] = newValue }
+    }
+
+    var currentCollection: CollectionSchemaV1.Collection? {
+        get { self[CurrentCollectionKey.self] }
+        set { self[CurrentCollectionKey.self] = newValue }
     }
 }
