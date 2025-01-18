@@ -17,8 +17,10 @@ enum DateSchemaV1: VersionedSchema {
 
     @Model
     class Date {
+        var name: String { text }
         var text: String
         var cards: [CardSchemaV1.StereoCard] = []
+        @Attribute(.externalStorage) var thumbnailData: Data?
 
         init(text: String) {
             self.text = text

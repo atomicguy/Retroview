@@ -34,7 +34,7 @@ class CatalogSortState<T: CatalogItem>: Equatable {
         switch option {
         case .alphabetical:
             return SortDescriptor(
-                \T.displayName, order: ascending ? .forward : .reverse)
+                \T.name, order: ascending ? .forward : .reverse)
         case .cardCount:
             return SortDescriptor(
                 \T.cards.count, order: ascending ? .forward : .reverse)

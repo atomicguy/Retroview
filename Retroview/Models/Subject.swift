@@ -19,6 +19,7 @@ enum SubjectSchemaV1: VersionedSchema {
     class Subject {
         var name: String
         var cards: [CardSchemaV1.StereoCard] = []
+        @Attribute(.externalStorage) var thumbnailData: Data?
 
         init(name: String) {
             self.name = name

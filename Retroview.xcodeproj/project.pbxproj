@@ -34,6 +34,8 @@
 		5C2056C92D34956700383B46 /* CollectionContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056C82D34956200383B46 /* CollectionContextMenu.swift */; };
 		5C2056CD2D34A2F300383B46 /* CollectionThumbnail+Generate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056CC2D34A2E500383B46 /* CollectionThumbnail+Generate.swift */; };
 		5C2056CF2D34C6B800383B46 /* Collection+UpdateThumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056CE2D34C6AA00383B46 /* Collection+UpdateThumb.swift */; };
+		5C2056D32D34D37900383B46 /* CatalogThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056D22D34D37400383B46 /* CatalogThumbnailView.swift */; };
+		5C2056D52D34D57C00383B46 /* CatalogGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056D42D34D57700383B46 /* CatalogGridView.swift */; };
 		5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A271A2D04DC01009ECECE /* AppDestination.swift */; };
 		5C4F76ED2D20F01F00122570 /* SpatialPhotoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4F76EC2D20F01900122570 /* SpatialPhotoConverter.swift */; };
 		5C4F76EF2D20F06300122570 /* StereoErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4F76EE2D20F05D00122570 /* StereoErrors.swift */; };
@@ -185,6 +187,8 @@
 		5C2056C82D34956200383B46 /* CollectionContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionContextMenu.swift; sourceTree = "<group>"; };
 		5C2056CC2D34A2E500383B46 /* CollectionThumbnail+Generate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionThumbnail+Generate.swift"; sourceTree = "<group>"; };
 		5C2056CE2D34C6AA00383B46 /* Collection+UpdateThumb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+UpdateThumb.swift"; sourceTree = "<group>"; };
+		5C2056D22D34D37400383B46 /* CatalogThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogThumbnailView.swift; sourceTree = "<group>"; };
+		5C2056D42D34D57700383B46 /* CatalogGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogGridView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5C4A271A2D04DC01009ECECE /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		5C4F76EC2D20F01900122570 /* SpatialPhotoConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialPhotoConverter.swift; sourceTree = "<group>"; };
@@ -445,6 +449,8 @@
 		5C73DB522D18EF95004BEEC5 /* CatalogViews */ = {
 			isa = PBXGroup;
 			children = (
+				5C2056D42D34D57700383B46 /* CatalogGridView.swift */,
+				5C2056D22D34D37400383B46 /* CatalogThumbnailView.swift */,
 				5CFE2B822D24CE380023EBF8 /* CatalogListView.swift */,
 				5CAFA76C2D1A747700112A93 /* CatalogItemProtocol.swift */,
 			);
@@ -789,6 +795,7 @@
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
+				5C2056D32D34D37900383B46 /* CatalogThumbnailView.swift in Sources */,
 				5CFE2B8D2D24EB940023EBF8 /* BulkCollectionButton.swift in Sources */,
 				5CD5770F2D0D2D89002FA8DB /* Array+Unique.swift in Sources */,
 				5C7955B02D1F7EF90037E204 /* CropUtility.swift in Sources */,
@@ -838,6 +845,7 @@
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C2056C92D34956700383B46 /* CollectionContextMenu.swift in Sources */,
 				5CFE2B7F2D24AEB50023EBF8 /* CardStackDestination.swift in Sources */,
+				5C2056D52D34D57C00383B46 /* CatalogGridView.swift in Sources */,
 				5CFE2B902D25E15C0023EBF8 /* CardActionMenu.swift in Sources */,
 				5C73DB6B2D19045D004BEEC5 /* SerifFontModifier.swift in Sources */,
 				5C7955AE2D1F71B70037E204 /* CropButton.swift in Sources */,

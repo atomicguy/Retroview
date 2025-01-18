@@ -6,10 +6,12 @@
 //
 
 import SwiftData
+import Foundation
 
 protocol CatalogItem: PersistentModel, Identifiable {
-    var displayName: String { get }
+    var name: String { get }
     var cards: [CardSchemaV1.StereoCard] { get }
+    var thumbnailData: Data? { get set }
 }
 
 // Conform existing types to CatalogItem

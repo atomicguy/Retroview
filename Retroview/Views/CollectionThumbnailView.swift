@@ -18,9 +18,18 @@ import SwiftUI
 
 struct CollectionThumbnailView: View {
     let collection: CollectionSchemaV1.Collection
+    let cards: [CardSchemaV1.StereoCard]
     let maxStackedCards = 5
     private let textOverlayHeight = CGFloat(44)
     private let cardPadding: CGFloat = 8  // Padding around the cards
+
+    init(
+        collection: CollectionSchemaV1.Collection,
+        cards: [CardSchemaV1.StereoCard]? = nil
+    ) {
+        self.collection = collection
+        self.cards = cards ?? collection.orderedCards
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -49,19 +58,21 @@ struct CollectionThumbnailView: View {
     }
 
     private var thumbnailContent: some View {
-        GeometryReader { geometry in
-            let size = geometry.size.width  // Use width to define the square size
-
-            dynamicCardStack(in: geometry)
-                .frame(width: size, height: size)  // Force a square frame
-                .clipped()  // Ensure no overflow outside the bounds
+            GeometryReader { geometry in
+                let size = geometry.size.width
+                let visibleCards = Array(cards.prefix(maxStackedCards))
+                
+                dynamicCardStack(in: geometry, cards: visibleCards)
+                    .frame(width: size, height: size)
+                    .clipped()
+            }
+            .aspectRatio(1, contentMode: .fit)
         }
-        .aspectRatio(1, contentMode: .fit)
-    }
 
     private var dynamicThumbnailView: some View {
         GeometryReader { geometry in
-            dynamicCardStack(in: geometry)
+            let visibleCards = Array(cards.prefix(maxStackedCards))
+            dynamicCardStack(in: geometry, cards: visibleCards)
         }
     }
 
@@ -79,15 +90,13 @@ struct CollectionThumbnailView: View {
         #endif
     }
 
-    private func dynamicCardStack(in geometry: GeometryProxy) -> some View {
-        let size = geometry.size.width  // Use width for both width and height
-        let visibleCards = Array(
-            collection.orderedCards.prefix(maxStackedCards))
-        let totalCards = visibleCards.count
+    private func dynamicCardStack(in geometry: GeometryProxy, cards: [CardSchemaV1.StereoCard]) -> some View {
+            let size = geometry.size.width
+            let totalCards = cards.count
 
         return ZStack(alignment: .top) {
             Color.clear
-            ForEach(Array(visibleCards.enumerated()), id: \.element.id) {
+            ForEach(Array(cards.enumerated()), id: \.element.id) {
                 index, card in
                 ThumbnailView(card: card)
                     .frame(width: size - (2 * cardPadding))

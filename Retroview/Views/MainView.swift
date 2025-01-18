@@ -63,19 +63,19 @@ struct MainView: View {
                 modelContext: modelContext,
                 navigationPath: $navigationPath)
         case .subjects:
-            CatalogListView<SubjectSchemaV1.Subject>(
+            CatalogGridView<SubjectSchemaV1.Subject>(
                 title: "Subjects",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\SubjectSchemaV1.Subject.name)
             )
         case .authors:
-            CatalogListView<AuthorSchemaV1.Author>(
+            CatalogGridView<AuthorSchemaV1.Author>(
                 title: "Authors",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\AuthorSchemaV1.Author.name)
             )
         case .dates:
-            CatalogListView<DateSchemaV1.Date>(
+            CatalogGridView<DateSchemaV1.Date>(
                 title: "Dates",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\DateSchemaV1.Date.text)
