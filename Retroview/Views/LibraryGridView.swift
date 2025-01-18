@@ -9,39 +9,32 @@ import SwiftData
 import SwiftUI
 
 struct LibraryGridView: View {
-    // MARK: - View State
-    private struct ViewState: Codable {
-        var searchText = ""
-        var currentPage = 0
-        var hasMoreContent = true
-        var loadedCardIDs: [UUID] = []
-    }
-
-    // MARK: - Properties
     @Environment(\.importManager) private var importManager
     @Environment(\.imageDownloadManager) private var imageDownloadManager
+
     let modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var loadedCards: [CardSchemaV1.StereoCard] = []
+    @State private var searchManager: SearchManager
+    @State private var currentPage = 0
     @State private var isLoadingMore = false
-    @State private var viewState = ViewState()
-    @State private var searchText = ""
+    @State private var hasMoreContent = true
 
     private let pageSize = 100
 
-    // MARK: - Body
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+        self.modelContext = modelContext
+        self._navigationPath = navigationPath
+        self._searchManager = State(
+            initialValue: SearchManager(modelContext: modelContext))
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            SearchBar(text: $searchText)
+            SearchBar(text: $searchManager.searchText)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-                .onChange(of: searchText) {
-                    viewState.searchText = searchText
-                    viewState.currentPage = 0
-                    viewState.loadedCardIDs = []
-                    Task { await loadInitialCards() }
-                }
 
             ScrollView {
                 LazyVGrid(
@@ -61,13 +54,16 @@ struct LibraryGridView: View {
                                     ))
                             }
                         )
+                        .id(card.id)
                     }
 
-                    if viewState.hasMoreContent {
+                    if hasMoreContent {
                         ProgressView()
                             .onAppear {
                                 if !isLoadingMore {
-                                    Task { await loadMoreCards() }
+                                    Task {
+                                        await loadMoreCards()
+                                    }
                                 }
                             }
                     }
@@ -75,73 +71,125 @@ struct LibraryGridView: View {
                 .padding(PlatformEnvironment.Metrics.defaultPadding)
             }
         }
+        .platformNavigationTitle("Library (\(searchManager.totalCount) cards)")
         .task {
-            if loadedCards.isEmpty {
+            searchManager.updateTotalCount(context: modelContext)
+        }
+        .onChange(of: searchManager.searchText) {
+            Task {
+                searchManager.updateTotalCount(context: modelContext)
                 await loadInitialCards()
             }
         }
-        .platformNavigationTitle("Library (\(loadedCards.count) cards)")
+        .platformToolbar {
+            if let manager = importManager, manager.isImporting {
+                ImportProgressIndicator(importManager: manager)
+            }
+
+            if let manager = imageDownloadManager, manager.isDownloading {
+                BackgroundProgressIndicator(
+                    isProcessing: manager.isDownloading,
+                    processedCount: manager.processedCardCount,
+                    totalCount: manager.missingImageCount,
+                    onCancel: { manager.cancelDownload() }
+                )
+            }
+        } trailing: {
+            Button {
+                imageDownloadManager?.startImageDownload()
+            } label: {
+                Label(
+                    "Download Missing Images",
+                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle")
+            }
+
+            ImportTypeMenu(
+                onImport: { urls, type in
+                    guard let manager = importManager else { return }
+
+                    switch type {
+                    case .mods:
+                        manager.startImport(from: urls)
+                    case .crops:
+                        startCropImport(urls: urls)
+                    }
+                }
+            )
+
+            if !loadedCards.isEmpty {
+                BulkCollectionButton(fetchCards: { searchManager.filteredCards })
+            }
+
+            DatabaseTransferButton()
+
+            #if DEBUG
+                StoreDebugMenu()
+            #endif
+        }
     }
 
-    // MARK: - Grid Layout
     private var columns: [GridItem] {
         [
             GridItem(
                 .adaptive(
                     minimum: PlatformEnvironment.Metrics.gridMinWidth,
-                    maximum: PlatformEnvironment.Metrics.gridMaxWidth),
-                spacing: 20)
+                    maximum: PlatformEnvironment.Metrics.gridMaxWidth
+                ), spacing: 20)
         ]
     }
 
-    // MARK: - Loading Methods
-    @MainActor
-    private func loadInitialCards() async {
-        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-        descriptor.fetchLimit = pageSize
-
-        if !viewState.searchText.isEmpty {
-            descriptor.predicate = #Predicate<CardSchemaV1.StereoCard> { card in
-                card.titles.contains {
-                    $0.text.localizedStandardContains(viewState.searchText)
-                }
+    private func startCropImport(urls: [URL]) {
+        let cropUpdateService = CropUpdateService(modelContext: modelContext)
+        Task {
+            do {
+                try await cropUpdateService.updateCropsInBatch(from: urls)
+            } catch {
+                print("Crop import failed: \(error)")
             }
-        }
-
-        do {
-            let cards = try modelContext.fetch(descriptor)
-            loadedCards = cards
-            viewState.loadedCardIDs = cards.map(\.uuid)
-            viewState.hasMoreContent = cards.count == pageSize
-        } catch {
-            print("Failed to load initial cards: \(error)")
         }
     }
 
-    @MainActor
+    private func loadInitialCards() async {
+        searchManager.updateTotalCount(context: modelContext)
+
+        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+            sortBy: [SortDescriptor(\.uuid)]
+        )
+        descriptor.fetchLimit = pageSize
+
+        if let searchPredicate = searchManager.predicate {
+            descriptor.predicate = searchPredicate
+        }
+
+        do {
+            loadedCards = try modelContext.fetch(descriptor)
+            hasMoreContent = loadedCards.count == pageSize
+        } catch {
+            print("Failed to load cards: \(error)")
+        }
+    }
+
     private func loadMoreCards() async {
-        guard viewState.hasMoreContent, !isLoadingMore else { return }
+        guard hasMoreContent, !isLoadingMore else { return }
 
         isLoadingMore = true
         defer { isLoadingMore = false }
 
-        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-        descriptor.fetchOffset = viewState.loadedCardIDs.count
+        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
+            sortBy: [SortDescriptor(\.uuid)]
+        )
+        descriptor.fetchOffset = loadedCards.count
         descriptor.fetchLimit = pageSize
 
-        if !viewState.searchText.isEmpty {
-            descriptor.predicate = #Predicate<CardSchemaV1.StereoCard> { card in
-                card.titles.contains {
-                    $0.text.localizedStandardContains(viewState.searchText)
-                }
-            }
+        // Apply search predicate if exists
+        if let searchPredicate = searchManager.predicate {
+            descriptor.predicate = searchPredicate
         }
 
         do {
             let newCards = try modelContext.fetch(descriptor)
+            hasMoreContent = newCards.count == pageSize
             loadedCards.append(contentsOf: newCards)
-            viewState.loadedCardIDs.append(contentsOf: newCards.map(\.uuid))
-            viewState.hasMoreContent = newCards.count == pageSize
         } catch {
             print("Failed to load more cards: \(error)")
         }
@@ -150,9 +198,9 @@ struct LibraryGridView: View {
 
 #Preview("Library Grid") {
     NavigationStack {
+        let container = try! PreviewDataManager.shared.container()
         LibraryGridView(
-            modelContext: try! PreviewDataManager.shared.container()
-                .mainContext,
+            modelContext: container.mainContext,
             navigationPath: .constant(NavigationPath())
         )
         .withPreviewStore()
