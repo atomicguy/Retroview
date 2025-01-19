@@ -58,16 +58,16 @@ struct CollectionThumbnailView: View {
     }
 
     private var thumbnailContent: some View {
-            GeometryReader { geometry in
-                let size = geometry.size.width
-                let visibleCards = Array(cards.prefix(maxStackedCards))
-                
-                dynamicCardStack(in: geometry, cards: visibleCards)
-                    .frame(width: size, height: size)
-                    .clipped()
-            }
-            .aspectRatio(1, contentMode: .fit)
+        GeometryReader { geometry in
+            let size = geometry.size.width
+            let visibleCards = Array(cards.prefix(maxStackedCards))
+
+            dynamicCardStack(in: geometry, cards: visibleCards)
+                .frame(width: size, height: size)
+                .clipped()
         }
+        .aspectRatio(1, contentMode: .fit)
+    }
 
     private var dynamicThumbnailView: some View {
         GeometryReader { geometry in
@@ -90,16 +90,21 @@ struct CollectionThumbnailView: View {
         #endif
     }
 
-    private func dynamicCardStack(in geometry: GeometryProxy, cards: [CardSchemaV1.StereoCard]) -> some View {
-            let size = geometry.size.width
-            let totalCards = cards.count
+    private func dynamicCardStack(
+        in geometry: GeometryProxy, cards: [CardSchemaV1.StereoCard]
+    ) -> some View {
+        let size = geometry.size.width
+        let totalCards = cards.count
 
         return ZStack(alignment: .top) {
             Color.clear
             ForEach(Array(cards.enumerated()), id: \.element.id) {
                 index, card in
                 ThumbnailView(card: card)
-                    .frame(width: size - (2 * cardPadding))
+                    .frame(
+                        width: max(size - (2 * cardPadding), 0),
+                        height: nil
+                    )
                     .aspectRatio(contentMode: .fit)
                     #if !os(visionOS)
                         .shadow(
