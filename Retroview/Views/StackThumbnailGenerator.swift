@@ -1,20 +1,22 @@
 //
-//  CollectionThumbnail+Generate.swift
+//  StackThumbnailGenerator.swift
 //  Retroview
 //
-//  Created by Adam Schuster on 1/12/25.
+//  Created by Adam Schuster on 1/19/25.
 //
 
 import SwiftData
 import SwiftUI
 
-extension CollectionThumbnailView {
+struct StackThumbnailGenerator {
+    static let maxStackedCards = 5
+
     @MainActor
-    static func generateThumbnail(
-        for collection: CollectionSchemaV1.Collection,
+    static func generateThumbnailData(
+        for item: StackDisplayable,
         size: CGSize = CGSize(width: 300, height: 300)
     ) async throws -> Data {
-        let view = CollectionThumbnailView(collection: collection)
+        let view = StackThumbnailView(item: item)
             .frame(width: size.width, height: size.height)
 
         let renderer = ImageRenderer(content: view)

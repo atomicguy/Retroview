@@ -97,6 +97,10 @@ struct RetroviewApp: App {
             .environment(
                 \.platformFilePicker, PlatformFilePickerKey.defaultValue
             )
+            .environment(
+                \.stackThumbnailManager,
+                StackThumbnailManager(context: sharedModelContainer.mainContext)
+            )
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
                     context: sharedModelContainer.mainContext)

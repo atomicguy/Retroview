@@ -83,7 +83,14 @@ struct MainView: View {
         case .favorites:
             FavoritesView(navigationPath: $navigationPath)
         case .collections:
-            CollectionsGridView(navigationPath: $navigationPath)
+            CatalogGridView<CollectionSchemaV1.Collection>(
+                title: "Collections",
+                navigationPath: $navigationPath,
+                sortDescriptor: SortDescriptor(\.name),
+                predicate: #Predicate<CollectionSchemaV1.Collection> {
+                    $0.name != "Favorites"
+                }
+            )
         case let .collection(id, _):
             if let collection = collections.first(where: { $0.id == id }) {
                 CardGridLayout(

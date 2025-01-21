@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CollectionContextMenu: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.stackThumbnailManager) private var thumbnailManager
     let collection: CollectionSchemaV1.Collection
 
     var body: some View {
@@ -46,12 +47,9 @@ struct CollectionContextMenu: View {
     }
 
     private func regenerateThumbnail() {
-        Task { @MainActor in
-            do {
-                try await collection.updateThumbnail(context: modelContext)
-            } catch {
-                print("Failed to generate thumbnail: \(error)")
-            }
+        Task {
+            guard let manager = thumbnailManager else { return }
+            try? await manager.updateThumbnail(for: collection)
         }
     }
 }

@@ -36,6 +36,7 @@ struct CollectionsGridView: View {
                         )
                         .frame(minHeight: 300) 
                         .withCollectionContextMenu(collection)
+                        .withAutoThumbnailUpdate(collection)
 
 //                        .task {
 //                            if collection.collectionThumbnail == nil {

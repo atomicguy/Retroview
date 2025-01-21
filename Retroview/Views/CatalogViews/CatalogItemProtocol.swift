@@ -18,3 +18,4 @@ protocol CatalogItem: PersistentModel, Identifiable, StackDisplayable {
 extension AuthorSchemaV1.Author: CatalogItem {}
 extension SubjectSchemaV1.Subject: CatalogItem {}
 extension DateSchemaV1.Date: CatalogItem {}
+extension CollectionSchemaV1.Collection: CatalogItem {}

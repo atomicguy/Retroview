@@ -79,9 +79,16 @@ import SwiftUI
                 .tag(AppDestination.favorites)
 
                 NavigationStack(path: $navigationPath) {
-                    CollectionsGridView(navigationPath: $navigationPath)
-                        .withNavigationDestinations(
-                            navigationPath: $navigationPath)
+                    CatalogGridView<CollectionSchemaV1.Collection>(
+                        title: "Collections",
+                        navigationPath: $navigationPath,
+                        sortDescriptor: SortDescriptor(\.name),
+                        predicate: #Predicate<CollectionSchemaV1.Collection> {
+                            $0.name != "Favorites"
+                        }
+                    )
+                    .withNavigationDestinations(
+                        navigationPath: $navigationPath)
                 }
                 .tabItem {
                     Label("Collections", systemImage: "folder")
