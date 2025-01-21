@@ -40,8 +40,9 @@ struct CatalogGridView<T: CatalogItem>: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(filteredAndSortedItems) { item in
                     NavigationLink(value: item) {
-                        CatalogThumbnailView(item: item)
-                            .frame(minHeight: 300)  // Add minimum height
+                        StackThumbnailView(item: item)
+                            .frame(minHeight: 300)
+                            .focusable()
                     }
                 }
             }

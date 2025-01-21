@@ -26,7 +26,7 @@ struct CollectionsGridView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(collections) { collection in
-                    CollectionThumbnailView(collection: collection)
+                    StackThumbnailView(item: collection)
                         .platformInteraction(
                             InteractionConfig(
                                 onDoubleTap: {
@@ -34,6 +34,7 @@ struct CollectionsGridView: View {
                                 }
                             )
                         )
+                        .frame(minHeight: 300) 
                         .withCollectionContextMenu(collection)
 
 //                        .task {
