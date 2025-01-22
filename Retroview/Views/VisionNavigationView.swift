@@ -72,10 +72,10 @@ import SwiftUI
                     GroupGridView<CollectionSchemaV1.Collection>(
                         title: "Collections",
                         navigationPath: $navigationPath,
-                        sortDescriptor: SortDescriptor(\.name),
-                        predicate: #Predicate<CollectionSchemaV1.Collection> {
-                            $0.name != "Favorites"
-                        }
+                        sortDescriptor: SortDescriptor(\.name)
+//                        predicate: #Predicate<CollectionSchemaV1.Collection> {
+//                            $0.name != "Favorites"
+//                        }
                     )
                     .withNavigationDestinations(
                         navigationPath: $navigationPath)
