@@ -11,6 +11,7 @@ import SwiftUI
 struct CatalogGridView<T: CatalogItem>: View {
     @Binding var navigationPath: NavigationPath
     @State private var searchText = ""
+    @State private var sortState = CatalogSortState<T>()
     @Query private var items: [T]
     private let title: String
 
@@ -40,10 +41,12 @@ struct CatalogGridView<T: CatalogItem>: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Search bar
-            SearchBar(text: $searchText)
-                .padding(.horizontal)
-                .padding(.vertical, 8)
+            HStack {
+                SearchBar(text: $searchText)
+                CatalogSortButton(sortState: sortState)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
@@ -60,6 +63,7 @@ struct CatalogGridView<T: CatalogItem>: View {
                                     )
                                 }
                         }
+                        .buttonStyle(.plain)
                         .aspectRatio(1, contentMode: .fit)
                         .platformInteraction(
                             InteractionConfig(

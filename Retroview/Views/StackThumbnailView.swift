@@ -31,11 +31,33 @@ struct StackThumbnailView: View {
 
                 // Title bar
                 titleBar
+
+                // Card count badge
+                cardCountBadge
+                    .padding(12)
             }
             .aspectRatio(1, contentMode: .fit)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .shadow(radius: 2)
+            .platformHover()
+            .help(item.stackTitle)
         }
+    }
+
+    private var cardCountBadge: some View {
+        ZStack {
+            Circle()
+                .fill(.ultraThinMaterial)
+                .frame(width: 32, height: 32)
+
+            Text("\(item.stackCards.count)")
+                .foregroundStyle(Color.black.opacity(0.8))
+                .modifier(SerifFontModifier())
+        }
+        .frame(
+            maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing
+        )
+        .offset(x: 8, y: -8)
     }
 
     @ViewBuilder
@@ -118,7 +140,6 @@ struct StackThumbnailView: View {
                         endPoint: .bottom
                     )
                 )
-                .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
         }
         .frame(height: titleHeight)
     }
@@ -193,6 +214,7 @@ struct StackThumbnailView: View {
                     .withPreviewStore()
                     .environment(\.imageLoader, CardImageLoader())
                     .previewDisplayName("Stack Thumbnail Examples")
+                    .frame(width: 1024, height: 800)
             }
         }
     }

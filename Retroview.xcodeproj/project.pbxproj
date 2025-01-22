@@ -33,6 +33,8 @@
 		5C2056C92D34956700383B46 /* CollectionContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056C82D34956200383B46 /* CollectionContextMenu.swift */; };
 		5C2056D52D34D57C00383B46 /* CatalogGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056D42D34D57700383B46 /* CatalogGridView.swift */; };
 		5C3C35D12D3F662100396991 /* StackThumbnailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3C35D02D3F661B00396991 /* StackThumbnailManager.swift */; };
+		5C3C35D32D40ACB300396991 /* CatalogSortButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3C35D22D40ACA900396991 /* CatalogSortButton.swift */; };
+		5C3C35D52D40B1E500396991 /* DebossedModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3C35D42D40B1E000396991 /* DebossedModifier.swift */; };
 		5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A271A2D04DC01009ECECE /* AppDestination.swift */; };
 		5C4F76ED2D20F01F00122570 /* SpatialPhotoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4F76EC2D20F01900122570 /* SpatialPhotoConverter.swift */; };
 		5C4F76EF2D20F06300122570 /* StereoErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4F76EE2D20F05D00122570 /* StereoErrors.swift */; };
@@ -186,6 +188,8 @@
 		5C2056D42D34D57700383B46 /* CatalogGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogGridView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5C3C35D02D3F661B00396991 /* StackThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackThumbnailManager.swift; sourceTree = "<group>"; };
+		5C3C35D22D40ACA900396991 /* CatalogSortButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogSortButton.swift; sourceTree = "<group>"; };
+		5C3C35D42D40B1E000396991 /* DebossedModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebossedModifier.swift; sourceTree = "<group>"; };
 		5C4A271A2D04DC01009ECECE /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		5C4F76EC2D20F01900122570 /* SpatialPhotoConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialPhotoConverter.swift; sourceTree = "<group>"; };
 		5C4F76EE2D20F05D00122570 /* StereoErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StereoErrors.swift; sourceTree = "<group>"; };
@@ -323,6 +327,7 @@
 		5C1454322CF7A61400D5C232 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				5C3C35D42D40B1E000396991 /* DebossedModifier.swift */,
 				5CD577102D0E36AB002FA8DB /* Array+StringNormalization.swift */,
 				5CD5770E2D0D2D83002FA8DB /* Array+Unique.swift */,
 				5C1454332CF7A63600D5C232 /* CardColorAnalyzer.swift */,
@@ -565,6 +570,7 @@
 		5CFE2B7B2D248BC00023EBF8 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				5C3C35D22D40ACA900396991 /* CatalogSortButton.swift */,
 				5CFE2B8C2D24EB8C0023EBF8 /* BulkCollectionButton.swift */,
 				5C993C762D31F9FC00DAA659 /* CardShareButton.swift */,
 				5C7955AD2D1F71B50037E204 /* CropButton.swift */,
@@ -754,6 +760,7 @@
 				5CD577352D0EAEF1002FA8DB /* CropUpdateService.swift in Sources */,
 				5C7955902D1E73040037E204 /* CardCropOverlayView.swift in Sources */,
 				5CCB4C132D10F8B400FD4005 /* ImageQuality.swift in Sources */,
+				5C3C35D52D40B1E500396991 /* DebossedModifier.swift in Sources */,
 				5C73DB712D19113E004BEEC5 /* ImportButtons.swift in Sources */,
 				5C73DB672D18FE14004BEEC5 /* SubjectBadgeView.swift in Sources */,
 				5C1454422CF816D500D5C232 /* JSONStructures.swift in Sources */,
@@ -842,6 +849,7 @@
 				5C2056C92D34956700383B46 /* CollectionContextMenu.swift in Sources */,
 				5CFE2B7F2D24AEB50023EBF8 /* CardStackDestination.swift in Sources */,
 				5C2056D52D34D57C00383B46 /* CatalogGridView.swift in Sources */,
+				5C3C35D32D40ACB300396991 /* CatalogSortButton.swift in Sources */,
 				5CFE2B902D25E15C0023EBF8 /* CardActionMenu.swift in Sources */,
 				5C73DB6B2D19045D004BEEC5 /* SerifFontModifier.swift in Sources */,
 				5C7955AE2D1F71B70037E204 /* CropButton.swift in Sources */,

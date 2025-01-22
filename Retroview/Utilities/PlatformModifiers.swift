@@ -463,6 +463,32 @@ extension View {
     }
 }
 
+struct PlatformHoverEffect: ViewModifier {
+    let cornerRadius: CGFloat
+    @State private var isHovering = false
+    
+    func body(content: Content) -> some View {
+        content
+            #if os(visionOS)
+                .hoverEffect(.highlight)
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            #elseif os(macOS)
+                .onHover { hovering in
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isHovering = hovering
+                    }
+                }
+                .opacity(isHovering ? 0.8 : 1.0)
+            #endif
+    }
+}
+
+extension View {
+    func platformHover(cornerRadius: CGFloat = 12) -> some View {
+        modifier(PlatformHoverEffect(cornerRadius: cornerRadius))
+    }
+}
+
 // Test Views for Previews
 private struct PreviewCard: View {
     let title: String
