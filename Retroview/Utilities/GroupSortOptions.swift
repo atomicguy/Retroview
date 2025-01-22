@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-enum CatalogSortOption: String, CaseIterable {
+enum GroupSortOptions: String, CaseIterable {
     case alphabetical = "Alphabetical"
     case cardCount = "Number of Cards"
 
@@ -21,11 +21,11 @@ enum CatalogSortOption: String, CaseIterable {
 }
 
 @Observable
-class CatalogSortState<T: CatalogItem>: Equatable {
-    var option: CatalogSortOption
+class CatalogSortState<T: GroupItem>: Equatable {
+    var option: GroupSortOptions
     var ascending: Bool
 
-    init(option: CatalogSortOption = .alphabetical, ascending: Bool = true) {
+    init(option: GroupSortOptions = .alphabetical, ascending: Bool = true) {
         self.option = option
         self.ascending = ascending
     }

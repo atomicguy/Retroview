@@ -28,7 +28,7 @@ import SwiftUI
                 .tag(AppDestination.library)
 
                 NavigationStack(path: $navigationPath) {
-                    CatalogGridView<SubjectSchemaV1.Subject>(
+                    GroupGridView<SubjectSchemaV1.Subject>(
                         title: "Subjects",
                         navigationPath: $navigationPath,
                         sortDescriptor: SortDescriptor(
@@ -42,7 +42,7 @@ import SwiftUI
                 .tag(AppDestination.subjects)
 
                 NavigationStack(path: $navigationPath) {
-                    CatalogGridView<AuthorSchemaV1.Author>(
+                    GroupGridView<AuthorSchemaV1.Author>(
                         title: "Authors",
                         navigationPath: $navigationPath,
                         sortDescriptor: SortDescriptor(
@@ -56,7 +56,7 @@ import SwiftUI
                 .tag(AppDestination.authors)
 
                 NavigationStack(path: $navigationPath) {
-                    CatalogGridView<DateSchemaV1.Date>(
+                    GroupGridView<DateSchemaV1.Date>(
                         title: "Dates",
                         navigationPath: $navigationPath,
                         sortDescriptor: SortDescriptor(\DateSchemaV1.Date.text)
@@ -69,17 +69,7 @@ import SwiftUI
                 .tag(AppDestination.dates)
 
                 NavigationStack(path: $navigationPath) {
-                    FavoritesView(navigationPath: $navigationPath)
-                        .withNavigationDestinations(
-                            navigationPath: $navigationPath)
-                }
-                .tabItem {
-                    Label("Favorites", systemImage: "heart")
-                }
-                .tag(AppDestination.favorites)
-
-                NavigationStack(path: $navigationPath) {
-                    CatalogGridView<CollectionSchemaV1.Collection>(
+                    GroupGridView<CollectionSchemaV1.Collection>(
                         title: "Collections",
                         navigationPath: $navigationPath,
                         sortDescriptor: SortDescriptor(\.name),
@@ -94,6 +84,16 @@ import SwiftUI
                     Label("Collections", systemImage: "folder")
                 }
                 .tag(AppDestination.collections)
+                
+                NavigationStack(path: $navigationPath) {
+                    FavoritesView(navigationPath: $navigationPath)
+                        .withNavigationDestinations(
+                            navigationPath: $navigationPath)
+                }
+                .tabItem {
+                    Label("Favorites", systemImage: "heart")
+                }
+                .tag(AppDestination.favorites)
             }
         }
 

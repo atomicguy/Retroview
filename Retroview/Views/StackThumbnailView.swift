@@ -51,7 +51,7 @@ struct StackThumbnailView: View {
                 .frame(width: 32, height: 32)
 
             Text("\(item.stackCards.count)")
-                .foregroundStyle(Color.black.opacity(0.8))
+                .foregroundStyle(.secondary)
                 .modifier(SerifFontModifier())
         }
         .frame(

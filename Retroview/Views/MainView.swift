@@ -63,34 +63,34 @@ struct MainView: View {
                 modelContext: modelContext,
                 navigationPath: $navigationPath)
         case .subjects:
-            CatalogGridView<SubjectSchemaV1.Subject>(
+            GroupGridView<SubjectSchemaV1.Subject>(
                 title: "Subjects",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\SubjectSchemaV1.Subject.name)
             )
         case .authors:
-            CatalogGridView<AuthorSchemaV1.Author>(
+            GroupGridView<AuthorSchemaV1.Author>(
                 title: "Authors",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\AuthorSchemaV1.Author.name)
             )
         case .dates:
-            CatalogGridView<DateSchemaV1.Date>(
+            GroupGridView<DateSchemaV1.Date>(
                 title: "Dates",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\DateSchemaV1.Date.text)
             )
-        case .favorites:
-            FavoritesView(navigationPath: $navigationPath)
         case .collections:
-            CatalogGridView<CollectionSchemaV1.Collection>(
+            GroupGridView<CollectionSchemaV1.Collection>(
                 title: "Collections",
                 navigationPath: $navigationPath,
-                sortDescriptor: SortDescriptor(\.name),
-                predicate: #Predicate<CollectionSchemaV1.Collection> {
-                    $0.name != "Favorites"
-                }
+                sortDescriptor: SortDescriptor(\.name)
+//                predicate: #Predicate<CollectionSchemaV1.Collection> {
+//                    $0.name != "Favorites"
+//                }
             )
+        case .favorites:
+            FavoritesView(navigationPath: $navigationPath)
         case let .collection(id, _):
             if let collection = collections.first(where: { $0.id == id }) {
                 CardGridLayout(

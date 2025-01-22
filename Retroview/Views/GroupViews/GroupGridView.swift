@@ -8,25 +8,22 @@
 import SwiftData
 import SwiftUI
 
-struct CatalogGridView<T: CatalogItem>: View {
+struct GroupGridView<T: GroupItem>: View {
     @Binding var navigationPath: NavigationPath
     @State private var searchText = ""
     @State private var sortState = CatalogSortState<T>()
     @Query private var items: [T]
+
     private let title: String
 
     init(
         title: String,
         navigationPath: Binding<NavigationPath>,
-        sortDescriptor: SortDescriptor<T>,
-        predicate: Predicate<T>? = nil
+        sortDescriptor: SortDescriptor<T>
     ) {
         self.title = title
         _navigationPath = navigationPath
-
-        // Configure Query with sort and predicate
-        let queryPredicate = predicate
-        _items = Query(filter: queryPredicate, sort: [sortDescriptor])
+        _items = Query(sort: [sortDescriptor])
     }
 
     private var columns: [GridItem] {
@@ -38,19 +35,45 @@ struct CatalogGridView<T: CatalogItem>: View {
                 spacing: PlatformEnvironment.Metrics.gridSpacing)
         ]
     }
+    
+    private var filteredAndSortedItems: [T] {
+            let filtered =
+                searchText.isEmpty
+                ? items
+                : items.filter { item in
+                    item.name.localizedCaseInsensitiveContains(searchText)
+                }
+
+            return filtered.sorted { first, second in
+                switch sortState.option {
+                case .alphabetical:
+                    if sortState.ascending {
+                        return first.name < second.name
+                    } else {
+                        return first.name > second.name
+                    }
+                case .cardCount:
+                    if sortState.ascending {
+                        return first.cards.count < second.cards.count
+                    } else {
+                        return first.cards.count > second.cards.count
+                    }
+                }
+            }
+        }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 SearchBar(text: $searchText)
-                CatalogSortButton(sortState: sortState)
+                GroupSortButton(sortState: sortState)
             }
             .padding(.horizontal)
             .padding(.vertical, 8)
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(filteredItems) { item in
+                    ForEach(filteredAndSortedItems) { item in
                         NavigationLink(value: item) {
                             StackThumbnailView(item: item)
                                 .aspectRatio(1, contentMode: .fit)
@@ -76,14 +99,8 @@ struct CatalogGridView<T: CatalogItem>: View {
                 .padding(PlatformEnvironment.Metrics.defaultPadding)
             }
         }
-        .platformNavigationTitle("\(title) (\(filteredItems.count))")
-    }
-
-    private var filteredItems: [T] {
-        items.filter {
-            searchText.isEmpty
-                || $0.name.localizedCaseInsensitiveContains(searchText)
-        }
+        .platformNavigationTitle("\(title) (\(filteredAndSortedItems.count))")
+        .searchable(text: $searchText, prompt: "Search \(title)")
     }
 }
 
@@ -102,7 +119,7 @@ extension View {
 
 #Preview("Catalog Grid View - Subjects") {
     NavigationStack {
-        CatalogGridView<SubjectSchemaV1.Subject>(
+        GroupGridView<SubjectSchemaV1.Subject>(
             title: "Subjects",
             navigationPath: .constant(NavigationPath()),
             sortDescriptor: SortDescriptor(\SubjectSchemaV1.Subject.name)
@@ -114,7 +131,7 @@ extension View {
 
 #Preview("Catalog Grid View - Authors") {
     NavigationStack {
-        CatalogGridView<AuthorSchemaV1.Author>(
+        GroupGridView<AuthorSchemaV1.Author>(
             title: "Authors",
             navigationPath: .constant(NavigationPath()),
             sortDescriptor: SortDescriptor(\AuthorSchemaV1.Author.name)
@@ -126,7 +143,7 @@ extension View {
 
 #Preview("Catalog Grid View - Dates") {
     NavigationStack {
-        CatalogGridView<DateSchemaV1.Date>(
+        GroupGridView<DateSchemaV1.Date>(
             title: "Dates",
             navigationPath: .constant(NavigationPath()),
             sortDescriptor: SortDescriptor(\DateSchemaV1.Date.text)

@@ -1,5 +1,5 @@
 //
-//  CatalogSortButton.swift
+//  GroupSortButton.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 1/21/25.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct CatalogSortButton<T: CatalogItem>: View {
+struct GroupSortButton<T: GroupItem>: View {
     @Bindable var sortState: CatalogSortState<T>
 
     var body: some View {
         Menu {
-            ForEach(CatalogSortOption.allCases, id: \.self) { option in
+            ForEach(GroupSortOptions.allCases, id: \.self) { option in
                 Button {
                     sortState.option = option
                 } label: {
@@ -42,7 +42,7 @@ struct CatalogSortButton<T: CatalogItem>: View {
 
 #Preview("Catalog Sort Button - Subjects") {
     NavigationStack {
-        CatalogSortButton(
+        GroupSortButton(
             sortState: CatalogSortState<SubjectSchemaV1.Subject>()
         )
         .withPreviewStore()
@@ -52,7 +52,7 @@ struct CatalogSortButton<T: CatalogItem>: View {
 
 #Preview("Catalog Sort Button - Authors") {
     NavigationStack {
-        CatalogSortButton(sortState: CatalogSortState<AuthorSchemaV1.Author>())
+        GroupSortButton(sortState: CatalogSortState<AuthorSchemaV1.Author>())
             .withPreviewStore()
             .frame(width: 44, height: 44)
     }
