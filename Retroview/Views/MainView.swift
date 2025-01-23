@@ -17,23 +17,27 @@ struct MainView: View {
 
     var body: some View {
         Group {
-            #if os(visionOS)
-                VisionNavigationView(
-                    selectedDestination: $selectedDestination,
-                    navigationPath: $navigationPath
-                )
-            #else
-                NavigationSplitView {
-                    Sidebar(selectedDestination: $selectedDestination)
-                } detail: {
-                    NavigationStack(path: $navigationPath) {
-                        contentView
-                            .withNavigationDestinations(
-                                navigationPath: $navigationPath)
+                #if os(visionOS)
+                    VisionNavigationView(
+                        selectedDestination: $selectedDestination,
+                        navigationPath: $navigationPath
+                    )
+                #elseif os(iOS)
+                    IPadNavigationView(
+                        selectedDestination: $selectedDestination,
+                        navigationPath: $navigationPath
+                    )
+                #else
+                    NavigationSplitView {
+                        Sidebar(selectedDestination: $selectedDestination)
+                    } detail: {
+                        NavigationStack(path: $navigationPath) {
+                            contentView
+                                .withNavigationDestinations(navigationPath: $navigationPath)
+                        }
                     }
-                }
-            #endif
-        }
+                #endif
+            }
         .modifier(SerifFontModifier())
         .environment(\.createCollection) { card in
             let newCollection = CollectionSchemaV1.Collection(name: "Untitled")
