@@ -96,6 +96,7 @@
 		5CAFA7652D19DF9100112A93 /* StoreImportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */; };
 		5CAFA7692D1A09BB00112A93 /* StoreArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */; };
 		5CAFA76D2D1A747E00112A93 /* GroupItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA76C2D1A747700112A93 /* GroupItemProtocol.swift */; };
+		5CC58A772D41F0080083A023 /* iPadNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC58A762D41F0020083A023 /* iPadNavigationView.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
@@ -256,6 +257,7 @@
 		5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreImportHandler.swift; sourceTree = "<group>"; };
 		5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreArchiveManager.swift; sourceTree = "<group>"; };
 		5CAFA76C2D1A747700112A93 /* GroupItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemProtocol.swift; sourceTree = "<group>"; };
+		5CC58A762D41F0020083A023 /* iPadNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadNavigationView.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -490,6 +492,7 @@
 		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5CC58A762D41F0020083A023 /* iPadNavigationView.swift */,
 				5C3C35D02D3F661B00396991 /* StackThumbnailManager.swift */,
 				5CC731412D3D9C670069741E /* StackDisplayableProtocol.swift */,
 				5CC7313F2D3D9A070069741E /* StackThumbnailView.swift */,
@@ -795,6 +798,7 @@
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
 				5CFE2B852D24D5D40023EBF8 /* SearchManager.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
+				5CC58A772D41F0080083A023 /* iPadNavigationView.swift in Sources */,
 				5CC5A5C32BD471D0005811DA /* Title.swift in Sources */,
 				5C4A271B2D04DC08009ECECE /* AppDestination.swift in Sources */,
 				5CFE2B8D2D24EB940023EBF8 /* BulkCollectionButton.swift in Sources */,
