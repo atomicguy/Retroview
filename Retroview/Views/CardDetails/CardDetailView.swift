@@ -21,11 +21,8 @@ struct CardDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                CardHeaderView(card: card)
-
                 if card.imageFrontId != nil {
                     ZStack {
-                        // Card image section
                         CardImageSection(
                             card: card,
                             side: .front,
@@ -33,7 +30,6 @@ struct CardDetailView: View {
                             showCrops: showCrops
                         )
 
-                        // Overlay for buttons
                         GeometryReader { geometry in
                             VStack {
                                 HStack {
@@ -63,7 +59,7 @@ struct CardDetailView: View {
                                 height: geometry.size.height)
                         }
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+//                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
 
                 if !card.subjects.isEmpty {
@@ -71,10 +67,7 @@ struct CardDetailView: View {
                 }
 
                 if card.imageBackId != nil {
-                    CardImageSection(
-                        card: card,
-                        side: .back,
-                        title: "Back")
+                    CardImageSection(card: card, side: .back, title: "Back")
                 }
 
                 CardTitlesSection(card: card) { title in
@@ -90,16 +83,8 @@ struct CardDetailView: View {
             }
             .padding()
         }
-        .platformNavigationTitle(
-            card.titlePick?.text ?? "Untitled Card",
-            displayMode: .inline
-        )
-        .platformToolbar {
-        } trailing: {
-            CardActionMenu.asButton(card: card)
-            CardShareButton(card: card)
-        }
     }
+
     private func handleViewInSpace() {
         #if os(visionOS)
             Task {

@@ -97,6 +97,7 @@
 		5CAFA7692D1A09BB00112A93 /* StoreArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */; };
 		5CAFA76D2D1A747E00112A93 /* GroupItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA76C2D1A747700112A93 /* GroupItemProtocol.swift */; };
 		5CC58A772D41F0080083A023 /* iPadNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC58A762D41F0020083A023 /* iPadNavigationView.swift */; };
+		5CC58A812D45DC6B0083A023 /* HorizontalCardStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC58A802D45DC670083A023 /* HorizontalCardStrip.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
 		5CC5A5C52BD47622005811DA /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C42BD47622005811DA /* Author.swift */; };
 		5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C62BD478CE005811DA /* Subject.swift */; };
@@ -258,6 +259,7 @@
 		5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreArchiveManager.swift; sourceTree = "<group>"; };
 		5CAFA76C2D1A747700112A93 /* GroupItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemProtocol.swift; sourceTree = "<group>"; };
 		5CC58A762D41F0020083A023 /* iPadNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadNavigationView.swift; sourceTree = "<group>"; };
+		5CC58A802D45DC670083A023 /* HorizontalCardStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCardStrip.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		5CC5A5C42BD47622005811DA /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		5CC5A5C62BD478CE005811DA /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 		5C73DB5F2D18FD4B004BEEC5 /* CardDetails */ = {
 			isa = PBXGroup;
 			children = (
+				5CC58A802D45DC670083A023 /* HorizontalCardStrip.swift */,
 				5CFE2B7C2D24959B0023EBF8 /* CardDetailStackView.swift */,
 				5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */,
 				5C73DB682D18FF36004BEEC5 /* CardHeaderView.swift */,
@@ -839,6 +842,7 @@
 				5C993C772D31F9FF00DAA659 /* CardShareButton.swift in Sources */,
 				5C4F76ED2D20F01F00122570 /* SpatialPhotoConverter.swift in Sources */,
 				5C698F342D30D641007E0111 /* StereoCard+URL.swift in Sources */,
+				5CC58A812D45DC6B0083A023 /* HorizontalCardStrip.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */,
 				5C80F6C02D17AD6800C58E7D /* ImportProgressIndicator.swift in Sources */,

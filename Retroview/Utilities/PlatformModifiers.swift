@@ -332,6 +332,7 @@ private struct PopoverPositionPreferenceKey: PreferenceKey {
 // MARK: - Navigation Title Modifier
 struct PlatformNavigationTitleModifier: ViewModifier {
     let title: String
+    let subtitle: String?
     let displayMode: NavigationTitleDisplayMode
 
     func body(content: Content) -> some View {
@@ -339,8 +340,15 @@ struct PlatformNavigationTitleModifier: ViewModifier {
             #if os(macOS)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
-                        Text(title)
-                        .font(.system(.title, design: .serif))
+                        VStack {
+                            Text(title)
+                            .font(.system(.title, design: .serif))
+                            if let subtitle = subtitle {
+                                Text(subtitle)
+                                .font(.system(.subheadline))
+                                .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 }
             #else
@@ -350,8 +358,15 @@ struct PlatformNavigationTitleModifier: ViewModifier {
                 )
                 .toolbar {
                     ToolbarItem(placement: .principal) {
-                        Text(title)
-                        .font(.system(.title, design: .serif))
+                        VStack {
+                            Text(title)
+                            .font(.system(.title, design: .serif))
+                            if let subtitle = subtitle {
+                                Text(subtitle)
+                                .font(.system(.subheadline))
+                                .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 }
             #endif
@@ -430,17 +445,22 @@ struct OverlayButtonStyle: ViewModifier {
 
 // MARK: - View Extensions
 extension View {
-    func platformInteraction(_ config: InteractionConfig) -> some View {
+    func platformInteraction(
+        _ config: InteractionConfig,
+        subtitle: String? = nil
+    ) -> some View {
         modifier(PlatformInteractionModifier(config: config))
     }
 
     func platformNavigationTitle(
         _ title: String,
+        subtitle: String? = nil,
         displayMode: NavigationTitleDisplayMode = .automatic
     ) -> some View {
         modifier(
             PlatformNavigationTitleModifier(
                 title: title,
+                subtitle: subtitle,
                 displayMode: displayMode
             )
         )
@@ -466,7 +486,7 @@ extension View {
 struct PlatformHoverEffect: ViewModifier {
     let cornerRadius: CGFloat
     @State private var isHovering = false
-    
+
     func body(content: Content) -> some View {
         content
             #if os(visionOS)

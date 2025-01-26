@@ -17,6 +17,7 @@ struct CardSubjectSection: View {
                     NavigationLink(value: subject) {
                         SubjectBadge(name: subject.name)
                     }
+                    .modifier(SerifFontModifier())
                 }
             }
         }
