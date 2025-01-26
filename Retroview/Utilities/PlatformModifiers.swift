@@ -345,7 +345,7 @@ struct PlatformNavigationTitleModifier: ViewModifier {
                             .font(.system(.title, design: .serif))
                             if let subtitle = subtitle {
                                 Text(subtitle)
-                                .font(.system(.subheadline))
+                                    .font(.system(.subheadline, design: .serif))
                                 .foregroundStyle(.secondary)
                             }
                         }
