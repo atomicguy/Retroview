@@ -12,11 +12,11 @@ struct NavigationDestinationModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .navigationDestination(for: CardStackDestination.self) {
+            .navigationDestination(for: CardDetailDestination.self) {
                 destination in
                 switch destination {
                 case .stack(let cards, let initialCard):
-                    CardDetailStackView(cards: cards, initialCard: initialCard)
+                    CardCarouselView(cards: cards, initialCard: initialCard)
                 }
             }
             .navigationDestination(for: SubjectSchemaV1.Subject.self) {
@@ -29,7 +29,7 @@ struct NavigationDestinationModifier: ViewModifier {
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
                         navigationPath.append(
-                            CardStackDestination.stack(
+                            CardDetailDestination.stack(
                                 cards: subject.cards,
                                 initialCard: card
                             ))
@@ -45,7 +45,7 @@ struct NavigationDestinationModifier: ViewModifier {
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
                         navigationPath.append(
-                            CardStackDestination.stack(
+                            CardDetailDestination.stack(
                                 cards: author.cards,
                                 initialCard: card
                             ))
@@ -60,7 +60,7 @@ struct NavigationDestinationModifier: ViewModifier {
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
                         navigationPath.append(
-                            CardStackDestination.stack(
+                            CardDetailDestination.stack(
                                 cards: date.cards,
                                 initialCard: card
                             ))
@@ -76,7 +76,7 @@ struct NavigationDestinationModifier: ViewModifier {
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
                         navigationPath.append(
-                            CardStackDestination.stack(
+                            CardDetailDestination.stack(
                                 cards: collection.orderedCards,
                                 initialCard: card
                             ))

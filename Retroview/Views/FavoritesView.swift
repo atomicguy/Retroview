@@ -22,7 +22,7 @@ struct FavoritesView: View {
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
                         navigationPath.append(
-                            CardStackDestination.stack(
+                            CardDetailDestination.stack(
                                 cards: favorite.orderedCards,
                                 initialCard: card
                             )

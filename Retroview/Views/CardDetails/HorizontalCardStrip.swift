@@ -8,6 +8,10 @@
 import SwiftData
 import SwiftUI
 
+#if os(macOS)
+    import AppKit
+#endif
+
 struct HorizontalCardStrip: View {
     let cards: [CardSchemaV1.StereoCard]
     let initialIndex: Int
@@ -22,7 +26,8 @@ struct HorizontalCardStrip: View {
     private let dragThreshold: CGFloat = 50
 
     init(
-        cards: [CardSchemaV1.StereoCard], initialCard: CardSchemaV1.StereoCard,
+        cards: [CardSchemaV1.StereoCard],
+        initialCard: CardSchemaV1.StereoCard,
         onIndexChanged: @escaping (Int) -> Void
     ) {
         self.cards = cards
@@ -35,7 +40,7 @@ struct HorizontalCardStrip: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: cardSpacing) {
+                LazyHStack(spacing: 32) {
                     ForEach(Array(cards.enumerated()), id: \.element.id) {
                         index, card in
                         CardDetailView(card: card)
@@ -50,15 +55,13 @@ struct HorizontalCardStrip: View {
                 )
                 .animation(
                     .spring(response: 0.35, dampingFraction: 0.8),
-                    value: dragOffset
-                )
-                
+                    value: dragOffset)
             }
             .gesture(dragGesture(geometry))
             .scrollDisabled(true)
         }
-        .onChange(of: currentIndex) { oldValue, newValue in
-            onIndexChanged(newValue)
+        .onChange(of: currentIndex) { _, newIndex in
+            onIndexChanged(newIndex)
         }
         .platformToolbar {
             EmptyView()

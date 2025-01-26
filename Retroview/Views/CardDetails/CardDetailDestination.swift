@@ -5,7 +5,7 @@
 //  Created by Adam Schuster on 12/31/24.
 //
 
-enum CardStackDestination: Hashable {
+enum CardDetailDestination: Hashable {
     case stack(
         cards: [CardSchemaV1.StereoCard], initialCard: CardSchemaV1.StereoCard)
 
@@ -18,7 +18,7 @@ enum CardStackDestination: Hashable {
         }
     }
 
-    static func == (lhs: CardStackDestination, rhs: CardStackDestination)
+    static func == (lhs: CardDetailDestination, rhs: CardDetailDestination)
         -> Bool
     {
         switch (lhs, rhs) {

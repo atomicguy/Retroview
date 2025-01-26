@@ -1,5 +1,5 @@
 //
-//  CardDetailStackView.swift
+//  CardCarouselView.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 12/31/24.
@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct CardDetailStackView: View {
+struct CardCarouselView: View {
     let cards: [CardSchemaV1.StereoCard]
     let initialCard: CardSchemaV1.StereoCard
     @State private var currentCard: CardSchemaV1.StereoCard
@@ -43,7 +43,7 @@ struct CardDetailStackView: View {
 #Preview("Card Detail Stack View") {
     NavigationStack {
         CardsPreviewContainer(count: 5) { cards in
-            CardDetailStackView(
+            CardCarouselView(
                 cards: cards,
                 initialCard: cards[cards.count / 2]
             )

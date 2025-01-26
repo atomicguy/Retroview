@@ -104,7 +104,7 @@ struct MainView: View {
                     navigationPath: $navigationPath,
                     onCardSelected: { card in
                         navigationPath.append(
-                            CardStackDestination.stack(
+                            CardDetailDestination.stack(
                                 cards: collection.orderedCards,
                                 initialCard: card
                             ))

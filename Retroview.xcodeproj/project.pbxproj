@@ -124,8 +124,8 @@
 		5CF629CB2D1DDEC000A55E89 /* PreviewDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF629CA2D1DDEBC00A55E89 /* PreviewDataManager.swift */; };
 		5CFE2B782D2486DF0023EBF8 /* GroupSortOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B772D2486DF0023EBF8 /* GroupSortOptions.swift */; };
 		5CFE2B7A2D2489840023EBF8 /* StereoCard+SpatialPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B792D24897C0023EBF8 /* StereoCard+SpatialPreview.swift */; };
-		5CFE2B7D2D2495A00023EBF8 /* CardDetailStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B7C2D24959B0023EBF8 /* CardDetailStackView.swift */; };
-		5CFE2B7F2D24AEB50023EBF8 /* CardStackDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B7E2D24AEB10023EBF8 /* CardStackDestination.swift */; };
+		5CFE2B7D2D2495A00023EBF8 /* CardCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B7C2D24959B0023EBF8 /* CardCarouselView.swift */; };
+		5CFE2B7F2D24AEB50023EBF8 /* CardDetailDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B7E2D24AEB10023EBF8 /* CardDetailDestination.swift */; };
 		5CFE2B852D24D5D40023EBF8 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B842D24D5D10023EBF8 /* SearchManager.swift */; };
 		5CFE2B872D24D60D0023EBF8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */; };
 		5CFE2B8B2D24E2040023EBF8 /* NYPLCollectionLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */; };
@@ -287,8 +287,8 @@
 		5CF629CA2D1DDEBC00A55E89 /* PreviewDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewDataManager.swift; sourceTree = "<group>"; };
 		5CFE2B772D2486DF0023EBF8 /* GroupSortOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSortOptions.swift; sourceTree = "<group>"; };
 		5CFE2B792D24897C0023EBF8 /* StereoCard+SpatialPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StereoCard+SpatialPreview.swift"; sourceTree = "<group>"; };
-		5CFE2B7C2D24959B0023EBF8 /* CardDetailStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailStackView.swift; sourceTree = "<group>"; };
-		5CFE2B7E2D24AEB10023EBF8 /* CardStackDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackDestination.swift; sourceTree = "<group>"; };
+		5CFE2B7C2D24959B0023EBF8 /* CardCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCarouselView.swift; sourceTree = "<group>"; };
+		5CFE2B7E2D24AEB10023EBF8 /* CardDetailDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailDestination.swift; sourceTree = "<group>"; };
 		5CFE2B842D24D5D10023EBF8 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		5CFE2B862D24D60A0023EBF8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		5CFE2B8A2D24E1FF0023EBF8 /* NYPLCollectionLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYPLCollectionLink.swift; sourceTree = "<group>"; };
@@ -466,11 +466,11 @@
 			isa = PBXGroup;
 			children = (
 				5CC58A802D45DC670083A023 /* HorizontalCardStrip.swift */,
-				5CFE2B7C2D24959B0023EBF8 /* CardDetailStackView.swift */,
+				5CFE2B7C2D24959B0023EBF8 /* CardCarouselView.swift */,
 				5C1DBD982D0FEE8E0050B4DF /* CardDetailView.swift */,
 				5C73DB682D18FF36004BEEC5 /* CardHeaderView.swift */,
 				5C5913BC2D126F1F0011C90D /* CardImageSection.swift */,
-				5CFE2B7E2D24AEB10023EBF8 /* CardStackDestination.swift */,
+				5CFE2B7E2D24AEB10023EBF8 /* CardDetailDestination.swift */,
 				5C73DB642D18FDE5004BEEC5 /* CardSubjectSection.swift */,
 				5C73DB622D18FD7F004BEEC5 /* CardTitlesSection.swift */,
 				5C73DB602D18FD61004BEEC5 /* MetadataSection.swift */,
@@ -848,14 +848,14 @@
 				5C80F6C02D17AD6800C58E7D /* ImportProgressIndicator.swift in Sources */,
 				5CC731402D3D9A0B0069741E /* StackThumbnailView.swift in Sources */,
 				5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */,
-				5CFE2B7D2D2495A00023EBF8 /* CardDetailStackView.swift in Sources */,
+				5CFE2B7D2D2495A00023EBF8 /* CardCarouselView.swift in Sources */,
 				5C7955B62D1F87050037E204 /* StereoGalleryButton.swift in Sources */,
 				5C7639832D06B0BF0043EEFC /* MODSParsingService.swift in Sources */,
 				5C7955A62D1F28A10037E204 /* PreviewDataManager+Export.swift in Sources */,
 				5C4F76EF2D20F06300122570 /* StereoErrors.swift in Sources */,
 				5C14545B2CF93F3000D5C232 /* CollectionDefaults.swift in Sources */,
 				5C2056C92D34956700383B46 /* CollectionContextMenu.swift in Sources */,
-				5CFE2B7F2D24AEB50023EBF8 /* CardStackDestination.swift in Sources */,
+				5CFE2B7F2D24AEB50023EBF8 /* CardDetailDestination.swift in Sources */,
 				5C2056D52D34D57C00383B46 /* GroupGridView.swift in Sources */,
 				5C3C35D32D40ACB300396991 /* GroupSortButton.swift in Sources */,
 				5CFE2B902D25E15C0023EBF8 /* CardActionMenu.swift in Sources */,

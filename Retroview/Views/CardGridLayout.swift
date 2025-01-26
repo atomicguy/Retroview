@@ -58,7 +58,7 @@ struct CardGridLayout: View {
                             onSelect: { selectedCard = card },
                             onDoubleClick: {
                                 navigationPath.append(
-                                    CardStackDestination.stack(
+                                    CardDetailDestination.stack(
                                         cards: cards,
                                         initialCard: card
                                     ))

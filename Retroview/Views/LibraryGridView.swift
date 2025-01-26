@@ -48,7 +48,7 @@ struct LibraryGridView: View {
                             onSelect: { selectedCard = card },
                             onDoubleClick: {
                                 navigationPath.append(
-                                    CardStackDestination.stack(
+                                    CardDetailDestination.stack(
                                         cards: loadedCards,
                                         initialCard: card
                                     ))
