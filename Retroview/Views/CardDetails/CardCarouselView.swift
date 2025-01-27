@@ -33,8 +33,13 @@ struct CardCarouselView: View {
             EmptyView()
         } trailing: {
             HStack {
-                CardShareButton(card: currentCard)
-                CardActionMenu.asButton(card: currentCard)
+                #if !os(visionOS)
+                    CardShareButton(card: currentCard)
+                    CardActionMenu.asButton(card: currentCard)
+                #else
+                    CardActionMenu.asButton(
+                        card: currentCard, includeShare: true)
+                #endif
             }
         }
     }

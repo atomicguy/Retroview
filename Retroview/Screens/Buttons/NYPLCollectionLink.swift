@@ -20,7 +20,7 @@ struct NYPLCollectionLink: View {
     var body: some View {
         Link(destination: url) {
             Label(
-                "New York Public Library Digital Collections",
+                "Source: The New York Public Library Digital Collections",
                 systemImage: "building.columns"
             )
             .font(.system(.body, design: .serif))

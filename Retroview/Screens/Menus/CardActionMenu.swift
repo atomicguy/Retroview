@@ -11,10 +11,12 @@ import SwiftUI
 struct CardActionMenu: View {
     let card: CardSchemaV1.StereoCard
     let isContextMenu: Bool
+    let includeShare: Bool?
 
-    init(card: CardSchemaV1.StereoCard, isContextMenu: Bool = false) {
+    init(card: CardSchemaV1.StereoCard, isContextMenu: Bool = false, includeShare: Bool = false) {
         self.card = card
         self.isContextMenu = isContextMenu
+        self.includeShare = includeShare
     }
 
     var body: some View {
@@ -22,7 +24,7 @@ struct CardActionMenu: View {
             MenuContent(card: card)
         } else {
             Menu {
-                MenuContent(card: card, includeShare: false)
+                MenuContent(card: card, includeShare: includeShare ?? false)
             } label: {
                 Image(systemName: "ellipsis.circle")
                     .font(.title2)
@@ -33,12 +35,16 @@ struct CardActionMenu: View {
 
 // Usage methods that make it clear which version we're using
 extension CardActionMenu {
-    static func asButton(card: CardSchemaV1.StereoCard) -> CardActionMenu {
-        CardActionMenu(card: card, isContextMenu: false)
+    static func asButton(card: CardSchemaV1.StereoCard, includeShare: Bool = false) -> CardActionMenu {
+        CardActionMenu(
+            card: card,
+            isContextMenu: false,
+            includeShare: includeShare
+        )
     }
 
     static func asContextMenu(card: CardSchemaV1.StereoCard) -> CardActionMenu {
-        CardActionMenu(card: card, isContextMenu: true)
+        CardActionMenu(card: card, isContextMenu: true, includeShare: true)
     }
 }
 
@@ -72,7 +78,7 @@ private struct MenuContent: View {
                 !CollectionDefaults.isFavorites(collection)
             {
                 Divider()
-                
+
                 Button(role: .destructive) {
                     collection.removeCard(card, context: modelContext)
                 } label: {

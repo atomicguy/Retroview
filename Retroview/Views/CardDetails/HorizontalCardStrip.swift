@@ -63,25 +63,6 @@ struct HorizontalCardStrip: View {
         .onChange(of: currentIndex) { _, newIndex in
             onIndexChanged(newIndex)
         }
-//        .platformToolbar {
-//            EmptyView()
-//        } trailing: {
-//            HStack {
-//                Button {
-//                    navigateToPrevious()
-//                } label: {
-//                    Label("Previous", systemImage: "chevron.left")
-//                }
-//                .disabled(currentIndex <= 0)
-//
-//                Button {
-//                    navigateToNext()
-//                } label: {
-//                    Label("Next", systemImage: "chevron.right")
-//                }
-//                .disabled(currentIndex >= cards.count - 1)
-//            }
-//        }
     }
 
     private func calculateTotalOffset(_ geometry: GeometryProxy) -> CGFloat {

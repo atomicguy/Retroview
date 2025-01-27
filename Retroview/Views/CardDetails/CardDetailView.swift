@@ -59,21 +59,28 @@ struct CardDetailView: View {
                                 height: geometry.size.height)
                         }
                     }
-//                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
 
                 if !card.subjects.isEmpty {
-                    CardSubjectSection(subjects: card.subjects)
+                    SubjectsSection(subjects: card.subjects)
                 }
-
-                if card.imageBackId != nil {
-                    CardImageSection(card: card, side: .back, title: "Back")
-                }
-
+                
                 CardTitlesSection(card: card) { title in
                     guard title != card.titlePick else { return }
                     card.titlePick = title
                     try? modelContext.save()
+                }
+                
+                if !card.dates.isEmpty {
+                    DatesSection(dates: card.dates)
+                }
+                
+                if !card.authors.isEmpty {
+                    AuthorsSection(authors: card.authors)
+                }
+
+                if card.imageBackId != nil {
+                    CardImageSection(card: card, side: .back, title: "Back")
                 }
 
                 Divider()
