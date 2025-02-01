@@ -11,9 +11,12 @@ import SwiftUI
 struct LibraryGridView: View {
     @Environment(\.importManager) private var importManager
     @Environment(\.imageDownloadManager) private var imageDownloadManager
+    @Environment(\.modelContext) private var modelContext
 
-    let modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
+
+    @State private var imageLoader = CardImageLoader()
+    @State private var prefetcher: ImagePrefetcher?
     @State private var selectedCard: CardSchemaV1.StereoCard?
     @State private var loadedCards: [CardSchemaV1.StereoCard] = []
     @State private var searchManager: SearchManager
@@ -21,10 +24,9 @@ struct LibraryGridView: View {
     @State private var isLoadingMore = false
     @State private var hasMoreContent = true
 
-    private let pageSize = 100
+    private let pageSize = 50
 
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        self.modelContext = modelContext
         self._navigationPath = navigationPath
         self._searchManager = State(
             initialValue: SearchManager(modelContext: modelContext))
@@ -54,6 +56,15 @@ struct LibraryGridView: View {
                                     ))
                             }
                         )
+                        .onAppear {
+                            if let index = loadedCards.firstIndex(of: card) {
+                                prefetcher?.prefetchAroundIndex(
+                                    index, in: loadedCards)
+                            }
+                        }
+                        .onDisappear {
+                            prefetcher?.cancelAllTasks()
+                        }
                         .id(card.id)
                     }
 
@@ -100,7 +111,8 @@ struct LibraryGridView: View {
             } label: {
                 Label(
                     "Download Missing Images",
-                    systemImage: "arrow.trianglehead.2.clockwise.rotate.90.circle")
+                    systemImage:
+                        "arrow.trianglehead.2.clockwise.rotate.90.circle")
             }
 
             ImportTypeMenu(
@@ -117,7 +129,8 @@ struct LibraryGridView: View {
             )
 
             if !loadedCards.isEmpty {
-                BulkCollectionButton(fetchCards: { searchManager.filteredCards })
+                BulkCollectionButton(fetchCards: { searchManager.filteredCards }
+                )
             }
 
             DatabaseTransferButton()
@@ -150,16 +163,9 @@ struct LibraryGridView: View {
     }
 
     private func loadInitialCards() async {
-        searchManager.updateTotalCount(context: modelContext)
-
-        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
-            sortBy: [SortDescriptor(\.uuid)]
-        )
+        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
         descriptor.fetchLimit = pageSize
-
-        if let searchPredicate = searchManager.predicate {
-            descriptor.predicate = searchPredicate
-        }
+        descriptor.propertiesToFetch = [\.uuid, \.imageFrontId, \.titlePick]
 
         do {
             loadedCards = try modelContext.fetch(descriptor)
@@ -175,13 +181,11 @@ struct LibraryGridView: View {
         isLoadingMore = true
         defer { isLoadingMore = false }
 
-        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
-            sortBy: [SortDescriptor(\.uuid)]
-        )
+        var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
         descriptor.fetchOffset = loadedCards.count
         descriptor.fetchLimit = pageSize
+        descriptor.propertiesToFetch = [\.uuid, \.imageFrontId, \.titlePick]
 
-        // Apply search predicate if exists
         if let searchPredicate = searchManager.predicate {
             descriptor.predicate = searchPredicate
         }
@@ -190,6 +194,12 @@ struct LibraryGridView: View {
             let newCards = try modelContext.fetch(descriptor)
             hasMoreContent = newCards.count == pageSize
             loadedCards.append(contentsOf: newCards)
+
+            // Prefetch images for new cards
+            if let lastVisible = loadedCards.last {
+                let index = loadedCards.firstIndex(of: lastVisible) ?? 0
+                prefetcher?.prefetchAroundIndex(index, in: loadedCards)
+            }
         } catch {
             print("Failed to load more cards: \(error)")
         }

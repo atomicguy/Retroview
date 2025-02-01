@@ -15,15 +15,13 @@ struct CollectionContextMenu: View {
 
     var body: some View {
         Group {
-            // Don't allow deletion of Favorites collection
             if !CollectionDefaults.isFavorites(collection) {
                 Button(role: .destructive) {
                     deleteCollection()
                 } label: {
                     Label("Delete Collection", systemImage: "trash")
                 }
-            }
-            if !CollectionDefaults.isFavorites(collection) {
+
                 Button {
                     regenerateThumbnail()
                 } label: {
@@ -36,10 +34,7 @@ struct CollectionContextMenu: View {
     }
 
     private func deleteCollection() {
-        // Remove the collection from the model context
         modelContext.delete(collection)
-
-        // Save changes in a background task
         Task {
             try? await Task.sleep(for: .milliseconds(100))
             try? modelContext.save()
@@ -49,7 +44,11 @@ struct CollectionContextMenu: View {
     private func regenerateThumbnail() {
         Task {
             guard let manager = thumbnailManager else { return }
-            try? await manager.updateThumbnail(for: collection)
+            do {
+                _ = try await manager.loadThumbnail(for: collection)
+            } catch {
+                print("Failed to regenerate thumbnail: \(error)")
+            }
         }
     }
 }

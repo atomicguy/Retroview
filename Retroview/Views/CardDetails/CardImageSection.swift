@@ -33,9 +33,9 @@ struct CardImageSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.system(.headline, design: .serif))
-                .foregroundStyle(.secondary)
+//            Text(title)
+//                .font(.system(.headline, design: .serif))
+//                .foregroundStyle(.secondary)
 
             if (side == .front
                 ? card.imageFrontId : card.imageBackId) != nil

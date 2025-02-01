@@ -12,32 +12,33 @@ struct MainView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \CollectionSchemaV1.Collection.name) private var collections:
         [CollectionSchemaV1.Collection]
-    @State private var selectedDestination: AppDestination?
+    @State private var selectedDestination: AppDestination? = .library
     @State private var navigationPath = NavigationPath()
 
     var body: some View {
         Group {
-                #if os(visionOS)
-                    VisionNavigationView(
-                        selectedDestination: $selectedDestination,
-                        navigationPath: $navigationPath
-                    )
-                #elseif os(iOS)
-                    IPadNavigationView(
-                        selectedDestination: $selectedDestination,
-                        navigationPath: $navigationPath
-                    )
-                #else
-                    NavigationSplitView {
-                        Sidebar(selectedDestination: $selectedDestination)
-                    } detail: {
-                        NavigationStack(path: $navigationPath) {
-                            contentView
-                                .withNavigationDestinations(navigationPath: $navigationPath)
-                        }
+            #if os(visionOS)
+                VisionNavigationView(
+                    selectedDestination: $selectedDestination,
+                    navigationPath: $navigationPath
+                )
+            #elseif os(iOS)
+                IPadNavigationView(
+                    selectedDestination: $selectedDestination,
+                    navigationPath: $navigationPath
+                )
+            #else
+                NavigationSplitView {
+                    Sidebar(selectedDestination: $selectedDestination)
+                } detail: {
+                    NavigationStack(path: $navigationPath) {
+                        contentView
+                            .withNavigationDestinations(
+                                navigationPath: $navigationPath)
                     }
-                #endif
-            }
+                }
+            #endif
+        }
         .modifier(SerifFontModifier())
         .environment(\.createCollection) { card in
             let newCollection = CollectionSchemaV1.Collection(name: "Untitled")
@@ -89,9 +90,9 @@ struct MainView: View {
                 title: "Collections",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\.name)
-//                predicate: #Predicate<CollectionSchemaV1.Collection> {
-//                    $0.name != "Favorites"
-//                }
+                //                predicate: #Predicate<CollectionSchemaV1.Collection> {
+                //                    $0.name != "Favorites"
+                //                }
             )
         case .favorites:
             FavoritesView(navigationPath: $navigationPath)

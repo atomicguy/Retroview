@@ -33,6 +33,10 @@
 		5C2056C92D34956700383B46 /* CollectionContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056C82D34956200383B46 /* CollectionContextMenu.swift */; };
 		5C2056D52D34D57C00383B46 /* GroupGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2056D42D34D57700383B46 /* GroupGridView.swift */; };
 		5C30F15E2D4709AC0095BDFB /* CardGroupsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C30F15D2D4709A00095BDFB /* CardGroupsSection.swift */; };
+		5C30F1602D4713520095BDFB /* StereoCard+Descriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C30F15F2D4713480095BDFB /* StereoCard+Descriptor.swift */; };
+		5C30F1622D4715950095BDFB /* GridLoadingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C30F1612D4715910095BDFB /* GridLoadingManager.swift */; };
+		5C30F1642D4715FA0095BDFB /* ImagePrefetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C30F1632D4715F60095BDFB /* ImagePrefetcher.swift */; };
+		5C30F1662D48690D0095BDFB /* AsyncSemaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C30F1652D4869010095BDFB /* AsyncSemaphore.swift */; };
 		5C3C35D12D3F662100396991 /* StackThumbnailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3C35D02D3F661B00396991 /* StackThumbnailManager.swift */; };
 		5C3C35D32D40ACB300396991 /* GroupSortButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3C35D22D40ACA900396991 /* GroupSortButton.swift */; };
 		5C3C35D52D40B1E500396991 /* DebossedModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3C35D42D40B1E000396991 /* DebossedModifier.swift */; };
@@ -96,6 +100,7 @@
 		5CAFA7652D19DF9100112A93 /* StoreImportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */; };
 		5CAFA7692D1A09BB00112A93 /* StoreArchiveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */; };
 		5CAFA76D2D1A747E00112A93 /* GroupItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CAFA76C2D1A747700112A93 /* GroupItemProtocol.swift */; };
+		5CC1F3322D4B4B88008E614C /* ScrollState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC1F3312D4B4B83008E614C /* ScrollState.swift */; };
 		5CC58A772D41F0080083A023 /* iPadNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC58A762D41F0020083A023 /* iPadNavigationView.swift */; };
 		5CC58A812D45DC6B0083A023 /* HorizontalCardStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC58A802D45DC670083A023 /* HorizontalCardStrip.swift */; };
 		5CC5A5C32BD471D0005811DA /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5A5C22BD471D0005811DA /* Title.swift */; };
@@ -122,6 +127,7 @@
 		5CEFA7672CFA7F5100D410EA /* DebugMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */; };
 		5CEFA7732CFA96FF00D410EA /* PlatformModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */; };
 		5CF629CB2D1DDEC000A55E89 /* PreviewDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF629CA2D1DDEBC00A55E89 /* PreviewDataManager.swift */; };
+		5CFCD30D2D4B3F62004FD98D /* StackThumbnailPrepService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFCD30C2D4B3F59004FD98D /* StackThumbnailPrepService.swift */; };
 		5CFE2B782D2486DF0023EBF8 /* GroupSortOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B772D2486DF0023EBF8 /* GroupSortOptions.swift */; };
 		5CFE2B7A2D2489840023EBF8 /* StereoCard+SpatialPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B792D24897C0023EBF8 /* StereoCard+SpatialPreview.swift */; };
 		5CFE2B7D2D2495A00023EBF8 /* CardCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFE2B7C2D24959B0023EBF8 /* CardCarouselView.swift */; };
@@ -190,6 +196,10 @@
 		5C2056D42D34D57700383B46 /* GroupGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridView.swift; sourceTree = "<group>"; };
 		5C267EBA2CE3209600AE3493 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5C30F15D2D4709A00095BDFB /* CardGroupsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGroupsSection.swift; sourceTree = "<group>"; };
+		5C30F15F2D4713480095BDFB /* StereoCard+Descriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StereoCard+Descriptor.swift"; sourceTree = "<group>"; };
+		5C30F1612D4715910095BDFB /* GridLoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridLoadingManager.swift; sourceTree = "<group>"; };
+		5C30F1632D4715F60095BDFB /* ImagePrefetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePrefetcher.swift; sourceTree = "<group>"; };
+		5C30F1652D4869010095BDFB /* AsyncSemaphore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSemaphore.swift; sourceTree = "<group>"; };
 		5C3C35D02D3F661B00396991 /* StackThumbnailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackThumbnailManager.swift; sourceTree = "<group>"; };
 		5C3C35D22D40ACA900396991 /* GroupSortButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSortButton.swift; sourceTree = "<group>"; };
 		5C3C35D42D40B1E000396991 /* DebossedModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebossedModifier.swift; sourceTree = "<group>"; };
@@ -258,6 +268,7 @@
 		5CAFA7642D19DF8C00112A93 /* StoreImportHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreImportHandler.swift; sourceTree = "<group>"; };
 		5CAFA7682D1A09B700112A93 /* StoreArchiveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreArchiveManager.swift; sourceTree = "<group>"; };
 		5CAFA76C2D1A747700112A93 /* GroupItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemProtocol.swift; sourceTree = "<group>"; };
+		5CC1F3312D4B4B83008E614C /* ScrollState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollState.swift; sourceTree = "<group>"; };
 		5CC58A762D41F0020083A023 /* iPadNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadNavigationView.swift; sourceTree = "<group>"; };
 		5CC58A802D45DC670083A023 /* HorizontalCardStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCardStrip.swift; sourceTree = "<group>"; };
 		5CC5A5C22BD471D0005811DA /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
@@ -285,6 +296,7 @@
 		5CEFA7662CFA7F4A00D410EA /* DebugMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenu.swift; sourceTree = "<group>"; };
 		5CEFA7722CFA96F600D410EA /* PlatformModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformModifiers.swift; sourceTree = "<group>"; };
 		5CF629CA2D1DDEBC00A55E89 /* PreviewDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewDataManager.swift; sourceTree = "<group>"; };
+		5CFCD30C2D4B3F59004FD98D /* StackThumbnailPrepService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackThumbnailPrepService.swift; sourceTree = "<group>"; };
 		5CFE2B772D2486DF0023EBF8 /* GroupSortOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSortOptions.swift; sourceTree = "<group>"; };
 		5CFE2B792D24897C0023EBF8 /* StereoCard+SpatialPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StereoCard+SpatialPreview.swift"; sourceTree = "<group>"; };
 		5CFE2B7C2D24959B0023EBF8 /* CardCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCarouselView.swift; sourceTree = "<group>"; };
@@ -359,12 +371,17 @@
 		5C4A271E2D04E954009ECECE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5CFCD30C2D4B3F59004FD98D /* StackThumbnailPrepService.swift */,
+				5C30F1652D4869010095BDFB /* AsyncSemaphore.swift */,
+				5C30F1632D4715F60095BDFB /* ImagePrefetcher.swift */,
+				5C30F1612D4715910095BDFB /* GridLoadingManager.swift */,
 				5C80F6BD2D17AD4B00C58E7D /* BackgroundImportManager.swift */,
 				5C1454452CF8172900D5C232 /* BatchImportService.swift */,
 				5C80F6C92D188A8A00C58E7D /* CardImageLoader.swift */,
 				5C80F6A12D13EFDE00C58E7D /* CardImageManager.swift */,
 				5CD577342D0EAEED002FA8DB /* CropUpdateService.swift */,
 				5C80F6C12D17D11E00C58E7D /* ImageDownloadManager.swift */,
+				5C3C35D02D3F661B00396991 /* StackThumbnailManager.swift */,
 				5C80F6A32D13F02900C58E7D /* ImagePreloadService.swift */,
 				5C1454432CF816EF00D5C232 /* ImportService.swift */,
 				5C7639822D06B0B80043EEFC /* MODSParsingService.swift */,
@@ -496,7 +513,6 @@
 			isa = PBXGroup;
 			children = (
 				5CC58A762D41F0020083A023 /* iPadNavigationView.swift */,
-				5C3C35D02D3F661B00396991 /* StackThumbnailManager.swift */,
 				5CC731412D3D9C670069741E /* StackDisplayableProtocol.swift */,
 				5CC7313F2D3D9A070069741E /* StackThumbnailView.swift */,
 				5CC7313D2D3D99E70069741E /* StackThumbnailGenerator.swift */,
@@ -528,6 +544,8 @@
 		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5CC1F3312D4B4B83008E614C /* ScrollState.swift */,
+				5C30F15F2D4713480095BDFB /* StereoCard+Descriptor.swift */,
 				5CC5A5C42BD47622005811DA /* Author.swift */,
 				5C1DBDA32D1000EF0050B4DF /* CardSide.swift */,
 				5C14544E2CF849D700D5C232 /* Collection.swift */,
@@ -788,10 +806,12 @@
 				5C1DBD912D0FB0B20050B4DF /* StoreUtility.swift in Sources */,
 				5CD5772B2D0EA904002FA8DB /* CropImportTypes.swift in Sources */,
 				5CF629CB2D1DDEC000A55E89 /* PreviewDataManager.swift in Sources */,
+				5C30F1622D4715950095BDFB /* GridLoadingManager.swift in Sources */,
 				5CAFA76D2D1A747E00112A93 /* GroupItemProtocol.swift in Sources */,
 				5C0318722D2CFBC7009B0871 /* FavoritesView.swift in Sources */,
 				5CFE2B7A2D2489840023EBF8 /* StereoCard+SpatialPreview.swift in Sources */,
 				5C80F6A22D13EFE300C58E7D /* CardImageManager.swift in Sources */,
+				5CFCD30D2D4B3F62004FD98D /* StackThumbnailPrepService.swift in Sources */,
 				5C0318702D2CFBB2009B0871 /* VisionNavigationView.swift in Sources */,
 				5C1992202D2B45A30039D52C /* StereoCard+ViewInSpace.swift in Sources */,
 				5C73DB632D18FD83004BEEC5 /* CardTitlesSection.swift in Sources */,
@@ -799,6 +819,7 @@
 				5CFE2B8B2D24E2040023EBF8 /* NYPLCollectionLink.swift in Sources */,
 				5C80F6CA2D188A9100C58E7D /* CardImageLoader.swift in Sources */,
 				5CC5A5C72BD478CE005811DA /* Subject.swift in Sources */,
+				5C30F1642D4715FA0095BDFB /* ImagePrefetcher.swift in Sources */,
 				5CFE2B852D24D5D40023EBF8 /* SearchManager.swift in Sources */,
 				5C6676DC2BC21881002DD52E /* StereoCard.swift in Sources */,
 				5CC58A772D41F0080083A023 /* iPadNavigationView.swift in Sources */,
@@ -833,6 +854,7 @@
 				5C19921E2D2A32920039D52C /* CropRectanglesView.swift in Sources */,
 				5C80F6B42D169D4800C58E7D /* ThumbnailSelectableView.swift in Sources */,
 				5C80F6C42D17D30D00C58E7D /* BackgroundProgressIndicator.swift in Sources */,
+				5C30F1662D48690D0095BDFB /* AsyncSemaphore.swift in Sources */,
 				5CD85DCC2D2BB8BC00BC23A7 /* CollectionsGridView.swift in Sources */,
 				5C73DB772D192102004BEEC5 /* ImportTypeMenu.swift in Sources */,
 				5C73DB732D191499004BEEC5 /* StoreTransferView.swift in Sources */,
@@ -845,8 +867,10 @@
 				5CC58A812D45DC6B0083A023 /* HorizontalCardStrip.swift in Sources */,
 				5C665F562CF9591E00838F37 /* FavoriteButton.swift in Sources */,
 				5C1DBD992D0FEE930050B4DF /* CardDetailView.swift in Sources */,
+				5CC1F3322D4B4B88008E614C /* ScrollState.swift in Sources */,
 				5C80F6C02D17AD6800C58E7D /* ImportProgressIndicator.swift in Sources */,
 				5CC731402D3D9A0B0069741E /* StackThumbnailView.swift in Sources */,
+				5C30F1602D4713520095BDFB /* StereoCard+Descriptor.swift in Sources */,
 				5CD577232D0E8448002FA8DB /* DatabaseTransferButton.swift in Sources */,
 				5CFE2B7D2D2495A00023EBF8 /* CardCarouselView.swift in Sources */,
 				5C7955B62D1F87050037E204 /* StereoGalleryButton.swift in Sources */,

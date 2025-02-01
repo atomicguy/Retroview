@@ -36,40 +36,12 @@ struct CollectionsGridView: View {
                         )
                         .frame(minHeight: 300) 
                         .withCollectionContextMenu(collection)
-                        .withAutoThumbnailUpdate(collection)
-
-//                        .task {
-//                            if collection.collectionThumbnail == nil {
-//                                await cacheCollectionThumbnail(collection)
-//                            }
-//                        }
                 }
             }
             .padding(PlatformEnvironment.Metrics.defaultPadding)
         }
         .platformNavigationTitle("Collections")
     }
-    
-//    private func cacheCollectionThumbnail(_ collection: CollectionSchemaV1.Collection) async {
-//        // Create a renderer to capture the thumbnail view
-//        let renderer = ImageRenderer(
-//            content: CollectionThumbnailView(collection: collection)
-//                .frame(width: 300, height: 300)
-//        )
-//        
-//        // Configure renderer
-//        renderer.scale = 2.0
-//        
-//        // Generate image and convert to Data
-//        if let image = renderer.uiImage {
-//            if let thumbnailData = image.jpegData(compressionQuality: 0.8) {
-//                await MainActor.run {
-//                    collection.collectionThumbnail = thumbnailData
-//                    try? modelContext.save()
-//                }
-//            }
-//        }
-//    }
 }
 
 #Preview {

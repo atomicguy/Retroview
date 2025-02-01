@@ -8,7 +8,8 @@
 import SwiftData
 import SwiftUI
 
-struct GroupGridView<T: GroupItem>: View {
+struct GroupGridView<T>: View where T: GroupItem {
+    @Environment(\.stackThumbnailManager) private var thumbnailManager
     @Binding var navigationPath: NavigationPath
     @State private var searchText = ""
     @State private var sortState = CatalogSortState<T>()
@@ -35,32 +36,32 @@ struct GroupGridView<T: GroupItem>: View {
                 spacing: PlatformEnvironment.Metrics.gridSpacing)
         ]
     }
-    
-    private var filteredAndSortedItems: [T] {
-            let filtered =
-                searchText.isEmpty
-                ? items
-                : items.filter { item in
-                    item.name.localizedCaseInsensitiveContains(searchText)
-                }
 
-            return filtered.sorted { first, second in
-                switch sortState.option {
-                case .alphabetical:
-                    if sortState.ascending {
-                        return first.name < second.name
-                    } else {
-                        return first.name > second.name
-                    }
-                case .cardCount:
-                    if sortState.ascending {
-                        return first.cards.count < second.cards.count
-                    } else {
-                        return first.cards.count > second.cards.count
-                    }
+    private var filteredAndSortedItems: [T] {
+        let filtered =
+            searchText.isEmpty
+            ? items
+            : items.filter { item in
+                item.name.localizedCaseInsensitiveContains(searchText)
+            }
+
+        return filtered.sorted { first, second in
+            switch sortState.option {
+            case .alphabetical:
+                if sortState.ascending {
+                    return first.name < second.name
+                } else {
+                    return first.name > second.name
+                }
+            case .cardCount:
+                if sortState.ascending {
+                    return first.cards.count < second.cards.count
+                } else {
+                    return first.cards.count > second.cards.count
                 }
             }
         }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -73,28 +74,36 @@ struct GroupGridView<T: GroupItem>: View {
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(filteredAndSortedItems) { item in
+                    ForEach(
+                        Array(filteredAndSortedItems.enumerated()),
+                        id: \.element.id
+                    ) { index, item in
                         NavigationLink(value: item) {
                             StackThumbnailView(item: item)
-                                .aspectRatio(1, contentMode: .fit)
-                                .frame(minHeight: 300)
-                                .withAutoThumbnailUpdate(item)
-                                .if(item is CollectionSchemaV1.Collection) {
-                                    view in
-                                    view.withCollectionContextMenu(
-                                        item as! CollectionSchemaV1.Collection
+                                .frame(minHeight: 300) 
+                                .task {
+                                    guard let manager = thumbnailManager else {
+                                        return
+                                    }
+                                    do {
+                                        _ = try await manager.loadThumbnail(
+                                            for: item)
+                                    } catch {
+                                        print(
+                                            "Failed to load thumbnail: \(error)"
+                                        )
+                                    }
+                                }
+                                .onAppear {
+                                    // Prefetch nearby thumbnails
+                                    thumbnailManager?.prefetchThumbnails(
+                                        for: filteredAndSortedItems,
+                                        around: index
                                     )
                                 }
                         }
                         .buttonStyle(.plain)
-                        .aspectRatio(1, contentMode: .fit)
-                        .platformInteraction(
-                            InteractionConfig(
-                                showHoverEffects: true
-                            )
-                        )
                     }
-
                 }
                 .padding(PlatformEnvironment.Metrics.defaultPadding)
             }

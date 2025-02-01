@@ -15,6 +15,8 @@ struct RetroviewApp: App {
     let imageDownloadManager: ImageDownloadManager
     let imageLoader = CardImageLoader()
     let spatialPhotoManager: SpatialPhotoManager
+    let stackThumbnailManager: StackThumbnailManager
+    let stackThumbnailPreparationService: StackThumbnailPreparationService
 
     init() {
         // Handle any pending imports before initializing SwiftData
@@ -34,6 +36,7 @@ struct RetroviewApp: App {
             DateSchemaV1.Date.self,
             CropSchemaV1.Crop.self,
             CollectionSchemaV1.Collection.self,
+            ScrollState.self,
         ])
 
         let modelConfiguration = ModelConfiguration(
@@ -49,12 +52,23 @@ struct RetroviewApp: App {
                 configurations: [modelConfiguration]
             )
             self.sharedModelContainer = container
+
+            // Initialize managers and services
             self.importManager = BackgroundImportManager(
                 modelContext: container.mainContext)
             self.imageDownloadManager = ImageDownloadManager(
                 modelContext: container.mainContext)
             self.spatialPhotoManager = SpatialPhotoManager(
                 modelContext: container.mainContext)
+
+            // Initialize thumbnail-related services
+            self.stackThumbnailManager = StackThumbnailManager(
+                context: container.mainContext)
+            self.stackThumbnailPreparationService =
+                StackThumbnailPreparationService(
+                    modelContext: container.mainContext,
+                    thumbnailManager: stackThumbnailManager
+                )
         } catch {
             print(
                 "Failed to create ModelContainer: \(error.localizedDescription)"
@@ -66,12 +80,23 @@ struct RetroviewApp: App {
                     configurations: [modelConfiguration]
                 )
                 self.sharedModelContainer = container
+
+                // Initialize managers and services
                 self.importManager = BackgroundImportManager(
                     modelContext: container.mainContext)
                 self.imageDownloadManager = ImageDownloadManager(
                     modelContext: container.mainContext)
                 self.spatialPhotoManager = SpatialPhotoManager(
                     modelContext: container.mainContext)
+
+                // Initialize thumbnail-related services
+                self.stackThumbnailManager = StackThumbnailManager(
+                    context: container.mainContext)
+                self.stackThumbnailPreparationService =
+                    StackThumbnailPreparationService(
+                        modelContext: container.mainContext,
+                        thumbnailManager: stackThumbnailManager
+                    )
             } catch {
                 fatalError(
                     "Could not create ModelContainer even after store reset: \(error)"
@@ -101,6 +126,9 @@ struct RetroviewApp: App {
                 \.stackThumbnailManager,
                 StackThumbnailManager(context: sharedModelContainer.mainContext)
             )
+            .task {
+                await stackThumbnailPreparationService.prepareStackThumbnails()
+            }
             .onAppear {
                 CollectionDefaults.setupDefaultCollections(
                     context: sharedModelContainer.mainContext)
@@ -138,6 +166,10 @@ private struct CurrentCollectionKey: EnvironmentKey {
     static let defaultValue: CollectionSchemaV1.Collection? = nil
 }
 
+private struct StackThumbnailManagerKey: EnvironmentKey {
+    static let defaultValue: StackThumbnailManager? = nil
+}
+
 extension EnvironmentValues {
     var importManager: BackgroundImportManager? {
         get { self[ImportManagerKey.self] }
@@ -167,5 +199,10 @@ extension EnvironmentValues {
     var currentCollection: CollectionSchemaV1.Collection? {
         get { self[CurrentCollectionKey.self] }
         set { self[CurrentCollectionKey.self] = newValue }
+    }
+
+    var stackThumbnailManager: StackThumbnailManager? {
+        get { self[StackThumbnailManagerKey.self] }
+        set { self[StackThumbnailManagerKey.self] = newValue }
     }
 }
