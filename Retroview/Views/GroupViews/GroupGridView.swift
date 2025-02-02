@@ -8,12 +8,15 @@
 import SwiftData
 import SwiftUI
 
+@MainActor
 struct GroupGridView<T: GroupItem>: View {
+    @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
     @State private var searchText = ""
-    @State private var sortState = CatalogSortState<T>()
-    @Query private var items: [T]
-
+    @State private var sortState = GroupSortState<T>()
+    @State private var loadedItems = [T]()
+    @State private var isLoadingMore = false
+    private let pageSize = 50
     private let title: String
 
     init(
@@ -22,45 +25,17 @@ struct GroupGridView<T: GroupItem>: View {
         sortDescriptor: SortDescriptor<T>
     ) {
         self.title = title
-        _navigationPath = navigationPath
-        _items = Query(sort: [sortDescriptor])
+        self._navigationPath = navigationPath
+        self.sortState = GroupSortState(option: .alphabetical)
     }
 
-    private var columns: [GridItem] {
-        [
-            GridItem(
-                .adaptive(
-                    minimum: PlatformEnvironment.Metrics.gridMinWidth,
-                    maximum: PlatformEnvironment.Metrics.gridMaxWidth),
-                spacing: PlatformEnvironment.Metrics.gridSpacing)
-        ]
-    }
-    
-    private var filteredAndSortedItems: [T] {
-            let filtered =
-                searchText.isEmpty
-                ? items
-                : items.filter { item in
-                    item.name.localizedCaseInsensitiveContains(searchText)
-                }
-
-            return filtered.sorted { first, second in
-                switch sortState.option {
-                case .alphabetical:
-                    if sortState.ascending {
-                        return first.name < second.name
-                    } else {
-                        return first.name > second.name
-                    }
-                case .cardCount:
-                    if sortState.ascending {
-                        return first.cards.count < second.cards.count
-                    } else {
-                        return first.cards.count > second.cards.count
-                    }
-                }
-            }
-        }
+    private let columns = [
+        GridItem(
+            .adaptive(
+                minimum: PlatformEnvironment.Metrics.gridMinWidth,
+                maximum: PlatformEnvironment.Metrics.gridMaxWidth
+            ), spacing: PlatformEnvironment.Metrics.gridSpacing)
+    ]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -73,34 +48,72 @@ struct GroupGridView<T: GroupItem>: View {
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(filteredAndSortedItems) { item in
+                    ForEach(loadedItems) { item in
                         NavigationLink(value: item) {
                             StackThumbnailView(item: item)
                                 .aspectRatio(1, contentMode: .fit)
                                 .frame(minHeight: 300)
                                 .withAutoThumbnailUpdate(item)
-                                .if(item is CollectionSchemaV1.Collection) {
-                                    view in
-                                    view.withCollectionContextMenu(
-                                        item as! CollectionSchemaV1.Collection
-                                    )
-                                }
                         }
                         .buttonStyle(.plain)
-                        .aspectRatio(1, contentMode: .fit)
-                        .platformInteraction(
-                            InteractionConfig(
-                                showHoverEffects: true
-                            )
-                        )
                     }
 
+                    if !isLoadingMore {
+                        Color.clear.onAppear {
+                            loadMoreItems()
+                        }
+                    }
                 }
                 .padding(PlatformEnvironment.Metrics.defaultPadding)
             }
         }
-        .platformNavigationTitle("\(title) (\(filteredAndSortedItems.count))")
-        .searchable(text: $searchText, prompt: "Search \(title)")
+        .platformNavigationTitle("\(title) (\(loadedItems.count))")
+        .onAppear {
+            loadInitialItems()
+        }
+        .onChange(of: searchText) {
+            loadInitialItems()
+        }
+    }
+
+    @MainActor
+    private func createDescriptor(offset: Int = 0) -> FetchDescriptor<T> {
+        var descriptor = FetchDescriptor<T>()
+        descriptor.fetchOffset = offset
+        descriptor.fetchLimit = pageSize
+
+        if !searchText.isEmpty {
+            descriptor.predicate = #Predicate<T> { item in
+                item.name.localizedStandardContains(searchText)
+            }
+        }
+
+        return descriptor
+    }
+
+    @MainActor
+    private func loadInitialItems() {
+        do {
+            let descriptor = createDescriptor()
+            loadedItems = try modelContext.fetch(descriptor)
+        } catch {
+            print("Failed to load initial items: \(error)")
+        }
+    }
+
+    @MainActor
+    private func loadMoreItems() {
+        guard !isLoadingMore else { return }
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+
+        do {
+            let descriptor = createDescriptor(offset: loadedItems.count)
+            let newItems = try modelContext.fetch(descriptor)
+            loadedItems.append(contentsOf: newItems)
+        } catch {
+            print("Failed to load more items: \(error)")
+        }
     }
 }
 

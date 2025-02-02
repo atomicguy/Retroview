@@ -19,7 +19,6 @@ struct IPadNavigationView: View {
             // Library Tab
             NavigationStack(path: $navigationPath) {
                 LibraryGridView(
-                    modelContext: modelContext,
                     navigationPath: $navigationPath
                 )
                 .withNavigationDestinations(navigationPath: $navigationPath)

@@ -17,7 +17,6 @@ import SwiftUI
             TabView(selection: destinationBinding) {
                 NavigationStack(path: $navigationPath) {
                     LibraryGridView(
-                        modelContext: modelContext,
                         navigationPath: $navigationPath
                     )
                     .withNavigationDestinations(navigationPath: $navigationPath)

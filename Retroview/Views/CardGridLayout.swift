@@ -82,23 +82,3 @@ struct CardGridLayout: View {
         }
     }
 }
-
-//#Preview("Collection Grid Layout") {
-//    NavigationStack {
-//        let container = try! PreviewDataManager.shared.container()
-//        let descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
-//        let cards = try! container.mainContext.fetch(descriptor)
-//        let collection = CollectionSchemaV1.Collection(name: "Preview Collection")
-//
-//        return CardGridLayout(
-//            cards: cards,
-//            collection: collection,
-//            selectedCard: .constant(cards.first),
-//            navigationPath: .constant(NavigationPath()),
-//            onCardSelected: { _ in }
-//        )
-//        .withPreviewStore()
-//        .environment(\.imageLoader, CardImageLoader())
-//        .frame(width: 1024, height: 600)
-//    }
-//}

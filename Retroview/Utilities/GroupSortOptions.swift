@@ -1,5 +1,5 @@
 //
-//  CatalogSortOptions.swift
+//  GroupSortOptions.swift
 //  Retroview
 //
 //  Created by Assistant on 12/30/24.
@@ -21,7 +21,7 @@ enum GroupSortOptions: String, CaseIterable {
 }
 
 @Observable
-class CatalogSortState<T: GroupItem>: Equatable {
+class GroupSortState<T: GroupItem>: Equatable {
     var option: GroupSortOptions
     var ascending: Bool
 
@@ -49,7 +49,7 @@ class CatalogSortState<T: GroupItem>: Equatable {
         ascending ? "Ascending" : "Descending"
     }
 
-    static func == (lhs: CatalogSortState<T>, rhs: CatalogSortState<T>) -> Bool
+    static func == (lhs: GroupSortState<T>, rhs: GroupSortState<T>) -> Bool
     {
         lhs.option == rhs.option && lhs.ascending == rhs.ascending
     }

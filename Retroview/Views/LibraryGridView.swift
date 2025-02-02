@@ -11,15 +11,14 @@ import SwiftUI
 struct LibraryGridView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
-    @State private var selectedCard: CardSchemaV1.StereoCard?
-    @State private var loadedCards = [CardSchemaV1.StereoCard]()
+    @State private var selectedCard: CardSchemaV1.StereoCard? = nil
+    @State private var loadedCards: [CardSchemaV1.StereoCard] = []
     @State private var isLoadingMore = false
     @State private var searchText = ""
-    @State private var searchManager: SearchManager
+    @State private var searchManager: SearchManager? = nil
 
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+    init(navigationPath: Binding<NavigationPath>) {
         self._navigationPath = navigationPath
-        self.searchManager = SearchManager(modelContext: modelContext)
     }
 
     private let columns = [
@@ -29,10 +28,17 @@ struct LibraryGridView: View {
                 maximum: PlatformEnvironment.Metrics.gridMaxWidth
             ), spacing: PlatformEnvironment.Metrics.gridSpacing)
     ]
+    
+    var searchTextBinding: Binding<String> {
+        Binding(
+            get: { searchManager?.searchText ?? "" },
+            set: { searchManager?.searchText = $0 }
+        )
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            SearchBar(text: $searchManager.searchText)
+            SearchBar(text: searchTextBinding)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
 
@@ -61,28 +67,34 @@ struct LibraryGridView: View {
                     if !isLoadingMore {
                         Color.clear
                             .onAppear {
-                                Task { await loadMoreCards() }
+                                loadMoreCards()
                             }
                     }
                 }
                 .padding(PlatformEnvironment.Metrics.defaultPadding)
             }
         }
-        .onChange(of: searchManager.searchText) {
+        .onAppear {
+            if searchManager == nil {
+                searchManager = SearchManager(modelContext: modelContext)
+            }
+        }
+        .onChange(of: searchManager?.searchText ?? "") {
             Task {
-                await loadInitialCards()
+                loadInitialCards()
             }
         }
     }
 
-    private func loadInitialCards() async {
+    @MainActor
+    func loadInitialCards() {
         var descriptor = FetchDescriptor<CardSchemaV1.StereoCard>()
         descriptor.fetchLimit = 50
         descriptor.relationshipKeyPathsForPrefetching = [
             \CardSchemaV1.StereoCard.titlePick
         ]
 
-        if let searchPredicate = searchManager.predicate {
+        if let searchPredicate = searchManager?.predicate {
             descriptor.predicate = searchPredicate
         }
 
@@ -93,9 +105,9 @@ struct LibraryGridView: View {
         }
     }
 
-    private func loadMoreCards() async {
+    @MainActor
+    func loadMoreCards() {
         guard !isLoadingMore else { return }
-
         isLoadingMore = true
         defer { isLoadingMore = false }
 
@@ -106,7 +118,7 @@ struct LibraryGridView: View {
             \CardSchemaV1.StereoCard.titlePick
         ]
 
-        if let searchPredicate = searchManager.predicate {
+        if let searchPredicate = searchManager?.predicate {
             descriptor.predicate = searchPredicate
         }
 
@@ -121,9 +133,8 @@ struct LibraryGridView: View {
 
 #Preview {
     NavigationStack {
-        let container = try! PreviewDataManager.shared.container()
+//        let container = try! PreviewDataManager.shared.container()
         LibraryGridView(
-            modelContext: container.mainContext,
             navigationPath: .constant(NavigationPath())
         )
         .withPreviewStore()

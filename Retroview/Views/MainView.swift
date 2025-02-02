@@ -64,7 +64,6 @@ struct MainView: View {
         switch selectedDestination {
         case .none, .library:
             LibraryGridView(
-                modelContext: modelContext,
                 navigationPath: $navigationPath)
         case .subjects:
             GroupGridView<SubjectSchemaV1.Subject>(
@@ -89,9 +88,6 @@ struct MainView: View {
                 title: "Collections",
                 navigationPath: $navigationPath,
                 sortDescriptor: SortDescriptor(\.name)
-//                predicate: #Predicate<CollectionSchemaV1.Collection> {
-//                    $0.name != "Favorites"
-//                }
             )
         case .favorites:
             FavoritesView(navigationPath: $navigationPath)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GroupSortButton<T: GroupItem>: View {
-    @Bindable var sortState: CatalogSortState<T>
+    @Bindable var sortState: GroupSortState<T>
 
     var body: some View {
         Menu {
@@ -43,7 +43,7 @@ struct GroupSortButton<T: GroupItem>: View {
 #Preview("Catalog Sort Button - Subjects") {
     NavigationStack {
         GroupSortButton(
-            sortState: CatalogSortState<SubjectSchemaV1.Subject>()
+            sortState: GroupSortState<SubjectSchemaV1.Subject>()
         )
         .withPreviewStore()
         .frame(width: 44, height: 44)
@@ -52,7 +52,7 @@ struct GroupSortButton<T: GroupItem>: View {
 
 #Preview("Catalog Sort Button - Authors") {
     NavigationStack {
-        GroupSortButton(sortState: CatalogSortState<AuthorSchemaV1.Author>())
+        GroupSortButton(sortState: GroupSortState<AuthorSchemaV1.Author>())
             .withPreviewStore()
             .frame(width: 44, height: 44)
     }

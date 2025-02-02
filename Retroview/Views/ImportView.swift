@@ -12,9 +12,9 @@ import UniformTypeIdentifiers
 struct ImportView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    
-    @State private var importService: BatchImportService
-    @State private var cropService: CropUpdateService
+
+    @State private var importService: BatchImportService? = nil
+    @State private var cropService: CropUpdateService? = nil
     @State private var selectedImportType: ImportType = .mods
     @State private var isImporting = false
     @State private var showError = false
@@ -22,12 +22,7 @@ struct ImportView: View {
     @State private var showConfirmation = false
     @State private var pendingImportURL: URL?
     @State private var fileCount = 0
-    
-    init(modelContext: ModelContext) {
-        _importService = State(initialValue: BatchImportService(modelContext: modelContext))
-        _cropService = State(initialValue: CropUpdateService(modelContext: modelContext))
-    }
-    
+
     private var importTypePicker: some View {
         Picker("Import Type", selection: $selectedImportType) {
             ForEach(ImportType.allCases) { type in
@@ -38,77 +33,89 @@ struct ImportView: View {
         .pickerStyle(.segmented)
         .padding(.horizontal)
     }
-    
+
     private var actionButtons: some View {
         HStack(spacing: 16) {
-            if importService.isProcessing {
+            if importService?.isProcessing ?? false {
                 Button(role: .destructive) {
-                    importService.cancelImport()
+                    importService?.cancelImport()
                 } label: {
                     Label("Cancel Import", systemImage: "xmark.circle")
                 }
                 .buttonStyle(.bordered)
             }
-            
+
             Button {
-                if importService.importReport != nil {
+                if importService?.importReport != nil {
                     dismiss()
                 } else {
                     isImporting = true
                 }
             } label: {
-                if importService.importReport != nil {
+                if importService?.importReport != nil {
                     Label("Done", systemImage: "checkmark")
                 } else {
                     Label("Select Folder", systemImage: "folder.badge.plus")
                 }
             }
             .buttonStyle(.borderedProminent)
-            .disabled(importService.isProcessing)
+            .disabled(importService?.isProcessing ?? false)
         }
     }
-    
+
     @ViewBuilder
     private var statusView: some View {
-        if importService.isProcessing {
+        if importService?.isProcessing ?? false {
             VStack(spacing: 16) {
                 ProgressView()
                     .controlSize(.large)
-                
-                let progress = importService.progress
-                VStack(spacing: 8) {
-                    ProgressView(
-                        value: Double(progress.completedUnitCount),
-                        total: Double(progress.totalUnitCount)
-                    )
-                    .progressViewStyle(.linear)
-                    
-                    HStack {
-                        Text("\(progress.completedUnitCount) of \(progress.totalUnitCount)")
-                            .monospacedDigit()
-                        Text("•")
-                        Text(
-                            "\((Double(progress.completedUnitCount) / Double(progress.totalUnitCount) * 100).formatted(.number.precision(.fractionLength(1))))%"
+
+                if let progress = importService?.progress { // ✅ Safe unwrapping
+                    VStack(spacing: 8) {
+                        ProgressView(
+                            value: Double(progress.completedUnitCount),
+                            total: Double(progress.totalUnitCount)
                         )
-                        .monospacedDigit()
+                        .progressViewStyle(.linear)
+
+                        HStack {
+                            Text("\(progress.completedUnitCount) of \(progress.totalUnitCount)")
+                                .monospacedDigit()
+                            Text("•")
+                            Text(
+                                "\((Double(progress.completedUnitCount) / Double(progress.totalUnitCount) * 100).formatted(.number.precision(.fractionLength(1))))%"
+                            )
+                            .monospacedDigit()
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: 300)
                 }
-                .frame(maxWidth: 300)
             }
-        } else if let report = importService.importReport {
+        } else if let report = importService?.importReport { // ✅ Safe unwrapping
             VStack(spacing: 12) {
-                Image(systemName: report.failureCount > 0 ? "checkmark.circle.trianglebadge.exclamationmark" : "checkmark.circle.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(report.failureCount > 0 ? .yellow : .green)
-                
-                Text(report.failureCount > 0 ? "Import Completed with Issues" : "Import Complete")
-                    .font(.headline)
-                
-                Text("\(report.successCount) files imported successfully" + (report.failureCount > 0 ? "\n\(report.failureCount) files failed" : ""))
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
+                Image(
+                    systemName: report.failureCount > 0
+                        ? "checkmark.circle.trianglebadge.exclamationmark"
+                        : "checkmark.circle.fill"
+                )
+                .font(.system(size: 48))
+                .foregroundStyle(report.failureCount > 0 ? .yellow : .green)
+
+                Text(
+                    report.failureCount > 0
+                        ? "Import Completed with Issues" : "Import Complete"
+                )
+                .font(.headline)
+
+                Text(
+                    "\(report.successCount) files imported successfully"
+                        + (report.failureCount > 0
+                            ? "\n\(report.failureCount) files failed" : "")
+                )
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
             }
         } else {
             ContentUnavailableView {
@@ -118,7 +125,7 @@ struct ImportView: View {
             }
         }
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -129,7 +136,7 @@ struct ImportView: View {
             }
             .padding()
             .frame(minWidth: 400, minHeight: 200)
-            .disabled(importService.isProcessing)
+            .disabled(importService?.isProcessing ?? false)  // ✅ Handle optional safely
             .platformNavigationTitle("Import Cards", displayMode: .inline)
             .platformToolbar {
                 EmptyView()
@@ -172,20 +179,51 @@ struct ImportView: View {
                 Text(errorMessage)
             }
         }
+        .onAppear {
+            if importService == nil {
+                importService = BatchImportService(modelContext: modelContext)
+            }
+            if cropService == nil {
+                cropService = CropUpdateService(modelContext: modelContext)
+            }
+        }
+    }
+
+    private func startImport() {
+        guard let url = pendingImportURL else { return }
+
+        Task {
+            do {
+                switch selectedImportType {
+                case .mods:
+                    try await importService?.importDirectory(at: url)
+                case .crops:
+                    try await cropService?.updateCropsInBatch(from: [url])
+                }
+            } catch {
+                await handleError(error)
+            }
+        }
     }
 
     private func analyzeDirectory(_ url: URL) async {
-        do {
-            fileCount =
-                try await selectedImportType == .mods
-                ? importService.analyzeDirectory(at: url)
-                : analyzeForCropUpdates(at: url)
+        guard let importService = importService else {
+            await handleError(NSError(domain: "ImportServiceUnavailable", code: 1, userInfo: [NSLocalizedDescriptionKey: "Import service is unavailable."]))
+            return
+        }
 
-            pendingImportURL = url
-            showConfirmation = true
+        do {
+            if selectedImportType == .mods {
+                fileCount = try await importService.analyzeDirectory(at: url)
+            } else {
+                fileCount = try await analyzeForCropUpdates(at: url)
+            }
         } catch {
             await handleError(error)
         }
+
+        pendingImportURL = url
+        showConfirmation = true
     }
 
     private func analyzeForCropUpdates(at url: URL) async throws -> Int {
@@ -201,23 +239,6 @@ struct ImportView: View {
         ).filter { $0.pathExtension.lowercased() == "json" }
 
         return fileURLs.count
-    }
-
-    private func startImport() {
-        guard let url = pendingImportURL else { return }
-
-        Task {
-            do {
-                switch selectedImportType {
-                case .mods:
-                    try await importService.importDirectory(at: url)
-                case .crops:
-                    try await cropService.updateCropsInBatch(from: [url])
-                }
-            } catch {
-                await handleError(error)
-            }
-        }
     }
 
     private func handleError(_ error: Error) async {
@@ -262,8 +283,8 @@ private struct ImportConfirmationDialog: View {
 }
 
 #Preview("Import View") {
-    let previewContainer = try! PreviewDataManager.shared.container()
-    
-    return ImportView(modelContext: previewContainer.mainContext)
+    //    let previewContainer = try! PreviewDataManager.shared.container()
+
+    ImportView()
         .withPreviewStore()
 }

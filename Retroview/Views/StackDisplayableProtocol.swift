@@ -26,7 +26,7 @@ extension CollectionSchemaV1.Collection: StackDisplayable {
     }
 }
 
-// Default implementation for catalog items
+// Default implementation for group items
 extension GroupItem {
     var stackTitle: String { name }
     var stackCards: [CardSchemaV1.StereoCard] { cards }

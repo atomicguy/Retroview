@@ -84,6 +84,7 @@ struct RetroviewApp: App {
         WindowGroup {
             Group {
                 MainView()
+                    .environment(\.modelContext, sharedModelContainer.mainContext)
                     .modifier(SerifFontModifier())
             }
             .environment(
