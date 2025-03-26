@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -211,7 +211,6 @@
 		5C5913BC2D126F1F0011C90D /* CardImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageSection.swift; sourceTree = "<group>"; };
 		5C665F552CF9591A00838F37 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		5C6676AC2BC210F7002DD52E /* Retroview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Retroview.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5C6676AF2BC210F7002DD52E /* RetroviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroviewApp.swift; sourceTree = "<group>"; };
 		5C6676B32BC210F8002DD52E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5C6676B52BC210F8002DD52E /* Retroview.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Retroview.entitlements; sourceTree = "<group>"; };
 		5C6676B72BC210F8002DD52E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -311,6 +310,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CDEFC252CE04E4C0046FD60 /* StereoViewer in Frameworks */,
+				5C7EA0F22CC5C631002FC3D2 /* StereoViewer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,9 +420,13 @@
 				5CD0759B2BDF29AB002B463C /* Screens */,
 				5CB421B32BCCB9E20065C130 /* Views */,
 				5CB421B42BCCB9EA0065C130 /* Models */,
+				5C4A27232D04E9DD009ECECE /* ViewModels */,
+				5CB421B32BCCB9E20065C130 /* Views */,
+				5C7639492D0659510043EEFC /* Utilities */,
 				5C6676B32BC210F8002DD52E /* Assets.xcassets */,
-				5C6676B52BC210F8002DD52E /* Retroview.entitlements */,
+				5C267EBA2CE3209600AE3493 /* Info.plist */,
 				5C6676B62BC210F8002DD52E /* Preview Content */,
+				5C6676B52BC210F8002DD52E /* Retroview.entitlements */,
 			);
 			path = Retroview;
 			sourceTree = "<group>";
@@ -536,10 +541,10 @@
 				5C03186F2D2CFBAE009B0871 /* VisionNavigationView.swift */,
 				5C66C10A2CFD807800BA5AC1 /* VisionViews */,
 			);
-			path = Views;
+			path = MODS;
 			sourceTree = "<group>";
 		};
-		5CB421B42BCCB9EA0065C130 /* Models */ = {
+		5C7639492D0659510043EEFC /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				5CC5A5C42BD47622005811DA /* Author.swift */,
@@ -557,10 +562,10 @@
 				5CC5A5C62BD478CE005811DA /* Subject.swift */,
 				5CC5A5C22BD471D0005811DA /* Title.swift */,
 			);
-			path = Models;
+			path = Utilities;
 			sourceTree = "<group>";
 		};
-		5CC89F052BE835AF001ECF22 /* Preview Helpers */ = {
+		5CB421B32BCCB9E20065C130 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				5C0925B72D211B7800CE06A9 /* CardPreviewContainer.swift */,
@@ -569,10 +574,10 @@
 				5CE9CF6F2D1E425300A49761 /* PreviewUtilities.swift */,
 				5C1DBD962D0FB8DE0050B4DF /* StoreDebugMenu.swift */,
 			);
-			path = "Preview Helpers";
+			path = Views;
 			sourceTree = "<group>";
 		};
-		5CD0759B2BDF29AB002B463C /* Screens */ = {
+		5CB421B42BCCB9EA0065C130 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				5C4A271A2D04DC01009ECECE /* AppDestination.swift */,
@@ -584,7 +589,7 @@
 				5CFE2B8E2D25E14C0023EBF8 /* Menus */,
 				5C73DB6E2D19111C004BEEC5 /* PlatformFilePicker.swift */,
 			);
-			path = Screens;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		5CFE2B7B2D248BC00023EBF8 /* Buttons */ = {
@@ -1311,6 +1316,24 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		5CDEFC232CE04E4C0046FD60 /* XCLocalSwiftPackageReference "../StereoViewer" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../StereoViewer;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5C7EA0F12CC5C631002FC3D2 /* StereoViewer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StereoViewer;
+		};
+		5CDEFC242CE04E4C0046FD60 /* StereoViewer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StereoViewer;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5C6676A42BC210F7002DD52E /* Project object */;
 }
