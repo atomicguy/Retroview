@@ -12,9 +12,32 @@ import SwiftUI
         @Binding var selectedDestination: AppDestination?
         @Binding var navigationPath: NavigationPath
         @Environment(\.modelContext) private var modelContext
+        @State private var showingTransferSheet = false
 
         var body: some View {
             TabView(selection: destinationBinding) {
+                NavigationStack(path: $navigationPath) {
+                    DailyDiscoveryView(
+                        navigationPath: $navigationPath,
+                        modelContext: modelContext
+                    )
+                    .withNavigationDestinations(navigationPath: $navigationPath)
+                    .toolbar {
+                        ToolbarItem(placement: .primaryAction) {
+                            Button {
+                                showingTransferSheet = true
+                            } label: {
+                                Label("Transfer Library", systemImage: "arrow.triangle.swap")
+                                    .labelStyle(.iconOnly)
+                            }
+                        }
+                    }
+                }
+                .tabItem {
+                    Label("Daily Discovery", image: "custom.mustache.seal")
+                }
+                .tag(AppDestination.dailyDiscovery)
+                
                 NavigationStack(path: $navigationPath) {
                     LibraryGridView(
                         navigationPath: $navigationPath
@@ -72,9 +95,6 @@ import SwiftUI
                         title: "Collections",
                         navigationPath: $navigationPath,
                         sortDescriptor: SortDescriptor(\.name)
-//                        predicate: #Predicate<CollectionSchemaV1.Collection> {
-//                            $0.name != "Favorites"
-//                        }
                     )
                     .withNavigationDestinations(
                         navigationPath: $navigationPath)
@@ -94,11 +114,14 @@ import SwiftUI
                 }
                 .tag(AppDestination.favorites)
             }
+            .sheet(isPresented: $showingTransferSheet) {
+                StoreTransferView()
+            }
         }
 
         private var destinationBinding: Binding<AppDestination> {
             Binding(
-                get: { selectedDestination ?? .library },
+                get: { selectedDestination ?? .dailyDiscovery },
                 set: { selectedDestination = $0 }
             )
         }

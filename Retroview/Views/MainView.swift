@@ -65,6 +65,11 @@ struct MainView: View {
         case .none, .library:
             LibraryGridView(
                 navigationPath: $navigationPath)
+        case .dailyDiscovery:
+                DailyDiscoveryView(
+                    navigationPath: $navigationPath,
+                    modelContext: modelContext
+                )
         case .subjects:
             GroupGridView<SubjectSchemaV1.Subject>(
                 title: "Subjects",

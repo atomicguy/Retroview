@@ -10,6 +10,7 @@ import SwiftUI
 
 struct Sidebar: View {
     @Binding var selectedDestination: AppDestination?
+    @State private var showingTransferSheet = false
 
     // Separate query for favorites using our existing predicate
     @Query(filter: ModelPredicates.Collection.favorites)
@@ -27,6 +28,11 @@ struct Sidebar: View {
             Section {
                 NavigationLink(value: AppDestination.library) {
                     Label("Library", systemImage: "photo.on.rectangle.angled")
+                        .modifier(SerifFontModifier())
+                }
+
+                NavigationLink(value: AppDestination.dailyDiscovery) {
+                    Label("Daily Discovery", image: "custom.mustache.rectangle.stack")
                         .modifier(SerifFontModifier())
                 }
 
@@ -77,6 +83,47 @@ struct Sidebar: View {
             .modifier(SerifFontModifier())
         }
         .modifier(SerifFontModifier())
+        .toolbar {
+            // Primary toolbar items
+            ToolbarItemGroup(placement: .primaryAction) {
+                // Library transfer button with higher priority
+                Button {
+                    showingTransferSheet = true
+                } label: {
+                    Label("Transfer Library", systemImage: "arrow.triangle.swap")
+                }
+                .sheet(isPresented: $showingTransferSheet) {
+                    StoreTransferView()
+                }
+                
+                // Move import menu to a separate group with lower priority
+                Menu {
+                    ImportTypeMenu { urls, type in
+                        // Trigger the appropriate import action
+                        Task {
+                            switch type {
+                            case .mods:
+                                print("Import MODS data from \(urls.count) folders")
+                            case .crops:
+                                print("Import crop updates from \(urls.count) folders")
+                            }
+                        }
+                    }
+                } label: {
+                    Label("Import", systemImage: "square.and.arrow.down")
+                }
+            }
+
+            #if DEBUG
+            // Debug tools in a separate group with lowest priority
+            ToolbarItemGroup(placement: .secondaryAction) {
+                DebugMenu()
+            }
+            #endif
+        }
+        .sheet(isPresented: $showingTransferSheet) {
+            StoreTransferView()
+        }
     }
 }
 

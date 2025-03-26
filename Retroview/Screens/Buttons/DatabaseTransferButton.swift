@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DatabaseTransferButton: View {
     @State private var showingTransfer = false
+    @State private var showImport = false
     let action: () -> Void
     
     init(action: @escaping () -> Void = {}) {
@@ -16,14 +17,32 @@ struct DatabaseTransferButton: View {
     }
     
     var body: some View {
-        Button {
-            showingTransfer = true
-            action()
+        Menu {
+            Button {
+                showImport = false
+                showingTransfer = true
+                action()
+            } label: {
+                Label("Export Library...", systemImage: "arrow.up")
+            }
+            
+            Button {
+                showImport = true
+                showingTransfer = true
+                action()
+            } label: {
+                Label("Import Library...", systemImage: "arrow.down")
+            }
         } label: {
             Label("Library Transfer", systemImage: "arrow.up.arrow.down")
         }
         .sheet(isPresented: $showingTransfer) {
-            StoreTransferView()
+            StoreTransferView(isImporting: showImport)
         }
     }
+}
+
+#Preview {
+    DatabaseTransferButton()
+        .padding()
 }

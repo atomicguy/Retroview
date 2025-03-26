@@ -25,6 +25,9 @@ struct RetroviewApp: App {
         #else
             ImportLogger.configure(logLevel: .error)
         #endif
+        
+        // Initialize the image cache early
+        _ = ImageCache.shared
 
         let schema = Schema([
             CardSchemaV1.StereoCard.self,

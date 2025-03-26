@@ -15,6 +15,7 @@ struct StoreTransferView: View {
     @State private var isImporting = false
     @State private var error: Error?
     @State private var exportURL: URL?
+    @State private var showProgress = false
     
     private let transferManager = StoreTransferManager.shared
     
@@ -40,16 +41,20 @@ struct StoreTransferView: View {
                         .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                    .disabled(showProgress)
                     
                     Button {
                         Task {
+                            showProgress = true
                             do {
                                 // Get the URL first
                                 exportURL = try await transferManager.exportStore()
+                                showProgress = false
                                 // Then trigger the export sheet
                                 isExporting = true
                             } catch {
                                 self.error = error
+                                showProgress = false
                             }
                         }
                     } label: {
@@ -60,9 +65,26 @@ struct StoreTransferView: View {
                         .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
+                    .disabled(showProgress)
                 }
                 .padding(.horizontal)
                 .fixedSize(horizontal: false, vertical: true)
+                
+                // Progress indicator
+                if showProgress {
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .controlSize(.large)
+                        Text(isImporting ? "Preparing to import..." : "Preparing export...")
+                            .foregroundStyle(.secondary)
+                        Text("This may take several minutes for large libraries")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
                 
                 // Error display if present
                 if let error {
@@ -79,9 +101,17 @@ struct StoreTransferView: View {
                 }
                 
                 Spacer()
+                
+                // Import note
+                if startWithImport {
+                    Text("Note: The app will restart after import.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.bottom, 8)
+                }
             }
             .padding(.top)
-            .platformNavigationTitle("Library Transfer")
+            .platformNavigationTitle("Library Transfer", displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -106,13 +136,15 @@ struct StoreTransferView: View {
                 allowedContentTypes: [.retroviewStore]
             ) { result in
                 Task {
+                    showProgress = true
                     do {
                         let url = try result.get()
                         try await transferManager.importStore(from: url)
                         // App needs to restart to use new store
-                        exit(0)
+                        // Note: importStore already calls exit(0)
                     } catch {
                         self.error = error
+                        showProgress = false
                     }
                 }
             }
@@ -125,4 +157,8 @@ struct StoreTransferView: View {
             }
         }
     }
+}
+
+#Preview("Transfer View") {
+    StoreTransferView()
 }

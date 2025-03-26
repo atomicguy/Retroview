@@ -15,6 +15,7 @@ enum AppDestination: Hashable {
     case favorites
     case collections
     case collection(UUID, String)
+    case dailyDiscovery
 
     var label: String {
         switch self {
@@ -25,6 +26,7 @@ enum AppDestination: Hashable {
         case .favorites: "Favorites"
         case .collections: "Collections"
         case let .collection(_, name): name
+        case .dailyDiscovery: "Daily Discovery"
         }
     }
 
@@ -38,6 +40,7 @@ enum AppDestination: Hashable {
         case .collections: "folder"
         case let .collection(_, name):
             name == CollectionDefaults.favoritesName ? "heart.fill" : "folder"
+        case .dailyDiscovery: "star.circle"
         }
     }
 }
