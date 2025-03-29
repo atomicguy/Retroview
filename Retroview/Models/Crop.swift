@@ -9,12 +9,17 @@ import Foundation
 import SwiftData
 
 enum CropSchemaV1: VersionedSchema {
-    static var versionIdentifier: Schema.Version = .init(1,0,0)
-    
+    static var versionIdentifier: Schema.Version = .init(1, 0, 0)
+
     static var models: [any PersistentModel.Type] {
         [Crop.self]
     }
-    
+
+    enum Side: String {
+        case left
+        case right
+    }
+
     @Model
     class Crop {
         var x0: Float
@@ -23,8 +28,10 @@ enum CropSchemaV1: VersionedSchema {
         var y1: Float
         var score: Float
         var side: String
-        var card: CardSchemaV1.StereoCard? = nil
-        
+
+        @Relationship(deleteRule: .cascade)
+        var card: CardSchemaV1.StereoCard?
+
         init(
             x0: Float,
             y0: Float,
@@ -40,5 +47,11 @@ enum CropSchemaV1: VersionedSchema {
             self.score = score
             self.side = side
         }
+    }
+}
+
+extension CropSchemaV1.Crop {
+    var description: String {
+        "(\(x0),\(y0))->(\(x1),\(y1))"
     }
 }

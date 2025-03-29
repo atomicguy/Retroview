@@ -1,5 +1,5 @@
 //
-//  Stereoview.swift
+//  StereoCard.swift
 //  Retroview
 //
 //  Created by Adam Schuster on 4/6/24.
@@ -7,240 +7,151 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 enum CardSchemaV1: VersionedSchema {
-    static var versionIdentifier: Schema.Version = .init(0,1,0)
-    
+    static var versionIdentifier: Schema.Version = .init(0, 1, 0)
+
     static var models: [any PersistentModel.Type] {
-        [CardSchemaV1.StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self, DateSchemaV1.Date.self]
+        [
+            CardSchemaV1.StereoCard.self,
+            TitleSchemaV1.Title.self,
+            AuthorSchemaV1.Author.self,
+            SubjectSchemaV1.Subject.self,
+            DateSchemaV1.Date.self,
+        ]
     }
-    
-    static var imageURLTemplate = "https://iiif-prod.nypl.org/index.php?id=%@&t=w"
-    
+
     @Model
     class StereoCard {
-        @Attribute(.unique)
-        var uuid: UUID
-        @Attribute(.externalStorage)
-        var imageFront: Data?
+        // MARK: - Core Properties
+        @Attribute(.unique) var uuid: UUID
         var imageFrontId: String?
-        @Attribute(.externalStorage)
-        var imageBack: Data?
         var imageBackId: String?
-        
-        @Relationship(inverse: \TitleSchemaV1.Title.cards)
+        var cardColor: String = "#F5E6D3"
+        var colorOpacity: Double
+
+        // MARK: - Image Storage
+        @Attribute(.externalStorage) var frontThumbnailData: Data?
+        @Attribute(.externalStorage) var frontStandardData: Data?
+        @Attribute(.externalStorage) var backThumbnailData: Data?
+        @Attribute(.externalStorage) var backStandardData: Data?
+        @Attribute(.externalStorage) var spatialPhotoData: Data?
+
+        // MARK: - Relationships
+        @Relationship(deleteRule: .cascade, inverse: \TitleSchemaV1.Title.cards)
         var titles = [TitleSchemaV1.Title]()
-        @Relationship(inverse: \TitleSchemaV1.Title.picks)
+
+        @Relationship(deleteRule: .nullify, inverse: \TitleSchemaV1.Title.picks)
         var titlePick: TitleSchemaV1.Title?
+
         @Relationship(inverse: \AuthorSchemaV1.Author.cards)
         var authors = [AuthorSchemaV1.Author]()
+
         @Relationship(inverse: \SubjectSchemaV1.Subject.cards)
         var subjects = [SubjectSchemaV1.Subject]()
+
         @Relationship(inverse: \DateSchemaV1.Date.cards)
         var dates = [DateSchemaV1.Date]()
-        @Relationship(inverse: \CropSchemaV1.Crop.card)
-        var leftCrop: CropSchemaV1.Crop?
-        @Relationship(inverse: \CropSchemaV1.Crop.card)
-        var rightCrop: CropSchemaV1.Crop?
 
+        var collections: [CollectionSchemaV1.Collection] = []
+
+        @Relationship(deleteRule: .cascade)
+        var crops: [CropSchemaV1.Crop] = []
+
+        // MARK: - Computed Properties
+        var leftCrop: CropSchemaV1.Crop? {
+            get { crops.first { $0.side == CropSchemaV1.Side.left.rawValue } }
+            set {
+                if let existingIndex = crops.firstIndex(where: {
+                    $0.side == CropSchemaV1.Side.left.rawValue
+                }) {
+                    crops.remove(at: existingIndex)
+                }
+                if let newCrop = newValue {
+                    crops.append(newCrop)
+                    newCrop.card = self
+                }
+            }
+        }
+
+        var rightCrop: CropSchemaV1.Crop? {
+            get { crops.first { $0.side == CropSchemaV1.Side.right.rawValue } }
+            set {
+                if let existingIndex = crops.firstIndex(where: {
+                    $0.side == CropSchemaV1.Side.right.rawValue
+                }) {
+                    crops.remove(at: existingIndex)
+                }
+                if let newCrop = newValue {
+                    crops.append(newCrop)
+                    newCrop.card = self
+                }
+            }
+        }
+
+        var color: Color {
+            get {
+                (Color(hex: cardColor) ?? Color(hex: "#F5E6D3")!)
+                    .opacity(colorOpacity)
+            }
+            set {
+                cardColor = newValue.toHex() ?? "#F5E6D3"
+                colorOpacity = 0.15
+            }
+        }
+
+        // Computed property for temporary URL access when needed
+        var temporarySpatialPhotoURL: URL? {
+            guard let data = spatialPhotoData else { return nil }
+
+            // Create URL in temporary directory
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent(uuid.uuidString)
+                .appendingPathExtension("heic")
+
+            try? data.write(to: url)
+            return url
+        }
+
+        // MARK: - Initialization
         init(
-                uuid: String,
-                imageFront: Data? = nil,
-                imageFrontId: String? = "",
-                imageBack: Data? = nil,
-                imageBackId: String? = "",
-                titles: [TitleSchemaV1.Title] = [],
-                authors: [AuthorSchemaV1.Author] = [],
-                subjects: [SubjectSchemaV1.Subject] = [],
-                dates: [DateSchemaV1.Date] = [],
-                leftCrop: CropSchemaV1.Crop? = nil,
-                rightCrop: CropSchemaV1.Crop? = nil
-            ) {
-                self.uuid = UUID(uuidString: uuid) ?? UUID()
-                self.imageFront = imageFront
-                self.imageFrontId = imageFrontId
-                self.imageBack = imageBack
-                self.imageBackId = imageBackId
-                self.titles = titles
-                self.authors = authors
-                self.subjects = subjects
-                self.dates = dates
-                self.leftCrop = leftCrop
-                self.rightCrop = rightCrop
-            }
-        
-        func imageUrl(forSide side: String ) -> URL? {
-            let baseUrl = "https://iiif-prod.nypl.org/index.php?id="
-            let sizeSuffix = "&t=w"
-            var imageName = imageFrontId
-            if (side == "back") {
-                imageName = imageBackId
-            }
-            let imageUrl = baseUrl + (imageName ?? "unknown") + sizeSuffix
-            return URL(string: imageUrl)
-        }
-        
-        // Function to download image and store it as external storage
-        func downloadImage(forSide side: String, completion: @escaping (Result<Void, Error>) -> Void) {
-            guard let url = imageUrl(forSide: side) else {
-                completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-                return
-            }
-            
-            let task = URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let data = data else {
-                    completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
-                    return
-                }
-                
-                if side == "front" {
-                    self.imageFront = data
-                } else if side == "back" {
-                    self.imageBack = data
-                }
-                
-                completion(.success(()))
-            }
-            
-            task.resume()
-        }
-        
-        static let sampleData: [StereoCard] = {
-            
-            return [
-                StereoCard(
-                    uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
-                    imageFrontId: "G90F186_030F",
-                    imageBackId: "G90F186_030B"
-                ),
-                StereoCard(
-                    uuid: "f0bf5ba0-c53b-012f-dab2-58d385a7bc34",
-                    imageFrontId: "G90F186_122F",
-                    imageBackId: "G90F186_122B"
-                )
-            ]
-        }()
-        
-        private static func loadImageData(named imageName: String) -> Data? {
-            guard let url = Bundle.main.url(forResource: imageName, withExtension: "jpg") else {
-                           return nil
-                       }
-                       return try? Data(contentsOf: url)
+            uuid: UUID,
+            imageFrontId: String? = nil,
+            imageBackId: String? = nil,
+            cardColor: String = "#F5E6D3",
+            colorOpacity: Double = 0.15,
+            titles: [TitleSchemaV1.Title] = [],
+            authors: [AuthorSchemaV1.Author] = [],
+            subjects: [SubjectSchemaV1.Subject] = [],
+            dates: [DateSchemaV1.Date] = [],
+            crops: [CropSchemaV1.Crop] = []
+        ) {
+            self.uuid = uuid
+            self.imageFrontId = imageFrontId
+            self.imageBackId = imageBackId
+            self.cardColor = cardColor
+            self.colorOpacity = colorOpacity
+            self.titles = titles
+            self.authors = authors
+            self.subjects = subjects
+            self.dates = dates
+            self.crops = crops
+
+            self.frontThumbnailData = nil
+            self.frontStandardData = nil
+            self.backThumbnailData = nil
+            self.backStandardData = nil
         }
     }
 }
 
-//enum CardSchemaV2: VersionedSchema {
-//    static var versionIdentifier: Schema.Version = .init(0,2,0)
-//    
-//    static var models: [any PersistentModel.Type] {
-//        [StereoCard.self, TitleSchemaV1.Title.self, AuthorSchemaV1.Author.self, SubjectSchemaV1.Subject.self, DateSchemaV1.Date.self]
-//    }
-//    
-//    @Model
-//    class StereoCard {
-//        @Attribute(.unique) 
-//        var uuid: String
-//        @Relationship(inverse: \TitleSchemaV1.Title.cards)
-//        var titles: [TitleSchemaV1.Title]
-//        @Relationship(inverse: \AuthorSchemaV1.Author.cards)
-//        var authors: [AuthorSchemaV1.Author]
-//        @Relationship(inverse: \SubjectSchemaV1.Subject.cards)
-//        var subjects: [SubjectSchemaV1.Subject]
-//        @Relationship(inverse: \DateSchemaV1.Date.cards)
-//        var dates: [DateSchemaV1.Date]
-//        var rating: Int?
-//        var imageIdFront: String
-//        var imageIdBack: String?
-//        @Relationship(deleteRule: .cascade)
-//        var left: CropSchemaV1.Crop?
-//        @Relationship(deleteRule: .cascade)
-//        var right: CropSchemaV1.Crop?
-//        
-//        init(
-//            uuid: String,
-//            titles: [TitleSchemaV1.Title],
-//            authors: [AuthorSchemaV1.Author],
-//            subjects: [SubjectSchemaV1.Subject],
-//            dates: [DateSchemaV1.Date],
-//            rating: Int? = nil,
-//            imageIdFront: String,
-//            imageIdBack: String?,
-//            left: CropSchemaV1.Crop?,
-//            right: CropSchemaV1.Crop?
-//            
-//        ) {
-//            self.uuid = uuid
-//            self.titles = titles
-//            self.authors = authors
-//            self.subjects = subjects
-//            self.dates = dates
-//            self.rating = rating
-//            self.imageIdFront = imageIdFront
-//            self.imageIdBack = imageIdBack
-//            self.left = left
-//            self.right = right
-//        }
-//        
-//        static func example() -> StereoCard {
-//            let card = StereoCard(
-//                uuid: "c7980740-c53b-012f-c86d-58d385a7bc34",
-//                titles: [
-//                    TitleSchemaV1.Title(
-//                        text: "Bird's-eye view, Columbian Exposition."
-//                    ),
-//                    TitleSchemaV1.Title(text: "Stereoscopic views of the World's Columbian Exposition. 7972.")
-//                ],
-//                authors: [
-//                    AuthorSchemaV1.Author(
-//                        name: "Kilburn, B. W. (Benjamin West) (1827-1909)"
-//                    )
-//                ],
-//                subjects: [
-//                    SubjectSchemaV1.Subject(
-//                        name: "Chicago (Ill.)"
-//                    ),
-//                    SubjectSchemaV1.Subject(
-//                        name: "Illinois"
-//                    ),
-//                    SubjectSchemaV1.Subject(
-//                        name: "World's Columbian Exposition (1893 : Chicago, Ill.)"
-//                    ),
-//                    SubjectSchemaV1.Subject(
-//                        name: "Exhibitions"
-//                    )
-//                ],
-//                dates: [
-//                    DateSchemaV1.Date(
-//                        text: "1893"
-//                    )
-//                ],
-//                imageIdFront: "IMG123f",
-//                imageIdBack: "IMG123b",
-//                left: CropSchemaV1.Crop(
-//                    x0: 0.0,
-//                    y0: 0.0,
-//                    x1: 0.0,
-//                    y1: 0.0,
-//                    score: 0.9,
-//                    side: "left"
-//                ),
-//                right: CropSchemaV1.Crop(
-//                    x0: 0.0,
-//                    y0: 0.0,
-//                    x1: 0.0,
-//                    y1: 0.0,
-//                    score: 0.9,
-//                    side: "right"
-//                )
-//            )
-//            
-//            return card
-//        }
-//    }
-//}
+// MARK: - Transferable Conformance
+extension CardSchemaV1.StereoCard: Transferable {
+    static var transferRepresentation: some TransferRepresentation {
+        ProxyRepresentation<CardSchemaV1.StereoCard, String>(exporting: {
+            card in
+            card.uuid.uuidString
+        })
+    }
+}
