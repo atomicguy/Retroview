@@ -59,12 +59,19 @@ final class ImageDownloadManager {
     }
     
     // Extracted batch processing into a separate function
-    private func processBatch(cards: [CardSchemaV1.StereoCard], preloader: ImagePreloadService) async throws {
+    private func processBatch(cards: [CardSchemaV1.StereoCard], preloader: ImagePreloadService) async throws(ImageDownloadError) {
         for card in cards {
-            if Task.isCancelled { break }
-            
+            if Task.isCancelled {
+                throw ImageDownloadError.downloadCancelled
+            }
+
             // Add a small delay between each card to avoid network congestion
-            try await Task.sleep(for: .milliseconds(50))
+            do {
+                try await Task.sleep(for: .milliseconds(50))
+            } catch {
+                throw ImageDownloadError.downloadCancelled
+            }
+
             await preloader.preloadImages(for: card)
             processedCardCount += 1
         }
@@ -85,47 +92,64 @@ final class ImageDownloadManager {
                 let countDescriptor = FetchDescriptor<CardSchemaV1.StereoCard>(
                     predicate: createNeedsThumbnailPredicate()
                 )
-                
-                totalCardCount = try modelContext.fetchCount(countDescriptor)
-                
+
+                do {
+                    totalCardCount = try modelContext.fetchCount(countDescriptor)
+                } catch {
+                    throw ImageDownloadError.swiftDataFetchFailure(reason: error.localizedDescription)
+                }
+
                 if totalCardCount == 0 {
                     logger.debug("No cards need thumbnail downloads")
-                    isDownloading = false
-                    return
+                    throw ImageDownloadError.noCardsNeedDownload
                 }
-                
+
                 logger.debug("Found \(self.totalCardCount) cards needing thumbnails")
-                
+
                 // Process in batches to avoid overloading
                 let preloader = ImagePreloadService()
                 var currentOffset = 0
-                
+
                 while currentOffset < totalCardCount && !Task.isCancelled {
                     // Fetch the next batch
                     let descriptor = createFetchDescriptor(
                         offset: currentOffset,
                         limit: batchSize
                     )
-                    
-                    let batchCards = try modelContext.fetch(descriptor)
-                    
+
+                    let batchCards: [CardSchemaV1.StereoCard]
+                    do {
+                        batchCards = try modelContext.fetch(descriptor)
+                    } catch {
+                        throw ImageDownloadError.batchFetchFailure(
+                            offset: currentOffset,
+                            reason: error.localizedDescription
+                        )
+                    }
+
                     if batchCards.isEmpty {
                         break // No more cards to process
                     }
-                    
+
                     // Process this batch
                     try await processBatch(cards: batchCards, preloader: preloader)
-                    
+
                     // Move to next batch
                     currentOffset += batchCards.count
-                    
+
                     // Add a delay between batches
                     if !Task.isCancelled {
-                        try await Task.sleep(for: .seconds(delayBetweenBatches))
+                        do {
+                            try await Task.sleep(for: .seconds(delayBetweenBatches))
+                        } catch {
+                            throw ImageDownloadError.downloadCancelled
+                        }
                     }
                 }
-            } catch {
+            } catch let error as ImageDownloadError {
                 logger.error("Image download failed: \(error.localizedDescription)")
+            } catch {
+                logger.error("Image download failed with unexpected error: \(error.localizedDescription)")
             }
 
             isDownloading = false

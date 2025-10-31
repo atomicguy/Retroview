@@ -11,16 +11,16 @@ import SwiftUI
 
 // Actor to safely manage pending image requests
 actor ImageRequestManager {
-    private var pendingRequests = [String: Task<CGImage?, Error>]()
-    
-    func getExistingTask(for key: String) -> Task<CGImage?, Error>? {
+    private var pendingRequests = [String: Task<CGImage?, ImageLoadError>]()
+
+    func getExistingTask(for key: String) -> Task<CGImage?, ImageLoadError>? {
         return pendingRequests[key]
     }
-    
-    func registerTask(_ task: Task<CGImage?, Error>, for key: String) {
+
+    func registerTask(_ task: Task<CGImage?, ImageLoadError>, for key: String) {
         pendingRequests[key] = task
     }
-    
+
     func removeTask(for key: String) {
         pendingRequests.removeValue(forKey: key)
     }
@@ -42,28 +42,28 @@ class CardImageLoader {
 
     func loadImage(
         for card: CardSchemaV1.StereoCard, side: CardSide, quality: ImageQuality
-    ) async throws -> CGImage? {
+    ) async throws(ImageLoadError) -> CGImage? {
         let cacheKey = "\(card.uuid)-\(side.rawValue)-\(quality.rawValue)"
-        
+
         // 1. Check cache first
         if let cachedImage = cache.getImage(forKey: cacheKey) {
             logger.debug("Found image in cache: \(cacheKey)")
             return cachedImage
         }
-        
+
         // 2. Check if there's already a pending request for this image
         if let existingTask = await requestManager.getExistingTask(for: cacheKey) {
             return try await existingTask.value
         }
-        
+
         // 3. Create a new loading task
-        let loadTask = Task<CGImage?, Error> {
+        let loadTask = Task<CGImage?, ImageLoadError> {
             defer {
                 Task {
                     await requestManager.removeTask(for: cacheKey)
                 }
             }
-            
+
             // First check SwiftData stored data
             if let storedImage = await loadStoredImage(for: card, side: side, quality: quality) {
                 logger.debug("Found image in SwiftData: \(cacheKey)")
@@ -72,37 +72,53 @@ class CardImageLoader {
                 }
                 return storedImage
             }
-            
+
             // Download as last resort
             logger.debug("Downloading image: \(cacheKey)")
             let imageManager = CardImageManager(card: card, side: side, quality: quality)
-            guard let url = imageManager.imageURL else { return nil }
-            
-            // Download image
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            guard let provider = CGDataProvider(data: data as CFData),
-                let image = CGImage(
-                    jpegDataProviderSource: provider,
-                    decode: nil,
-                    shouldInterpolate: true,
-                    intent: .defaultIntent)
-            else {
-                throw ImageError.invalidImageData
+            guard let url = imageManager.imageURL else {
+                throw ImageLoadError.missingImageURL(
+                    cardUUID: card.uuid,
+                    side: side.rawValue
+                )
             }
-            
+
+            // Download image
+            let (data, _): (Data, URLResponse)
+            do {
+                (data, _) = try await URLSession.shared.data(from: url)
+            } catch {
+                throw ImageLoadError.networkFailure(
+                    cardUUID: card.uuid,
+                    underlyingError: error.localizedDescription
+                )
+            }
+
+            guard let provider = CGDataProvider(data: data as CFData) else {
+                throw ImageLoadError.dataProviderCreationFailed(cardUUID: card.uuid)
+            }
+
+            guard let image = CGImage(
+                jpegDataProviderSource: provider,
+                decode: nil,
+                shouldInterpolate: true,
+                intent: .defaultIntent)
+            else {
+                throw ImageLoadError.cgImageCreationFailed(cardUUID: card.uuid)
+            }
+
             // Store in SwiftData
             await imageManager.storeImageData(data)
-            
+
             // Store in cache
             cache.storeImage(image, data: data, forKey: cacheKey)
-            
+
             return image
         }
-        
+
         // Store the task in our actor
         await requestManager.registerTask(loadTask, for: cacheKey)
-        
+
         return try await loadTask.value
     }
 
@@ -153,9 +169,5 @@ class CardImageLoader {
 
     func clearCache() {
         cache.clearCache()
-    }
-
-    enum ImageError: Error {
-        case invalidImageData
     }
 }

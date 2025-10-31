@@ -58,68 +58,101 @@ final class BackgroundImportManager {
             do {
                 try await importFiles(from: urls)
                 await startImagePreload()
-                
+
                 // Explicitly end import
                 importedFileCount = totalFileCount
                 isImporting = false
-                
+
                 logger.debug("Import completed successfully")
-            } catch {
+            } catch let error as ImportError {
                 logger.error("Import failed: \(error.localizedDescription)")
-                
+
                 // Ensure import state is reset
                 importedFileCount = totalFileCount
                 isImporting = false
-                
+
                 throw error
+            } catch {
+                logger.error("Import failed with unexpected error: \(error.localizedDescription)")
+
+                // Ensure import state is reset
+                importedFileCount = totalFileCount
+                isImporting = false
+
+                throw ImportError.batchProcessingFailure(
+                    batchIndex: -1,
+                    reason: error.localizedDescription
+                )
             }
         }
     }
 
-    private func importFiles(from urls: [URL]) async throws {
+    private func importFiles(from urls: [URL]) async throws(ImportError) {
         let importService = ImportService(modelContext: modelContext)
-        
+
         for url in urls {
             guard !Task.isCancelled else {
                 logger.info("Import cancelled")
-                break
+                throw ImportError.importCancelled
             }
-            
-            let files = try FileManager.default.contentsOfDirectory(
-                at: url,
-                includingPropertiesForKeys: [.isRegularFileKey],
-                options: .skipsHiddenFiles
-            ).filter { $0.pathExtension.lowercased() == "json" }
-            
+
+            let files: [URL]
+            do {
+                files = try FileManager.default.contentsOfDirectory(
+                    at: url,
+                    includingPropertiesForKeys: [.isRegularFileKey],
+                    options: .skipsHiddenFiles
+                ).filter { $0.pathExtension.lowercased() == "json" }
+            } catch {
+                throw ImportError.fileReadFailure(
+                    url: url.path,
+                    reason: error.localizedDescription
+                )
+            }
+
             logger.debug("Processing \(files.count) files in \(url.lastPathComponent)")
-            
+
             // Process in smaller batches to keep UI responsive
             let batchSize = 10
             for batch in stride(from: 0, to: files.count, by: batchSize) {
                 let end = min(batch + batchSize, files.count)
                 let batchFiles = files[batch..<end]
-                
-                try await withThrowingTaskGroup(of: Void.self) { group in
-                    for fileURL in batchFiles {
-                        group.addTask { @MainActor in
-                            do {
-                                try await importService.importJSON(from: fileURL)
-                                
-                                // Explicitly update on main actor
-                                self.importedFileCount += 1
-                                
-                                logger.debug(
-                                    "Progress updated: \(self.importedFileCount) of \(self.totalFileCount)"
-                                )
-                            } catch {
-                                logger.error(
-                                    "Failed to import \(fileURL.lastPathComponent): \(error.localizedDescription)"
-                                )
-                                // Do not halt entire import if one file fails
+
+                do {
+                    try await withThrowingTaskGroup(of: Void.self) { group in
+                        for fileURL in batchFiles {
+                            group.addTask { @MainActor in
+                                do {
+                                    try await importService.importJSON(from: fileURL)
+
+                                    // Explicitly update on main actor
+                                    self.importedFileCount += 1
+
+                                    logger.debug(
+                                        "Progress updated: \(self.importedFileCount) of \(self.totalFileCount)"
+                                    )
+                                } catch let error as ImportError where error.isSkippable {
+                                    // Skippable errors - log and continue
+                                    logger.warning(
+                                        "Skipped \(fileURL.lastPathComponent): \(error.localizedDescription)"
+                                    )
+                                    self.importedFileCount += 1
+                                } catch {
+                                    logger.error(
+                                        "Failed to import \(fileURL.lastPathComponent): \(error.localizedDescription)"
+                                    )
+                                    // Re-throw non-skippable errors
+                                    throw error
+                                }
                             }
                         }
+                        try await group.waitForAll()
                     }
-                    try await group.waitForAll()
+                } catch {
+                    throw ImportError.batchProcessingFailure(
+                        batchIndex: batch / batchSize,
+                        reason: error.localizedDescription
+                    )
                 }
             }
         }

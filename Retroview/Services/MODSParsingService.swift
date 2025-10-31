@@ -8,87 +8,97 @@
 import Foundation
 
 actor MODSParsingService {
-    enum MODSParsingError: LocalizedError {
-        case invalidJSON(String)
-        case missingRequiredField(String)
-        case unexpectedDataStructure(String)
-        case processingError(String)
+    static func convertMODSToStereoCard(_ data: Data, fileName: String? = nil) throws(MODSParsingError) -> StereoCardJSON {
+        let fileNameStr = fileName ?? "unknown"
+        ImportLogger.log(.debug, "Starting MODS parsing...", file: fileName)
 
-        var errorDescription: String? {
-            switch self {
-            case .invalidJSON(let detail):
-                return "Invalid JSON format: \(detail)"
-            case .missingRequiredField(let field):
-                return "Missing required field: \(field)"
-            case .unexpectedDataStructure(let detail):
-                return "Unexpected data structure: \(detail)"
-            case .processingError(let detail):
-                return "Processing error: \(detail)"
-            }
-        }
-    }
-
-    static func convertMODSToStereoCard(_ data: Data, fileName: String? = nil) throws -> StereoCardJSON {
+        let cleanedData: Data
         do {
-            ImportLogger.log(.debug, "Starting MODS parsing...", file: fileName)
-            
-            let cleanedData = try preprocessJSONData(data)
-            guard let dict = try JSONSerialization.jsonObject(with: cleanedData) as? [String: Any] else {
-                ImportLogger.log(.error, "Failed to parse JSON", file: fileName)
-                throw MODSParsingError.invalidJSON("Could not parse as dictionary")
-            }
-            
-            guard let cardDict = dict["card"] as? [String: Any] else {
-                ImportLogger.log(.error, "Missing card object", file: fileName)
-                throw MODSParsingError.unexpectedDataStructure("Missing card object")
-            }
-            
-            guard let nyplAPI = cardDict["nyplAPI"] as? [String: Any] else {
-                print("❌ Missing nyplAPI object")
-                throw MODSParsingError.unexpectedDataStructure("Missing nyplAPI object")
-            }
-            
-            guard let response = nyplAPI["response"] as? [String: Any] else {
-                print("❌ Missing response object")
-                throw MODSParsingError.unexpectedDataStructure("Missing response object")
-            }
-            
-            guard let mods = response["mods"] as? [String: Any] else {
-                print("❌ Missing mods object")
-                print("Response keys available: \(response.keys)")
-                throw MODSParsingError.unexpectedDataStructure("Missing mods object")
-            }
-            
-            // Extract all required fields
-            let uuid = try extractUUID(from: mods)
-            let titles = extractTitles(from: mods)
-            let dates = extractDates(from: mods)
-            let subjects = extractSubjects(from: mods)
-            let authors = extractAuthors(from: mods)
-            let imageIds = extractImageIDs(from: response)
-            
-            // Create and return the card
-            let card = StereoCardJSON(
-                uuid: uuid.uuidString,
-                titles: titles,
-                subjects: subjects,
-                authors: authors,
-                dates: dates,
-                imageIds: imageIds,
-                left: CropData(x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "left"),
-                right: CropData(x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "right")
-            )
-            
-            return card
+            cleanedData = try preprocessJSONData(data)
         } catch {
-            ImportLogger.log(.error, "Failed to import: \(error.localizedDescription)", file: fileName)
-                    throw error
+            throw MODSParsingError.jsonSerializationFailure(
+                fileName: fileNameStr,
+                reason: error.localizedDescription
+            )
         }
+
+        let dict: [String: Any]
+        do {
+            guard let parsedDict = try JSONSerialization.jsonObject(with: cleanedData) as? [String: Any] else {
+                ImportLogger.log(.error, "Failed to parse JSON", file: fileName)
+                throw MODSParsingError.invalidJSON(
+                    fileName: fileNameStr,
+                    reason: "Could not parse as dictionary"
+                )
+            }
+            dict = parsedDict
+        } catch let error as MODSParsingError {
+            throw error
+        } catch {
+            throw MODSParsingError.jsonSerializationFailure(
+                fileName: fileNameStr,
+                reason: error.localizedDescription
+            )
+        }
+
+        guard let cardDict = dict["card"] as? [String: Any] else {
+            ImportLogger.log(.error, "Missing card object", file: fileName)
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileNameStr,
+                field: "card"
+            )
+        }
+
+        guard let nyplAPI = cardDict["nyplAPI"] as? [String: Any] else {
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileNameStr,
+                field: "nyplAPI"
+            )
+        }
+
+        guard let response = nyplAPI["response"] as? [String: Any] else {
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileNameStr,
+                field: "response"
+            )
+        }
+
+        guard let mods = response["mods"] as? [String: Any] else {
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileNameStr,
+                field: "mods"
+            )
+        }
+
+        // Extract all required fields
+        let uuid = try extractUUID(from: mods, fileName: fileNameStr)
+        let titles = extractTitles(from: mods)
+        let dates = extractDates(from: mods)
+        let subjects = extractSubjects(from: mods)
+        let authors = extractAuthors(from: mods)
+        let imageIds = try extractImageIDs(from: response, fileName: fileNameStr)
+
+        // Create and return the card
+        let card = StereoCardJSON(
+            uuid: uuid.uuidString,
+            titles: titles,
+            subjects: subjects,
+            authors: authors,
+            dates: dates,
+            imageIds: imageIds,
+            left: CropData(x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "left"),
+            right: CropData(x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "right")
+        )
+
+        return card
     }
 
-    private static func extractUUID(from mods: [String: Any]) throws -> UUID {
+    private static func extractUUID(from mods: [String: Any], fileName: String) throws(MODSParsingError) -> UUID {
         guard let identifiers = mods["identifier"] as? [[Any]] else {
-            throw MODSParsingError.missingRequiredField("identifiers")
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileName,
+                field: "identifiers"
+            )
         }
 
         guard
@@ -96,10 +106,19 @@ actor MODSParsingService {
                 .first(where: {
                     ($0 as? [String: Any])?["type"] as? String == "uuid"
                 }) as? [String: Any],
-            let uuidString = uuidIdentifier["x_"] as? String,
-            let uuid = UUID(uuidString: uuidString)
+            let uuidString = uuidIdentifier["x_"] as? String
         else {
-            throw MODSParsingError.missingRequiredField("UUID")
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileName,
+                field: "UUID"
+            )
+        }
+
+        guard let uuid = UUID(uuidString: uuidString) else {
+            throw MODSParsingError.invalidUUID(
+                fileName: fileName,
+                uuidString: uuidString
+            )
         }
 
         return uuid
@@ -259,37 +278,35 @@ actor MODSParsingService {
         return authors
     }
 
-    private static func extractImageIDs(from response: [String: Any])
-        -> ImageIDs
-    {
-//        print("\n🔍 Debug - Processing captures:")
+    private static func extractImageIDs(from response: [String: Any], fileName: String) throws(MODSParsingError) -> ImageIDs {
         var frontId = ""
         var backId = ""
 
-        if let captures = response["capture"] as? [[Any]] {
-//            print("Found capture arrays: \(captures.count)")
+        guard let captures = response["capture"] as? [[Any]] else {
+            throw MODSParsingError.invalidImageIdentifier(fileName: fileName)
+        }
 
-            for captureArray in captures {
-                for capture in captureArray {
-                    if let captureDict = capture as? [String: Any],
-                        let imageIDDict = captureDict["imageID"]
-                            as? [String: Any],
-                        let imageID = imageIDDict["x_"] as? String
-                    {
-                        print("Found imageID: \(imageID)")
-                        if imageID.hasSuffix("F") {
-                            frontId = imageID
-//                            print("✓ Set as front image: \(frontId)")
-                        } else if imageID.hasSuffix("B") {
-                            backId = imageID
-//                            print("✓ Set as back image: \(backId)")
-                        }
+        for captureArray in captures {
+            for capture in captureArray {
+                if let captureDict = capture as? [String: Any],
+                    let imageIDDict = captureDict["imageID"] as? [String: Any],
+                    let imageID = imageIDDict["x_"] as? String
+                {
+                    print("Found imageID: \(imageID)")
+                    if imageID.hasSuffix("F") {
+                        frontId = imageID
+                    } else if imageID.hasSuffix("B") {
+                        backId = imageID
                     }
                 }
             }
         }
 
-//        print("\nFinal IDs - Front: \(frontId), Back: \(backId)\n")
+        // Validate that we found at least a front image
+        guard !frontId.isEmpty else {
+            throw MODSParsingError.invalidImageIdentifier(fileName: fileName)
+        }
+
         return ImageIDs(front: frontId, back: backId)
     }
 }
@@ -320,49 +337,56 @@ extension MODSParsingService {
 }
 
 extension MODSParsingService {
-    static func debugConvertMODSToStereoCard(_ data: Data) throws
-        -> StereoCardJSON
-    {
+    static func debugConvertMODSToStereoCard(_ data: Data) throws(MODSParsingError) -> StereoCardJSON {
+        let fileName = "debug"
+
         // Try parsing JSON
-        guard
-            let dict = try? JSONSerialization.jsonObject(with: data)
-                as? [String: Any]
-        else {
-            throw MODSParsingError.unexpectedDataStructure(
-                "Failed to parse initial JSON")
+        guard let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw MODSParsingError.invalidJSON(
+                fileName: fileName,
+                reason: "Failed to parse initial JSON"
+            )
         }
 
         // Check for card
         guard let cardDict = dict["card"] as? [String: Any] else {
-            throw MODSParsingError.unexpectedDataStructure(
-                "Missing or invalid 'card' object in JSON: \(dict.keys)")
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileName,
+                field: "card (keys: \(dict.keys))"
+            )
         }
 
         // Check for nyplAPI
         guard let nyplAPI = cardDict["nyplAPI"] as? [String: Any] else {
-            throw MODSParsingError.unexpectedDataStructure(
-                "Missing or invalid 'nyplAPI' in card: \(cardDict.keys)")
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileName,
+                field: "nyplAPI (keys: \(cardDict.keys))"
+            )
         }
 
         // Check for response
         guard let response = nyplAPI["response"] as? [String: Any] else {
-            throw MODSParsingError.unexpectedDataStructure(
-                "Missing or invalid 'response' in nyplAPI: \(nyplAPI.keys)")
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileName,
+                field: "response (keys: \(nyplAPI.keys))"
+            )
         }
 
         // Check for mods
         guard let mods = response["mods"] as? [String: Any] else {
-            throw MODSParsingError.unexpectedDataStructure(
-                "Missing or invalid 'mods' in response: \(response.keys)")
+            throw MODSParsingError.missingRequiredField(
+                fileName: fileName,
+                field: "mods (keys: \(response.keys))"
+            )
         }
 
         // Continue with existing parsing logic...
-        let uuid = try extractUUID(from: mods)
+        let uuid = try extractUUID(from: mods, fileName: fileName)
         let titles = extractTitles(from: mods)
         let dates = extractDates(from: mods)
         let subjects = extractSubjects(from: mods)
         let authors = extractAuthors(from: mods)
-        let imageIds = extractImageIDs(from: response)
+        let imageIds = try extractImageIDs(from: response, fileName: fileName)
 
         // Log the structure at each level
         print("\n🔍 Debug - Document Structure:")
@@ -374,7 +398,7 @@ extension MODSParsingService {
 
         let defaultCrop = CropData(
             x0: 0, y0: 0, x1: 1, y1: 1, score: 1.0, side: "left")
-        
+
         return StereoCardJSON(
             uuid: uuid.uuidString,
             titles: titles,
